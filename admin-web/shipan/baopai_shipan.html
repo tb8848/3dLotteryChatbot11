@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>包牌实盘</title>
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+
+    <style type="text/css">
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="overflow-y: auto">
+<div class="module package-type">
+    <div name="module" id="handicap_reality_combo" class="m5 mt10 handicap" v-cloak>
+        <template>
+        <div name="module" id="guide_handicap" class="guide">
+            <div class="fl">
+                <a href="#!online_account" i18n="shipan.menu.position">位置 </a>&gt;&gt;
+                <span class="red" i18n="shipan.menu.baopai.shipan">   包牌实盘  </span> </div>
+            <div class="fr">
+                <a href="outPan.html" class="" i18n="shipan.menu.outPan">《出货盘</a> |
+                <a href="outDetail.html" class="" i18n="shipan.menu.outDetail">出货明细</a> |
+                <a href="winOutDetail.html" class="" i18n="shipan.menu.winOutDetail">出货中奖明细</a> |
+                <a href="javascript:void(0)" class="fn-out" onclick="popChild(1)" i18n="shipan.menu.chuhuo">出货</a> |
+                <a href="outImport.html" class="" i18n="shipan.menu.outImport">出货导入</a> |
+                <a href="download.html" class="" i18n="shipan.menu.download">下载》</a> |
+                <a href="shiHuoDetail.html" class="" i18n="shipan.menu.shiHuoDetail">实货明细</a> |
+                <a href="shiHuoZhongJiang.html" class="" i18n="shipan.menu.shiHuoZhongJiang">中奖明细</a> |
+                <a href="shiPan.html" class="" i18n="shipan.menu.shiPan">实盘</a> |
+                <a href="baopai_shipan.html" class="fb red" i18n="shipan.menu.baopai.shipan">包牌实盘</a> |
+                <a href="xupan.html" class="" i18n="shipan.menu.xupan">虚盘</a>
+            </div>
+        </div>
+        <div class="mt10">
+            <table class="t-1">
+                <thead>
+                <tr class="bg1">
+                    <td id="nav_fixnum" class="tc1" colspan="20"> <span i18n="shipan.menu.baopai.shipan">包牌实盘</span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+<!--                        <a href="javascript:void(0)" @click="changeMethodType(this,2,100)" class="white " :class="[lmId==2?'yellow':'']">二定位(<span id="lm-fz-2">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                        <a href="javascript:void(0)" @click="changeMethodType(this,3,100)" class="white " :class="[lmId==3?'yellow':'']">三定位(<span id="lm-fz-3">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                        <a href="javascript:void(0)" @click="changeMethodType(this,4,100)" class="white" :class="[lmId==4?'yellow':'']">四定位(<span id="lm-fz-4">0</span>)</a>&nbsp;&nbsp;&nbsp;-->
+                        <a v-for="(item,idx) in settingList" href="javascript:void(0)"
+                           class="white " class="white" :class="[lmId==item.id?'yellow':'']"
+                           style="margin-left:10px" @click="changeMethodType(item)">{{item.bettingMethod}}({{item.fuzhi}})</a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        <a href="shiPan.html" class="blue" i18n="shipan.jump.shiPan">跳转实盘</a>
+                    </td>
+                </tr>
+                <tr> <td colspan="20">
+                    <form>
+                        <input type="hidden" name="is_package" value="1">
+                        <input type="hidden" name="log" value="1">
+                        <input type="hidden" name="bet_no" id="bet_no">
+                        <input type="hidden" name="fix_num" value="40">
+                        <input type="hidden" name="isxian" value="0">
+                        <input type="hidden" id="no_type_id" value="">
+                        <table class="t-1">
+                            <tbody>
+                            <tr class="bg3">
+                                <td width="60">
+                                    <label class="dist-5">
+                                        <input type="radio" value="1" class="radio" id="rise_drop1"
+                                                                 @click="initOddsChangeWay(1)" :checked="oddsChange.oddsChangeWay==1">
+                                        <span i18n="shipan.rise">各升</span>
+                                    </label>
+                                    <label class="dist-5">
+                                        <input type="radio" value="0" class="radio" :checked="oddsChange.oddsChangeWay==0" id="rise_drop0" @click="initOddsChangeWay(0)">
+                                        <span i18n="shipan.drop">各降</span>
+                                    </label>
+                                </td>
+                                <td width="60">
+                                    <input type="text" class="input-odds" v-model="oddsChange.odds" id="set_odds" number="true" maxlength="7"
+                                           autofocus="autofocus" autocomplete="off">
+                                    <input type="hidden" name="diff_odds" id="diff_odds">
+                                </td>
+                                <td width="60">
+                                    <div class="bd-islimit">
+                                        <label class="dist-5">
+                                            <input type="radio" :checked="oddsChange.itemChangeWay==1" class="radio" value="1" id="islimit1" @click="initItemLimitChangeWay(1)">
+                                            <span i18n="shipan.upper.limit">上限</span>
+                                        </label>
+                                        <label class="dist-5">
+                                            <input type="radio" :checked="oddsChange.itemChangeWay==0" class="radio" value="0" id="islimit0" @click="initItemLimitChangeWay(0)">
+                                            <span i18n="shipan.add">各加</span>
+                                        </label>
+                                    </div>
+                                    <div class="bd-islimit hide" i18n="shipan.odds">赔率</div>
+                                </td>
+                                <td width="60" class="h54">
+                                    <input type="text" class="input-odds" id="odds_item_limit"
+                                           number="true" maxlength="8" autocomplete="off" v-model="oddsChange.itemLimit">
+                                </td>
+                                <td width="60">
+                                    <div class="dist-5"> <input type="button" value="添加" class="btn-submit" id="btnAdd" @click="addBpOddsChange" i18n="shipan.save"> </div>
+                                    <div class="dist-5"> <input type="button" value="取消" class="btn-cancel" id="btnCancel" @clic="cancelOddsChange" i18n="shipan.cancel"> </div>
+                                </td>
+                                <td width="160" class="tc" >
+                                    <input type="button" class="p10 f13 combo-sort" :class="[dataSortType==1?'package-combo-active':'']" value="按负值排行" @click="sortBy(this,1)" i18n="shipan.press.negative.Ranking">
+                                    <br>
+                                    <br>
+                                    <input type="button" class="p10 f13 combo-sort" :class="[dataSortType==0?'package-combo-active':'']" value="按号码顺序" @click="sortBy(this,0)" i18n="shipan.press.number.order">
+                                </td>
+                                <td >
+                                    <div name="module" id="pager" class="pager"
+                                         pagebody="tbody" pagecount="100" >
+                                        <span i18n="shipan.page.no">第</span> <span class="pageindex red">{{pager.curpage}}</span>
+                                        <span i18n="shipan.page.page">页</span> <span i18n="shipan.page.total">共</span>
+                                        <span class="pagecount red">{{pager.pages}}</span> <span i18n="shipan.page.page">页</span>
+                                        <span i18n="shipan.page.total">共</span> <span class="recordcount red">{{pager.total}}</span> <span i18n="shipan.page.count">条</span>
+                                        <a href="javascript:void(0)" class="fn-first" @click="toFirst" i18n="shipan.page.firstPage">首页</a>
+                                        <a href="javascript:void(0)" class="fn-prev" @click = "toPrev" i18n="shipan.page.prePage">上一页</a>
+                                        <a href="javascript:void(0)" class="fn-next" @click = "toNext" i18n="shipan.page.nextPage">下一页</a>
+                                        <a href="javascript:void(0)" class="fn-last" @click = "toLast" i18n="shipan.page.lastPage">尾页</a>
+                                        <input type="text" class="input w30 fn-index" v-model="pager.toPage">
+                                        <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="toPage">
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                            <tr class="bg3" v-if="lmId==4">
+                                <td colspan="8">
+                                    <table class="w-100 ">
+                                        <tbody v-for="(item,idx) in bpSettingList">
+                                            <tr class="f13 package-combo-fixedtr">
+                                                <td colspan="10">
+                                                    <label class="m10" style=" cursor: pointer;">
+                                                        <input class="vm1 package-check-all" type="checkbox" @click="selectAll(item)" :checked="item.selected">&nbsp;&nbsp;
+                                                        <span>{{$t('all')}}</span>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr class=" f13 package-combo-fixedtr" v-for="(it1,idx1) in item.bpSettingList">
+                                                <td class=" load-combo" data-packageid="1105000" packge-type-no="11" :class="[it1.stopBuyFlag?'package-combo-pause':'']">
+                                                    <label style="width: 150px" class="package-combo-label package-combo-label-f40fn-check-elem">
+                                                        <input class="vm1 inputBox" type="checkbox" :checked="it1.selected" @click="selectOne(it1)">&nbsp;&nbsp;{{it1.groupCount}}
+                                                        {{$t('group')}}
+                                                    </label>
+                                                    <span class="package-combo-areatext package-combo-areatext-f40">
+                                                        <span class="ml20 red" v-if="it1.peiRateChange!=null"> {{it1.peiRateChange}} </span>
+                                                        <span class="ml20 red" v-else> {{it1.peiRate}} </span>
+                                                        <span class="ml20">{{it1.lanMoney}}</span>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="bg3" id="sublist" v-if="lmId!=4">
+                                <td colspan="7">
+                                    <table class="w-100 ">
+                                        <tbody>
+                                        <tr id="settingPackageList" class="tc f13 " format="formatList">
+                                            <td class="border-none">
+                                                <table class="t-1">
+                                                    <tbody>
+
+                                                    <tr v-if="lmId!=4">
+                                                        <td valign="top" v-for="(item,idx) in bpSettingList">
+                                                            <div class="package_combo_title load-combo " dict_no_type="2" dict-hold-money="0" type="2" :class="item.id==lsId?'red':''">
+                                                                <label class="package-combo-label fn-check-all package-check-all">
+                                                                    <input class="vm1" type="checkbox" @click="selectAll(item)" :checked="item.selected">&nbsp;&nbsp;{{item.bettingRule}}
+                                                                </label>
+                                                                <span class="package-combo-areatext fn-checkall-combo" @click="changeSelSettingId(item)">
+                                                                    <span i18n="shipan.total.investment">{{$t('zongtou')}}</span>（{{item.fuzhi}}）
+                                                                </span>
+                                                            </div>
+                                                            <ul class="package_combo_30">
+                                                                <li class="load-combo package-combo-last " packge-type-no="1"
+                                                                    v-for="(it1,idx1) in item.bpSettingList" v-if="it1.groupCount!=null" :class="[it1.id==bpId?'red':'',it1.stopBuyFlag?'package-combo-pause':'']">
+                                                                    <label class="package-combo-label fn-check-elem">
+                                                                        <input class="vm1 inputBox" type="checkbox" :checked="it1.selected" @click="selectOne(it1)">&nbsp;&nbsp;{{it1.groupCount}}
+                                                                        {{$t('group')}}
+<!--                                                                        <span i18n="shipan.group">组</span>-->
+                                                                    </label>
+                                                                        <span class="package-combo-areatext" @click="changeSelBpGroupId(it1)" >
+                                                                            <span class="package-odds-left">
+                                                                                <span class="package-odds-inner red" v-if="it1.peiRateChange!=null"> {{it1.peiRateChange}} </span>
+                                                                                <span class="package-odds-inner red" v-else> {{it1.peiRate}} </span>
+                                                                            </span>
+                                                                            <span class="package-odds-right">
+                                                                                <span class="package-odds-inner"> {{it1.lanMoney}} </span>
+                                                                            </span>
+                                                                        </span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </td>
+                </tr>
+                </thead>
+
+                <tbody class="list combo-list" id="tbody" v-if="lmId==4">
+                <tr>
+                    <td colspan="20" class="tc">
+                        <div>
+                            <a :href="'../setting/baopaiSetting.html?id='+currSetting.id+'&lmId='+currSetting.lotteryMethodId" class="fb blue" i18n="shipan.a.batches">[A分批]</a>
+                            <span>{{currSetting.bettingRule}} <span i18n="shipan.negative.Ranking">负值排行</span>({{currSettingFuzhi}})</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <span i18n="shipan.positive.number">正值个数</span>({{currSetting.zzvalue}})&nbsp;&nbsp; <span i18n="shipan.average.odds">平均赔率</span>({{currSetting.avgOdds}})&nbsp;&nbsp;
+                            <a :href="'../setting/packageOddsChange.html?lsId='+currSetting.id+'&lmId='+currSetting.lotteryMethodId" class="fb blue" i18n="shipan.change.odds">[赔率变动]</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr v-for="(lineNo,idx) in lines">
+                    <td colspan="2" v-for="(loc,ii) in 10" width="10%">
+                        <table style="width:100%" border="none">
+                            <tr>
+                                <td  v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<settingCodesList[0].pageData.length"
+                                     :class="[settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].selected?'active':'']"
+                                     class="l options fn-number" :number="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code"
+                                     style="border:none;border-right:1px solid #dcf7db;width:50%" @click="selectOne(settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)])">
+                                    <strong class="blue">[{{(pager.curpage-1)*pager.limit+(lineNo-1)*10+loc}}]</strong>
+                                    <br> {{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code}}
+                                </td>
+                                <td v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<settingCodesList[0].pageData.length"  style="border:none;width:50%"
+                                    class="r r-bd fn-number maxlose " :class="[settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].selected?'active':'']"
+                                    :maxlose="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].maxLoss"
+                                    :number="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code"
+                                    @click="selectOne(settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)])" align="left">
+                                    <!--<span class="blue" title="赔率(Odds)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds}}</span>&nbsp;&nbsp;-->
+                                    <!--<span class="black2" title="平均赔率(odds_avg)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds_avg}}</span><br> -->
+                                    <span title="总吃货-总出货(HoldMoney)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].package_chuhuo}}</span><br>
+                                    <span class="red" title="最大损失(MaxLose)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].maxLoss}}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+
+
+                <tbody class="list combo-list" v-if="lmId!=4">
+                <tr>
+                    <td colspan="20" class="tc">
+                        <div>  <a :href="'../setting/baopaiSetting.html?id='+currSetting.id+'&lmId='+currSetting.lotteryMethodId" class="fb blue" i18n="shipan.a.batches">[A分批]</a>
+                            <span>{{currSetting.bettingRule}} <span i18n="shipan.negative.Ranking">负值排行</span>({{currSettingFuzhi}})</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <span i18n="shipan.positive.number">正值个数</span>({{currSetting.zzvalue}})&nbsp;&nbsp; <span i18n="shipan.average.odds">平均赔率</span>({{currSetting.avgOdds}})&nbsp;&nbsp;
+                            <a :href="'../setting/packageOddsChange.html?lsId='+currSetting.id+'&lmId='+currSetting.lotteryMethodId" class="fb blue" i18n="shipan.change.odds">[赔率变动]</a>
+                        </div>
+                        <input type="hidden" id="show_color" value="1">
+                        <input type="hidden" id="fix_num" value="40">
+                    </td>
+                </tr>
+                </tbody>
+                <tbody v-for="(item,idx) in settingCodesList" v-if="lmId!=4 && item.lsid==lsId">
+                <tr v-for="(lineNo,idx) in lines">
+                    <td colspan="2" v-for="(loc,ii) in 10" width="10%">
+                        <table style="width:100%" border="none">
+                            <tr>
+                                <td  v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<item.pageData.length"
+                                     :class="[item.pageData[(lineNo-1)*10+(loc-1)].selected?'active':'']"
+                                     class="l options fn-number" :number="item.pageData[(lineNo-1)*10+(loc-1)].code"
+                                     style="border:none;border-right:1px solid #dcf7db;width:50%"
+                                     @click="selectOne(item.pageData[(lineNo-1)*10+(loc-1)])">
+                                    <strong class="blue">[{{(pager.curpage-1)*pager.limit+(lineNo-1)*10+loc}}]</strong>
+                                    <br> {{item.pageData[(lineNo-1)*10+(loc-1)].code}}
+                                </td>
+                                <td v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<item.pageData.length"  style="border:none;"
+                                    class="r r-bd fn-number maxlose " :class="[item.pageData[(lineNo-1)*10+(loc-1)].selected?'active':'']"
+                                    :maxlose="item.pageData[(lineNo-1)*10+(loc-1)].maxLoss"
+                                    :number="item.pageData[(lineNo-1)*10+(loc-1)].code"
+                                    @click="selectOne(item.pageData[(lineNo-1)*10+(loc-1)])" align="left">
+                                    <!--<span class="blue" title="赔率(Odds)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds}}</span>&nbsp;&nbsp;-->
+                                    <!--<span class="black2" title="平均赔率(odds_avg)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds_avg}}</span><br> -->
+                                    <span title="总吃货-总出货(HoldMoney)">{{item.pageData[(lineNo-1)*10+(loc-1)].package_chuhuo}}</span><br>
+                                    <span class="red" title="最大损失(MaxLose)">{{item.pageData[(lineNo-1)*10+(loc-1)].maxLoss}}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+                <!--<tbody v-for="(lineNo,idx) in lines">-->
+                <!--<tr>-->
+                <!--<td class="l options fn-number  " number="0000" _i="0" _j="0" style="border-right-color:#d6f1d5;">-->
+                <!--<strong class="blue">[1]</strong><br> 0000 </td>-->
+                <!--<td class="r r-bd fn-number maxlose-->
+                <!--" maxlose="0" number="0000">-->
+                <!--<span title="总吃货-总出货(HoldMoney)">0</span><br>-->
+                <!--<span title="最大损失(MaxLose)" class="yellow2">0</span>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            </table>
+        </div>
+        </template>
+    </div>
+</div>
+<div name="module" id="footer" class="footer">
+    <div class="bd"> Copyright © 2017 xxx. All Rights Reserved </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/codes_utils.js?v=3"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/projects/baopai-shipan.js?v12"></script>
+<script type="text/javascript">
+    //选中包牌实盘
+    window.parent.navSelect("handicap_combo");
+
+</script>
+</body>
+</html>

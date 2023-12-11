@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/adminseccode.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>
+    <script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>
+    <style>
+        .aaa{
+            border: 1px solid black;
+            color: black;
+        }
+        .table-bordered td {
+            border-left: 1px solid #e0e0e0;
+            border-top: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body style="height: 100%;overflow: auto">
+<div>
+    <div class="memberleft">
+        <table class="table table-bordered table-condensed table-hover aaa">
+            <thead>
+                <tr class="xiazhukuang">
+                    <th colspan="2" >会员资料</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 50%">账　　号:</td><td id="m_username"></td>
+                </tr>
+                <tr>
+                    <td>姓　　名:</td><td id="m_nickname"></td>
+                </tr>
+                <tr>
+                    <td>信用额度:</td><td id="m_credits"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="memberright">
+        <table class="table table-bordered table-condensed table-hover aaa">
+            <thead>
+                <tr class="xiazhukuang">
+                    <th colspan="6" >会员资料</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="16%">自动:</td>
+                    <td width="16%"><input type="radio" name="entermode" value="0" id="entermode0"></td>
+                    <td width="16%">小票打印:</td>
+                    <td width="16%"><input type="radio" name="sendmode" value="1" id="sendmode1"></td>
+                    <td width="16%">实际赔率:</td>
+                    <td width="16%"><input type="radio" name="isfpfrankhotzhuan" value="1" id="isfpfrankhotzhuan1"></td>
+                </tr>
+                <tr>
+                    <td width="16%">回车:</td>
+                    <td width="16%"><input type="radio" name="entermode" value="1" id="entermode1"></td>
+                    <td width="16%">显示彩种:</td>
+                    <td width="16%"><input type="radio" name="sendmode" value="0" id="sendmode0"></td>
+                    <td width="16%">转换赔率:</td>
+                    <td width="16%"><input type="radio" name="isfpfrankhotzhuan" value="0" id="isfpfrankhotzhuan0"></td>
+                </tr>
+                <tr>
+                    <td width="16%">小票截图:</td>
+                    <td width="16%"><input type="checkbox" name="printCut" value="1" id="printCut"></td>
+                    <td colspan="4"></td>
+
+                </tr>
+                <tr>
+                    <td width="16%">销售点</td>
+                    <td colspan="5"><textarea cols="25" rows="2" name="xiaoshou" style="width:95%"></textarea></td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td colspan="3">如果销售点填写内容，会和之前浏览器页眉里内容重复，只能设置一个地方。</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td colspan="3">浏览器-&#45;&#45;设置-&#45;&#45;打印-&#45;&#45;页面设置-&#45;&#45;页眉-&#45;&#45;自定义-&#45;&#45;清空内容-&#45;&#45;确定</td>-->
+                <!--</tr>-->
+            </tbody>
+        </table>
+    </div>
+    <table class="table-member" style="padding-left: 2%;">
+        <tbody>
+            <tr>
+                <td width="40%" style="padding-left: 2%;">&nbsp;1、小票打印请使用系统自带浏览器&nbsp;&nbsp;<img src="../img/ie7.png" width="35"></td>
+                <td width="50%" rowspan="2">&nbsp;<button class="btn" id="memberbut" type="button">提交</button></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 2%;">&nbsp;2、提示:+号代表x号</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding-left: 2%;">&nbsp;3、小票打印处，增加了分页，每页显示500笔。</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding-left: 2%;">&nbsp;4、下注明细里，颜色（<font color="#ff0000" size="4">●</font>）或（<font color="#339900" size="4">●</font>）连在一起的，代表是在同一张小票上。</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding:0 0 1% 2%;">&nbsp;5、小票打印处内容超过500笔，再次下单后，系统会自动清空之前小票打印内容，请注意使用。</td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="width: 95%;margin: 0 auto">
+        <table class="table table-bordered table-condensed table-hover tablecenter aaa" style="margin: 1% 4% 0 4%;width: 92%;" id="menu" lay-filter="menu"></table>
+    </div>
+
+    <!--<table class="table table-bordered table-condensed table-hover tablecenter aaa" style="margin: 1% 4% 0 4%;width: 92%;">
+        <thead>
+            <tr class="xiazhukuang">
+                <th colspan="9" >会员资料</th>
+            </tr>
+            <tr class="xiazhukuang2">
+                <th>类别</th>
+                <th>最小下注</th>
+                <th>赔率上限(多个用/分开)</th>
+                <th>单注上限</th>
+                <th>单项上限</th>
+                <th>交易回水</th>
+                <th>赔率</th>
+            </tr>
+        </thead>
+        <tbody id="memberList"></tbody>
+    </table>-->
+</div>
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script>
+
+    var bs = null;
+
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    onload = function () {
+        var leftCredit = localStorage.getItem("leftCredit");
+        if (leftCredit == "null" || leftCredit == "" || leftCredit == undefined){
+            leftCredit = 0;
+        }
+        $("#m_credits").html(leftCredit);
+        $("#m_username").html(localStorage.getItem("uname"));
+    }
+
+    layui.config({
+        //   base: '/js/'存放treeTable.js的文件夹
+        base: '../js/layui/'
+    }).use(['form' , 'jquery','treeTable', 'util'], function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var util = layui.util;
+        var treeTable = layui.treeTable, form = layui.form;
+        var form = layui.form;
+
+
+        $.ajax({
+            url:HOST+'draw/getVipBasicSetting',
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    bs = res.data.basicSetting;
+                    $("#entermode"+bs.autoOrEnter).attr("checked",true);
+                    $("#sendmode"+bs.printOrShowLottery).attr("checked",true);
+                    $("#isfpfrankhotzhuan"+bs.realOrTransformOdds).attr("checked",true);
+                    if(bs.printScreencut==1){
+                        $("input[name='printCut']").attr("checked",true);
+                    }else{
+                        $("input[name='printCut']").attr("checked",false);
+                    }
+                    $("input[name='xiaoshou']").val(bs.saleName);
+                }
+            }
+
+        })
+
+        // 渲染表格
+        var insTb = treeTable.render({
+            id: 'menu',
+            elem: '#menu',
+            url: HOST+'vipInfo/getLotteryNumberList',
+            height: 'full-200',
+            method:'get',
+            tree: {
+                iconIndex: 2,
+                isPidData: true,
+                idName: 'lotterySettingId',//父ID
+                pidName: 'parentId',//子ID
+                openName: 'open',// 是否默认展开的字段名
+            },
+            cols: [[
+                { field: 'id', title: 'ID', fixed: 'left', unresize: true, sort: true, hide: true }
+                , { field: 'bettingRule', title: '类别',width:'10%' , templet: function (d) {
+                        if (d.parentId == null) {
+                            return "<span style='color:blue'> "+ d.bettingRule +"</span>";;
+                        }else {
+                            return d.bettingRule
+                        }
+                    }}
+                , { field: 'minBettingPrice', title: '最小下注',width:'15%'}
+                , { field: 'peiRate', title: '赔率上限(多个用/分开)',width:'15%'}
+                , { field: 'maxBettingCount', title: '单注上限',width:'10%'}
+                , { field: 'maxNumberTypeCount', title: '单项上限',width:'15%'}
+                , { field: 'lanHuoUpperLimit', title: '拦货上限',width:'10%', templet: function (d) {
+                        if (d.lotterySettingId == '19' || d.lotterySettingId == '20' || d.lotterySettingId == '21') {
+                            return null;
+                        }else {
+                            return d.lanHuoUpperLimit;
+                        }
+                    }}
+                , { field: 'earnWaterList', singleLine: false,title: '赚水',width:'15%', templet: function(d) {
+                        d.str = 0;
+                        if (d.lotterySettingId == 19 || d.lotterySettingId == 20 || d.lotterySettingId == 21) {
+                            return "";
+                        }
+                        var zvalueHelp=  selectWz(d.earnWaterList, d.earnWater, d.lotteryMethodId);
+                        var zval = '<select name="peiRate" lay-filter="peiRateSelect" lay-verify="required">';
+                        zval += zvalueHelp;
+                        zval += '</select>'
+                        return zval;
+                    }}
+                , { field: 'peiRate', title: '赔率',width:'20%'}
+            ]],
+            done: function (res, curr, count) {
+                //设置下拉框样式在表格之上 不会遮挡下拉框
+                $(".ew-tree-table").css('overflow','visible');
+                $(".ew-tree-table-box").css('overflow','visible');
+                $(".ew-tree-table-box").css('height','100%');
+                $(".ew-tree-table-view").css('overflow','visible');
+                $(".ew-tree-table-cell").css('overflow','visible');
+                $("tr").css('width', '100%')
+                $(".ew-tree-table-head").css('border-right','none')
+                $(".ew-tree-table-indent").removeClass();
+
+                form.render();//刷新表单
+            },
+            style: 'margin-top:0;'
+        });
+
+        function selectWz(earnWaterList, earnWater) {
+            var selMaintenanceItem = '';
+            for(var i = 0;i < earnWaterList.length;i++){
+                if (earnWater == earnWaterList[i].earnWater) {
+                    selMaintenanceItem+='<option value="'+earnWaterList[i].earnWater+'" selected>'+earnWaterList[i].earnWater+'</option>';
+                }else {
+                    selMaintenanceItem+='<option value="'+earnWaterList[i].earnWater+'">'+earnWaterList[i].earnWater+'</option>';
+                }
+            }
+            return selMaintenanceItem
+        }
+
+        form.on('select(peiRateSelect)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var id = $(this).parents('tr').children("td[data-field=id]").find(".ew-tree-table-cell-content").html();
+            $.ajax({
+                url: HOST + "vipInfo/updateUserEarnWater?earnWater=" + data.value + "&aId=" + id,
+                type: "get",
+                success: function (res) {
+                    if (res.code == 200) {
+                        trElem.find("td:last .ew-tree-table-cell-content").html(res.data);
+                    }
+                },
+                error: function () {
+                }
+            });
+            form.render("select");
+        });
+
+
+        $("#memberbut").on("click","",function (res) {
+            console.log();
+            bs.saleName = $("input[name='xiaoshou']").val();
+            bs.printScreencut = document.getElementById("printCut").checked==true?1:0;
+            bs.printOrShowLottery =  $("input[name='sendmode']").val();
+            bs.autoOrEnter = $("input[name='entermode']").val();
+            bs.realOrTransformOdds = $("input[name='isfpfrankhotzhuan']").val();
+            console.log(bs);
+            layer.msg('正在处理...', {
+                icon: 16
+                ,shade: 0.3
+                ,time:-1
+            });
+            $.ajax({
+                url:HOST+'draw/upBasicSetting',
+                type:'post',
+                data:JSON.stringify(bs),
+                contentType:"application/json",
+                success:function (res) {
+                    layer.closeAll()
+                    if(res.code==0){
+                        layer.msg("更改成功")
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll();
+
+                }
+            })
+        })
+    });
+</script>
+
+</body>
+</html>

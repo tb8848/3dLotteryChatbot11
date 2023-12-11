@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<property name="LOG_CONTEXT_NAME" value="log"/>
+<!--??????????? ?? LogBack ??????????-->
+<property name="LOG_HOME" value="logs/${LOG_CONTEXT_NAME}" />
+<!-- ?????????? -->
+<contextName>${LOG_CONTEXT_NAME}</contextName>
+<!-- ????? -->
+<!--<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+&lt;!&ndash;??????%d?????%thread??????%-5level???????5?????%msg??????%n????&ndash;&gt;
+<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{50}:%L) - %msg%n</pattern>
+<charset>utf-8</charset>
+</encoder>
+<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+<level>INFO</level>
+</filter>
+</appender>-->
+
+
+<!-- ?????????? -->
+<conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+<conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+<conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+<!-- ?????? -->
+<property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+<!--1. ??????-->
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+<!--???appender???????????????????????????????????????-->
+<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+<level>INFO</level>
+</filter>
+<encoder>
+<Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+<!-- ????? -->
+<charset>UTF-8</charset>
+</encoder>
+</appender>
+
+<!--info?????????-->
+<appender name="file.info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+<Prudent>true</Prudent>
+<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+<!--????????????????-->
+<FileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/info/info.%d{yyyy-MM-dd-HH}.%i.log</FileNamePattern>
+<!--????????-->
+<MaxHistory>30</MaxHistory>
+<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+<!-- ?????????????????????10M(??)????10M?????????0??? -->
+<maxFileSize>10MB</maxFileSize>
+</timeBasedFileNamingAndTriggeringPolicy>
+</rollingPolicy>
+<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+<!--??????%d?????%thread??????%-5level???????5????? %method ???  %L ?? %msg??????%n????-->
+<pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56}.%method:%L - %msg%n</pattern>
+<charset>utf-8</charset>
+</encoder>
+<!-- ????????info??? -->
+<filter class="ch.qos.logback.classic.filter.LevelFilter">
+<level>INFO</level>
+<onMatch>ACCEPT</onMatch>
+<onMismatch>DENY</onMismatch>
+</filter>
+</appender>
+
+
+<!--???????????-->
+<appender name="file.error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+<Prudent>true</Prudent>
+<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+<!--???????????????-->
+<FileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/error/error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+<!--????????-->
+<MaxHistory>30</MaxHistory>
+<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+<!-- ?????????????????????10M(??)????10M?????????0??? -->
+<maxFileSize>10MB</maxFileSize>
+</timeBasedFileNamingAndTriggeringPolicy>
+</rollingPolicy>
+<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+<!--??????%d?????%thread??????%-5level???????5????? %method ???  %L ?? %msg??????%n????-->
+<pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56}.%method:%L - %msg%n</pattern>
+<charset>utf-8</charset>
+</encoder>
+<!-- ????????error??? -->
+<filter class="ch.qos.logback.classic.filter.LevelFilter">
+<level>ERROR</level>
+<onMatch>ACCEPT</onMatch>
+<onMismatch>DENY</onMismatch>
+</filter>
+</appender>
+
+<!--warn?????????-->
+<appender name="file.warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+<Prudent>true</Prudent>
+<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+<FileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/warn/warn.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+<!--????????-->
+<MaxHistory>30</MaxHistory>
+<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+<!-- ?????????????????????10M(??)????10M?????????0??? -->
+<maxFileSize>10MB</maxFileSize>
+</timeBasedFileNamingAndTriggeringPolicy>
+</rollingPolicy>
+<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+<!--??????%d?????%thread??????%-5level???????5????? %method ???  %L ?? %msg??????%n????-->
+<pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56}.%method:%L - %msg%n</pattern>
+<charset>utf-8</charset>
+</encoder>
+<!-- ????????warn??? -->
+<filter class="ch.qos.logback.classic.filter.LevelFilter">
+<level>WARN</level>
+<onMatch>ACCEPT</onMatch>
+<onMismatch>DENY</onMismatch>
+</filter>
+</appender>
+
+
+
+<!--  ?????? -->
+<root level="DEBUG">
+<appender-ref ref="STDOUT" />
+<appender-ref ref="file.error" />
+<appender-ref ref="file.info" />
+<appender-ref ref="file.warn" />
+</root>
+
+</configuration>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../css/common.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+    <title>停押号码保留区</title>
+    <link rel="stylesheet" href="../../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../../css/A-P5.css" media="all">
+
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+        /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div id="main" >
+    <template>
+    <div class="module">
+        <div name="module" id="betlist" class="m5" deps="betlist">
+            <div class="guide-memberadmin" name="module" deps="guide_memberadmin">
+                <div class="hd"> {{roleName}}{{userName}} </div>
+                <div class="bd">
+                    <a id="buyDetail" :href="'xiazhuDetail.html?vipId='+userId+'&pid='+pid" i18n="vip.buyDetail">下注明细</a>
+                    <a class="" id="drawDetail" :href="'zhongjiang_detail.html?vipId='+userId+'&pid='+pid" i18n="vip.drawDetail">中奖明细</a>
+                    <a class="" id="stopBuyCodes" :href="'stop_buy_codes.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCode">停押号码</a>
+                    <a class="active" id="lackCodes" :href="'stop_buy_codes_keep.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCodeKeep">停押保留区</a>
+                    <a class="" id="monthReport" :href="'month_report.html?vipId='+userId+'&pid='+pid" i18n="vip.monthReport">月报表</a>
+                    <a class=""   id="bills" :href="'bills.html?vipId='+userId+'&pid='+pid" i18n="vip.bills">历史账单</a>
+                    <a id="userInfo" :href="'user_info.html?vipId='+userId+'&pid='+pid" i18n="vip.info">会员资料</a>
+                    <a href="javascript:void(0)" @click="goBack" i18n="vip.back">返回</a>
+                </div>
+
+            </div>
+
+            <div class="mt10">
+                <form autocomplete="off" novalidate="novalidate">
+                    <input type="hidden" name="period_no">
+                    <input type="hidden" value="86" name="member_id">
+                    <input type="hidden" value="1" name="member_level">
+                    <input type="hidden" value="betlack" name="link">
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1"> <td colspan="4" i18n="detail.search">搜索</td> </tr>
+                        </thead>
+                        <tbody class="noBD">
+                            <tr>
+                                <td width="50" i18n="detail.searchCode"> 查号码 </td>
+                                <td width="60"> <input type="text" class="w60" maxlength="4" betno="true" v-model="searchParam.buyCodes"> </td>
+                                <td width="50"> <input type="button" value="提交" class="btn" @click="toSearch()" i18n="detail.submit"></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="mt10">
+                <table class="t-1 table_bg">
+                    <thead> <tr class="bg1"> <td colspan="18" i18n="vip.stopCodeKeepArea">  停押号码保留区  </td>
+                        <td colspan="2">
+                            <select class="w110" id="sel_period_no" @change="changeDrawId()" v-if="drawList.length>0">
+                                <option v-for="(item,idx) in drawList" :value="item.id" :selected="item.id==searchParam.drawId">{{item.drawId}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="bg2 tc">
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.buyCode">号码</td> <td i18n="detail.buyMoney">金额</td>
+                    </tr>
+
+                    </thead>
+                    <tbody id="tbody" class="fn-hover tc">
+                        <tr v-for="(lineNo,idx) in lines">
+                            <td v-for="(loc,ii) in 20" v-if="(lineNo-1)*10+loc-1<dataArr.length">{{dataArr[(lineNo-1)*10+loc-1]}}</td>
+                        </tr>
+                        <tr class="tfoot tl bold">
+                            <td colspan="2" i18n="bills.heji">合计</td>
+                            <td colspan="2"><span i18n="bills.bishu">笔数</span>：{{buyList.length}}</td>
+                            <td colspan="16"><span i18n="bills.totalMoney">总金额</span>：{{totalMoney}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div name="module" id="pager" class="pager" pagecount="1" v-if="pager.pages>1">
+                第 <span class="pageindex red">{{pager.currpage}}</span> 页 共
+                <span class="pagecount red">{{pager.pages}}</span> 页 共
+                <span class="recordcount red">{{pager.total<0?0:pager.total}}</span> 条
+                <a href="javascript:void(0)" class="fn-first" @click="firstPage()">首页</a>
+                <a href="javascript:void(0)" class="fn-prev" @click="prePage()">上一页</a>
+                <a href="javascript:void(0)" class="fn-next" @click="nextPage()">下一页</a>
+                <a href="javascript:void(0)" class="fn-last" @click="lastPage()">尾页</a>
+                <input type="text" class="input w30 fn-index" maxlength="10" digits="true" v-model="pager.toPage">
+                <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="goPage()">
+            </div>
+        </div>
+    </div>
+</template>
+</div>
+
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script src="../../js/projects/stop_buy_codes.js?v3"></script>
+<script src="../../js/projects/validate.js?v2"></script>
+<script>
+
+    var moduleName = "admin_vip";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+
+    var $ = layui.jquery;
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.init(1);
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+    //vm.init();
+
+</script>
+
+<script type="text/javascript">
+   //vm.init(1)
+</script>
+
+</body>
+</html>

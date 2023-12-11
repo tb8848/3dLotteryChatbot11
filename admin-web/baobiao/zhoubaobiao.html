@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>周报表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+        .white:hover{
+            color: white;
+        }
+
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main">
+    <template>
+    <div class="module">
+        <div name="module" id="report" class="m5 mt10 report">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="report.top.location">位置 </a> &gt;&gt;
+                    <span class="red" i18n="report.top.weekReport">  周报表    &gt;&gt;
+                        <span id="navPath"></span>
+                        <!--<a class="blue" href=" #!report|month?level=6&amp;link=week&amp;member_id=74&amp;period_no=&amp;start_period_date=&amp;end_period_date= " title="查看up66862"> up66862(总监) </a>-->
+                    </span>
+                </div>
+                <div class="fr">
+                    <a href="javascript:void(0)" class="" @click="toDayReport" i18n="report.top.dayReport">日报表</a> |
+                    <a href="javascript:void(0)" class="" @click="toMonthReport" i18n="report.top.monthReport">月报表</a> |
+                    <a href="javascript:void(0)" class="fb red" @click="toWeekReport" i18n="report.top.weekReport">周报表</a>
+                </div>
+            </div>
+            <div class="mt10 div_print" id="div_print">
+                <form id="report_week" novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="8">
+                                <span i18n="report.top.weekReport">周报表</span>&gt;&gt;
+                                <span i18n="report.query.timeRange">时间范围</span>
+                                <input type="hidden" name="level" id="weekFlag">
+                                <input type="text" id="start_date" name="start_data" autocomplete="off" class="w120">
+                                -
+                                <input type="text" id="end_date" name="end_date" autocomplete="off" class="w120">
+                                <button type="button" id="last_week" class="btn" i18n="report.query.lastWeek" style="cursor: pointer">上周</button>
+                                <button type="button" id="this_week" class="btn" i18n="report.query.thisWeek" style="cursor: pointer">本周</button>
+                                <button type="button" id="sel_week_report" name="sel_week_report" class="btn" @click="queryWeek()" i18n="report.query.query" style="cursor: pointer">查询</button>
+                            </td>
+                            <td colspan="3" v-if="selfRoleId != 5"></td>
+                            <td colspan="2" v-if="selfRoleId == 5"><a href="javascript:void(0)" id="lnk_print" class="white" @click="print()"  i18n="report.table.title.print">打印</a></td>
+                            <td v-else><a href="javascript:void(0)" id="lnk_print" class="white" @click="print()"  i18n="report.table.title.print">打印</a></td>
+                        </tr>
+                        <tr class="tc">
+                            <td rowspan="2" class="bg2" width="150"> {{childRole}}</td>
+                            <td colspan="3" class="bg-yellow"  i18n="report.table.head.vip">会员</td>
+                            <td colspan="2" class="bg-pink" v-if="selfRoleId != 5"> {{childRole}}</td>
+                            <td colspan="4" class="bg-orange"> {{selfRole}}</td>
+                            <td colspan="2" class="bg-pink"> {{parentRole}}</td>
+                        </tr>
+                        <tr class="tc">
+                            <td class="bg-yellow" i18n="report.table.head.count">笔数</td>
+                            <td class="bg-yellow" i18n="report.table.head.zt">总投</td>
+                            <td class="bg-yellow" i18n="report.table.head.profitLoss">盈亏</td>
+                            <td class="bg-pink" v-if="selfRoleId != 5" i18n="report.table.head.zt">总投</td>
+                            <td class="bg-pink" v-if="selfRoleId != 5" i18n="report.table.head.profitLoss">盈亏</td>
+<!--                            <td class="bg-orange" v-if="selfRole == '总监'" i18n="report.table.head.ztAmount"> 总投金额</td>-->
+<!--                            <td class="bg-orange" v-else> 占成金额</td>-->
+<!--                            <td class="bg-orange" v-if="selfRole == '总监'" i18n="report.table.head.profitLoss"> 盈亏</td>-->
+<!--                            <td class="bg-orange" v-else> 占成盈亏</td>-->
+                            <td class="bg-orange" v-if="selfRoleId == 1"> {{$t('ztje')}}</td>
+                            <td class="bg-orange" v-else> {{$t('zcje')}}</td>
+                            <td class="bg-orange" v-if="selfRoleId == 1"> {{$t('yk')}}</td>
+                            <td class="bg-orange" v-else> {{$t('zcyk')}}</td>
+                            <td class="bg-deeporg" i18n="report.table.head.welfare"> 福利</td>
+                            <td class="bg-deeporg" i18n="report.table.head.totalProfitLoss">总盈亏</td>
+                            <td class="bg-pink" i18n="report.table.head.zt">总投</td>
+                            <td class="bg-pink" i18n="report.table.head.profitLoss">盈亏</td>
+                        </tr>
+                        </thead>
+                        <tbody class="fn-hover" id="tbody" v-if="dataList.length > 0">
+                        <tr v-for="(item, index) in dataList">
+                            <td>
+                                <strong class="blue">[{{index + 1}}]</strong>
+                                <span v-if="selfRoleId != 5">
+                                    <a :href="'zhoubaobiao.html?userId='+item.childUserId" class="gray">{{item.childUserName}}</a>
+                                </span>
+                                <span v-else>
+                                    {{item.childUserName}}
+                                </span>
+                            </td>
+                            <td class="bg-yellow">{{item.vipTotalCount}}</td>
+                            <td class="bg-yellow">{{item.vipTotalMoney==null ? '' : (item.vipTotalMoney.toString().indexOf('.')!=-1 ? item.vipTotalMoney.toFixed(2).split(".")[0]+'.' : item.vipTotalMoney)}}<span style="color: #c2c1c1;">{{item.vipTotalMoney == null ? '' : (item.vipTotalMoney.toString().indexOf('.')!=-1 ? item.vipTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-yellow">{{item.vipProfitLossMoney==null ? '' : (item.vipProfitLossMoney.toString().indexOf('.')!=-1 ? item.vipProfitLossMoney.toFixed(2).split(".")[0]+'.' : item.vipProfitLossMoney)}}<span style="color: #c2c1c1;">{{item.vipProfitLossMoney == null ? '' : (item.vipProfitLossMoney.toString().indexOf('.')!=-1 ? item.vipProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-pink" v-if="selfRoleId != 5">{{item.childTotalMoney==null ? '' : (item.childTotalMoney.toString().indexOf('.')!=-1 ? item.childTotalMoney.toFixed(2).split(".")[0]+'.' : item.childTotalMoney)}}<span style="color: #c2c1c1;">{{item.childTotalMoney == null ? '' : (item.childTotalMoney.toString().indexOf('.')!=-1 ? item.childTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-pink" v-if="selfRoleId != 5">{{item.childProfitLossMoney==null ? '' : (item.childProfitLossMoney.toString().indexOf('.')!=-1 ? item.childProfitLossMoney.toFixed(2).split(".")[0]+'.' : item.childProfitLossMoney)}}<span style="color: #c2c1c1;">{{item.childProfitLossMoney == null ? '' : (item.childProfitLossMoney.toString().indexOf('.')!=-1 ? item.childProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-orange" v-if="selfRoleId == 1">{{item.selfTotalMoney==null ? '' : (item.selfTotalMoney.toString().indexOf('.')!=-1 ? item.selfTotalMoney.toFixed(2).split(".")[0]+'.' : item.selfTotalMoney)}}<span style="color: #c2c1c1;">{{item.selfTotalMoney == null ? '' : (item.selfTotalMoney.toString().indexOf('.')!=-1 ? item.selfTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-orange" v-else>{{item.selfZcMoney==null ? '' : (item.selfZcMoney.toString().indexOf('.')!=-1 ? item.selfZcMoney.toFixed(2).split(".")[0]+'.' : item.selfZcMoney)}}<span style="color: #c2c1c1;">{{item.selfZcMoney == null ? '' : (item.selfZcMoney.toString().indexOf('.')!=-1 ? item.selfZcMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-orange" v-if="selfRoleId == 1">{{item.selfProfitLossMoney==null ? '' : (item.selfProfitLossMoney.toString().indexOf('.')!=-1 ? item.selfProfitLossMoney.toFixed(2).split(".")[0]+'.' : item.selfProfitLossMoney)}}<span style="color: #c2c1c1;">{{item.selfProfitLossMoney == null ? '' : (item.selfProfitLossMoney.toString().indexOf('.')!=-1 ? item.selfProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-orange" v-else>{{item.selfZcProfitMoney==null ? '' : (item.selfZcProfitMoney.toString().indexOf('.')!=-1 ? item.selfZcProfitMoney.toFixed(2).split(".")[0]+'.' : item.selfZcProfitMoney)}}<span style="color: #c2c1c1;">{{item.selfZcProfitMoney == null ? '' : (item.selfZcProfitMoney.toString().indexOf('.')!=-1 ? item.selfZcProfitMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-deeporg">{{item.selfReturnWater==null ? '' : (item.selfReturnWater.toString().indexOf('.')!=-1 ? item.selfReturnWater.toFixed(2).split(".")[0]+'.' : item.selfReturnWater)}}<span style="color: #c2c1c1;">{{item.selfReturnWater == null ? '' : (item.selfReturnWater.toString().indexOf('.')!=-1 ? item.selfReturnWater.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-deeporg">{{item.selfTotalProfitLossMoney==null ? '' : (item.selfTotalProfitLossMoney.toString().indexOf('.')!=-1 ? item.selfTotalProfitLossMoney.toFixed(2).split(".")[0]+'.' : item.selfTotalProfitLossMoney)}}<span style="color: #c2c1c1;">{{item.selfTotalProfitLossMoney == null ? '' : (item.selfTotalProfitLossMoney.toString().indexOf('.')!=-1 ? item.selfTotalProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-pink">{{item.parentTotalMoney==null ? '' : (item.parentTotalMoney.toString().indexOf('.')!=-1 ? item.parentTotalMoney.toFixed(2).split(".")[0]+'.' : item.parentTotalMoney)}}<span style="color: #c2c1c1;">{{item.parentTotalMoney == null ? '' : (item.parentTotalMoney.toString().indexOf('.')!=-1 ? item.vipTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg-pink">{{item.parentProfitLossMoney==null ? '' : (item.parentProfitLossMoney.toString().indexOf('.')!=-1 ? item.parentProfitLossMoney.toFixed(2).split(".")[0]+'.' : item.parentProfitLossMoney)}}<span style="color: #c2c1c1;">{{item.parentProfitLossMoney == null ? '' : (item.parentProfitLossMoney.toString().indexOf('.')!=-1 ? item.parentProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                        </tr>
+                        <tr class="tfoot">
+                            <td class="tc"><span class="fb">{{$t('heji')}}</span></td>
+                            <td class="fb">{{totalData.vipTotalCount}}</td>
+                            <td class="fb">{{totalData.vipTotalMoney==null ? '' : (totalData.vipTotalMoney.toString().indexOf('.')!=-1 ? totalData.vipTotalMoney.toFixed(2).split(".")[0]+'.' : totalData.vipTotalMoney)}}<span style="color: #c2c1c1;">{{totalData.vipTotalMoney == null ? '' : (totalData.vipTotalMoney.toString().indexOf('.')!=-1 ? totalData.vipTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb">{{totalData.vipProfitLossMoney==null ? '' : (totalData.vipProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.vipProfitLossMoney.toFixed(2).split(".")[0]+'.' : totalData.vipProfitLossMoney)}}<span style="color: #c2c1c1;">{{totalData.vipProfitLossMoney == null ? '' : (totalData.vipProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.vipProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb" v-if="selfRoleId != 5">{{totalData.childTotalMoney==null ? '' : (totalData.childTotalMoney.toString().indexOf('.')!=-1 ? totalData.childTotalMoney.toFixed(2).split(".")[0]+'.' : totalData.childTotalMoney)}}<span style="color: #c2c1c1;">{{totalData.childTotalMoney == null ? '' : (totalData.childTotalMoney.toString().indexOf('.')!=-1 ? totalData.childTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb" v-if="selfRoleId != 5">{{totalData.childProfitLossMoney==null ? '' : (totalData.childProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.childProfitLossMoney.toFixed(2).split(".")[0]+'.' : totalData.childProfitLossMoney)}}<span style="color: #c2c1c1;">{{totalData.childProfitLossMoney == null ? '' : (totalData.childProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.childProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb" v-if="selfRoleId == 1">{{totalData.selfTotalMoney==null ? '' : (totalData.selfTotalMoney.toString().indexOf('.')!=-1 ? totalData.selfTotalMoney.toFixed(2).split(".")[0]+'.' : totalData.selfTotalMoney)}}<span style="color: #c2c1c1;">{{totalData.selfTotalMoney == null ? '' : (totalData.selfTotalMoney.toString().indexOf('.')!=-1 ? totalData.selfTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb" v-else>{{totalData.selfZcMoney==null ? '' : (totalData.selfZcMoney.toString().indexOf('.')!=-1 ? totalData.selfZcMoney.toFixed(2).split(".")[0]+'.' : totalData.selfZcMoney)}}<span style="color: #c2c1c1;">{{totalData.selfZcMoney == null ? '' : (totalData.selfZcMoney.toString().indexOf('.')!=-1 ? totalData.selfZcMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb" v-if="selfRoleId == 1">{{totalData.selfProfitLossMoney==null ? '' : (totalData.selfProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.selfProfitLossMoney.toFixed(2).split(".")[0]+'.' : totalData.selfProfitLossMoney)}}<span style="color: #c2c1c1;">{{totalData.selfProfitLossMoney == null ? '' : (totalData.selfProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.selfProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb" v-else>{{totalData.selfZcProfitMoney==null ? '' : (totalData.selfZcProfitMoney.toString().indexOf('.')!=-1 ? totalData.selfZcProfitMoney.toFixed(2).split(".")[0]+'.' : totalData.selfZcProfitMoney)}}<span style="color: #c2c1c1;">{{totalData.selfZcProfitMoney == null ? '' : (totalData.selfZcProfitMoney.toString().indexOf('.')!=-1 ? totalData.selfZcProfitMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb">{{totalData.selfReturnWater==null ? '' : (totalData.selfReturnWater.toString().indexOf('.')!=-1 ? totalData.selfReturnWater.toFixed(2).split(".")[0]+'.' : totalData.selfReturnWater)}}<span style="color: #c2c1c1;">{{totalData.selfReturnWater == null ? '' : (totalData.selfReturnWater.toString().indexOf('.')!=-1 ? totalData.selfReturnWater.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb">{{totalData.selfTotalProfitLossMoney==null ? '' : (totalData.selfTotalProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.selfTotalProfitLossMoney.toFixed(2).split(".")[0]+'.' : totalData.selfTotalProfitLossMoney)}}<span style="color: #c2c1c1;">{{totalData.selfTotalProfitLossMoney == null ? '' : (totalData.selfTotalProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.selfTotalProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb">{{totalData.parentTotalMoney==null ? '' : (totalData.parentTotalMoney.toString().indexOf('.')!=-1 ? totalData.parentTotalMoney.toFixed(2).split(".")[0]+'.' : totalData.parentTotalMoney)}}<span style="color: #c2c1c1;">{{totalData.parentTotalMoney == null ? '' : (totalData.parentTotalMoney.toString().indexOf('.')!=-1 ? totalData.parentTotalMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="fb">{{totalData.parentProfitLossMoney==null ? '' : (totalData.parentProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.parentProfitLossMoney.toFixed(2).split(".")[0]+'.' : totalData.parentProfitLossMoney)}}<span style="color: #c2c1c1;">{{totalData.parentProfitLossMoney == null ? '' : (totalData.parentProfitLossMoney.toString().indexOf('.')!=-1 ? totalData.parentProfitLossMoney.toFixed(2).split(".")[1] : '')}}</span></td>
+                        </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+<!--                                <td colspan="12" i18n="report.table.noData">暂无数据！</td>-->
+                                <td colspan="12">{{$t('noData')}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    const messages = {
+        zh: {
+            heji:"合计",
+            ztje:"总投金额",
+            yk:"盈亏",
+            zcje:"占成金额",
+            zcyk:"占成盈亏",
+            noData:"暂无数据！",
+        },
+        th: {
+            heji:"รวม",
+            ztje:"จำนวนเงินรวมที่ลงทุน",
+            yk:"กำไรและขาดทุน",
+            zcje:"จำนวนเงินจากการแบ่งกำไร",
+            zcyk:"ผลกำไรขาดทุนจากการแบ่งกำไร",
+            noData:"ไม่มีข้อมูล!",
+        }
+    }
+
+    var moduleName = "report";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        vm.init();
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    // var url = "zhoubaobiao.html?userId="+item.uid+"&isBack="+item.isBack;
+    //处理浏览器返回事件导致的面包屑导航问题
+    function pushHistory() {
+        var state = {
+            title: "zhoubaobiao",
+            url: "#"
+        };
+        window.history.pushState(state, "zhoubaobiao", "#xx");
+    }
+    pushHistory();
+    window.addEventListener("popstate", function(e) {
+        var uid = GetQueryString("userId");
+        var pp = sessionStorage.getItem("yueji_nav");
+        var navPath = [];
+        var pid = "";
+        if(pp!="" && pp!=null){
+            navPath=JSON.parse(pp);
+            for(var i=0,len=navPath.length;i<len;i++){
+                var item = navPath[i];
+                if(item.uid==uid){
+                    break;
+                }
+                pid = item.uid;
+            }
+        }
+        if(pid!=""){
+            var url = "zhoubaobiao.html?userId="+pid+"&isBack=1";
+            console.log("我监听到了浏览器的返回按钮事件啦");//根据自己的需求实现自己的功能
+            window.location.href=url;
+        }else{
+            sessionStorage.setItem("yueji_nav","");
+            window.location.href=window.location;
+        }
+
+    }, false);
+
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            parentRole: "",
+            selfRole: "",
+            selfRoleId:"",
+            childRole: "",
+            dataList: [],
+            totalData: {},
+            userId: "",
+            startDate: "",
+            endDate: "",
+            weekFlag: 1,
+            selfName:"",
+            isBack:"0"
+        },
+        methods: {
+            init() {
+                this.userId = GetQueryString("userId");
+                this.drawId = GetQueryString("drawId");
+                this.startDate = getWeek(0,0);
+                this.endDate = getWeek(0, 1);
+                $("#weekFlag").val(1);
+                console.log(this.startDate)
+                const _this = this;
+                layer.msg(i18np.prop('report.load.dataLoading'),{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                $.ajax({
+                    url:HOST+"report/getReportHeader?userId=" + _this.userId ,
+                    success:function(res){
+                        if(res.code == 200) {
+                            _this.parentRole = res.data.parentRole;
+                            _this.selfRole = res.data.selfRole;
+                            _this.selfRoleId = res.data.selfRoleId;
+                            _this.childRole = res.data.childRole;
+                            _this.selfName = res.data.selfName;
+                            var qs = {
+                                uid:_this.userId,
+                                roleName:_this.selfRole,
+                                userName:_this.selfName,
+                                drawId:_this.drawId,
+                                isBack:1
+                            }
+                            _this.buildNavPath(qs);
+                            _this.initDataList();
+                        }
+                    }
+                });
+            },
+            initDataList() {
+                const _this = this;
+                const  weekFlag = $("#weekFlag").val();
+                $.ajax({
+                    url:HOST+"report/getWeekReportList?userId=" + _this.userId + "&startDate=" + _this.startDate + "&endDate=" + _this.endDate + "&weekFlag=" + _this.weekFlag,
+                    success:function(res){
+                        layer.closeAll();
+                        if(res.code == 200) {
+                            _this.dataList = res.data.dataList
+                            _this.totalData = res.data.total
+                        }
+                    },
+                    error:function () {
+                        layer.closeAll();
+                    }
+                });
+            },
+            queryWeek () {
+                this.startDate = $("#start_date").val();
+                this.endDate = $("#end_date").val();
+                this.weekFlag = $("#weekFlag").val();
+                this.initDataList();
+            },
+            buildNavPath(qs){
+                var that = this;
+                var pp = sessionStorage.getItem("yueji_nav");
+                var navPath = [];
+                var pathStr = "";
+                if(pp==null || pp==""){
+                    navPath.push(qs)
+                }else{
+                    var newArr=[];
+                    navPath=JSON.parse(pp);
+                    var exist = false;
+                    for(var i=0,len=navPath.length;i<len;i++){
+                        var item = navPath[i];
+                        newArr.push(item);
+                        if(item.uid==that.uid){
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if(exist && that.isBack=="1"){
+                        navPath = newArr;
+                    }else{
+                        navPath.push(qs)
+                    }
+                }
+                navPath.forEach((item,idx)=>{
+                    var url = "zhoubaobiao.html?userId="+item.uid+"&isBack="+item.isBack;
+                    var alink = '<a class="blue" href="'+url+'" title="查看'+item.userName+'">\n' +
+                        '<span style="color: #0000FF;">'+item.userName+'</span>\n' +
+                        '<span style="color: #0000FF;">('+item.roleName+')</span>\n' +
+                        '</a>';
+                    if(pathStr==''){
+                        pathStr = alink;
+                    }else{
+                        pathStr = pathStr + ">>"+alink;
+                    }
+                });
+                $("#navPath").html(pathStr);
+                sessionStorage.setItem("yueji_nav",JSON.stringify(navPath))
+            },
+            toWeekReport(){
+                sessionStorage.setItem("yueji_nav","");
+                window.location.href="zhoubaobiao.html";
+            },
+            toMonthReport(){
+                sessionStorage.setItem("yueji_nav","");
+                window.location.href="yuebaobiao.html?all=1";
+            },
+            toDayReport(){
+                sessionStorage.setItem("yueji_nav","");
+                window.location.href="daybaobiao.html";
+            },
+            print() {
+                $("#div_print").jqprint();
+            }
+        }
+    })
+
+    function getWeek(n, type) { // 周
+        let now = new Date()
+        let day = now.getDay() //返回星期几的某一天;
+        if (!type) {
+            if (n == 1) {
+                let dayNumber = day == 0 ? 0 : 7 - day
+                now.setDate(now.getDate() + dayNumber + 1)
+            } else if (n == -1) {
+                let dayNumber = day == 0 ? 6 : day - 1
+                now.setDate(now.getDate() - dayNumber - 7)
+            } else {
+                let dayNumber = day == 0 ? 6 : day - 1
+                now.setDate(now.getDate() - dayNumber)
+            }
+        } else {
+            if (n == 1) {
+                let dayNumber = day == 0 ? 0 : 7 - day
+                now.setDate(now.getDate() + dayNumber + 1 + 6) // 在周开始的日期上+6天=周结束
+            } else if (n == -1) {
+                let dayNumber = day == 0 ? 6 : day - 1
+                now.setDate(now.getDate() - dayNumber - 7 + 6)
+            } else {
+                let dayNumber = day == 0 ? 0 : 7 - day
+                now.setDate(now.getDate() + dayNumber)
+            }
+        }
+        let date = now.getDate()
+        let month = now.getMonth() + 1
+
+        let s = now.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date)
+        return s
+    };
+</script>
+<script>
+    layui.use(['form' , 'jquery','laydate'], function(){
+        var $ = layui.jquery;
+        let weekStartDate = getWeek(0, 0); //本周开始日期
+        let weekEndDate = getWeek(0, 1); // 本周结束日期
+        //getWeek(1, 0) // 获取下周开始日期
+        //getWeek(1, 1) // 获取下周结束日期
+
+        $("#last_week").on('click', function () {
+            let preWeekStartDate = getWeek(-1, 0) // 上周开始日期
+            let preWeekEngDate = getWeek(-1, 1) // 上周结束日期
+            $("#end_date").val(preWeekEngDate);
+            $("#start_date").val(preWeekStartDate);
+            $("#weekFlag").val(0);
+        })
+
+        $("#this_week").on('click', function () {
+            $("#end_date").val(weekEndDate);
+            $("#start_date").val(weekStartDate);
+            $("#weekFlag").val(1);
+        })
+
+        const laydate = layui.laydate;
+        const endDate= laydate.render({
+            elem: '#end_date',//选择器结束时间
+            type: 'date',
+            value: weekEndDate,
+            done: function(value,date){
+                startDate.config.max={
+                    year:date.year,
+                    month:date.month-1,//关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                }
+            }
+        });
+        //日期范围
+        const startDate=laydate.render({
+            elem: '#start_date',
+            type: 'date',
+            value: weekStartDate,
+            done: function(value, date){
+                endDate.config.min ={
+                    year:date.year,
+                    month:date.month-1, //关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                };
+            }
+        });
+    });
+</script>
+</body>
+</html>

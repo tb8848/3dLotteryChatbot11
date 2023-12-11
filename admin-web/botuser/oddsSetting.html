@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>赔率设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!--    <link rel="stylesheet" href="./css/basicSetting.css" media="all">-->
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+
+    <link href="../css/style-Permutation5.css" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css" type="text/css" rel="stylesheet">
+
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            padding: 4px;
+            outline: none;
+        }
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="main">
+    <div class="module">
+        <div name="module" id="st_handicap" class="m5 mt10">
+            <template>
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.fixed.plate">  赔率设置  </span>
+                </div>
+                <div class="fr">
+                    <a href="list.html" class="" >账户列表</a></div>
+            </div>
+
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td class="relative">
+                            <span i18n="setting.information.prompt">信息提示</span>
+                            <span class="fn-toggle-show icon-open"></span>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody class="fn-toggle-content">
+                    <tr>
+                        <td class="red">
+                            猜1D赔率说明：例5/12/150为三重赔率，第一重赔率表示猜1D中1，第二重赔率表示猜1D中2，第三重赔率表示猜1D中3
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="red">
+                            猜2D赔率说明：例15/25为双重赔率，第一重赔率表示猜2D两不同号中奖，第二重赔率表示猜2D两同号中奖
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="red">
+                            包选三赔率说明：例102/362为双重赔率，第一重赔率表示包选三组中，第二重赔率表示包选三全中
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="red">
+                            包选六赔率说明：例60/320为双重赔率，第一重赔率表示包选六组中，第二重赔率表示包选六全中
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="red">
+                            通选赔率说明：例17/240为双重赔率，第一重赔率表示投注与开奖号任意两位相同中奖，第二重赔率表示投注号码与当期开奖号码按位全部相同中奖
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt10">
+                <form novalidate="novalidate">
+                    <div class="mt10">
+                        <table class="t-1">
+                            <thead>
+                                <tr class="bg1">
+                                    <td i18n="setting.three.type">类别</td>
+                                    <td>赔率</td>
+                                    <td>最小限额</td>
+                                    <td>最大限额</td>
+                                    <td i18n="setting.four.sort">排序</td>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody" class="fn-hover" v-for="(item,lmIdx) in dataList">
+                                <tr class="J_control0" v-if="item.botUserOddsList.length>1">
+                                    <td class="blue" >{{item.bettingMethod}}</td>
+                                    <td class="bg3"></td>
+                                    <td></td>
+                                    <td class="bg3"></td>
+                                    <td></td>
+                                </tr>
+                                <tr id="1" v-for="(lsItem,lsIdx) in item.botUserOddsList">
+                                    <td>{{lsItem.bettingRule}}</td>
+                                    <td class="bg3">
+                                        <input type="text" class="ime-dis" name="odds_max_limit0" _name="odds_max_limit"
+                                               positive="true" maxlength="20" v-model="lsItem.odds" @blur="changeValue(lsItem,lmIdx, lsIdx)">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="min_bet0" _name="min_bet" class="w60 ime-dis"
+                                               required="required" v-model="lsItem.minBuy"
+                                               number="true" min="0" maxlength="20" aria-required="true" @blur="changeValue(lsItem,lmIdx, lsIdx)">
+                                    </td>
+                                    <td class="bg3">
+                                        <input type="text" class="ime-dis w90" name="one_bet_limit0" _name="one_bet_limit" required="required" min="0"
+                                               maxlength="10" digits="true" aria-required="true"
+                                               v-model="lsItem.maxBuy" @blur="changeValue(lsItem,lmIdx, lsIdx)">
+                                    </td>
+                                    <td> <input type="text" class="ime-dis w60" disabled="disabled" name="sort_order0" _name="sort_order" :value="lsItem.sort_order"
+                                                required="required" digits="true" min="0" maxlength="5" aria-required="true">
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt10 tc">  <input type="button" value="提交" class="btn" @click="subData" i18n="setting.submit"> </div> </form> </div>
+            </template>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    const messages = {
+        zh: {
+            addOdds:"添加赔率",
+            batchOdds:"分批赔率",
+            packageBatchOdds:"包牌分批赔率",
+        },
+        th: {
+            addOdds:"เพิ่มอัตราต่อรอง",
+            batchOdds:"อัตราต่อรองแบบแบ่งเป็นชุด",
+            packageBatchOdds:"อัตราต่อรองแบบแบ่งเป็นชุดสำหรับการซื้อชุด",
+        }
+    }
+
+    var $ = layui.jquery;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        vm.init();
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.init();
+    });
+
+    var layer = layui.layer;
+    const vm = new Vue({
+        el: '#st_handicap',
+        i18n,
+        data: {
+            dataList:[],
+            upLsId:[],
+        },
+        userId : "",
+        methods:{
+            init(){
+                var that = this;
+                that.userId = GetQueryString("userId");
+                layer.msg(i18np.prop("setting.msg.data.loading"),{time:-1,icon:16,shade:0.3})
+                $.ajax({
+                    url: HOST + 'admin/botUserOdds/oddsList?userId=' + that.userId,
+                    type:'get',
+                    success:function(res){
+                        layer.closeAll();
+                        if(res.code==0){
+                            that.dataList = res.data;
+                            var order = 0;
+                            that.dataList.forEach((item,idx)=>{
+                                item.botUserOddsList.forEach((it1,idx1)=>{
+                                    it1.sort_order = order++;
+                                })
+                            })
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error:function(res){
+                        layer.closeAll();
+                        // layer.msg("网络异常");
+                        layer.msg(i18np.prop("setting.one.network.exception"));
+                    }
+                })
+            },
+            changeValue(lsItem,lmIdx,lsIdx){
+                var changed = false;
+                var oriDataItem = this.dataList[lmIdx].botUserOddsList[lsIdx];
+                if(oriDataItem.minBuy!=lsItem.minBuy){
+                    this.dataList[lmIdx].botUserOddsList[lsIdx].minBuy = lsItem.minBuy;
+                    changed = true;
+                }
+                if(oriDataItem.odds = lsItem.odds){
+                    this.dataList[lmIdx].botUserOddsList[lsIdx].odds = lsItem.odds;
+                    changed = true;
+                }
+                if(oriDataItem.maxBuy = lsItem.maxBuy){
+                    this.dataList[lmIdx].botUserOddsList[lsIdx].maxBuy = lsItem.maxBuy;
+                    changed = true;
+                }
+                var lsId = oriDataItem.id;
+                if(changed && !this.upLsId.includes(lsId)){
+                    this.upLsId.push(lsId);
+                }
+            },
+            subData(){
+                var that = this;
+                if(this.upLsId.length<1){
+                    // layer.msg("未修改任何数据");
+                    layer.msg(i18np.prop("setting.four.no.update.all.data"));
+                    return;
+                }
+                var upList = [];
+                this.dataList.forEach((item,idx)=>{
+                    var lsList = item.botUserOddsList;
+                    lsList.forEach((it1,idx1)=>{
+                        if(that.upLsId.includes(it1.id)){
+                            upList.push(it1);
+                        }
+                    })
+                });
+                layer.msg(i18np.prop("setting.four.data.updating"),{time:-1,icon:16,shade:0.3})
+                $.ajax({
+                    url: HOST +"admin/botUserOdds/batchUpdateOdds"
+                    , type: "POST"
+                    ,contentType: 'application/json'
+                    ,data:JSON.stringify(upList)
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            // layer.msg("更新完成");
+                            layer.msg(i18np.prop("setting.four.update.completed"));
+                            that.upLsId = [];
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error:function(res){
+                        layer.closeAll();
+                        // layer.msg("网络异常");
+                        layer.msg(i18np.prop("setting.one.network.exception"));
+                    }
+                });
+                return false;
+            },
+        }
+    });
+    // vm.init();
+
+    // layui.config({
+    //     //   base: '/js/'存放treeTable.js的文件夹
+    //     base: '../js/layui/'
+    // }).use(['form' , 'jquery','treeTable', 'util'], function() {
+    //     var $ = layui.jquery;
+    //     var layer = layui.layer;
+    //     var util = layui.util;
+    //     var treeTable = layui.treeTable, form = layui.form;
+    //     var form = layui.form;
+    //
+    //     // 渲染表格
+    //     var insTb = treeTable.render({
+    //         id: 'dp',
+    //         elem: '#dp',
+    //         url: HOST + 'dingPan/getDingPanList',
+    //         height: 'full-200',
+    //         method: 'get',
+    //         tree: {
+    //             iconIndex: 2,
+    //             isPidData: true,
+    //             idName: 'id',//父ID
+    //             pidName: 'parentId',//子ID
+    //             openName: 'open',// 是否默认展开的字段名
+    //             //public bool open { get; set; }open字段是bool类型
+    //         },
+    //         //defaultToolbar: ['filter', 'print', 'exports'],
+    //         cols: [[
+    //             {field: 'id', title: 'ID', fixed: 'left', unresize: true, sort: true, hide: true}
+    //             , {
+    //                 field: 'bettingRule', title: '类别', templet: function (d) {
+    //                     if (d.parentId == null) {
+    //                         return "<span style='color:blue'> " + d.bettingRule + "</span>";
+    //                         ;
+    //                     } else {
+    //                         return d.bettingRule
+    //                     }
+    //                 }
+    //             }
+    //             , {field: 'minBettingPrice', title: '最小下注', edit:'text'}
+    //             , {field: 'peiRate', title: '赔率上限(多个用/分开)', edit:'text'}
+    //             , {field: 'maxBettingCount', title: '单注上限', edit:'text'}
+    //             , {field: 'maxNumberTypeCount', title: '单项上限', edit:'text'}
+    //             , {field: 'peiRateLowerLimit', title: '赔率下限', edit:'text'}
+    //             , {toolbar: "#caozuo",align : 'center', title: "操作",fixed: 'right'}
+    //         ]],
+    //         done: function (res, curr, count) {
+    //             $("span:contains('一定位')").parent().parent().parent().parent().click(function () {
+    //                 return false;
+    //             });
+    //             $("span:contains('二定位')").parent().parent().parent().parent().click(function () {
+    //                 return false;
+    //             });
+    //             $("span:contains('三定位')").parent().parent().parent().parent().click(function () {
+    //                 return false;
+    //             });
+    //             //设置下拉框样式在表格之上 不会遮挡下拉框
+    //             $(".ew-tree-table").css('overflow', 'visible');
+    //             $(".ew-tree-table-box").css('overflow', 'visible');
+    //             $(".ew-tree-table-box").css('height', '100%');
+    //             $(".ew-tree-table-view").css('overflow', 'visible');
+    //             $(".ew-tree-table-cell").css('overflow', 'visible');
+    //             $("tr").css('width', '100%')
+    //             $(".ew-tree-table-head").css('border-right', 'none')
+    //             $(".ew-tree-table-indent").removeClass();
+    //             form.render();//刷新表单
+    //         },
+    //         style: 'margin-top:0;'
+    //     });
+    //
+    //     treeTable.on('tool(dp)', function (obj) {
+    //         var data=obj.data;
+    //         var event = obj.event;
+    //         if (event === 'addPeiRate' || event === 'parentAddPeiRate') {
+    //             window.location.href = "addPeiRate.html?id=" + data.id;
+    //         }else if (event === 'bpPeiRate') {
+    //             window.location.href = "baopaiSetting.html?id=" + data.id+"&lmId="+data.lotteryMethodId;
+    //         }else if (event === 'fpPeiRate') {
+    //             window.location.href = "groupPeiRateSetting.html?id=" + data.id+"&lmId="+data.lotteryMethodId;
+    //         }
+    //     })
+    //
+    //     treeTable.on('edit(dp)', function(obj){
+    //         var object1 = {};
+    //         var value = obj.value //得到修改后的值
+    //             ,data = obj.data //得到所在行所有键值
+    //             ,field = obj.field; //得到字段
+    //
+    //         if (field == "minBettingPrice") {
+    //             if (isNaN(value)) {
+    //                 layer.msg("最小下注必须是数字或小数");
+    //                 treeTable.reload('dp');
+    //                 return
+    //             }
+    //         }else if (field == "maxBettingCount" || field == "maxNumberTypeCount") {
+    //             if (!(/(^[1-9]\d*$)/.test(value))) {
+    //                 layer.msg("输入的值必须是正整数");
+    //                 treeTable.reload('menu');
+    //                 return
+    //             }
+    //         }
+    //         object1[field] = value;
+    //         object1["id"] = data.id
+    //         $.ajax({
+    //             url: HOST +"dingPan/updateDingPan"
+    //             , type: "POST"
+    //             ,contentType: 'application/json'
+    //             ,data:JSON.stringify(object1)
+    //             , success: function (data) {
+    //                 if (data.code == 500) {
+    //                     layer.msg(data.msg);
+    //                 }
+    //                 treeTable.reload('dp');
+    //             }
+    //         });
+    //     })
+    // });
+</script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../css/common.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../../css/style-Permutation5.css" media="all">
+
+    <link rel="stylesheet" href="../../css/A-P5.css" media="all">
+
+    <title>月报表</title>
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+            /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div id="main">
+    <template>
+    <div class="module">
+        <div name="module" id="memberadmin_report_month" class="m5 report" deps="report">
+            <input type="hidden" id="param_origin"
+                   value="member_id=86&amp;level=1&amp;member_level=1&amp;account=test2111&amp;link=month&amp;period_no=23008&amp;parent_id=85">
+            <input type="hidden" id="param_month" value="period_month=&amp;start_period_no=&amp;end_period_no=&amp;member_id=86&amp;level=1&amp;member_level=1&amp;account=test2111&amp;period_no=23008&amp;parent_id=85">
+                <div class="guide-memberadmin" name="module" deps="guide_memberadmin">
+                    <div class="hd">{{roleName}}{{userName}}</div>
+                    <div class="bd">
+                        <a id="buyDetail" :href="'xiazhuDetail.html?vipId='+userId+'&pid='+pid" i18n="vip.buyDetail">下注明细</a>
+                        <a class="" id="drawDetail" :href="'zhongjiang_detail.html?vipId='+userId+'&pid='+pid" i18n="vip.drawDetail">中奖明细</a>
+                        <a class="" id="stopBuyCodes" :href="'stop_buy_codes.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCode">停押号码</a>
+                        <a class="" id="lackCodes" :href="'stop_buy_codes_keep.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCodeKeep">停押保留区</a>
+                        <a class="active" id="monthReport" :href="'month_report.html?vipId='+userId+'&pid='+pid" i18n="vip.monthReport">月报表</a>
+                        <a class=""   id="bills" :href="'bills.html?vipId='+userId+'&pid='+pid" i18n="vip.bills">历史账单</a>
+                        <a id="userInfo" :href="'user_info.html?vipId='+userId+'&pid='+pid" i18n="vip.info">会员资料</a>
+                        <a href="javascript:void(0)" @click="goBack" i18n="vip.back">返回</a>
+                    </div>
+<!--                </div>-->
+            </div>
+            <div class="mt10 div_print">
+                <form id="report_week">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="4">  <span i18n="vip.monthReport">月报表</span> |  <span id="month_list">
+                            <a :href="'month_report.html?months='+month+ '&vipId=' + userId + '&pid=' + pid" v-for="month in yearMonthList" :class="monthData==month ? 'yellow red' : 'yellow'">【{{month}}】</a>
+                                <a :href="'month_report.html?all=1&vipId=' + userId + '&pid=' + pid" :class="all != 1 ? 'yellow' :'yellow red'">【<span i18n="bills.all">全部</span>】</a>
+                            </span>
+                            </td>
+                            <td colspan="2">
+                                <select class="period_list print_hide w110" id="start_period_no" @change="changeSelect()">
+                                </select>
+                                <span class="print_hide">&gt;&gt;</span>
+                                <select class="period_list print_hide w110" id="end_period_no" @change="changeSelect()">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="tc">
+                            <td rowspan="2" class="bg2" width="150" i18n="bills.date">  日期  </td>
+                            <td colspan="3" class="bg-yellow" width="40%" i18n="vip.role">会员</td>
+                            <td colspan="2" class="bg-pink" i18n="vip.agent">   代理  </td>
+                        </tr>
+                        <tr class="tc">
+                            <td class="bg-yellow" i18n="bills.bishu">笔数</td>
+                            <td class="bg-yellow" i18n="bills.zongtou">总投</td>
+                            <td class="bg-yellow" i18n="bills.yingkui">盈亏</td>
+                            <td class="bg-pink" i18n="bills.zongtou">总投</td> <!-- <td class="bg-pink">赚水</td> -->
+                            <td class="bg-pink" i18n="bills.yingkui">盈亏</td> <!---->
+                        </tr>
+                        </thead>
+                        <tbody class="fn-hover" id="tbody" v-if="dataList.length > 0">
+                        <tr v-for="(item, index) in dataList">
+                            <td> <strong class="blue">{{index + 1}}</strong>   {{item.monthDay}}   </td>
+                            <td class="bg-yellow"> {{item.vipBuyCount}} </td>
+                            <td class="bg-yellow"> {{item.vipAmount}} </td>
+                            <td class="bg-deeporg">  {{item.vipProfitLossMoney}}  </td>
+                            <td class="bg-pink"> {{item.dlAmount}} </td> <!--<td class="bg-pink"> 0 </td>-->
+                            <td class="bg-pink"> {{item.dlProfitLossMoney}} </td>
+                        </tr>
+                        <tr class="tfoot">
+                            <td class="tc">
+                                <span class="fb">{{$t('heji')}}</span>
+                            </td>
+                            <td class="fb">{{totalData.vipBuyCount}}</td>
+                            <td class="fb">{{totalData.vipAmount}}</td>
+                            <td class="fb">{{totalData.vipProfitLossMoney}}</td>
+                            <td class="fb">{{totalData.dlAmount}}</td>
+                            <td class="fb">{{totalData.dlProfitLossMoney}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody v-else>
+                        <tr>
+                            <td colspan="12" i18n="bills.noData">暂无数据！</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+    </template>
+</div>
+
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+
+<script>
+    const messages = {
+        zh: {
+            heji:"合计",
+            noData:"暂无数据！",
+        },
+        th: {
+            heji:"รวม",
+            noData:"ไม่มีข้อมูล!",
+        }
+    }
+
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    var moduleName = "admin_vip";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+
+    var $ = layui.jquery;
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data:{
+            yearMonthList: "",
+            monthData: "",
+            month: "",
+            all: "",
+            dataList: [],
+            totalData: {},
+            userId: "",
+            pid: "",
+            userName:"",
+            roleName:"",
+        },
+        methods:{
+            goBack(){
+                //window.location.href="../../baobiao/daybaobiao.html?userId="+this.userId;
+                window.location.href="../userList2.html?id="+this.pid;
+                //history.back();
+            },
+            init() {
+                const flag = GetQueryString("userDetail");
+                const monthQuery = GetQueryString("months");
+                this.all = GetQueryString("all");
+                this.userId = GetQueryString("vipId");
+                this.pid = GetQueryString("pid");
+                if (flag == 1) {
+                    $("#top").hide();
+                }
+                this.userName = window.sessionStorage.getItem("userName");
+                this.roleName = window.sessionStorage.getItem("roleName");
+                if (monthQuery != null && monthQuery != "" && monthQuery != undefined) {
+                    this.month = monthQuery;
+                    this.monthData = monthQuery;
+                }
+                if (this.userId != null && this.userId != '' && this.userId != undefined) {
+                    $("#dgd").hide();
+                    $("#dgd2").hide();
+                }
+                const _this = this;
+
+                $.ajax({
+                    url: HOST + "draw/getDrawList68"
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            let c = 1;
+                            let startDraw = GetQueryString("startDraw");
+                            let endDraw = GetQueryString("endDraw");
+                            // 期号select
+                            for(const i in res.data) {
+                                if (startDraw != "" && startDraw != null && startDraw != undefined) {
+                                    if (startDraw == res.data[i].drawId) {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"' selected>"+res.data[i].drawIdStr+"</option>")
+                                    }else {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                    }
+                                }else {
+                                    if (c == res.data.length) {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"' selected>"+res.data[i].drawIdStr+"</option>")
+                                    }else {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                    }
+                                }
+
+                                c ++;
+                            }
+                            for(const i in res.data) {
+                                if (endDraw != "" && endDraw != null && endDraw != undefined) {
+                                    if (endDraw == res.data[i].drawId) {
+                                        $("#end_period_no").append("<option value='"+res.data[i].drawId+"' selected>"+res.data[i].drawIdStr+"</option>")
+                                    }else {
+                                        $("#end_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                    }
+                                }else {
+                                    $("#end_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                }
+
+                            }
+                            _this.initList();
+                        } else {
+                            layer.msg(i18np.prop('dataError'));
+                        }
+                    }
+                });
+            },
+            initList() {
+                layer.msg(i18np.prop('dataLoading'),{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                const _this = this;
+                let startDraw = "";
+                let endDraw = "";
+                if (GetQueryString("all") == 1) {
+                    startDraw = $("#start_period_no").val();
+                    endDraw = $("#end_period_no").val();
+                }
+                $.ajax({
+                    url: HOST + "vip/report/getVipMonthReport?startDrawId=" + startDraw + "&endDrawId=" + endDraw + "&month=" + _this.month + "&userId=" + _this.userId
+                    , type: "get"
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            _this.yearMonthList = res.data.yearMonthList;
+                            _this.dataList = res.data.dataList
+                            _this.totalData = res.data.total
+                        } else {
+                            layer.msg(i18np.prop('dataError'));
+                        }
+                    }
+                });
+            },
+            changeSelect () {
+                const startDraw = $("#start_period_no").val();
+                const endDraw = $("#end_period_no").val();
+                window.location.href = 'month_report.html?all=1&startDraw=' + startDraw + "&endDraw=" + endDraw + "&vipId=" + this.userId + "&pid=" + this.pid
+            },
+        }
+    })
+
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties("admin_vip-"+moduleName);
+            vm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties("admin_vip-"+moduleName);
+        i18n.locale=lang;
+    }
+    //vm.init();
+
+</script>
+
+</body>
+</html>

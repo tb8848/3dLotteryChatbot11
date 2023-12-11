@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>拦货明细</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        td {
+            border: 1px solid #a4d4f9 !important;
+            padding: 4px;
+            outline: none;
+        }
+
+        th {
+            border: 1px solid #a4d4f9 !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+        .layui-table-tool {
+            position: relative;
+            z-index: 890;
+            width: 100%;
+            min-height: 30px;
+            line-height: 30px;
+            padding: 5px 15px;
+            border-width: 0 0 1px;
+        }
+        .layui-table-tool-self{
+            display: none;
+        }
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+
+        .layui-table{
+            width: 100% !important;
+        }
+
+        .layui-select {
+            width: 110px;
+        }
+
+        .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table[lay-even] tr:nth-child(even) {
+            background-color: #d8f8104a !important;
+        }<!-- tbody tr:hover -->
+
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="mainLH">
+    <div class="module">
+        <div name="module" id="awardreadadmin" class="m5 mt10">
+            <input type="hidden" id="param_month" value="period_no=">
+            <div class="mt10">
+                <form action="" novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1">
+                                <td colspan="18"></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td width="40" i18n="lanhuo.query.account">查账号</td>
+                                <td width="80">
+                                    <input type="text" class="w90" name="member_account" id="member_account" value="">
+                                </td>
+                                <td width="40" i18n="lanhuo.query.codes">查号码</td>
+                                <td width="80">
+                                    <input type="text" class="w90" name="bet_no" id="bet_no" maxlength="4" betno="true">
+                                </td>
+                                <!--<td width="15" i18n="lanhuo.query.xian">现</td>
+                                <td width="10">
+                                    <input type="checkbox" name="show_xian" id="show_xian" value="1">
+                                </td>-->
+                                <td width="30" i18n="lanhuo.query.list">列出</td>
+                                <td width="60">
+                                    <select name="range_type" id="range_type">
+                                        <option value="0">{{$t('odds')}}</option>
+                                        <option value="1">{{$t('money')}}</option>
+                                        <option value="2">{{$t('decode')}}</option>
+                                    </select>
+                                </td>
+                                <td width="60">
+                                    <input type="text" class="w60" name="range_min" id="range_min" nonnegative="true" maxlength="10">
+                                </td>
+                                <td width="15" i18n="lanhuo.query.to">至</td>
+                                <td width="60">
+                                    <input type="text" class="w60" name="range_max" id="range_max" positive="true" maxlength="10">
+                                </td>
+                                <td width="30" i18n="lanhuo.query.classify">分类</td>
+                                <td width="60">
+                                    <select name="category" id="category">
+                                        <option value="">全部</option>
+                                        <option value="a">直选</option>
+                                        <option value="19">&nbsp;&nbsp;普通</option>
+                                        <option value="20">&nbsp;&nbsp;和值</option>
+                                        <option value="b">组三</option>
+                                        <option value="21">&nbsp;&nbsp;普通</option>
+                                        <option value="22">&nbsp;&nbsp;胆拖</option>
+                                        <option value="23">&nbsp;&nbsp;和值</option>
+                                        <option value="c">组六</option>
+                                        <option value="24">&nbsp;&nbsp;普通</option>
+                                        <option value="25">&nbsp;&nbsp;胆拖</option>
+                                        <option value="26">&nbsp;&nbsp;和值</option>
+                                        <option value="d">1D</option>
+                                        <option value="13">&nbsp;&nbsp;1D</option>
+                                        <option value="14">&nbsp;&nbsp;猜1D</option>
+                                        <option value="e">2D</option>
+                                        <option value="15">&nbsp;&nbsp;2D</option>
+                                        <option value="16">&nbsp;&nbsp;猜2D</option>
+                                        <option value="f">包选</option>
+                                        <option value="17">&nbsp;&nbsp;包选三</option>
+                                        <option value="18">&nbsp;&nbsp;包选六</option>
+                                        <option value="g">和数</option>
+                                        <option value="27">&nbsp;&nbsp;0/27</option>
+                                        <option value="28">&nbsp;&nbsp;1/26</option>
+                                        <option value="29">&nbsp;&nbsp;2/25</option>
+                                        <option value="30">&nbsp;&nbsp;3/24</option>
+                                        <option value="31">&nbsp;&nbsp;4/23</option>
+                                        <option value="32">&nbsp;&nbsp;5/22</option>
+                                        <option value="33">&nbsp;&nbsp;6/21</option>
+                                        <option value="34">&nbsp;&nbsp;7/20</option>
+                                        <option value="35">&nbsp;&nbsp;8/19</option>
+                                        <option value="36">&nbsp;&nbsp;9/18</option>
+                                        <option value="37">&nbsp;&nbsp;10/17</option>
+                                        <option value="38">&nbsp;&nbsp;11/16</option>
+                                        <option value="39">&nbsp;&nbsp;12/15</option>
+                                        <option value="40">&nbsp;&nbsp;13/14</option>
+                                        <option value="2">复式</option>
+                                        <option value="9">大小</option>
+                                        <option value="10">奇偶</option>
+                                        <option value="11">猜三同</option>
+                                        <option value="12">拖拉机</option>
+                                    </select>
+                                </td>
+                                <!--<td width="30" i18n="lanhuo.query.type">类型</td>
+                                <td width="60">
+                                    <select name="package_id" id="package_id">
+                                        <option value="-1">{{$t('all')}}</option>
+                                        <option value="1">{{$t('bulkCargo')}}</option>
+                                        <option value="2">{{$t('package')}}</option>
+                                    </select>
+                                </td>-->
+                                <td width="60">
+                                    <button lay-submit value="提交" class="btn" lay-filter="search-submit" i18n="lanhuo.btn.submit" style="cursor: pointer">提交</button>
+                                </td>
+                                <td></td>
+                                <td width="30">
+                                    <!--                                <a href="#!backups_detail.backups_detail|backups_detail?backup_type=1">下载</a>-->
+                                    <a href="beifen.html" id="downLoad" i18n="lanhuo.btn.download">下载</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10" id="table_div" style="border: 1px solid #000000">
+                <table style="width: 100%">
+                    <thead>
+                        <tr class="bg1">
+                            <td style="width: 546px;">拦货明细(红色为退码)</td>
+                            <td style="width: 62.2%;"></td>
+                            <td colspan="2">
+                                <select class="w110" name="draw" id="draw" lay-filter="draw"></select>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="layui-hide" id="t" lay-filter="t" ></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/lanhuo/lanHuoList.js"></script>
+<!--<script  type="text/javascript" language="javascript">-->
+<!--    const messages = {-->
+<!--        zh: {-->
+<!--            odds:"赔率",-->
+<!--            money:"金额",-->
+<!--            decode:"退码",-->
+<!--            all:"全部",-->
+<!--            oneFixed:"一定位",-->
+<!--            twoFixed:"二定位",-->
+<!--            threeFixed:"三定位",-->
+<!--            fourFixed:"四定位",-->
+<!--            twoShow:"二字现",-->
+<!--            threeShow:"三字现",-->
+<!--            fourShow:"四字现",-->
+<!--            quickHit:"快打",-->
+<!--            quickSelect:"快选",-->
+<!--            txtImport:"txt导入",-->
+<!--            ed:"二定",-->
+<!--            summary:"汇总表",-->
+<!--            bulkCargo:"散货",-->
+<!--            package:"包牌",-->
+<!--            total:"合计",-->
+<!--            notData:"暂无数据!",-->
+<!--        },-->
+<!--        th: {-->
+<!--            odds:"赔率th",-->
+<!--            money:"金额th",-->
+<!--            decode:"退码th",-->
+<!--            all:"全部th",-->
+<!--            oneFixed:"一定位th",-->
+<!--            twoFixed:"二定位th",-->
+<!--            threeFixed:"三定位th",-->
+<!--            fourFixed:"四定位th",-->
+<!--            twoShow:"二字现th",-->
+<!--            threeShow:"三字现th",-->
+<!--            fourShow:"四字现th",-->
+<!--            quickHit:"快打th",-->
+<!--            quickSelect:"快选th",-->
+<!--            txtImport:"txt导入th",-->
+<!--            ed:"二定th",-->
+<!--            summary:"汇总表th",-->
+<!--            bulkCargo:"散货th",-->
+<!--            package:"包牌th",-->
+<!--            total:"合计th",-->
+<!--            notData:"暂无数据!th",-->
+<!--        }-->
+<!--    }-->
+
+<!--    function GetQueryString(name){-->
+<!--        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");-->
+<!--        var a = decodeURI(window.location.search);-->
+<!--        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则-->
+<!--        if(r!=null)return  unescape(r[2]); return null;-->
+<!--    }-->
+
+<!--    var moduleName = "lanhuo";-->
+<!--    var defaultLang = layui.data('langTab').langType;-->
+<!--    const i18n = new VueI18n({-->
+<!--        locale: defaultLang, // set locale-->
+<!--        messages, // set locale messages-->
+<!--    });-->
+<!--    var i18np=null;-->
+
+<!--    initLangConfig({-->
+<!--        defaultLang:defaultLang,-->
+<!--        filePath: "../js/i18n/"+moduleName+"/",-->
+<!--        module:moduleName,-->
+<!--        base:"../js/"-->
+<!--    })-->
+
+<!--    var $ = layui.jquery;-->
+<!--    $(function () {-->
+<!--        var flag = GetQueryString("userDetail")-->
+<!--        if (flag == 1) {-->
+<!--            $("#top").hide();-->
+<!--            $("#downLoad").hide();-->
+<!--        }-->
+<!--    })-->
+
+<!--    function changeLang(lang){-->
+<!--        reloadI18n({-->
+<!--            defaultLang:lang,-->
+<!--            filePath: "../js/i18n/"+moduleName+"/",-->
+<!--            module:moduleName,-->
+<!--        })-->
+<!--        i18np.loadProperties(moduleName);-->
+<!--        i18n.locale=lang;-->
+<!--    }-->
+
+<!--    const vm = new Vue({-->
+<!--        el: '#mainLH',-->
+<!--        i18n,-->
+<!--        data: {},-->
+<!--        methods: {-->
+<!--            init() {-->
+<!--                console.log("初始化vue了")-->
+<!--            }-->
+<!--        }-->
+<!--    })-->
+
+<!--    layui.config(-->
+<!--        {base: '../js/'})-->
+<!--        .extend({i18np: 'i18n'})-->
+<!--        .use(['form' , 'jquery' , 'table' , 'i18np'], function(){-->
+
+<!--        var form = layui.form;-->
+<!--        var table = layui.table;-->
+
+<!--        i18np = layui.i18np;-->
+<!--        reloadI18n({-->
+<!--            defaultLang:defaultLang,-->
+<!--            filePath: "../js/i18n/"+moduleName+"/",-->
+<!--            module:moduleName,-->
+<!--        })-->
+<!--        i18np.loadProperties(moduleName);-->
+<!--        vm.init();-->
+
+<!--        var parentUserId = GetQueryString("parentId");-->
+<!--        table.render({-->
+<!--            elem: '#t',-->
+<!--            id: 'tt',-->
+<!--            totalRow: true, // 开启合计行-->
+<!--            url: HOST+'lanHuo/getLanHuoList',-->
+<!--            where: {drawStatus: "", parentUserId: parentUserId},-->
+<!--            limit: 40,-->
+<!--            cols: [-->
+<!--                [-->
+<!--                    // {title: '序号',type:'numbers',width:80 ,align: 'center'},-->
+<!--                    {field: 'printId',title: i18np.prop('lanhuo.table.head.printId'),align: 'center',totalRowText: i18np.prop('lanhuo.table.total'), width: 200},-->
+<!--                    {field: 'vipName',title: i18np.prop('lanhuo.table.head.member'),align: 'center', width: 150},-->
+<!--                    {field: 'createTime',title: i18np.prop('lanhuo.table.head.orderTime'),align: 'center',width: 200},-->
+<!--                    {field: 'buyCodes',title: i18np.prop('lanhuo.table.head.codes'),align: 'center', templet: function (d) {-->
+<!--                            if (d.hasOneFlag == 1) {-->
+<!--                                return "<span style='font-weight: bold'>" +  d.buyCodes + "</span>" +-->
+<!--                                    "<span span style='color:red; font-weight: bold' i18n='lanhuo.query.xian'>"+i18n.prop("lanhuo.query.xian")+"</span>";-->
+<!--                            }else {-->
+<!--                                return "<span style='font-weight: bold'>" + d.buyCodes + "</span>";-->
+<!--                            }-->
+<!--                        }},-->
+<!--                    {field: 'buyMoney',title: i18np.prop('lanhuo.table.head.betAmount'),align: 'center', totalRow: true},-->
+<!--                    {field: 'zhanCheng',title: i18np.prop('lanhuo.table.head.zhancheng'),align: 'center'},-->
+<!--                    {field: 'shMoney',title: i18np.prop('lanhuo.table.head.shihuoMoney'),align: 'center'},-->
+<!--                    {field: 'peiRate',title: i18np.prop('lanhuo.table.head.peiRate'),align: 'center'},-->
+<!--                    {field: 'returnWater',title: i18np.prop('lanhuo.table.head.huishui'),align: 'center', totalRow: true},-->
+<!--                    {field: 'drawMoney',title: i18np.prop('lanhuo.table.head.winLottery'),align: 'center', totalRow: true, templet: function (d) {-->
+<!--                            if (d.drawStatus == 0 || d.drawStatus == null || d.drawStatus == "") {-->
+<!--                                return "&#45;&#45;"-->
+<!--                            }else {-->
+<!--                                return d.drawMoney-->
+<!--                            }-->
+<!--                        }},-->
+<!--                    {field: 'profitLossMoney',title: i18np.prop('lanhuo.table.head.yinkui'),align: 'center', totalRow: true},-->
+<!--                    {field: 'peiRateUpper',title: i18np.prop('lanhuo.table.head.peiRateUpperLimit'),align: 'center'},-->
+<!--                    {field: 'baoPai',title: i18np.prop('lanhuo.table.head.baoPai'),align: 'center'}-->
+<!--                ]-->
+<!--            ],-->
+<!--            page: true-->
+<!--            ,page: {-->
+<!--                curr: layui.data("t_page").index-->
+<!--            },-->
+<!--            done: (res, curr, count) => {-->
+<!--                form.render();-->
+<!--                layui.data("t_page", {-->
+<!--                    key: 'index',-->
+<!--                    value: curr-->
+<!--                });-->
+
+<!--                var backCodeList = [];-->
+<!--                var data = res.data;-->
+<!--                for (var i = 0; i < res.data.length; i++) {-->
+<!--                    if (data[i].backCodeFlag == 1) {-->
+<!--                        backCodeList.push(i);-->
+<!--                    }-->
+<!--                }-->
+<!--                Layui_SetDataTableRowColor("table_div", backCodeList,'#c3c3c3', 'red');-->
+<!--            }-->
+<!--        });-->
+
+<!--        function Layui_SetDataTableRowColor(DivId, RowArray, Color, fontColor) {-->
+<!--            try {-->
+<!--                var div = document.getElementById(DivId);-->
+<!--                if (div != null) {-->
+<!--                    var table_main = div.getElementsByClassName('layui-table-main');-->
+<!--                    if (table_main != null && table_main.length > 0) {-->
+<!--                        var table = table_main[0].getElementsByClassName('layui-table');-->
+<!--                        if (table != null && table.length > 0) {-->
+<!--                            var trs = table[0].querySelectorAll("tr");-->
+<!--                            for (var RowIndex = 0; RowIndex < RowArray.length; RowIndex++) {-->
+<!--                                if (trs != null && trs.length > 0) {-->
+<!--                                    trs[RowArray[RowIndex]].style.color = fontColor;-->
+<!--                                    trs[RowArray[RowIndex]].style.backgroundColor = "#DEDEBC";-->
+<!--                                }-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            } catch (e) {-->
+<!--                console.log(e.message);-->
+<!--            }-->
+<!--        }-->
+
+<!--        $.ajax({-->
+<!--            url:HOST+"company/selectListCompany" ,-->
+<!--            success:function(res){-->
+<!--                if(res.code == 0) {-->
+<!--                    $("#company").append("<option value='' i18n='lanhuo.query.select.all'>"+i18np.prop("lanhuo.query.select.all")+"</option>")-->
+<!--                    for(var i in res.data) {-->
+<!--                        $("#company").append("<option value='"+res.data[i].id+"'>"+res.data[i].companyName+"</option>")-->
+<!--                    }-->
+<!--                    form.render()-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
+
+<!--        $.ajax({-->
+<!--            url:HOST+"draw/getDrawList68" ,-->
+<!--            success:function(res){-->
+<!--                if(res.code == 200) {-->
+<!--                    for(var i in res.data) {-->
+<!--                        $("#draw").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")-->
+<!--                    }-->
+<!--                    form.render()-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
+
+<!--        var username = "";-->
+<!--        var buyCodes = "";-->
+<!--        var xianFlag = 0;-->
+<!--        var lieType = 0;-->
+<!--        var start = "";-->
+<!--        var end = "";-->
+<!--        var lotterySettingType = "";-->
+<!--        var buyType = "";-->
+<!--        var company = "";-->
+<!--        var drawId = "";-->
+
+<!--        //搜索操作-->
+<!--        form.on('submit(search-submit)', function (data) {-->
+<!--            username = $("#member_account").val();-->
+<!--            buyCodes = $("#bet_no").val();-->
+<!--            var isXian = $("input[name='show_xian']").prop("checked");-->
+<!--            if (isXian) {-->
+<!--                xianFlag = 1;-->
+<!--            }else {-->
+<!--                xianFlag = 0;-->
+<!--            }-->
+<!--            lieType = $("#range_type").val();-->
+<!--            start = $("#range_min").val();-->
+<!--            end = $("#range_max").val();-->
+<!--            lotterySettingType = $("#category").val();-->
+<!--            buyType = $("#package_id").val();-->
+<!--            company = $("#company").val();-->
+<!--            drawId = $("#draw").val();-->
+<!--            table.reload('tt', {-->
+<!--                where: {"username": username,"buyCodes":buyCodes, "xianFlag": xianFlag, "lieType": lieType, "start": start, "end": end, "lotterySettingType": lotterySettingType, "buyType": buyType, "companyId": company, "drawId": drawId}-->
+<!--                , page: {-->
+<!--                    curr: 1-->
+<!--                }-->
+<!--            });-->
+<!--            return false;-->
+<!--        });-->
+
+<!--        $("#company").change(function() {-->
+<!--            username = $("#member_account").val();-->
+<!--            buyCodes = $("#bet_no").val();-->
+<!--            var isXian = $("input[name='show_xian']").prop("checked");-->
+<!--            if (isXian) {-->
+<!--                xianFlag = 1;-->
+<!--            }else {-->
+<!--                xianFlag = 0;-->
+<!--            }-->
+<!--            lieType = $("#range_type").val();-->
+<!--            start = $("#range_min").val();-->
+<!--            end = $("#range_max").val();-->
+<!--            lotterySettingType = $("#category").val();-->
+<!--            buyType = $("#package_id").val();-->
+<!--            company = $("#company").val();-->
+<!--            drawId = $("#draw").val();-->
+<!--            table.reload('tt', {-->
+<!--                where: {"username": username,"buyCodes":buyCodes, "xianFlag": xianFlag, "lieType": lieType, "start": start, "end": end, "lotterySettingType": lotterySettingType, "buyType": buyType, "companyId": company, "drawId": drawId}-->
+<!--                , page: {-->
+<!--                    curr: 1-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+<!--        $("#draw").change(function() {-->
+<!--            username = $("#member_account").val();-->
+<!--            buyCodes = $("#bet_no").val();-->
+<!--            var isXian = $("input[name='show_xian']").prop("checked");-->
+<!--            if (isXian) {-->
+<!--                xianFlag = 1;-->
+<!--            }else {-->
+<!--                xianFlag = 0;-->
+<!--            }-->
+<!--            lieType = $("#range_type").val();-->
+<!--            start = $("#range_min").val();-->
+<!--            end = $("#range_max").val();-->
+<!--            lotterySettingType = $("#category").val();-->
+<!--            buyType = $("#package_id").val();-->
+<!--            company = $("#company").val();-->
+<!--            drawId = $("#draw").val();-->
+<!--            table.reload('tt', {-->
+<!--                where: {"username": username,"buyCodes":buyCodes, "xianFlag": xianFlag, "lieType": lieType, "start": start, "end": end, "lotterySettingType": lotterySettingType, "buyType": buyType, "companyId": company, "drawId": drawId}-->
+<!--                , page: {-->
+<!--                    curr: 1-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+<!--        $("#btnPrint").on('click', function () {-->
+<!--            var d = $("#draw").val();-->
+<!--            window.open('printZonghuo.html?drawId=' + d);-->
+<!--        })-->
+<!--    });-->
+<!--</script>-->
+</body>
+</html>

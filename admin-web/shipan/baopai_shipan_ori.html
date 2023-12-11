@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>包牌实盘</title>
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+</head>
+<body style="overflow-y: auto">
+    <div class="module package-type">
+        <div name="module" id="handicap_reality_combo" class="m5 mt10 handicap">
+            <div name="module" id="guide_handicap" class="guide">
+                <div class="fl">
+                    <a href="#!online_account">位置 </a>
+                    <span class="red"> &gt;&gt;  包牌实盘  </span> </div>
+                    <div class="fr">
+                        <a href="outPan.html" class="">《出货盘</a> |
+                        <a href="outDetail.html" class="">出货明细</a> |
+                        <a href="winOutDetail.html" class="">出货中奖明细</a> |
+                        <a href="javascript:void(0)" class="fn-out" onclick="popChild(1)">出货</a> |
+                        <a href="outImport.html" class="">出货导入</a> |
+                        <a href="download.html" class="">下载》</a> |
+                        <a href="shiHuoDetail.html" class="">实货明细</a> |
+                        <a href="shiHuoZhongJiang.html" class="">中奖明细</a> |
+                        <a href="shiPan.html" class="">实盘</a> |
+                        <a href="baopai_shipan.html" class="fb red">包牌实盘</a> |
+                        <a href="../xupan/xupan.html" class="">虚盘</a>
+                    </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td id="nav_fixnum" class="tc1" colspan="20"> 包牌实盘&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span id="lmMethodList">
+                        <!--<a href="#!handicap_combo?ispackage=1&amp;fix_num=20&amp;no_type_id=1&amp;isSortByProfit=false&amp;showColor=1&amp;isSortByProfit=false&amp;pageSize=100" -->
+                           <!--class="white ">二定位(0)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                        <!--<a href="#!handicap_combo?ispackage=1&amp;fix_num=30&amp;no_type_id=7&amp;isSortByProfit=false&amp;showColor=1&amp;isSortByProfit=false&amp;pageSize=100"-->
+                           <!--class="white ">三定位(0)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                        <!--<a href="#!handicap_combo?ispackage=1&amp;fix_num=40&amp;no_type_id=11&amp;isSortByProfit=false&amp;showColor=1&amp;isSortByProfit=false&amp;pageSize=100" -->
+                           <!--class="white yellow">四定位(0)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            </span>
+                        <a href="shiPan.html" class="blue">跳转实盘</a>
+                        </td>
+                    </tr>
+                    <tr> <td colspan="20">
+                        <form>
+                            <input type="hidden" name="is_package" value="1">
+                            <input type="hidden" name="log" value="1">
+                        <input type="hidden" name="bet_no" id="bet_no">
+                        <input type="hidden" name="fix_num" value="40">
+                        <input type="hidden" name="isxian" value="0">
+                        <input type="hidden" id="no_type_id" value="">
+                        <table class="t-1">
+                            <tbody>
+                            <tr class="bg3">
+                                <td width="60">
+                                    <label class="dist-5"><input type="radio" name="rise_drop" value="1" class="radio" id="rise_drop1">各升</label>
+                                    <label class="dist-5"><input type="radio" name="rise_drop" value="0" class="radio" checked="checked" id="rise_drop0">各降</label>
+                                </td>
+                                <td width="60">
+                                    <input type="text" class="input-odds" name="bet_money" id="set_odds" number="true" maxlength="7" autofocus="autofocus" autocomplete="off">
+                                    <input type="hidden" name="diff_odds" id="diff_odds">
+                                </td>
+                                <td width="60">
+                                    <div class="bd-islimit">
+                                        <label class="dist-5"><input type="radio" name="islimit" class="radio" value="1" id="islimit1">上限</label>
+                                        <label class="dist-5"><input type="radio" name="islimit" class="radio" value="0" checked="checked" id="islimit0">各加</label>
+                                    </div>
+                                    <div class="bd-islimit hide">赔率</div>
+                                </td>
+                                <td width="60" class="h54">
+                                    <input type="text" class="input-odds" name="one_item_limit" id="odds_item_limit"
+                                           number="true" maxlength="8" autocomplete="off">
+                                </td>
+                                <td width="60">
+                                    <div class="dist-5"> <input type="button" value="添加" class="btn-submit" id="btnAdd"> </div>
+                                    <div class="dist-5"> <input type="button" value="取消" class="btn-cancel" id="btnCancel"> </div>
+                                </td>
+                                <td width="160" class="tc" >
+                                    <input type="button" class="p10 f13 combo-sort" value="按负值排行" onclick="sortBy(this,1)">
+                                    <br>
+                                    <br>
+                                    <input type="button" class="p10 f13 combo-sort package-combo-active" value="按号码顺序" onclick="sortBy(this,0)">
+                                </td>
+                                <td >
+                                    <div name="module" id="pager" class="pager" action="handicap_combo"
+                                                      pagebody="tbody" pagecount="100" param="fix_num=40&amp;pagesize=100&amp;no_type_id=11&amp;showColor=1&amp;isSortByProfit=false">
+                                        第 <span class="pageindex red">1</span> 页 共
+                                        <span class="pagecount red">100</span> 页
+                                        共 <span class="recordcount red">10000</span> 条
+                                        <a href="javascript:void(0)" class="fn-first">首页</a>
+                                        <a href="javascript:void(0)" class="fn-prev">上一页</a>
+                                        <a href="javascript:void(0)" class="fn-next">下一页</a>
+                                        <a href="javascript:void(0)" class="fn-last">尾页</a>
+                                        <input type="text" class="input w30 fn-index">
+                                        <input type="button" class="btn btn-gray w30 fn-go" value="GO">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="bg3" id="sublist">
+                                <td colspan="7">
+                                    <table class="w-100 ">
+                                        <tbody>
+                                        <tr class="f13 package-combo-fixedtr hide" id="fix4">
+                                            <td colspan="10"> <label class="m10" style=" cursor: pointer;">
+                                                <input class="vm1 package-check-all" type="checkbox">&nbsp;&nbsp;全選</label>
+                                            </td>
+                                        </tr>
+                                        <tr id="settingPackageList" class="tc f13 " param="fix_num=20&amp;no_type_id=1" format="formatList">
+                                            <td class="border-none">
+                                                <table class="t-1">
+                                                    <tbody>
+                                                        <tr id="settingTypes">
+                                                            <!--<td valign="top">-->
+                                                                <!--<div class="package_combo_title load-combo  load-combo-active" dict_no_type="1" dict-hold-money="0" type="2">-->
+                                                                    <!--<label class="package-combo-label fn-check-all package-check-all" data-check="true">-->
+                                                                        <!--<input class="vm1" type="checkbox">&nbsp;&nbsp;口口XX </label>-->
+                                                                    <!--<span class="package-combo-areatext fn-checkall-combo">总投（0）</span>-->
+                                                                <!--</div>-->
+                                                                <!--<ul class="package_combo_30">-->
+                                                                    <!--<li class="load-combo package-combo-last " data-packageid="100050" packge-type-no="1">-->
+                                                                        <!--<label class="package-combo-label fn-check-elem">-->
+                                                                            <!--<input class="vm1 inputBox" type="checkbox" name="package_id" value="100050">&nbsp;&nbsp;50组 </label>-->
+                                                                        <!--<span class="package-combo-areatext">-->
+                                                                            <!--<span class="package-odds-left">-->
+                                                                                <!--<span class="package-odds-inner red"> 100 </span>-->
+                                                                            <!--</span>-->
+                                                                            <!--<span class="package-odds-right">-->
+                                                                                <!--<span class="package-odds-inner"> 0 </span>-->
+                                                                            <!--</span>-->
+                                                                        <!--</span>-->
+                                                                    <!--</li>-->
+                                                                <!--</ul>-->
+                                                            <!--</td>-->
+                                                            <!--<td valign="top">-->
+                                                                <!--<div class="package_combo_title load-combo " dict_no_type="2" dict-hold-money="0" type="2">-->
+                                                                    <!--<label class="package-combo-label fn-check-all package-check-all" data-check="true">-->
+                                                                        <!--<input class="vm1" type="checkbox">&nbsp;&nbsp;口X口X </label>-->
+                                                                    <!--<span class="package-combo-areatext fn-checkall-combo">总投（0）</span>-->
+                                                                <!--</div>-->
+                                                                <!--<ul class="package_combo_30">-->
+                                                                    <!--<li class="load-combo package-combo-last " data-packageid="200050" packge-type-no="2">-->
+                                                                        <!--<label class="package-combo-label fn-check-elem">-->
+                                                                            <!--<input class="vm1 inputBox" type="checkbox" name="package_id" value="200050">&nbsp;&nbsp;50组 </label>-->
+                                                                        <!--<span class="package-combo-areatext">-->
+                                                                            <!--<span class="package-odds-left">-->
+                                                                                <!--<span class="package-odds-inner red"> 100 </span>-->
+                                                                            <!--</span>-->
+                                                                            <!--<span class="package-odds-right">-->
+                                                                                <!--<span class="package-odds-inner"> 0 </span>-->
+                                                                            <!--</span>-->
+                                                                        <!--</span>-->
+                                                                    <!--</li>-->
+                                                                <!--</ul>-->
+                                                            <!--</td>-->
+                                                            <!--<td valign="top">-->
+                                                                <!--<div class="package_combo_title load-combo " dict_no_type="3" dict-hold-money="0" type="2"> <label class="package-combo-label fn-check-all package-check-all" data-check="true">-->
+                                                                    <!--<input class="vm1" type="checkbox">&nbsp;&nbsp;口XX口 </label> <span class="package-combo-areatext fn-checkall-combo">总投（0）</span>-->
+                                                                <!--</div>-->
+                                                                <!--<ul class="package_combo_30">   <li class="load-combo package-combo-last " data-packageid="300050" packge-type-no="3">-->
+                                                                    <!--<label class="package-combo-label fn-check-elem"> <input class="vm1 inputBox" type="checkbox" name="package_id" value="300050">&nbsp;&nbsp;50组 </label>-->
+                                                                    <!--<span class="package-combo-areatext"> <span class="package-odds-left"> <span class="package-odds-inner red"> 100 </span> </span>-->
+                                                                        <!--<span class="package-odds-right"> <span class="package-odds-inner"> 0 </span> </span> </span>-->
+                                                                    <!--</li>-->
+                                                                <!--</ul>-->
+                                                            <!--</td>-->
+                                                            <!--<td valign="top">-->
+                                                                <!--<div class="package_combo_title load-combo " dict_no_type="4" dict-hold-money="0" type="2"> <label class="package-combo-label fn-check-all package-check-all" data-check="true"> <input class="vm1" type="checkbox">&nbsp;&nbsp;X口X口 </label> <span class="package-combo-areatext fn-checkall-combo">总投（0）</span> </div>-->
+                                                                <!--<ul class="package_combo_30">-->
+                                                                    <!--<li class="load-combo package-combo-last " data-packageid="400050" packge-type-no="4">-->
+                                                                        <!--<label class="package-combo-label fn-check-elem"> <input class="vm1 inputBox" type="checkbox" name="package_id" value="400050">&nbsp;&nbsp;50组 </label>  <span class="package-combo-areatext"> <span class="package-odds-left">-->
+                                                                        <!--<span class="package-odds-inner red"> 100 </span> </span> <span class="package-odds-right"> <span class="package-odds-inner"> 0 </span>-->
+                                                                    <!--</span> </span>-->
+                                                                    <!--</li>-->
+                                                                <!--</ul>-->
+                                                            <!--</td>-->
+                                                            <!--<td valign="top">-->
+                                                                <!--<div class="package_combo_title load-combo " dict_no_type="5" dict-hold-money="0" type="2"> <label class="package-combo-label fn-check-all package-check-all" data-check="true">-->
+                                                                    <!--<input class="vm1" type="checkbox">&nbsp;&nbsp;X口口X </label> <span class="package-combo-areatext fn-checkall-combo">总投（0）</span> </div>-->
+                                                                <!--<ul class="package_combo_30">   <li class="load-combo package-combo-last " data-packageid="500050" packge-type-no="5">-->
+                                                                    <!--<label class="package-combo-label fn-check-elem"> <input class="vm1 inputBox" type="checkbox" name="package_id" value="500050">&nbsp;&nbsp;50组 </label>-->
+                                                                    <!--<span class="package-combo-areatext"> <span class="package-odds-left"> <span class="package-odds-inner red"> 100 </span>-->
+                                                                    <!--</span> <span class="package-odds-right"> <span class="package-odds-inner"> 0 </span> </span> </span> </li>-->
+                                                                <!--</ul>-->
+                                                            <!--</td>-->
+                                                            <!--<td valign="top">   <div class="package_combo_title load-combo " dict_no_type="6" dict-hold-money="0" type="2"> <label class="package-combo-label fn-check-all package-check-all" data-check="true">-->
+                                                                <!--<input class="vm1" type="checkbox">&nbsp;&nbsp;XX口口 </label> <span class="package-combo-areatext fn-checkall-combo">总投（0）</span> </div>-->
+                                                                <!--<ul class="package_combo_30">   <li class="load-combo package-combo-last " data-packageid="600050" packge-type-no="6">-->
+                                                                    <!--<label class="package-combo-label fn-check-elem"> <input class="vm1 inputBox" type="checkbox" name="package_id" value="600050">&nbsp;&nbsp;50组 </label>-->
+                                                                    <!--<span class="package-combo-areatext"> <span class="package-odds-left"> <span class="package-odds-inner red"> 100 </span> </span>-->
+                                                                        <!--<span class="package-odds-right"> <span class="package-odds-inner"> 0 </span> </span> </span>-->
+                                                                <!--</li>-->
+                                                                <!--</ul>-->
+                                                            <!--</td>-->
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <!--<tr class="bg3">-->
+                                <!--<td colspan="8">-->
+                                    <!--<table class="w-100 "><tbody>-->
+                                        <!--<tr class="f13 package-combo-fixedtr">-->
+                                            <!--<td colspan="10"> <label class="m10" style=" cursor: pointer;">-->
+                                                <!--<input class="vm1 package-check-all" type="checkbox">&nbsp;&nbsp;全選</label>-->
+                                            <!--</td>-->
+                                        <!--</tr>-->
+                                <!--<tr id="settingPackageList" class=" f13 package-combo-fixedtr"-->
+                                    <!--template="fix_num40_tpl" action="/RealBetPackage/GetSettingPackageList"-->
+                                    <!--param="fix_num=40&amp;no_type_id=11" format="formatList_40">-->
+                                    <!--<td class=" load-combo" data-packageid="1105000" packge-type-no="11">-->
+                                        <!--<label class="package-combo-label package-combo-label-f40fn-check-elem">-->
+                                            <!--<input class="vm1 inputBox" type="checkbox" name="package_id" value="1105000">&nbsp;&nbsp;5000组 </label>-->
+                                        <!--<span class="package-combo-areatext package-combo-areatext-f40">-->
+                                            <!--<span class="ml20 red">10000</span> <span class="ml20">0</span>-->
+                                        <!--</span>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
+                            <!--</td>-->
+                            <!--</tr>-->
+                           <!---->
+                           <!---->
+                            </tbody>
+                        </table>
+                    </form>
+                    </td>
+                    </tr>
+                    </thead>
+
+                    <tbody class="list combo-list" id="tbody">
+                        <!--<tr> <td colspan="20" class="tc">-->
+                            <!--<div>  <a href="#!setting.st_batchodds|st_batchodds?fix_num=40&amp;no_type_id=11&amp;from=handicap&amp;ispackage=1" class="fb blue">[A分批]</a>-->
+                                <!--<span>四定位 负值排行(0)</span> &nbsp;&nbsp;&nbsp;&nbsp; 正值个数(10000)&nbsp;&nbsp; 平均赔率(0)&nbsp;&nbsp;-->
+                                <!--<a href="#!setting.st_package_odds|st_package_odds?dict_no_type_id=0&amp;fix_num=40&amp;type=package_odds&amp;is_package=1&amp;f=p" class="fb blue">[赔率变动]</a>-->
+                            <!--</div>-->
+                            <!--<input type="hidden" id="show_color" value="1">-->
+                            <!--<input type="hidden" id="fix_num" value="40">-->
+                        <!--</td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td class="l options fn-number  " number="0000" _i="0" _j="0" style="border-right-color:#d6f1d5;">-->
+                            <!--<strong class="blue">[1]</strong><br> 0000 </td>-->
+                            <!--<td class="r r-bd fn-number maxlose-->
+                                <!--" maxlose="0" number="0000">-->
+                                <!--<span title="总吃货-总出货(HoldMoney)">0</span><br>-->
+                                <!--<span title="最大损失(MaxLose)" class="yellow2">0</span>-->
+                            <!--</td>-->
+                            <!--<td class="l options fn-number  " number="0001" _i="1" _j="0" style="border-right-color:#d6f1d5;">-->
+                                <!--<strong class="blue">[2]</strong><br> 0001 </td>-->
+                            <!--<td class="r r-bd fn-number maxlose  " maxlose="0" number="0001">-->
+                                <!--<span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span>-->
+                            <!--</td>   <td class="l options fn-number  " number="0002" _i="2" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[3]</strong><br> 0002 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0002"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0003" _i="3" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[4]</strong><br> 0003 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0003"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0004" _i="4" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[5]</strong><br> 0004 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0004"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0005" _i="5" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[6]</strong><br> 0005 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0005"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0006" _i="6" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[7]</strong><br> 0006 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0006"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0007" _i="7" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[8]</strong><br> 0007 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0007"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0008" _i="8" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[9]</strong><br> 0008 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0008"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0009" _i="9" _j="0" style="border-right-color:#d6f1d5;"> <strong class="blue">[10]</strong><br> 0009 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0009"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0010" _i="0" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[11]</strong><br> 0010 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0010"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0011" _i="1" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[12]</strong><br> 0011 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0011"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0012" _i="2" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[13]</strong><br> 0012 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0012"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0013" _i="3" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[14]</strong><br> 0013 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0013"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0014" _i="4" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[15]</strong><br> 0014 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0014"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0015" _i="5" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[16]</strong><br> 0015 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0015"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0016" _i="6" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[17]</strong><br> 0016 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0016"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0017" _i="7" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[18]</strong><br> 0017 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0017"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0018" _i="8" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[19]</strong><br> 0018 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0018"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0019" _i="9" _j="1" style="border-right-color:#d6f1d5;"> <strong class="blue">[20]</strong><br> 0019 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0019"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0020" _i="0" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[21]</strong><br> 0020 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0020"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0021" _i="1" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[22]</strong><br> 0021 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0021"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0022" _i="2" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[23]</strong><br> 0022 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0022"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0023" _i="3" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[24]</strong><br> 0023 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0023"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0024" _i="4" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[25]</strong><br> 0024 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0024"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0025" _i="5" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[26]</strong><br> 0025 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0025"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0026" _i="6" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[27]</strong><br> 0026 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0026"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0027" _i="7" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[28]</strong><br> 0027 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0027"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0028" _i="8" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[29]</strong><br> 0028 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0028"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0029" _i="9" _j="2" style="border-right-color:#d6f1d5;"> <strong class="blue">[30]</strong><br> 0029 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0029"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0030" _i="0" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[31]</strong><br> 0030 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0030"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0031" _i="1" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[32]</strong><br> 0031 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0031"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0032" _i="2" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[33]</strong><br> 0032 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0032"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0033" _i="3" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[34]</strong><br> 0033 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0033"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0034" _i="4" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[35]</strong><br> 0034 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0034"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0035" _i="5" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[36]</strong><br> 0035 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0035"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0036" _i="6" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[37]</strong><br> 0036 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0036"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0037" _i="7" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[38]</strong><br> 0037 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0037"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0038" _i="8" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[39]</strong><br> 0038 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0038"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0039" _i="9" _j="3" style="border-right-color:#d6f1d5;"> <strong class="blue">[40]</strong><br> 0039 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0039"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0040" _i="0" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[41]</strong><br> 0040 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0040"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0041" _i="1" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[42]</strong><br> 0041 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0041"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0042" _i="2" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[43]</strong><br> 0042 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0042"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0043" _i="3" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[44]</strong><br> 0043 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0043"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0044" _i="4" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[45]</strong><br> 0044 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0044"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0045" _i="5" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[46]</strong><br> 0045 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0045"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0046" _i="6" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[47]</strong><br> 0046 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0046"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0047" _i="7" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[48]</strong><br> 0047 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0047"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0048" _i="8" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[49]</strong><br> 0048 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0048"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0049" _i="9" _j="4" style="border-right-color:#d6f1d5;"> <strong class="blue">[50]</strong><br> 0049 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0049"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0050" _i="0" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[51]</strong><br> 0050 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0050"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0051" _i="1" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[52]</strong><br> 0051 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0051"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0052" _i="2" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[53]</strong><br> 0052 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0052"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0053" _i="3" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[54]</strong><br> 0053 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0053"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0054" _i="4" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[55]</strong><br> 0054 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0054"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0055" _i="5" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[56]</strong><br> 0055 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0055"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0056" _i="6" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[57]</strong><br> 0056 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0056"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0057" _i="7" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[58]</strong><br> 0057 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0057"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0058" _i="8" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[59]</strong><br> 0058 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0058"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0059" _i="9" _j="5" style="border-right-color:#d6f1d5;"> <strong class="blue">[60]</strong><br> 0059 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0059"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0060" _i="0" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[61]</strong><br> 0060 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0060"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0061" _i="1" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[62]</strong><br> 0061 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0061"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0062" _i="2" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[63]</strong><br> 0062 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0062"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0063" _i="3" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[64]</strong><br> 0063 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0063"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0064" _i="4" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[65]</strong><br> 0064 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0064"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0065" _i="5" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[66]</strong><br> 0065 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0065"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0066" _i="6" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[67]</strong><br> 0066 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0066"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0067" _i="7" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[68]</strong><br> 0067 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0067"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0068" _i="8" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[69]</strong><br> 0068 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0068"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0069" _i="9" _j="6" style="border-right-color:#d6f1d5;"> <strong class="blue">[70]</strong><br> 0069 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0069"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0070" _i="0" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[71]</strong><br> 0070 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0070"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0071" _i="1" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[72]</strong><br> 0071 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0071"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0072" _i="2" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[73]</strong><br> 0072 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0072"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0073" _i="3" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[74]</strong><br> 0073 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0073"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0074" _i="4" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[75]</strong><br> 0074 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0074"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0075" _i="5" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[76]</strong><br> 0075 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0075"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0076" _i="6" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[77]</strong><br> 0076 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0076"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0077" _i="7" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[78]</strong><br> 0077 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0077"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0078" _i="8" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[79]</strong><br> 0078 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0078"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0079" _i="9" _j="7" style="border-right-color:#d6f1d5;"> <strong class="blue">[80]</strong><br> 0079 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0079"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0080" _i="0" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[81]</strong><br> 0080 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0080"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0081" _i="1" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[82]</strong><br> 0081 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0081"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0082" _i="2" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[83]</strong><br> 0082 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0082"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0083" _i="3" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[84]</strong><br> 0083 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0083"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0084" _i="4" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[85]</strong><br> 0084 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0084"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0085" _i="5" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[86]</strong><br> 0085 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0085"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0086" _i="6" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[87]</strong><br> 0086 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0086"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0087" _i="7" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[88]</strong><br> 0087 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0087"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0088" _i="8" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[89]</strong><br> 0088 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0088"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0089" _i="9" _j="8" style="border-right-color:#d6f1d5;"> <strong class="blue">[90]</strong><br> 0089 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0089"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr><tr>  <td class="l options fn-number  " number="0090" _i="0" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[91]</strong><br> 0090 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0090"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0091" _i="1" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[92]</strong><br> 0091 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0091"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0092" _i="2" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[93]</strong><br> 0092 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0092"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0093" _i="3" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[94]</strong><br> 0093 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0093"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0094" _i="4" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[95]</strong><br> 0094 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0094"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0095" _i="5" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[96]</strong><br> 0095 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0095"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0096" _i="6" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[97]</strong><br> 0096 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0096"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0097" _i="7" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[98]</strong><br> 0097 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0097"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0098" _i="8" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[99]</strong><br> 0098 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0098"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   <td class="l options fn-number  " number="0099" _i="9" _j="9" style="border-right-color:#d6f1d5;"> <strong class="blue">[100]</strong><br> 0099 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0099"> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span title="最大损失(MaxLose)" class="yellow2">0</span> </td>   </tr>-->
+
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> Copyright © 2017 xxx. All Rights Reserved </div>
+    </div>
+
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/codes_utils.js?v=3"></script>
+<script type="text/javascript">
+    var $ = layui.$;
+    var settingList = [];
+    var curpage = 1;
+    var limit = 100;
+    var pages = 1;
+    var codesList = [];
+    var pageData=[];
+    var selectedList=[];
+    var rise_drop = 0;
+    var lmId = 4;
+    var fmName = "";
+    var bpSettingList = [];
+    var changeList = [];
+    var lsId = 1;
+    var currSetting = null;
+    var bpId = null;
+    var bpBuyList=[];
+
+    //选中设置
+    window.parent.navSelect("handicap_combo");
+
+    function popChild(tag){
+        layer.open({
+            type:2,
+            title:'出货',
+            content:'kuaida.html',
+            area:['80%','500px']
+        })
+    }
+
+    //号码排序规则
+    function _compareCodeRule(it1,it2){
+        return it1.code>it2.code;
+    }
+
+    //负值排序规则
+    function _compareFuzhiRule(it1,it2){
+        return it1.maxLoss<it2.maxLoss;
+    }
+
+    //排序
+    function sortBy(_this,type){
+        $(_this).addClass('package-combo-active');
+        $(_this).siblings().removeClass('package-combo-active');
+        if(type==0){
+            //号码排行
+            codesList.sort(_compareCodeRule);
+            curpage =1;
+        }else{
+            //负值排行
+            codesList.sort(_compareFuzhiRule);
+            curpage =1;
+        }
+        __showData();
+    }
+
+
+    $("#btnAdd").on("click","",function (e) { //添加
+        if(changeList.length<1){
+            layer.msg("未选择分类");
+            return;
+        }
+        var odds = $("#set_odds").val();
+        var itemLimit = $("#odds_item_limit").val();
+        if(odds=="" && itemLimit==""){
+            layer.msg("未填写内容");
+            return;
+        }
+        var oddsChangeWay = $("input[name='rise_drop']:checked").val();
+        var itemLimitWay = $("input[name='islimit']:checked").val();
+        console.log("oddsChangeWay=",oddsChangeWay+",itemLimitWay=",itemLimitWay);
+        for(var i=0,len=changeList.length;i<len;i++){
+            changeList[i].oddsChangeType=oddsChangeWay;
+            changeList[i].itemLimitType=itemLimitWay;
+            changeList[i].peiRateChange=odds;
+            changeList[i].oneItemLimit = itemLimit;
+        }
+        layer.msg("数据保存中...",{time:-1,shade:0.3,icon:16});
+        $.ajax({
+            url:HOST+"bpSetting/change/saveChangeFromBpShiPan",
+            type:'post',
+            contentType:'application/json',
+            data:JSON.stringify(changeList),
+            success:function(res){
+                layer.closeAll();
+                if(res.code==200){
+                    getBpSettings()
+                }else{
+                    layer.msg(res.msg);
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+            }
+        })
+        return false;
+    })
+
+    $("#btnCancel").on("click","",function (e) {//取消
+        $("#set_odds").val("");
+        $("#odds_item_limit").val("");
+        $("#rise_drop0").prop("checked",true);
+        $("#islimit0").prop("checked",true);
+        return false;
+    })
+
+    window.onload = function (e) {
+        var _lmId = GetQueryString("lmId");
+        if(_lmId!=null){
+            lmId = _lmId;
+        }
+        getSettings();
+    }
+
+    function getSettings(){
+        layer.msg("数据加载中...",{time:-1,shade:0.3,icon:16})
+        $.ajax({
+            //url:HOST+'admin/drawbuy/bpshipan/settings?lotteryType=1',
+            url:HOST +'lotteryMethod/getAll?lotteryType=1',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    settingList = res.data;
+                    initSetting();
+                }
+            }
+        })
+    }
+
+    function  initSetting() {
+        var html = "";
+        var cls = '';
+        for(var i=0,len=settingList.length;i<len;i++){
+            var item = settingList[i];
+            if(item.id<5 && item.id>1){
+                if(lmId!=null && item.id==lmId){
+                    cls = 'yellow'
+                }else{
+                    cls = ''
+                }
+                html = html + '<a href="javascript:void(0)"' +
+                    'class="white '+cls+'" onclick="changeSetting(this,'+item.id+')">'+item.bettingMethod+'(<span id="lm-fuzhi-'+item.id+'">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;'
+            }
+        }
+        $("#lmMethodList").html(html);
+        getBpSettings()
+    }
+
+    function getBpSettings(){//根据大类获取小类的包牌组数据
+        $.ajax({
+            url:HOST+'bpSetting/getList?lmId='+lmId,
+            type:'get',
+            success:function(res){
+                layer.closeAll();
+                if(res.code==200){
+                    bpSettingList = res.data;
+                    initBodyData();
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+            }
+        })
+    }
+
+    function __initBpGroups(__lmId,__lsId) {
+        for(var i=0,len=bpSettingList.length;i<len;i++){
+            var item = bpSettingList[i];
+            if(item.lotteryMethodId==__lmId){
+                var list = item.lotterySettingResList;
+                for(j=0,ll=list.length;j<ll;j++){
+                    if(list[j].id==__lsId){
+                        return list[j]
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    function changeSetting(obj,_lmId){
+        lmId = _lmId;
+        $(obj).addClass('yellow');
+        $(obj).siblings().removeClass('yellow');
+        changeList = [];
+        initBodyData();
+    }
+
+    function initBodyData() {
+        if(lmId==4){
+            //fmName = "四定位";
+            //codesList = createCodesForDing(4,"");
+            for(var i=0,len=settingList.length;i<len;i++){
+                var item = settingList[i];
+                //if(item.id==lmId){
+                    $("#pager").show();
+                    var sublist = item.lotterySettingList;
+                    lsId = sublist[0].id;
+                    __subSetting(4,sublist);
+                //}
+            }
+        }else if(lmId==2){
+            for(var i=0,len=settingList.length;i<len;i++){
+                var item = settingList[i];
+                //if(item.id==lmId){
+                    $("#pager").hide();
+                    var sublist = item.lotterySettingList;
+                    lsId = sublist[0].id;
+                    __subSetting(2,sublist);
+                //}
+            }
+
+        }else if(lmId==3){
+            for(var i=0,len=settingList.length;i<len;i++){
+                var item = settingList[i];
+                //if(item.id==lmId){
+                    $("#pager").show();
+                    var sublist = item.lotterySettingList;
+                    lsId = sublist[0].id;
+                    __subSetting(3,sublist);
+                //}
+            }
+        }
+
+    }
+
+    function __subSetting(len,sublist) {
+        var tdHtml = "";
+        var activeCls = '';
+        for(var i=0,ll=sublist.length;i<ll;i++){
+            var item = sublist[i];
+            if(lsId==item.id){
+                fmName = item.bettingRule;
+                currSetting = item;
+                activeCls = 'load-combo-active';
+            }else {
+                activeCls = '';
+            }
+            var config = __initBpGroups(lmId,item.id);
+            if(null!=config){
+                var glist = config.bpSettingList;
+                if(null!=glist){
+                    var groupList = "";
+                    if(lmId==4){//四定位的
+                        $("#fix4").html('<td colspan="10"> <label class="m10" style=" cursor: pointer;">\n' +
+                            '<input class="vm1 package-check-all" type="checkbox" value="'+item.id+'" onclick="selectAll(this,'+item.id+')" id="selectAll-'+item.id+'">&nbsp;&nbsp;全選</label>\n' +
+                            '</td>').show();
+                        for(var j=0,ss=glist.length;j<ss;j++){
+                            var it = glist[j];
+                            if(null == bpId){//当前选中的包牌设置ID
+                                if(j==0){
+                                    bpId = it.id;
+                                }
+                            }
+                            if(it.groupCount!=null){
+                                var pr = it.peiRateChange==null || it.peiRateChange==""?item.peiRate:it.peiRateChange;
+                                tdHtml = tdHtml +'<td class="load-combo" data-packageid="1105000" packge-type-no="11" align="left"> ' +
+                                    '<label class="package-combo-label package-combo-label-f40fn-check-elem" style="float:clear">  ' +
+                                    '<input class="vm1 inputBox chk_'+item.id+'" type="checkbox" value="'+it.id+'" name="package_id"  onclick="selectOne(this,'+item.id+',\''+it.id+'\')">&nbsp;&nbsp;5000组 </label>' +
+                                    '<span class="package-combo-areatext package-combo-areatext-f40"> ' +
+                                    '<span class="ml20 red" onclick="groupClick(this,'+lmId+','+item.id+',\''+it.id+'\')">'+pr+'</span> ' +
+                                    '<span class="ml20" >0</span>  ' +
+                                    '</span> ' +
+                                    '</td>';
+                            }
+                        }
+                    }else{
+                        $("#fix4").hide();
+                        for(var j=0,ss=glist.length;j<ss;j++){
+                            var it = glist[j];
+                            if(null == bpId){//当前选中的包牌设置ID
+                                if(j==0){
+                                    bpId = it.id;
+                                }
+                            }
+                            if(it.groupCount!=null){
+                                var pr = it.peiRateChange==null || it.peiRateChange==""?item.peiRate:it.peiRateChange;
+                                groupList = groupList + '<li class="load-combo package-combo-last li_'+it.id+'" data-packageid="100050" packge-type-no="1">' +
+                                    '<label class="package-combo-label fn-check-elem">' +
+                                    '<input class="vm1 inputBox chk_'+item.id+'" type="checkbox" value="'+it.id+'" name="package_id" value="100050" onclick="selectOne(this,'+item.id+',\''+it.id+'\')">&nbsp;&nbsp;'+it.groupCount+'组 </label>\n' +
+                                    '<span class="package-combo-areatext">\n' +
+                                    '<span class="package-odds-left">\n' +
+                                    '<span class="package-odds-inner red" onclick="groupClick(this,'+lmId+','+item.id+',\''+it.id+'\')"> '+pr+' </span></span>' +
+                                    '<span class="package-odds-right">\n' +
+                                    '<span class="package-odds-inner" id="onecode-money-'+it.id+'"> 0 </span></span>\n' +
+                                    '</span></li>';
+                            }
+                        }
+                        groupList = '<ul class="package_combo_30">' + groupList +'</ul>';
+                        tdHtml = tdHtml + '<td valign="top">' +
+                            '<div class="package_combo_title load-combo '+activeCls+'" dict_no_type="1" dict-hold-money="0" type="2" id="subSettingType-'+item.id+'">' +
+                            '<label class="package-combo-label fn-check-all package-check-all" data-check="true">' +
+                            '<input class="vm1" type="checkbox" value="'+item.id+'" onclick="selectAll(this,'+item.id+')" id="selectAll-'+item.id+'">&nbsp;&nbsp;'+item.bettingRule+' </label>' +
+                            '<span class="package-combo-areatext fn-checkall-combo" onclick="groupClick(this,'+lmId+','+item.id+',\'\')">总投（<span id="ls-fuzhi-'+item.id+'">0</span>）</span></div>'
+                            + groupList+'</td>';
+                    }
+                }
+            }
+        }
+        $("#settingTypes").html(tdHtml);
+        codesList = createCodesForDing(len,fmName);
+        //console.log("==========codesList=",codesList);
+        initPager();
+        __getBpBuyList();
+        __getSettingFuzhi();
+
+    }
+
+    function  __getSettingFuzhi() {
+        $.ajax({
+            url:HOST+'admin/drawbuy/bpshipan/settings?lotteryType=1',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    var dlist = res.data;
+                    dlist.forEach((item,idx)=>{
+                        $("#lm-fuzhi-"+item.id).html(item.fuzhi);
+                        item.lotterySettingList.forEach((it1,idx1)=>{
+                            $("#ls-fuzhi-"+it1.id).html(it1.fuzhi);
+                        })
+                    })
+                    //initSetting();
+                }
+            }
+        })
+    }
+
+
+    //分组赔率点击事件
+    function groupClick(obj,__lmId,__lsId,__bpSettingId) {
+        if(__bpSettingId==""){
+            $("#subSettingType-"+__lsId).addClass('load-combo-active');
+            $(".package_combo_title").not($("#subSettingType-"+__lsId)).removeClass('load-combo-active');
+            $("li").removeClass('load-combo-active');
+        }else{
+            $(".li_"+__bpSettingId).addClass('load-combo-active');
+            $("li").not($(".li_"+__bpSettingId)).removeClass('load-combo-active');
+            $(".package_combo_title").removeClass('load-combo-active');
+        }
+
+        for(var i=0,len=settingList.length;i<len;i++){
+            var item = settingList[i];
+            if(item.id==__lmId){
+                var slist = item.lotterySettingList;
+                for(var j=0,ll=slist.length;j<ll;j++){
+                    if(slist[j].id==__lsId){
+                        currSetting = slist[j];
+                        fmName = slist[j].bettingRule;
+                        codesList = createCodesForDing(__lmId,fmName);
+                        curpage = 1;
+                        if(__bpSettingId!=""){
+                            bpId = __bpSettingId;
+                        }else{
+                            var config = __initBpGroups(__lmId,__lsId);
+                            //console.log("config ====",JSON.stringify(config));
+                            if(null!=config) {
+                                //var pr = config.peiRateUpperLimit;
+                                var glist = config.bpSettingList;
+                                if (null != glist) {
+                                    for(var j=0,ss=glist.length;j<ss;j++) {
+                                        var it = glist[j];
+                                        if (it.groupCount!=null) {//当前选中的包牌设置ID
+                                            bpId = it.id;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        initPager();
+                        __getBpBuyList();
+                        //__showCodes();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    function __showCodes() {
+        for(var i=0,len=codesList.length;i<len;i++) {
+            var item = codesList[i];
+            var holdMoney = 0;
+            var maxloss = 0;
+            var codeInfo = __getBuyCodeInfo(item.code);
+            if (null != codeInfo) {
+                maxloss = codeInfo.maxLoss;
+                holdMoney = codeInfo.buyMoney
+                item.maxLoss = maxloss;
+                item.chuhuo = holdMoney;
+                codesList[i] = item;
+                $("#onecode-money-"+bpId).html(holdMoney);
+            }
+        }
+        __showData();
+    }
+
+    function __showData(){
+        var si = (curpage-1)*limit;
+        var ei = curpage*limit;
+        if(ei>codesList.length){
+            ei=codesList.length;
+        }
+        pageData = codesList.slice(si,ei);
+        var zzhi = codesList.length - currSetting.codesAmount;
+        var avg_odds = __getAvgPr();
+        var fixRow = '<tr> <td colspan="20" class="tc">' +
+            '<div>  <a href="../setting/baopaiSetting.html?id='+currSetting.id+'&lmId='+currSetting.lotteryMethodId+'" class="fb blue">[A分批]</a>\n' +
+            '<span>'+fmName+' 负值排行('+currSetting.fuzhi+')</span> &nbsp;&nbsp;&nbsp;&nbsp; 正值个数('+zzhi+')&nbsp;&nbsp; 平均赔率('+avg_odds+')&nbsp;&nbsp;\n' +
+            '<a href="../setting/packageOddsChange.html?lsId='+currSetting.id+'&lmId='+currSetting.lotteryMethodId+'" class="fb blue">[赔率变动]</a>\n' +
+            '</div>' +
+            '<input type="hidden" id="show_color" value="1">\n' +
+            '<input type="hidden" id="fix_num" value="40">\n' +
+            '</td></tr>';
+        var rows = "";
+        var codeDataStr='';
+        for(var i=0,len=pageData.length;i<len;i++){
+            var item = pageData[i];
+            if(parseInt(i%10)==0 && i>0){
+                rows = rows +'<tr>'+codeDataStr+'</tr>';
+                codeDataStr = '';
+            }
+            var xuhao = (curpage-1)*limit +(i+1);
+            codeDataStr = codeDataStr + '<td class="l options fn-number  " number="'+item.code+'" _i="0" _j="0" style="border-right-color:#d6f1d5;">\n' +
+                '<strong class="blue">['+xuhao+']</strong><br> '+item.code+' </td>\n' +
+                '<td class="r r-bd fn-number maxlose" maxlose="0" number="'+item.code+'">\n' +
+                '<span title="总吃货-总出货(HoldMoney)" id="chuhuo-'+item.code+'">'+item.chuhuo+'</span><br>\n' +
+                '<span title="最大损失(MaxLose)" class="yellow2" id="loss-'+item.code+'">'+item.maxLoss+'</span>\n' +
+                '</td>'
+        }
+        rows = rows +'<tr>'+codeDataStr+'</tr>';
+        $("#tbody").html(fixRow + rows);
+    }
+
+    //单选
+    function selectOne(obj,__lsId,__bpId){
+        var idx = 0;
+        var lsChked = 0;
+        var existIdx = __checkSelectExist(__lsId,__bpId);
+        for(var i=0,len=changeList.length;i<len;i++){
+            if(changeList[i].lotterySettingId==__lsId){
+                lsChked++;
+            }
+        }
+        if(obj.checked){
+            if(existIdx==-1){
+                changeList.push({
+                    lotterySettingId:__lsId,
+                    id:__bpId
+                })
+                lsChked++;
+            }
+            var chkLen = 0;
+            $(".chk_"+__lsId).each(function(e){
+                if(this.checked){
+                    chkLen++;
+                }
+            });
+            if(chkLen==lsChked){
+                $("#selectAll-"+__lsId).prop("checked",true);
+            }
+        }else{
+            if(existIdx!=-1){
+                changeList.splice(existIdx,1);
+                $("#selectAll-"+__lsId).prop("checked",false);
+            }
+        }
+        console.log("selectOne=======changeList=",JSON.stringify(changeList));
+    }
+
+    //检测是否已选择，如果是，返回元素下标，否则返回-1
+    function __checkSelectExist(__lsId,__bpId) {
+        for(var i=0,len=changeList.length;i<len;i++){
+            if(changeList[i].lotterySettingId==__lsId){
+                if(changeList[i].id==__bpId){
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+
+
+    //全选
+    function selectAll(obj,__lsId){
+        var idx = 0;
+        var lsChked = 0;
+        if(obj.checked){
+            $(".chk_"+__lsId).each(function(e){
+                this.checked = true;
+                var existIdx = __checkSelectExist(__lsId,this.value);
+                if(existIdx==-1){
+                    changeList.push({
+                        lotterySettingId:__lsId,
+                        id:this.value
+                    })
+                }
+            });
+        }else{
+            $(".chk_"+__lsId).each(function(e){
+                this.checked = false;
+                var existIdx = __checkSelectExist(__lsId,this.value);
+                if(existIdx!=-1){
+                    changeList.splice(existIdx,1);
+                }
+            });
+        }
+        console.log("selectAll=======changeList=",JSON.stringify(changeList));
+    }
+
+
+
+    function __getBpBuyList(){
+        $.ajax({
+            url:HOST+'admin/drawbuy/bplist?bpId='+bpId+"&lsId="+lsId,
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    bpBuyList = res.data.dataList;
+
+                    __showCodes();
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+            }
+        })
+    }
+
+    function __getBuyCodeInfo(code){
+        for(var i=0,len=bpBuyList.length;i<len;i++){
+            var item = bpBuyList[i];
+            if(item.buyCode==code){
+                return item;
+            }
+            // var dlist = item.dataList;
+            // for(var j=0,ll=dlist.length;j<ll;j++) {
+            //     if (dlist[j].buyCode == code) {
+            //         return dlist[j];
+            //     }
+            // }
+        }
+        return null;
+    }
+
+
+    function __getAvgPr(){//获取平均赔率
+        for(var i=0,len=bpBuyList.length;i<len;i++){
+            var item = bpBuyList[i];
+            if(item.lotterySettingId==lsId){
+                return item.avg_odds;
+            }
+        }
+        return currSetting.peiRate;
+    }
+
+    function initPager() {
+        var total = codesList.length;
+        pages = total%limit==0?parseInt(total/limit):parseInt(total/limit)+1;
+        $(".pageindex").html(curpage);
+        $('.pagecount').html(pages);
+        $('.recordcount').html(total);
+    }
+
+    $("#pager").on("click",'.fn-first',function (e) {
+        if(curpage>1){
+            curpage = 1;
+            $(".pageindex").html(curpage);
+            __showCodes();
+        }
+    })
+
+
+    $("#pager").on("click",'.fn-next',function (e) {
+        if(curpage<pages){
+            curpage++;
+            $(".pageindex").html(curpage);
+            __showCodes();
+        }
+    })
+
+    $("#pager").on("click",'.fn-prev',function (e) {
+        if(curpage>1){
+            curpage--;
+            $(".pageindex").html(curpage);
+            __showCodes();
+        }
+    })
+
+    $("#pager").on("click",'.fn-last',function (e) {
+        if(curpage<pages){
+            curpage=pages;
+            $(".pageindex").html(curpage);
+            __showCodes();
+        }
+    })
+
+</script>
+
+    <!--<script type="text/html" id="tpl_refresh">-->
+    <!--<tr>-->
+        <!--<td colspan="20" class="tc">-->
+            <!--<div>-->
+                <!--{{if !IsSubAccount}} <a href="#!setting.st_batchodds|st_batchodds?fix_num={{Param.fix_num}}&no_type_id={{Data.NoTypeData[0].NoTypeId}}&from=handicap&ispackage=1" class="fb blue">[A分批]</a>{{/if}} <span>{{Data.NoTypeData[0].NoTypeName}} 负值排行({{Data.NoTypeData[0].HoldMoneyTotal | format_floor}})</span>-->
+                <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                <!--正值个数({{Data.NoTypeData[0].PositiveNoCount}})&nbsp;&nbsp;-->
+                <!--平均赔率({{Data.NoTypeData[0].odds_avg}})&nbsp;&nbsp;-->
+                <!--{{if Data.is_use==1}}-->
+                <!--<a href="#!setting.st_package_odds|st_package_odds?dict_no_type_id=0&fix_num={{Param.fix_num}}&type=package_odds&is_package=1&f=p" class="fb blue">[赔率变动]</a>-->
+                <!--{{/if}}-->
+            <!--</div>-->
+            <!--<input type="hidden" id="show_color" value="{{Param.showColor}}" />-->
+            <!--<input type="hidden" id="fix_num" value="{{Param.fix_num}}" />-->
+        <!--</td>-->
+    <!--</tr>-->
+    <!--{{if !Data.NoTypeData[0].NoData.length}}-->
+    <!--<tr><td colspan="22">暂无数据！</td></tr>-->
+    <!--{{else}}-->
+    <!--{{each Data.NoTypeData[0].NoData as item i}}-->
+    <!--{{if i % 10 == 0}}-->
+    <!--<tr>-->
+        <!--{{/if}}-->
+        <!--<td class="l  options   fn-number {{if item.IsBlue}}bg-blue{{/if}} {{if item.IsWin}}bg-win{{else}}{{if item.IsPaused}}active{{/if}}{{/if}}" number="{{item.Number}}" _i="{{i%10}}" _j="{{(i/10).toFixed()}}" style="border-right-color:#d6f1d5;">-->
+            <!--<strong class="blue">[{{item.OrderId}}]</strong><br>-->
+            <!--{{item.Number}}-->
+        <!--</td>-->
+        <!--<td class="r r-bd fn-number maxlose {{if item.IsBlue}}bg-blue{{/if}} {{if item.IsWin}}bg-win{{else}}{{if item.IsPaused}}active{{/if}}{{/if}}" maxlose="{{item.MaxLose}}" number="{{item.Number}}">-->
+            <!--<span title="总吃货-总出货(HoldMoney)">{{item.HoldMoney.toFixed(2)}}</span><br>-->
+            <!--<span title="最大损失(MaxLose)" class="{{if Param.showColor == 1}}{{if item.MaxLose < 0}}red{{else}}yellow2{{/if}}{{else}}yellow2{{/if}}">{{item.MaxLose.toInt()}}</span>-->
+        <!--</td>-->
+        <!--{{/each}}-->
+        <!--{{/if}}-->
+    <!--</tr>-->
+<!--</script>-->
+    <!---->
+    <!--<script type="text/html" id="fix_num40_tpl">-->
+    <!--{{if Param.fix_num == 40}}-->
+    <!--{{if Data && Data.length}}-->
+    <!--{{each Data as item i}}-->
+    <!--<td class="{{if item.is_paused}}package-combo-pause{{/if}} load-combo" data-packageid="{{item.package_id}}" packge-type-no="{{item.dict_no_type_id}}">-->
+        <!--<label class="package-combo-label package-combo-label-f40{{if item.is_use}}fn-check-elem{{/if}}">-->
+            <!--{{if item.package_name == "" || item.package_name == undefined}}-->
+            <!--暂无数据！-->
+            <!--{{else}}-->
+            <!--<input class="vm1 inputBox" type="checkbox" name="package_id" value="{{item.package_id}}" {{if !item.is_use}}disabled{{/if}}/>&nbsp;&nbsp;{{item.package_name}}-->
+        <!--</label><span class="package-combo-areatext package-combo-areatext-f40">-->
+                <!--<span class="ml20 red">{{item.package_odds}}</span>-->
+                <!--<span class="ml20">{{item.hold_money}}{{if !item.is_use}}&nbsp;(已删){{/if}}</span>-->
+                <!--{{/if}}-->
+            <!--</span>-->
+    <!--</td>-->
+    <!--{{/each}}-->
+    <!--{{else}}-->
+    <!--<td>暂无数据！</td>-->
+    <!--{{/if}}-->
+    <!--{{else if Param.fix_num == 30 || Param.fix_num == 20}}-->
+    <!--<td class="border-none">-->
+        <!--<table class="t-1">-->
+            <!--<tr>-->
+                <!--{{each Data as item i}}-->
+                <!--<td valign="top">-->
+                    <!--{{each item as elem j}}-->
+                    <!--{{if j == 0}}-->
+                    <!--<div class="package_combo_title load-combo {{if i == Param.no_type_id}} load-combo-active{{/if}}" dict_no_type="{{elem.dict_no_type_id}}" dict-hold-money="{{elem.Dict_hold_Money}}" type="2">-->
+                        <!--<label class="package-combo-label fn-check-all package-check-all" data-check="true">-->
+                            <!--<input class="vm1" type="checkbox" />&nbsp;&nbsp;{{elem.no_type_name}}-->
+                        <!--</label>-->
+                        <!--<span class="package-combo-areatext fn-checkall-combo">总投（{{elem.Dict_hold_Money}}）</span>-->
+                    <!--</div>-->
+                    <!--{{/if}}-->
+                    <!--{{/each}}-->
+                    <!--<ul class="package_combo_30">-->
+                        <!--{{each item as elem j}}-->
+                        <!--{{if elem.package_name}}-->
+                        <!--<li class="load-combo {{if j == item.length-1}}package-combo-last{{/if}} {{if elem.is_paused}}package-combo-pause{{/if}}" data-packageid="{{elem.package_id}}" packge-type-no="{{elem.dict_no_type_id}}">-->
+                            <!--{{if elem.is_use}}-->
+                            <!--<label class="package-combo-label fn-check-elem">-->
+                                <!--<input class="vm1 inputBox" type="checkbox" name="package_id" value="{{elem.package_id}}" />&nbsp;&nbsp;{{elem.package_name}}-->
+                            <!--</label>-->
+                            <!--{{else}}-->
+                            <!--<label class="package-combo-label">-->
+                                <!--<input class="vm1 inputBox" type="checkbox" name="package_id" disabled value="{{elem.package_id}}" />&nbsp;&nbsp;{{elem.package_name}}-->
+                            <!--</label>-->
+                            <!--{{/if}}-->
+                            <!--<span class="package-combo-areatext">-->
+                                    <!--<span class="package-odds-left">-->
+                                        <!--<span class="package-odds-inner red">-->
+                                            <!--{{elem.package_odds}}-->
+                                        <!--</span>-->
+                                    <!--</span>-->
+                                    <!--<span class="package-odds-right">-->
+                                        <!--<span class="package-odds-inner">-->
+                                            <!--{{elem.hold_money}}{{if !elem.is_use}}&nbsp;(已删){{/if}}-->
+                                        <!--</span>-->
+                                    <!--</span>-->
+
+                                <!--</span>-->
+                        <!--</li>-->
+                        <!--{{/if}}-->
+                        <!--{{/each}}-->
+                    <!--</ul>-->
+                <!--</td>-->
+                <!--{{/each}}-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</td>-->
+    <!--{{/if}}-->
+<!--</script>-->
+<!--</div>-->
+
+
+<!--<script type="text/javascript" src="/All/All.js?v=20221212172846000"></script><dl class="boxDay" style="display:none"><dt class="dt"><a class="l" href="#">◄</a><a class="r" href="#">►</a><b><span name="reyear"></span>年<span name="remouth"></span>月</b></dt><dd class="hd"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></dd><dd name="content" class="bd"></dd></dl><iframe src="/All/domain.html" style="width:0; height:0" frameborder="0"></iframe><div class="module g-tl" style="left: 283px; top: 308.5px; display: none;"><div class="hd"></div><div class="bd">该项不能为空</div><div class="ft bb"></div></div>-->
+<!--<script type="text/javascript" src="/Scripts/Libs/require.min.js"></script>-->
+<!--<script src="/Scripts/Libs/require.config.js?v=20221212172846000"></script>-->
+
+
+
+<!--<input type="hidden" id="_exponentValue" value="010001">-->
+<!--<input type="hidden" id="_publickeyValue" value="9052A2461968D1B4544C4FF6485774442F51740617A1E2D7957CF6377CD7FC4D03DC823E974330B81E5C2138BE8811481331069D57AF109CCC0CF39A91F476E438AF6EFB7F702EC69050057DA816BE07BF91CE027C4A79FB8C3374A4F91DE72DE01D5F00838E4DACE81A914021DADE9994F62E76CE4622E0D5A26B565564090B">-->
+<!--<script type="text/javascript">-->
+    <!--function JsRsaEncrypt(text) {-->
+        <!--var exponentVal = $('#_exponentValue').val();-->
+        <!--var modulusVal = $('#_publickeyValue').val();-->
+        <!--if (exponentVal === "" || modulusVal === "") return text;-->
+        <!--setMaxDigits(256);-->
+        <!--var rsaKey = new RSAKeyPair(exponentVal, "", modulusVal);-->
+        <!--var result = encryptedString(rsaKey, encodeURI(text));-->
+        <!--return result;-->
+    <!--}-->
+<!--</script>-->
+
+
+
+</body>
+</html>

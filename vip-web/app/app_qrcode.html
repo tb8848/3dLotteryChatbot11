@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>二维码下载</title>
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <script src="../js/jquery/jquery.min.js"></script>
+    <script src="../js/jquery/jquery.qrcode.min.js"></script>
+    <script src="../js/config.js"></script>
+    <style>
+        html,body{
+            height: 100%;
+            width: 100% ;
+        }
+        .anniu{
+            width: 70px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: #30A89D;
+            color: white;
+            margin: 10px auto;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body style="background-color: white;">
+    <div class="layui-row" style="display: flex;justify-content: center;">
+        <!--            <div id="child-row1">-->
+        <!--                <img class="layui-upload-img" name="picture" id="picture1" src="../img/app_qrcode.png" style="width: 200px;height: 200px">-->
+        <!--            </div>-->
+        <div id="qrcode" style="margin-top: 20px;"></div>
+    </div>
+    <div class="anniu" i18n="index.download">下载</div>
+</body>
+
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+<script>
+    var moduleName = "index";
+    var $i18np = null;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+    console.log("===============baseUrl===",baseUrl);
+
+    var defaultLang = layui.data('langTab').langType;
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+    }
+
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+</script>
+
+<script type="text/javascript" charset="utf-8">
+    var id = "";
+    var url = "";
+    var layer = layui.layer;
+    $(function () {
+        //生成二维码
+        $.ajax({
+            url:HOST+"apkPC/getNewestApk"
+            ,type:"get"
+            ,success:function (res) {
+                if (res.code == 200){
+                    id = res.data.id;
+                    $("#qrcode").empty();
+                    url = HOST+"apkPC/download?id="+id;
+                    $("#qrcode").qrcode({
+                        render: "canvas", //table方式
+                        width: 200, //宽度
+                        height:200, //高度
+                        text: url //任意内容
+                    });
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+            ,error:function () {
+                console.log("ajax error");
+            }
+        });
+    })
+
+    //点击下载
+    $(".anniu").click(function () {
+        window.open(HOST+"apkPC/download?id=" + id);
+        layer.close(layer.index);
+    })
+</script>
+</html>

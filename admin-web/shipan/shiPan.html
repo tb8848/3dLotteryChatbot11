@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>实盘</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!--<link rel="stylesheet" href="../css/basicSetting.css" media="all">-->
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+
+    <link href="../css/style-Permutation5.css" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css" type="text/css" rel="stylesheet">
+    <style type="text/css">
+        .drawCode{
+            background-color: silver;
+        }
+    </style>
+</head>
+<body style="overflow-y:auto;">
+<div id="main1">
+    <template>
+    <div class="module">
+        <div name="module" id="handicap_reality" class="m5 mt10 handicap" :class="[showMode==2?'erd':'']">
+            <div name="module" id="guide_handicap" class="guide" v-if="showMode==0">
+                <div class="fl">
+                    <a href="#!online_account" i18n="shipan.menu.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="shipan.menu.shiPan">   实盘  </span>
+                </div>
+                <div class="fr">
+                    <a href="outPan.html" class="" i18n="shipan.menu.outPan">《出货盘</a> |
+                    <a href="outDetail.html" class="" i18n="shipan.menu.outDetail">出货明细</a> |
+                    <a href="winOutDetail.html" class="" i18n="shipan.menu.winOutDetail">出货中奖明细</a> |
+                    <a href="javascript:void(0)" class="fn-out" onclick="popChild(1)" i18n="shipan.menu.chuhuo">出货</a> |
+                    <a href="outImport.html" class="" i18n="shipan.menu.outImport">出货导入</a> |
+                    <a href="download.html" class="" i18n="shipan.menu.download">下载》</a> |
+                    <a href="shiHuoDetail.html" class="" i18n="shipan.menu.shiHuoDetail">实货明细</a> |
+                    <a href="shiHuoZhongJiang.html" class="" i18n="shipan.menu.shiHuoZhongJiang">中奖明细</a> |
+                    <a href="shiPan.html" class="fb red" i18n="shipan.menu.shiPan">实盘</a>|
+                    <a href="baopai_shipan.html" class="" i18n="shipan.menu.baopai.shipan">包牌实盘</a> |
+                    <a href="xupan.html" class="" i18n="shipan.menu.xupan">虚盘</a></div>
+            </div>
+
+            <div name="module" class="guide" v-if="showMode==2">
+                <div class="fl">
+                    <a href="#!online_account" i18n="shipan.menu.position">{{$t('position')}} </a>&gt;&gt;
+                    <span class="red" i18n="shipan.director.control">  {{$t('zjkp')}} </span>
+                </div>
+                <div class="fr">
+                    <a href="shiHuoDetail.html" class="" i18n="shipan.menu.shiHuoDetail">{{$t('shihuoDetail')}}</a> |
+                    <a href="shiHuoZhongJiang.html" class="" i18n="shipan.menu.shiHuoZhongJiang">{{$t('winDetail')}}</a>
+                </div>
+            </div>
+
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                        <tr class="bg1">
+                            <td id="nav_fixnum" class="tc1" colspan="18">
+                                <span v-if="showMode!=2" i18n="shipan.menu.shiPan">实盘</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span v-if="showMode==2" i18n="shipan.control">控盘</span>&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,1,100)" class="white " :class="[lmId==1?'yellow':'']">
+                                    <span i18n="shipan.oneFixed">一定位</span>(<span id="lm-fz-1">{{lmFuzhiMap["1"]}}</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,2,100)" class="white " :class="[lmId==2?'yellow':'']"><span i18n="shipan.twoFixed">二定位</span>(<span id="lm-fz-2">{{lmFuzhiMap["2"]}}</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,3,100)" class="white " :class="[lmId==3?'yellow':'']"><span i18n="shipan.threeFixed">三定位</span>(<span id="lm-fz-3">{{lmFuzhiMap["3"]}}</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,4,100)" class="white" :class="[lmId==4?'yellow':'']"><span i18n="shipan.fourFixed">四定位</span>(<span id="lm-fz-4">{{lmFuzhiMap["4"]}}</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,5,100)" class="white " :class="[lmId==5?'yellow':'']"><span i18n="shipan.twoShow">二字现</span>(<span id="lm-fz-5">{{lmFuzhiMap["5"]}}</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,6,1000)" class="white " :class="[lmId==6?'yellow':'']"><span i18n="shipan.threeShow">三字现</span>(<span id="lm-fz-6">{{lmFuzhiMap["6"]}}</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,7,100)" class="white " :class="[lmId==7?'yellow':'']"><span i18n="shipan.fourShow">四字现</span>(<span id="lm-fz-7">{{lmFuzhiMap["7"]}}</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a :href="'baopai_shipan.html?lmId='+lmId" v-if="lmId<5 && lmId>1" i18n="shipan.jump.package">跳转包牌</a>
+                            </td>
+                            <td class="tc1 a_r tc" colspan="2">
+                                <a href="javascript:void(0)" class="white huizongbtn" id="printlink" @click="toPrint()" i18n="shipan.summary.printing">汇总打印</a>
+                            </td>
+                        </tr>
+                        <tr v-if="showMode==0">
+                            <td colspan="20">
+                                <form autocomplete="off">
+                                    <input type="hidden" name="log" value="1">
+                                    <input type="hidden" name="bet_no" id="bet_no">
+                                    <input type="hidden" id="fix_num" name="fix_num" value="40">
+                                    <input type="hidden" name="isxian" value="0">
+                                    <table class="t-1">
+                                        <tbody>
+                                        <tr class="bg3">
+                                            <td width="60" rowspan="2">
+                                                <label class="dist-5">
+                                                    <input type="radio" @click="initOddsChangeWay(1)" name="rise_drop"  value="1" class="radio" :checked="oddsChange.oddsChangeWay==1">
+                                                    <span i18n="shipan.rise">各升</span>
+                                                </label>
+                                                <label class="dist-5">
+                                                    <input type="radio" @click="initOddsChangeWay(0)" name="rise_drop" value="0"  class="radio" :checked="oddsChange.oddsChangeWay==0">
+                                                    <span i18n="shipan.drop">各降</span>
+                                                </label>
+                                                <label class="dist-5"><input type="radio" @click="initOddsChangeWay(2)" name="rise_drop" value="2" class="radio" :checked="oddsChange.oddsChangeWay==2">
+                                                    <span i18n="shipan.out">各出</span>
+                                                </label>
+                                            </td>
+                                            <td width="60" >
+                                                <input type="text" class="input-odds" name="bet_money" id="set_odds" number="true" maxlength="7"
+                                                                  autofocus="autofocus" autocomplete="off" v-model="oddsChange.odds">
+                                                <input type="hidden" name="diff_odds">
+                                            </td>
+                                            <td width="60">
+                                                <div class="bd-islimit" v-if="oddsChange.oddsChangeWay!=2">
+                                                    <label class="dist-5">
+                                                        <input type="radio" name="islimit" @click="initItemLimitChangeWay(1)" class="radio" value="1" :checked="oddsChange.itemChangeWay==1">
+                                                        <span i18n="shipan.upper.limit">上限</span>
+                                                    </label>
+                                                    <label class="dist-5">
+                                                        <input type="radio" name="islimit" @click="initItemLimitChangeWay(0)" class="radio" value="0" :checked="oddsChange.itemChangeWay==0">
+                                                        <span i18n="shipan.add">各加</span>
+                                                    </label>
+                                                </div>
+                                                <div class="bd-islimit" v-if="oddsChange.oddsChangeWay==2" i18n="shipan.odds">赔率</div>
+                                            </td>
+                                            <td width="60" class="h54">
+                                                <input type="text" class="input-odds"
+                                                                              name="one_item_limit" id="odds_item_limit"
+                                                                              number="true" maxlength="8"
+                                                                              autocomplete="off" v-model="oddsChange.itemLimit">
+                                            </td>
+                                            <td width="60" rowspan="2">
+                                                <div class="dist-5">
+                                                    <input type="button" value="添加" class="btn-submit" id="btnAdd" @click="addOddsChange" i18n="shipan.save">
+                                                </div>
+                                                <div class="dist-5">
+                                                    <input type="button" value="取消" class="btn-cancel" id="btnCancel" @click="cancelOddsChange" i18n="shipan.cancel">
+                                                </div>
+                                            </td>
+                                            <td width="30" class="tc bg-yellow" rowspan="2" i18n="shipan.negative">负值</td>
+                                            <td width="160" rowspan="2">
+                                                <div class="bd-sel-count">
+                                                    <input type="button" value="10" class="sel-count" id="sel10" :class="[batchSel.size==10?'sel-active':'']"
+                                                           @click="selCount('sel10',10)">
+                                                    <input type="button" value="20" class="sel-count" id="sel20" :class="[batchSel.size==20?'sel-active':'']"
+                                                           @click="selCount('sel20',20)">
+                                                    <input type="button" value="25" class="sel-count" id="sel25" :class="[batchSel.size==25?'sel-active':'']"
+                                                           @click="selCount('sel25',25)">
+                                                    <input type="button" value="30" class="sel-count" id="sel30" :class="[batchSel.size==30?'sel-active':'']"
+                                                           @click="selCount('sel30',30)">
+                                                    <input type="button" value="35" class="sel-count" id="sel35" :class="[batchSel.size==35?'sel-active':'']"
+                                                           @click="selCount('sel35',35)">
+                                                </div>
+                                                <div class="bd-sel-count">
+                                                    <input type="button" value="40" class="sel-count" id="sel40" :class="[batchSel.size==40?'sel-active':'']"
+                                                           @click="selCount('sel40',40)">
+                                                    <input type="button" value="45" class="sel-count" id="sel45" :class="[batchSel.size==45?'sel-active':'']"
+                                                           @click="selCount('sel45',45)">
+                                                    <input type="button" value="50" class="sel-count" id="sel50" :class="[batchSel.size==50?'sel-active':'']"
+                                                           @click="selCount('sel50',50)">
+                                                    <input type="button" value="80" class="sel-count" id="sel80" :class="[batchSel.size==80?'sel-active':'']"
+                                                           @click="selCount('sel80',80)">
+                                                    <input type="button" value="100" class="sel-count" id="sel100" :class="[batchSel.size==100?'sel-active':'']"
+                                                           @click="selCount('sel100',100)">
+                                                </div>
+                                                <div v-if="lmId==3 || lmId==4 || lmId==7">
+                                                    <input type="text" id="key_betno" class="w60" maxlength="4" v-model="distCode">
+                                                    <button type="button" id="btn_search" @click="searchCode()">{{$t('numberSearch')}}</button>
+<!--                                                    <input type="button" id="btn_search" value="号码搜索" @click="searchCode()" i18n="shipan.number.search">-->
+                                                </div>
+                                            </td>
+                                            <td rowspan=" 2  ">
+                                                <div name="module" id="pager" class="pager" action="handicap_reality" pagebody="tbody" pagecount="100"
+                                                     param="fix_num=40&amp;pagesize=100">
+                                                    <span i18n="shipan.page.no">第</span>
+                                                    <span class="pageindex red">{{pager.curpage}}</span> <span i18n="shipan.page.page">页</span>
+                                                    <span i18n="shipan.page.total">共</span> <span class="pagecount red">{{pager.pages}}</span>
+                                                    <span i18n="shipan.page.page">页</span><span i18n="shipan.page.total">共</span>
+                                                    <span class="recordcount red">{{pager.total}}</span><span i18n="shipan.page.count">条</span>
+                                                    <a href="javascript:void(0)" class="fn-first" @click="toFirst()" i18n="shipan.page.firstPage">首页</a> <a
+                                                            href="javascript:void(0)" class="fn-prev" @click="toPre()" i18n="shipan.page.prePage">上一页</a> <a
+                                                            href="javascript:void(0)" class="fn-next" @click="toNext()" i18n="shipan.page.nextPage">下一页</a> <a
+                                                            href="javascript:void(0)" class="fn-last" @click="toLast()" i18n="shipan.page.lastPage">尾页</a>
+                                                    <input type="text" class="input w30 fn-index" v-model="pager.toPage">
+                                                    <input type="button" class="btn btn-gray w30 fn-go"  value="GO" @click="toPage()"></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="bg3" v-if="lmId==3 || lmId==4 || lmId==7">
+                                            <td colspan="3"> {{$t('operationStopNumber')}}&gt;&gt;
+                                                <label>
+                                                    <input type="radio" name="top_count"  value="" checked="checked" @click="changeStopCodeRange(1)">
+                                                    {{$t('thisPage')}}
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="top_count" value="1000" @click="changeStopCodeRange(maxOptRange)">
+                                                    {{$t('front')}}{{maxOptRange}}{{$t('page')}}
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr class="bg3" v-if="showMode==2">
+                            <td width="400">
+                                <div id="class_erd" i18n="shipan.type"> {{$t('type')}}&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a v-for="(item,idx) in lsList" href="javascript:void(0)" class="blue" style="margin-right: 10px;"
+                                       :class="[item.id==lsId?'red':'']" :value="item.id" @click="changeLsTypeAtErding(item.id)">{{item.bettingRule}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                            </td>
+                            <td width="30" class="tc bg-yellow" i18n="shipan.negative">{{$t('negative')}}</td>
+                            <td width="160">
+                                <div class="bd-sel-count">
+                                    <input type="button" value="10" class="sel-count" id="erdingSel10"
+                                           :class="[batchSel.size==10?'sel-active':'']" @click="selCount('erdingSel10',10)">
+                                    <input type="button" value="20" class="sel-count" id="erdingSel20"
+                                           :class="[batchSel.size==20?'sel-active':'']" @click="selCount('erdingSel20',20)">
+                                    <input type="button" value="25" class="sel-count" id="erdingSel25"
+                                           :class="[batchSel.size==25?'sel-active':'']" @click="selCount('erdingSel25',25)">
+                                    <input type="button" value="30" class="sel-count" id="erdingSel30"
+                                           :class="[batchSel.size==30?'sel-active':'']" @click="selCount('erdingSel30',30)">
+                                    <input type="button" value="35" class="sel-count" id="erdingSel35"
+                                           :class="[batchSel.size==35?'sel-active':'']" @click="selCount('erdingSel35',35)">
+                                </div>
+                                <div class="bd-sel-count">
+                                    <input type="button" value="40" class="sel-count" id="erdingSel40"
+                                           :class="[batchSel.size==40?'sel-active':'']" @click="selCount('erdingSel40',40)">
+                                    <input type="button" value="45" class="sel-count" id="erdingSel45"
+                                           :class="[batchSel.size==45?'sel-active':'']" @click="selCount('erdingSel45',45)">
+                                    <input type="button" value="50" class="sel-count" id="erdingSel50"
+                                           :class="[batchSel.size==50?'sel-active':'']" @click="selCount('erdingSel50',50)">
+                                    <input type="button" value="80" class="sel-count" id="erdingSel80"
+                                           :class="[batchSel.size==80?'sel-active':'']" @click="selCount('erdingSel80',80)">
+                                    <input type="button" value="100" class="sel-count" id="erdingSel100"
+                                           :class="[batchSel.size==100?'sel-active':'']" @click="selCount('erdingSel100',100)">
+                                </div>
+                            </td>
+                            <td>
+                                <form id="form2" novalidate="novalidate">
+                                    <input type="hidden" name="fix_num" value="20">
+                                    <input type="hidden" name="no_type_id" value="1">
+                                    <span i18n="shipan.amount.less">{{$t('moneyLess')}}</span>：
+                                    <input type="text" class="w60" v-model="erdingBet.end_money" number="true" value="">
+                                    <span i18n="shipan.amount.greater">{{$t('moneyGreate')}}</span>：
+                                    <input type="text" class="w60" v-model="erdingBet.start_money" number="true" value="">
+                                    <button type="button" class="btn" @click="changeCodesColor()">{{$t('changeColor')}}</button>
+<!--                                    <input type="button" value="号码变色" class="btn" @click="changeCodesColor()" i18n="shipan.number.discoloration">-->
+                                </form>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div  style="text-align: center" v-if="startLoading"><img src="../img/load.gif"></div>
+
+                <table class="t-1" v-if="showMode!=2 && !startLoading">
+
+                    <tbody class="list" v-if="loadOver==1 && showMode==0 && lsList.length==1" id="tbody">
+
+                        <tr v-if="dataFrom==0">
+                            <td class="tc" colspan="20">
+                                <div>
+                                    <a :href="'../setting/groupPeiRateSetting.html?id='+settingCodesList[0].lsid+'&lmId='+lmId"
+                                       class="fb blue">{{$t('batches')}}</a>
+                                    <span>{{settingCodesList[0].lsName}}</span> {{$t('ranking')}}
+                                    <span>({{settingCodesList[0].fuzhi}})</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span>{{$t('number')}}</span>({{settingCodesList[0].zzvalue}})
+                                    <a href="javascript:void(0)" class="fb blue" @click="changeDataFrom(1)">{{$t('oddsChange')}}</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span>{{$t('averageOdds')}}</span><span class="red">{{settingCodesList[0].odds_avg}}</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr v-if="dataFrom==1">
+                            <td colspan="20" class="tc"> {{settingCodesList[0].lsName}}
+                                <a href="javascript:void(0)" class="fb red fn-oddschange">{{$t('oddsChange')}}</a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" class="fb blue" @click="changeDataFrom(0)">{{$t('returnShipan')}}</a>
+                                <span>{{$t('thali')}}</span>:
+                                <select class="w90" id="no_set_id">
+                                    <option value="0">{{$t('all')}}</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <!-- 动态生成 -->
+                        <tr v-if="dataFrom==0" v-for="(lineNo,idx) in lines">
+                            <td colspan="2" v-for="(loc,ii) in 10" width="10%">
+                                <table style="width:100%" border="none">
+                                    <tr>
+                                        <td  v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<settingCodesList[0].pageData.length"
+                                            :class="[settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].selected?'active':'',settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].isSearchCode?'selected':'',settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']"
+                                            class="fn-number" :number="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code"
+                                            style="border:none;border-right:1px solid #dcf7db;width:50%" @click="selectOne(settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)])">
+                                            <strong class="blue">[{{(pager.curpage-1)*pager.limit+(lineNo-1)*10+loc}}]</strong>
+                                            <br> {{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code}}
+                                        </td>
+                                        <td v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<settingCodesList[0].pageData.length"  style="border:none;width:50%"
+                                            class=" r-bd fn-number maxlose "
+                                            :class="[settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].selected?'active':'',settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].isSearchCode?'selected':'',settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']"
+                                            :maxlose="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].maxLoss"
+                                            :number="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code"
+                                            @click="selectOne(settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)])" align="left">
+                                            <span class="blue" title="赔率(Odds)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds}}</span>&nbsp;&nbsp;<span
+                                                class="black2" title="平均赔率(odds_avg)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds_avg}}</span><br> <span
+                                                title="总吃货-总出货(HoldMoney)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].chuhuo}}</span><br>
+                                            <span class="red" title="最大损失(MaxLose)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].maxLoss}}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr v-if="dataFrom==1 && currSettingCodes!=null" v-for="(lineNo,idx) in lines">
+                            <td colspan="2" v-for="(loc,ii) in 10" style="width: 10%">
+                                <table style="width:100%" border="none">
+                                    <tr>
+                                        <td width="50%" v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<currSettingCodes.pageData.length"
+                                            :class="[currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].selected?'active':'',currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].isSearchCode?'selected':'',currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']"
+                                            class="fn-number" :number="currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].code"
+                                            style="border:none;border-right:1px solid #dcf7db;" @click="selectOne(currSettingCodes.pageData[(lineNo-1)*10+(loc-1)])">
+                                            <strong class="blue">[{{(pager.curpage-1)*pager.limit+(lineNo-1)*10+(loc-1)}}]</strong>
+                                            <br> {{currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].code}}
+                                        </td>
+                                        <td  width="50%" v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<currSettingCodes.pageData.length"  style="border:none;"
+                                            :class="[currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].selected?'active':'',currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].isSearchCode?'selected':'',currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']"  class=" r-bd fn-number maxlose "
+                                            :maxlose="currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].maxLoss"
+                                            :number="currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].code"
+                                            @click="selectOne(currSettingCodes.pageData[(lineNo-1)*10+(loc-1)])" align="left">
+                                            <span class="blue" title="赔率(Odds)">{{currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].odds}}</span>&nbsp;&nbsp;<span
+                                                class="black2" title="平均赔率(odds_avg)">{{currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].odds_avg}}</span><br>
+                                            <span title="总吃货-总出货(HoldMoney)">{{currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].chuhuo}}</span><br>
+                                            <span class="red" title="最大损失(MaxLose)">{{currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].maxLoss}}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+
+                    <!-- 全屏模式 -->
+                    <tbody class="list" v-if="loadOver==1 && showMode==0 && lsList.length>1 && fullScreen==1" > <!-- && lmId==2-->
+                        <tr>
+                            <td v-for="(item,idx) in settingCodesList" :class="[lsId!=item.lsid?'tc lc':'tc']" :colspan="lmId==3?4:lsId==item.lsid?6:2">
+                                <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td v-if="lsId==item.lsid && dataFrom==0" style="border: none">
+                                            <div>
+                                                <a :href="'../setting/groupPeiRateSetting.html?id='+item.lsid+'&lmId='+lmId" i18n="shipan.a.batches">{{$t('batches')}}</a>
+                                                <a  v-if="lmId==2" @click="toErdingRealbet()">
+                                                    <span class="red">{{item.lsName}}</span>
+                                                    <span i18n="shipan.negative.Ranking">{{$t('ranking')}}</span>
+                                                    <span>({{item.fuzhi}})</span>
+                                                </a>
+                                                <a  v-else>
+                                                    <span class="red">{{item.lsName}}</span>
+                                                    <span i18n="shipan.negative.Ranking">{{$t('ranking')}}</span>
+                                                    <span>({{item.fuzhi}})</span>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <span i18n="shipan.positive.number">{{$t('number')}}</span>({{item.zzvalue}})
+                                                <a href="javascript:void(0)" class="fb red" @click="changeFullScreen(0,item.lsid)">
+                                                    [<span i18n="shipan.menu.shiPan">{{$t('firmOffer')}}</span>]
+                                                </a>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a href="javascript:void(0)"
+                                                   class="fb blue" @click="changeDataFrom(1)" i18n="shipan.change.odds">{{$t('oddsChange')}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span i18n="shipan.average.odds">{{$t('averageOdds')}}</span><span class="red">{{item.odds_avg}}</span>
+                                            </div>
+                                        </td>
+                                        <td v-else-if="lsId==item.lsid && dataFrom==1" style="border: none">
+                                            <div> {{item.lsName}}
+                                                <a href="javascript:void(0)" class="fb red fn-oddschange" @click="changeDataFrom(1)" i18n="shipan.change.odds">{{$t('oddsChange')}}</a>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a @click="changeFullScreen(0,item.lsid)" href="javascript:void(0)" class="fb blue" i18n="shipan.return.shiPan">{{$t('returnShipan')}}</a>
+                                            </div>
+                                            <div>
+                                                <span i18n="shipan.package">{{$t('thali')}}</span>:
+                                                <select class="w90" :id="'no_set_id_'+item.lsid" v-model="oddsChange.comboId" @change="getOddsChangeList">
+                                                    <option value="0">{{$t('all')}}</option>
+                                                    <option v-for="(combo,cidx) in oddsChangeComboList" :value="combo.id" :selected="oddsChange.comboId==combo.id">{{combo.comboName}}</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td v-else style="border: none">
+                                            <a href="javascript:void(0)" @click="changeFullScreen(1,item.lsid)">{{item.lsName}}</a>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr v-if="dataFrom==1 && oddsChange.comboId!=0">
+                            <td colspan="20">{{oddsChange.comboName}}</td>
+                        </tr>
+
+
+                        <tr v-for="(lineNo,idx1) in lines">
+                            <td class="tc" v-for="(loc,ii) in 8" colspan="2">
+                                <table border="0" width="100%" cellpadding="0" cellspacing="0" @click="selectOne(currSettingCodes.pageData[(lineNo-1)*8+(loc-1)])" >
+                                    <tr>
+                                        <td v-if="(lineNo*8+loc)%8==loc%8 && (lineNo-1)*8+(loc-1)<currSettingCodes.pageData.length" class="l fn-number tc  "
+                                            number="00XX" style="border:none;border-right:1px solid #dcf7db;"
+                                            :class="[currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].selected?'active':'',currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']">
+                                            <div class="l-hd"> <strong class="blue">[{{(pager.curpage-1)*pager.limit+(lineNo-1)*8+loc}}]</strong>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].code}} </div>
+                                            <div v-if="dataFrom==0">
+                                                <a class="btn" href="javascript:void(0)" @click.stop="zhuanCode(currSettingCodes.pageData[(lineNo-1)*8+(loc-1)])"
+                                                     class="btn" i18n="shipan.turn">{{$t('zhuan')}}</a>
+                                                <input type="radio" class="radio fn-partial" name="checkradio" tabindex="1">
+                                            </div>
+                                        </td>
+                                        <td v-if="(lineNo*8+loc)%8==loc%8 && (lineNo-1)*8+(loc-1)<currSettingCodes.pageData.length" class="r r-bd fn-number maxlose  " maxlose="0"
+                                            number="00XX" style="border:none"
+                                            :class="[currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].selected?'active':'',currSettingCodes.pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']">
+                                            <span class="blue">{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].odds}}</span> &nbsp;&nbsp;
+                                            <span class="gray2">{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].odds_avg}}</span>
+                                            <br> {{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].chuhuo.toFixed(2)}}<br>
+                                            <span class="red">{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].maxLoss}}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <!-- 非全屏模式 -->
+                    <tbody class="list" v-if="loadOver==1 && showMode==0 && lsList.length>1 && fullScreen==0" > <!-- && lmId==2-->
+                        <tr>
+                            <td class="tc" v-for="(item,idx) in settingCodesList">
+                                <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                                    <tr class="border0">
+                                        <td class="border0" width="70%">
+                                            <div>
+                                                <input type="radio" class="radio" name="choice_second" :checked="batchSel.lsId==item.lsid" :value="item.lsid"
+                                                       @click="changeSelSettingId(item.lsid)">
+                                                <!-- href="setting.st_batchodds|st_batchodds?fix_num={{Param.fix_num}}&no_type_id={{item.NoTypeId}}&from=handicap&ispackage=0"-->
+                                                <a :href="'../setting/groupPeiRateSetting.html?id='+item.lsid+'&lmId='+item.lmid" class="fb blue" i18n="shipan.a.batches">{{$t('batches')}}</a>
+                                                <!-- href="handicap_reality.erdingrealbet|erdingrealbet?fix_num=20&no_type_id={{item.NoTypeId}}" 跳二字定页面 -->
+                                                <a v-if="lmId==2"  class="red" @click="toErdingRealbet(item.lsid)">
+                                                    <span class="red">{{item.lsName}}</span>
+                                                    <span i18n="shipan.negative.Ranking">{{$t('ranking')}}</span>
+                                                    <span>({{item.fuzhi}})</span>
+                                                </a>
+                                                <span class="red" v-else>
+                                                    <span>{{item.lsName}}</span>
+                                                    <span i18n="shipan.negative.Ranking">{{$t('ranking')}}</span>
+                                                    <span>({{item.fuzhi}})</span>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span i18n="shipan.positive.number">{{$t('number')}}</span>({{item.zzvalue}})
+    <!--                                            href="handicap_reality.handicap_full|handicap_reality?fix_num={{Param.fix_num}}&no_type_id={{item.NoTypeId}}&pagesize=100"-->
+                                                <a href="javascript:void(0)"  class="fb blue" @click="changeFullScreen(1,item.lsid)">
+                                                    [<span i18n="shipan.full.screen">{{$t('quanping')}}</span>]
+                                                </a>
+                                                <span i18n="shipan.average.odds">{{$t('averageOdds')}}</span>
+                                                <span class="red">{{item.odds_avg}}</span>
+                                            </div>
+                                        </td>
+    <!--                                    <td class="border0 f13 hide" width="30%">-->
+    <!--&lt;!&ndash;                                        href="handicap_combo?ispackage=1&fix_num=20&no_type_id={{item.NoTypeId}}&pagesize=100&isSortByProfit=false&showColor=1"&ndash;&gt;-->
+    <!--                                        <a ><span class="bgyellow">包牌停押</span></a>-->
+    <!--                                    </td>-->
+                                    </tr>
+                                    <!-- 数据展示 非全屏模式 -->
+                                    <tr v-if="lmId==2">
+                                        <td width="16.6%" class="choice_column item_list">
+                                            <table width="100%"  v-for="(_item,idx1) in item.pageData">
+                                                <tr>
+                                                    <td width="40%"
+                                                        class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.isSearchCode?'selected':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.MaxLose" :number="_item.code" @click="selectOne(_item)">
+                                                        <div class="l-hd">
+                                                            <strong class="blue">[{{(pager.curpage-1)*pager.limit+idx1+1}}]</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{_item.code}}
+                                                        </div>
+                                                        <div>
+    <!--                                                        :href="handicap_reality.handicap_transform|handicap_transform?fix_num=30&num=_item.code"-->
+                                                            <a  class="btn" href="javascript:void(0)" @click.stop="zhuanCode(_item)">{{$t('zhuan')}}</a>
+                                                        </div>
+                                                    </td>
+                                                    <td width="30%" style="text-align: left"
+                                                        class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.isSearchCode?'selected':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.MaxLose" :number="_item.code" @click="selectOne(_item)">
+                                                        <span class="blue" title="赔率(Odds)">{{_item.odds}}</span>&nbsp;&nbsp;
+                                                        <span class="black2" title="平均赔率(odds_avg)">{{_item.odds_avg}}</span><br>
+                                                        <span title="总吃货-总出货(HoldMoney)">{{_item.chuhuo}}</span><br>
+                                                        <span class="red" title="最大损失(MaxLose)">{{_item.maxLoss}}</span>
+                                                    </td>
+                                                    <td class="tc bg-cyan-blue fn-package-number" width="30%">
+                                                        <span v-if="idx1==0" i18n="shipan.query.select.baoPai">{{$t('baopai')}}</span>
+                                                        <span v-if="idx1==0"><br/><br/></span>
+                                                        <span>{{_item.package_chuhuo}}</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <tr v-if="lmId==3 || lmId==1">
+                                        <td width="25%" class="choice_column item_list">
+                                            <table width="100%"  v-for="(_item,idx1) in item.pageData">
+                                                <tr>
+                                                    <td width="40%"
+                                                        class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.isSearchCode?'selected':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.maxLoss" :number="_item.code" @click.self="selectOne(_item)">
+                                                        <div class="l-hd">
+                                                            <strong class="blue">[{{(pager.curpage-1)*pager.limit+idx1+1}}]</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{_item.code}}
+                                                        </div>
+                                                        <div>
+                                                            <!--                                                        :href="handicap_reality.handicap_transform|handicap_transform?fix_num=30&num=_item.code"-->
+                                                            <a class="btn" href="javascript:void(0)" @click.stop="zhuanCode(_item)" i18n="shipan.turn">{{$t('zhuan')}}</a>
+                                                        </div>
+                                                    </td>
+                                                    <td width="30%" class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.isSearchCode?'selected':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.MaxLose" :number="_item.code" @click="selectOne(_item)" align="left">
+                                                        <span class="blue" title="赔率(Odds)">{{_item.odds}}</span>&nbsp;&nbsp;
+                                                        <span class="black2" title="平均赔率(odds_avg)">{{_item.odds_avg}}</span><br>
+                                                        <span title="总吃货-总出货(HoldMoney)">{{_item.chuhuo}}</span><br>
+                                                        <span class="red" title="最大损失(MaxLose)">{{_item.maxLoss}}</span>
+                                                    </td>
+                                                    <td class="tc bg-cyan-blue fn-package-number" width="30%">
+                                                        <span v-if="idx1==0" i18n="shipan.query.select.baoPai">{{$t('baopai')}}</span>
+                                                        <span v-if="idx1==0"><br/><br/>
+                                                        </span>
+                                                        <span>{{_item.package_chuhuo}}</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <!-- 号码转 -->
+                    <tbody class="list" v-if="showMode==1" v-for="(item,idx) in codeZhuanList">
+                        <tr v-if="idx==0" >
+                            <td colspan="8">
+                                <strong class="f16">
+                                    <span i18n="shipan.max.negative">{{$t('ljzdfz')}}</span>:
+                                    <span class="red" v-if="zhuanParam.maxFuzhi>0">{{zhuanParam.maxFuzhi}}</span>
+                                    <span class="red" v-else-if="zhuanParam.minFuzhi<0">{{zhuanParam.minFuzhi}}</span>
+                                    <span class="red" v-else>0</span>
+                                </strong>
+                            </td>
+                            <td colspan="12">
+                                <form no_type_id="1" novalidate="novalidate">
+                                    <input type="hidden" name="log" value="2">
+                                    <input type="hidden" name="bet_no">
+                                    <strong class="f14 mr10">{{item.lsName}}</strong>
+                                    <a href="javascript:void(0)" class="fn-refresh red2 f16" @click="refreshData(item)">
+                                        [<span i18n="shipan.refresh">{{$t('renovate')}}</span>]
+                                    </a>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr v-if="idx!=0">
+                            <td colspan="8"></td>
+                            <td colspan="12">
+                                <form no_type_id="7" novalidate="novalidate">
+                                    <input type="hidden" name="log" value="2">
+                                    <input type="hidden" name="bet_no"> <strong class="f14 mr10">{{item.lsName}}</strong>
+                                    <label class="f14 mr10">
+                                        <input type="checkbox" class="checkbox selectAll" no_type_id="7" :id="'zhuan-ls-'+item.lsid"
+                                                                   @click="selectAllAtZhuan(item)">
+                                        <span i18n="shipan.select.all">{{$t('selectAll')}}</span>
+                                    </label>
+                                    <span class="red f14 mr5" i18n="shipan.drop">{{$t('eachDrop')}}</span>:
+                                    <input type="text" class="w60" name="set_diff_odds" maxlength="7" exactdivisor="1" v-model="item.downPr">
+                                    <input type="hidden" name="diff_odds">
+                                    <span class="red f14 mr5" i18n="shipan.upper.limit">{{$t('topLimit')}}</span>:
+                                    <input type="text" class="w60" name="one_item_limit" maxlength="8" v-model="item.itemLimit">
+                                    <button type="button" class="btn" @click="subOddsChangeAtZhuan(item)">{{$t('submit')}}</button>
+<!--                                    <input type="button" value="提交" class="btn" @click="subOddsChangeAtZhuan(item)" i18n="shipan.submit">-->
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr v-for="(lineNo,idx1) in item.lines" >
+                            <td colspan="2" v-for="(loc,ii) in 10">
+                                <table @click="selectOneAtZhuan(item.codesList[(lineNo-1)*10+(loc-1)])">
+                                    <tbody>
+                                    <tr>
+                                        <td v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<item.codesList.length"  class="l fn-number "
+                                            :class="[item.codesList[(lineNo-1)*10+(loc-1)].selected?'active':'',(lineNo-1)*10+loc==1?'bg-blue':'',item.codesList[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']"
+                                            :number="item.codesList[(lineNo-1)*10+(loc-1)].code" name="part1" position="1" tabindex="1" style="border:none;border-right: 1px solid #a4d4f9">
+                                            <strong class="blue" >[{{(lineNo-1)*10+loc}}]</strong><br> {{item.codesList[(lineNo-1)*10+(loc-1)].code}} <br>
+                                            <input type="radio" class="radio fn-select-part" name="part1" position="1" tabindex="1">
+                                        </td>
+                                        <td v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<item.codesList.length" class="r r-bd fn-number maxlose "
+                                            maxlose="8.82" :number="item.codesList[(lineNo-1)*10+(loc-1)].code" no_type_id="7" name="part1" position="1" tabindex="1"
+                                            :class="[item.codesList[(lineNo-1)*10+(loc-1)].selected?'active':'',(lineNo-1)*10+loc==1?'bg-blue':'',item.codesList[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']" style="border:none">
+                                            <span class="blue">{{item.codesList[(lineNo-1)*10+(loc-1)].odds}}</span>
+                                            <br> {{item.codesList[(lineNo-1)*10+(loc-1)].odds_avg}}<br>
+                                            <span class="red">{{item.codesList[(lineNo-1)*10+(loc-1)].maxLoss}}</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="t-1 mt10 " v-if="showMode==2 && !startLoading">
+                    <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <div id="bd_tpl">
+                                <table class="t-3 erd-hand-table ">
+                                    <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td class="fn-row" _index="0" is_select="0" @click="verticalSelect(this,0)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="1" is_select="0" @click="verticalSelect(this,1)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="2" is_select="0" @click="verticalSelect(this,2)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="3" is_select="0" @click="verticalSelect(this,3)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="4" is_select="0" @click="verticalSelect(this,4)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="5" is_select="0" @click="verticalSelect(this,5)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="6" is_select="0" @click="verticalSelect(this,6)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="7" is_select="0" @click="verticalSelect(this,7)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="8" is_select="0" @click="verticalSelect(this,8)"><img src="../img/bhrow.gif" alt=""></td>
+                                        <td class="fn-row" _index="9" is_select="0" @click="verticalSelect(this,9)"><img src="../img/bhrow.gif" alt=""></td>
+                                    </tr>
+                                    <tr class="bg">
+                                        <td></td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span></td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span> </td>
+                                        <td><span class="no" i18n="shipan.number">{{$t('haoma')}}</span><span class="red erdodds" i18n="shipan.odds">{{$t('odds')}}</span>  </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody v-for="(lineNo,idx) in erdingBet.lines">
+                                        <tr>
+                                            <td class="fn-col" :_index="0" is_select="0" @click="hovorSelect(this,lineNo-1)"><img src="../img/bhcol.gif" ></td>
+                                            <td class="options  " :_i="erdingBet.pageData[(lineNo-1)*10+(loc-1)].i" :_j="erdingBet.pageData[(lineNo-1)*10+(loc-1)].j"
+                                                    :bet_no="erdingBet.pageData[(lineNo-1)*10+(loc-1)].code" maxlose="12.506" v-for="(loc,ii) in 10"
+                                                    @click="selectOne(erdingBet.pageData[(lineNo-1)*10+(loc-1)])"
+                                                    :class="[erdingBet.pageData[(lineNo-1)*10+(loc-1)].selected?'active':'',erdingBet.pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']" :id="'e' + erdingBet.pageData[(lineNo-1)*10+(loc-1)].oriCode">
+                                                <span class="no" v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<erdingBet.pageData.length"><br>{{erdingBet.pageData[(lineNo-1)*10+(loc-1)].code}}<br></span>
+                                                <span class="odds  erdodds" v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<erdingBet.pageData.length">
+                                                    <i class="red">{{erdingBet.pageData[(lineNo-1)*10+(loc-1)].odds}}</i>
+                                                    <br>{{erdingBet.pageData[(lineNo-1)*10+(loc-1)].chuhuo}}<br>
+                                                    <i :class="[erdingBet.pageData[(lineNo-1)*10+(loc-1)].maxLoss<0?'green':'red']">{{erdingBet.pageData[(lineNo-1)*10+(loc-1)].maxLoss}}</i>
+                                                </span>
+                                            </td>
+                                        </tr>
+<!--                                    <tr>-->
+<!--                                        <td class="fn-col" _index="0" is_select="0"><img src="../img/bhcol.gif"></td>-->
+<!--                                        <td class="options  " _i="0" _j="0" bet_no="00XX" maxlose="12.506">-->
+<!--                                            <span class="no"><br>00XX<br></span>-->
+<!--                                            <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span></td>-->
+<!--                                        <td class="options  " _i="0" _j="1" bet_no="01XX" maxlose="12.506">-->
+<!--                                            <span class="no"><br>01XX<br></span>-->
+<!--                                            <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span></td>-->
+<!--                                        <td class="options  " _i="0" _j="2" bet_no="02XX" maxlose="12.506">-->
+<!--                                            <span class="no"><br>02XX<br></span>-->
+<!--                                            <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span></td>-->
+<!--                                        <td class="options  " _i="0" _j="3" bet_no="03XX" maxlose="12.506">-->
+<!--                                            <span class="no"><br>03XX<br></span> <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span> </td>-->
+<!--                                        <td class="options  " _i="0" _j="4" bet_no="04XX" maxlose="12.506"> <span class="no"><br>04XX<br></span>-->
+<!--                                            <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span> </td>-->
+<!--                                        <td class="options  " _i="0" _j="5" bet_no="05XX" maxlose="12.506"> <span class="no"><br>05XX<br></span>-->
+<!--                                            <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span> </td>-->
+<!--                                        <td class="options  " _i="0" _j="6" bet_no="06XX" maxlose="12.506"> <span class="no"><br>06XX<br></span>-->
+<!--                                            <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span> </td>-->
+<!--                                        <td class="options  " _i="0" _j="7" bet_no="07XX" maxlose="12.506"> <span class="no"><br>07XX<br></span>-->
+<!--                                            <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span> </td>-->
+<!--                                        <td class="options  " _i="0" _j="8" bet_no="08XX" maxlose="12.506"> <span class="no"><br>08XX<br></span>-->
+<!--                                                <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span> </td>-->
+<!--                                        <td class="options  " _i="0" _j="9" bet_no="09XX" maxlose="12.506"> <span class="no"><br>09XX<br></span>-->
+<!--                                                <span class="odds  erdodds"><i class="red">100</i><br>0<br><i class="red">13</i></span> </td>-->
+<!--                                        </tr>-->
+<!--                                   -->
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <table class="t-3">
+                                <tbody>
+                                <tr>
+                                    <td width="70%" class="no-padding">
+                                        <table class="t-3">
+                                            <tbody>
+                                            <tr>
+                                                <td rowspan="2" class="bg fb" width="40" i18n="shipan.fixed.position">{{$t('fixedPosition')}}</td>
+                                                <td class="fn-fix vi" id="fixLoc1">
+                                                    <span id="loc1">{{erdingBet.dingLoc1}}</span>
+                                                    <input type="button" class="item" value="0" name="0" @click="ezdJ('dw0',1,0);"
+                                                           id="dw0" data="0" :class="erdingBet.locArr[0]==0?'active':''">
+                                                    <input type="button" class="item" value="1" name="1" @click="ezdJ('dw11',1,0);" id="dw11" data="1">
+                                                    <input type="button" class="item" value="2" name="2" @click="ezdJ('dw12',1,0);" id="dw12" data="2">
+                                                    <input type="button" class="item" value="3" name="3" @click="ezdJ('dw13',1,0);" id="dw13" data="3">
+                                                    <input type="button" class="item" value="4" name="4" @click="ezdJ('dw14',1,0);" id="dw14" data="4">
+                                                    <input type="button" class="item" value="5" name="5" @click="ezdJ('dw15',1,0);" id="dw15" data="5">
+                                                    <input type="button" class="item" value="6" name="6" @click="ezdJ('dw16',1,0);" id="dw16" data="6">
+                                                    <input type="button" class="item" value="7" name="7" @click="ezdJ('dw17',1,0);" id="dw17" data="7">
+                                                    <input type="button" class="item" value="8" name="8" @click="ezdJ('dw18',1,0);" id="dw18" data="8">
+                                                    <input type="button" class="item" value="9" name="9" @click="ezdJ('dw19',1,0);" id="dw19" data="9">
+                                                    <input type="button" class="item" :value="$t('dan')" @click="ezdJ('dw110',1,1);" id="dw110" data="10">
+                                                    <input type="button" class="item" :value="$t('shuang')" @click="ezdJ('dw111',1,1);" id="dw111" data="11">
+                                                    <input type="button" class="item" :value="$t('da')" @click="ezdJ('dw112',1,1);" id="dw112" data="12">
+                                                    <input type="button" class="item" :value="$t('xiao')" @click="ezdJ('dw113',1,1);" id="dw113" data="13">
+<!--                                                    <input type="button" class="item" value="单" name="10" @click="ezdJ('dw110',1,0);" id="dw110" data="10">-->
+<!--                                                    <input type="button" class="item" value="双" name="11" @click="ezdJ('dw111',1,0);" id="dw111" data="11">-->
+<!--                                                    <input type="button" class="item" value="大" name="12" @click="ezdJ('dw112',1,0);" id="dw112" data="12">-->
+<!--                                                    <input type="button" class="item" value="小" name="13" @click="ezdJ('dw113',1,0);" id="dw113" data="13">-->
+                                                </td>
+                                                <td rowspan="2" class="bg fb" width="30" i18n="shipan.hefen">{{$t('hefen')}}</td>
+                                                <td rowspan="2" class="fn-hf">
+                                                    <div class="vi" id="erziding_hf0">
+                                                        <input type="button" class="item" value="0" name="0" id="ct0" @click="ezdJ('ct0',2,3);" data="0">
+                                                        <input type="button" class="item" value="1" name="1" id="ct1" @click="ezdJ('ct1',2,3);" data="1">
+                                                        <input type="button" class="item" value="2" name="2" id="ct2" @click="ezdJ('ct2',2,3);" data="2">
+                                                        <input type="button" class="item" value="3" name="3" id="ct3" @click="ezdJ('ct3',2,3);" data="3">
+                                                        <input type="button" class="item" value="4" name="4" id="ct4" @click="ezdJ('ct4',2,3);" data="4">
+                                                        <button type="button" class="item" name="10" @click="ezdJ('ct44',2,44);" id="ct44">{{$t('dan')}}</button>
+<!--                                                        <input type="button" class="item" value="单" name="10" @click="ezdJ('ct44',2,44);" id="ct44" i18n="shipan.single">-->
+                                                    </div>
+                                                    <div class="vi" id="erziding_hf1">
+                                                        <input type="button" class="item" value="5" name="5" id="ct5" @click="ezdJ('ct5',2,3);" data="5">
+                                                        <input type="button" class="item" value="6" name="6" id="ct6" @click="ezdJ('ct6',2,3);" data="6">
+                                                        <input type="button" class="item" value="7" name="7" id="ct7" @click="ezdJ('ct7',2,3);" data="7">
+                                                        <input type="button" class="item" value="8" name="8" id="ct8" @click="ezdJ('ct8',2,3);" data="8">
+                                                        <input type="button" class="item" value="9" name="9" id="ct9" @click="ezdJ('ct9',2,3);" data="9">
+                                                        <button type="button" class="item" name="11" @click="ezdJ('ct55',2,55);" id="ct55">{{$t('shuang')}}</button>
+<!--                                                        <input type="button" class="item" value="双" name="11" @click="ezdJ('ct55',2,55);" id="ct55" i18n="shipan.double">-->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fn-fix" id="fixLoc2">
+                                                    <span id="loc2">{{erdingBet.dingLoc2}}</span>
+                                                    <input type="button" class="item" value="0" name="0" @click="ezdJ('dw20',1,1);" id="dw20" data="0">
+                                                    <input type="button" class="item" value="1" name="1" @click="ezdJ('dw21',1,1);" id="dw21" data="1">
+                                                    <input type="button" class="item" value="2" name="2" @click="ezdJ('dw22',1,1);" id="dw22" data="2">
+                                                    <input type="button" class="item" value="3" name="3" @click="ezdJ('dw23',1,1);" id="dw23" data="3">
+                                                    <input type="button" class="item" value="4" name="4" @click="ezdJ('dw24',1,1);" id="dw24" data="4">
+                                                    <input type="button" class="item" value="5" name="5" @click="ezdJ('dw25',1,1);" id="dw25" data="5">
+                                                    <input type="button" class="item" value="6" name="6" @click="ezdJ('dw26',1,1);" id="dw26" data="6">
+                                                    <input type="button" class="item" value="7" name="7" @click="ezdJ('dw27',1,1);" id="dw27" data="7">
+                                                    <input type="button" class="item" value="8" name="8" @click="ezdJ('dw28',1,1);" id="dw28" data="8">
+                                                    <input type="button" class="item" value="9" name="9" @click="ezdJ('dw29',1,1);" id="dw29" data="9">
+                                                    <input type="button" class="item" :value="$t('dan')" @click="ezdJ('dw210',1,1);" id="dw210" data="10">
+                                                    <input type="button" class="item" :value="$t('shuang')" @click="ezdJ('dw211',1,1);" id="dw211" data="11">
+                                                    <input type="button" class="item" :value="$t('da')" @click="ezdJ('dw212',1,1);" id="dw212" data="12">
+                                                    <input type="button" class="item" :value="$t('xiao')" @click="ezdJ('dw213',1,1);" id="dw213" data="13">
+<!--                                                    <input type="button" class="item" value="单" name="10" @click="ezdJ('dw210',1,1);" id="dw210" data="10" i18n="shipan.single">-->
+<!--                                                    <input type="button" class="item" value="双" name="11" @click="ezdJ('dw211',1,1);" id="dw211" data="11" i18n="shipan.double">-->
+<!--                                                    <input type="button" class="item" value="大" name="12" @click="ezdJ('dw212',1,1);" id="dw212" data="12" i18n="shipan.large">-->
+<!--                                                    <input type="button" class="item" value="小" name="13" @click="ezdJ('dw213',1,1);" id="dw213" data="13" i18n="shipan.small">-->
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td class="no-padding">
+                                        <form id="form1" novalidate="novalidate">
+                                            <input type="hidden" name="log" value="1">
+                                            <input type="hidden" name="bet_no">
+                                            <input type="hidden" name="is_show" value="1">
+                                                <div style="font-size:14px;"> <span i18n="shipan.fixed.odds">{{$t('fixedOdds')}}</span>:{{currLs.peiRate}}&nbsp;&nbsp;&nbsp;&nbsp;<label>
+                                                <input type="checkbox" class="checkbox" value="1" id="cbx_is_show" v-model="oddsChange.isShow" :checked="oddsChange.isShow">
+                                                <span i18n="shipan.dont.display">{{$t('noShow')}}</span>
+                                                </label>
+                                            </div>
+                                            <div class="pt5">
+                                                <select id="rise_drop" class="text-large rise_drop" style="font-size:16px" v-model="oddsChange.oddsChangeWay">
+                                                    <option value="0">{{$t('jiang')}}</option>
+                                                    <option value="1">{{$t('sheng')}}</option>
+                                                </select>
+                                                <input type="text" class="text-large w60" id="set_diff_odds" maxlength="7"
+                                                       v-model="oddsChange.odds">
+                                                <input type="hidden" name="diff_odds" id="diff_odds">
+                                                <span class="f16" i18n="shipan.upper.limit">{{$t('shangxian')}}</span>
+                                                <input type="text" class="text-large w100" maxlength="8" v-model="oddsChange.itemLimit">
+                                                <button type="button" class="btn-large" @click="changeOddsAtErding()">{{$t('add')}}</button>
+                                                <button type="button" class="btn-large fn-cancel">{{$t('cancel')}}</button>
+<!--                                                <input type="button" class="btn-large" value="添加" @click="changeOddsAtErding()" i18n="shipan.save">-->
+<!--                                                <input type="button" class="btn-large fn-cancel" value="取消" i18n="shipan.cancel">-->
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+
+<div name="module" id="footer" class="footer">
+        <div class="bd"> Copyright © 2017 xxx. All Rights Reserved</div>
+</div>
+
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/codes_utils.js?v3"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/projects/shipan-v2.js?v3"></script>
+<script  type="text/javascript" language="javascript">
+    //选中实盘
+    window.parent.navSelect("handicap_reality");
+    function popChild(tag){
+        layer.open({
+            type:2,
+            // title:'出货',
+            title:i18np.prop("shipan.menu.chuhuo"),
+            content:'kuaida.html',
+            area:['80%','650px']
+        })
+    }
+</script>
+</body>
+</html>

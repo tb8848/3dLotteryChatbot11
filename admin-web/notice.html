@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>系统通知</title>
+    <style type="text/css">
+        body {
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            font-family:Arial,sans-serif;
+        }
+
+        .sysnotice {
+            border: 1px solid #000;
+            margin: 10px 20px;
+        }
+
+        .sysnotice .title {
+            background: #9fd3dc;
+            line-height: 30px;
+            font-size: 16px;
+            text-align: center;
+            margin: 0;
+            border-bottom: 1px solid #000;
+        }
+
+        .sysnotice .content {
+            line-height: 21px;
+        }
+
+        .sysnotice .content li {
+            margin: 0 0 10px;
+        }
+
+        .sysnotice .ft {
+            text-align: center;
+            padding: 20px 0 50px;
+        }
+
+        .sysnotice .ft label {
+            margin-left: 10px;
+        }
+
+        .sysnotice .btn {
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .sysnotice .red {
+            color: red;
+        }
+        #btn_quickly{
+            text-decoration:underline;
+            color:#888888;
+            cursor:pointer;
+        }
+        #btn_quickly:hover{
+            color:blue;
+        }
+        .notice-titel{
+            text-align:center;
+            font-size:20px;
+            padding-top:20px;
+        }
+        .notice-txt{
+            line-height:250%;
+            padding:40px 20px 0;
+        }
+    </style>
+</head>
+
+<body class="body-sysnotice">
+<div class="sysnotice">
+    <div class="bd">
+        <h1 class="title" id="sys_notice_title"></h1>
+        <div class="content">
+            <div class="notice-txt" id="sys_notice_content">
+            </div>
+        </div>
+    </div>
+    <div class="ft">
+        <input type="button" id="btn_enter" value="确认已阅读" class="btn"/>
+    </div>
+</div>
+
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script>
+    var $ = layui.$;
+
+    function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    }
+
+    //获取公告
+    $(function () {
+        var SESSIONID = getUrlParameter("s");
+        $("#btn_enter").on("click", function () {
+            location.href = "/App/Index?_=" + (new Date).getTime();
+        }).focus();
+
+        function sysNotice() {
+            $.ajax({
+                url: SESSIONID + "/Setting/GetBackendSysNotice?g=2023011394265",
+                type: "GET",
+                cache: false,
+                dataType: "json",
+                success: function (x) {
+                    $("#sys_notice_title").html(x.Data[0].sys_notice_title);
+                    $("#sys_notice_content").html(x.Data[0].sys_notice_content);
+                }
+            });
+        };
+        sysNotice();
+    });
+</script>
+</body>
+
+</html>

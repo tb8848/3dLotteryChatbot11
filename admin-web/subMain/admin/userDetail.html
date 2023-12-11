@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>查看</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+    <style>
+        /*th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }*/
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+        /*.ew-tree-table-cell > .ew-tree-table-cell-content {*/
+        /*    padding: 5px 15px;*/
+        /*    line-height: 20px !important;*/
+        /*}*/
+        /*.t-1 tbody td {*/
+        /*    line-height: 22px;*/
+        /*}*/
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        .mydk{
+            cursor: pointer;
+        }
+        .layui-table-header {
+            height: 30px;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="mainSub">
+    <template>
+    <div class="module">
+        <div name="module" id="awardreadadmin" class="m5"><input type="hidden" id="param_month" value="period_no=">
+            <div class="guide-memberadmin" name="module" deps="guide_memberadmin">
+                <div class="hd"> {{roleName}}{{userName}}</div>
+                <div class="bd">
+                    <a class="active" id="zhDetail" href="javascript:void(0)" @click="tabClickUrl('zhDetail')" i18n="user.userDetail.tab.zhDetail">{{$t('zhDetail')}}</a>
+                    <a class="" id="zhDetailDraw" href="javascript:void(0)" @click="tabClickUrl('zhDetailDraw')" i18n="user.userDetail.tab.zhWin">{{$t('zhWin')}}</a>
+                    <a class="" id="lhDetail" href="javascript:void(0)" @click="tabClickUrl('lhDetail')" i18n="user.userDetail.tab.lhDetail">拦货明细</a>
+                    <a class="" id="lhDetailDraw" href="javascript:void(0)" @click="tabClickUrl('lhDetailDraw')" i18n="user.userDetail.tab.lhWin">拦货中奖</a>
+                    <a class="" id="monthReport" href="javascript:void(0)" @click="tabClickUrl('monthReport')" i18n="user.userDetail.tab.monthReport">月报表</a>
+                    <a class="" id="lhPan" href="javascript:void(0)" @click="tabClickUrl('lhPan')" i18n="user.userDetail.tab.lhPan">拦货盘</a>
+                    <a href="javascript:void(0)" @click="tabClickUrl('goBack')" i18n="user.userDetail.tab.goBack">返回</a></div>
+            </div>
+            <div id="content"></div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+    <!--../zonghuo/zonghuoList.html -->
+    </template>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script>
+
+    const messages = {
+        zh: {
+            zhDetail:"总货明细",
+            zhWin:"总货中奖",
+            lhDetail:"拦货明细",
+            lhWin:"拦货中奖",
+            monthReport:"月报表",
+            lhPan:"拦货盘",
+            goBack:"返回",
+        },
+        th: {
+            zhDetail:"รายละเอียดสินค้าทั้งหมด",
+            zhWin:"รายละเอียดการชนะของสินค้าทั้งหมด",
+            lhDetail:"รายละเอียดของสินค้าที่บล็อก",
+            lhWin:"การชนะของสินค้าที่บล็อก",
+            monthReport:"รายงานเดือน",
+            lhPan:"สินค้าที่บล็อก",
+            goBack:"กลับ",
+        }
+    }
+    var moduleName = "user";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties('subMain-'+moduleName);
+            vm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties('subMain-'+moduleName);
+        i18n.locale=lang;
+    }
+
+    var $ = layui.jquery;
+    window.addEventListener("message", function(event) {
+        var data = event.data;
+        //以下内容为处理业务和调用当前页面的函数方法
+        reloadI18n({
+            defaultLang:data.changeLang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties('subMain-'+moduleName);
+        i18n.locale=data.changeLang;
+        window.location.reload();
+    });
+
+    sessionStorage.setItem("yueji_nav","");
+
+    var layer = layui.layer;
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    const vm = new Vue({
+        el: '#mainSub',
+        i18n,
+        data: {
+            roleName: "",
+            userName: "",
+        },
+        methods: {
+            init() {
+                const userId = GetQueryString("parentId");
+                const _this = this;
+                $.ajax({
+                    url: HOST + "admin/getUserDetail?userId=" + userId
+                    , type: "get"
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            _this.roleName = res.data.roleName;
+                            _this.userName = res.data.userName;
+                        } else {
+                            layer.msg(i18np.prop('user.edit.ajax.error.dataError'));
+                        }
+                    }
+                });
+                this.tabClickUrl('zhDetail');
+            },
+            tabClickUrl(param) {
+                $(".bd").children('a').removeClass('active');
+                switch(param){
+                    case 'zhDetail': //总货明细
+                        $("#zhDetail").addClass('active');
+                        $.ajaxSetup ({
+                            cache: false //关闭AJAX相应的缓存
+                        });
+                        $("#content").load("../zonghuo/zonghuoList.html");
+                        break;
+                    case 'zhDetailDraw': //总货中奖明细
+                        $("#zhDetailDraw").addClass('active');
+                        $.ajaxSetup ({
+                            cache: false //关闭AJAX相应的缓存
+                        });
+                        $("#content").load("../zonghuo/zhongjiang.html");
+                        break;
+                    case 'lhDetail': //拦货明细
+                        $("#lhDetail").addClass('active');
+                        $.ajaxSetup ({
+                            cache: false //关闭AJAX相应的缓存
+                        });
+                        const url = window.sessionStorage.getItem("homeUrl")
+                        /*$("#content").load(url + "/lanhuo/lanHuoList.html",function () {
+                           $.getScript(url + "/js/lanhuo/lanHuoList.js")
+                        });*/
+                        $("#content").load("../lanhuo/lanHuoList.html");
+                        break;
+                    case 'lhDetailDraw': //拦货中奖明细
+                        $("#lhDetailDraw").addClass('active');
+                        $("#content").load("../lanhuo/zhongjiang.html");
+                        break;
+                    case 'monthReport': //月报表
+                        $("#monthReport").addClass('active');
+                        $.ajaxSetup ({
+                            cache: false //关闭AJAX相应的缓存
+                        });
+                        $("#content").load("../baobiao/yuebaobiao.html");
+                        break;
+                    case 'lhPan': //拦货盘
+                        $("#lhPan").addClass('active');
+                        $.ajaxSetup ({
+                            cache: false //关闭AJAX相应的缓存
+                        });
+                        /*$("#content").load("../../lanhuo/lanhuoPan.html",function () {
+                            $.getScript("../js/projects/lanhuopan.js?t="+Math.random()) //subMain内部的js
+                        });*/
+                        // $("#content").load("../../lanhuo/lanhuoPan.html",function () {
+                        //    $.getScript("../js/projects/lanhuopan.js?t="+Math.random())
+                        // });
+                        $("#content").load("../lanhuo/lanhuoPan-3d.html");
+                        break;
+                    case 'goBack': //拦货盘
+                        history.back();
+                        break;
+                }
+            }
+        }
+    })
+    // vm.init();
+</script>
+</body>
+</html>

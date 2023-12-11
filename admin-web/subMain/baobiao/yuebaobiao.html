@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>月报表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+        .white:hover{
+            color: white;
+        }
+
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main2">
+    <template>
+    <div class="module">
+        <div name="module" id="report_month" class="m5 mt10 report">
+            <div class="guide" id="top">
+                <div class="fl">
+                    <a href="#!online_account" i18n="report.top.location">位置 </a> &gt;&gt;
+                    <span class="red" i18n="report.top.monthReport">   月报表    &gt;&gt;
+                        <a class="blue" href=" # ">{{selfName}}({{selfRole}}) </a>
+                    </span>
+                </div>
+                <div class="fr">
+                    <a href="javascript:void(0)" class="" @click="toDayReport" i18n="report.top.dayReport">日报表</a> |
+                    <a href="javascript:void(0)" @click="toMonthReport" class="fb red" i18n="report.top.monthReport">月报表</a> |
+                    <a href="javascript:void(0)" @click="toWeekReport" i18n="report.top.weekReport">周报表</a>
+                </div>
+            </div>
+            <div class="mt10 div_print" id="div_print">
+                <form id="report_week" novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="8">
+                                <span i18n="report.top.monthReport">月报表</span> |
+                                <!--<a :href="'daGuDongList.html?start=' + start + '&end=' + end" class="yellow" id="dgd" i18n="report.table.title.dgd"> 大股东 </a><span id="dgd2">|</span>-->
+                                <span id="month_list">
+                                    <a @click="clickMonth(month)" v-for="month in yearMonthList" :class="monthData==month ? 'yellow red' : 'yellow'" style="cursor: pointer">【{{month}}】</a>
+                                    <a :class="all != 1 ? 'yellow' :'yellow red'" @click="clickAll()" style="cursor: pointer" i18n="report.query.all">【全部】</a>
+                                </span>
+                            </td>
+                            <td colspan="3">
+                                <select class="period_list print_hide w110" id="start_period_no" @change="changeSelect()">
+
+                                </select>
+                                <span class="print_hide">&gt;&gt;</span>
+                                <select class="period_list print_hide w110" id="end_period_no" @change="changeSelect()">
+
+                                </select>
+                            </td>
+                            <td><a href="javascript:void(0)" id="lnk_print" class="white" @click="print()" i18n="report.table.title.print">打印</a></td>
+                        </tr>
+                        <tr class="tc">
+                            <td rowspan="2" class="bg2" width="150" i18n="report.table.head.date"> 日期</td>
+                            <td colspan="3" class="bg-yellow" i18n="report.table.head.vip">会员</td>
+                            <td colspan="2" class="bg-pink"> {{childRole}}</td>
+                            <td colspan="4" class="bg-orange"> {{selfRole}}</td>
+                            <td colspan="2" class="bg-pink"> {{parentRole}}</td>
+                        </tr>
+                        <tr class="tc">
+                            <td class="bg-yellow" i18n="report.table.head.count">笔数</td>
+                            <td class="bg-yellow" i18n="report.table.head.zt">总投</td>
+                            <td class="bg-yellow" i18n="report.table.head.profitLoss">盈亏</td>
+                            <td class="bg-pink" i18n="report.table.head.zt">总投</td>
+                            <td class="bg-pink" i18n="report.table.head.profitLoss">盈亏</td>
+                            <td class="bg-orange" i18n="report.table.head.ztAmount"> 总投金额</td>
+                            <td class="bg-orange" i18n="report.table.head.profitLoss"> 盈亏</td>
+                            <td class="bg-deeporg" i18n="report.table.head.welfare"> 福利</td>
+                            <td class="bg-deeporg" i18n="report.table.head.totalProfitLoss">总盈亏</td>
+                            <td class="bg-pink" i18n="report.table.head.zt">总投</td>
+                            <td class="bg-pink" i18n="report.table.head.profitLoss">盈亏</td>
+                        </tr>
+                        </thead>
+                        <tbody class="fn-hover" id="tbody" v-if="dataList.length > 0">
+                        <tr v-for="(item, index) in dataList">
+                            <td>
+                                <strong class="blue">{{index + 1}}</strong>
+<!--                                <a :href="'daybaobiao.html?drawId=' + item.drawId+'&userId='+logUserId" class="gray">-->
+<!--                                    <strong :class="index == 0 ? 'red' : ''">{{item.monthDay}}</strong>-->
+<!--                                </a>-->
+                                <a :href="'../../baobiao/daybaobiao.html?drawId=' + item.drawId+'&userId='+logUserId" class="gray" v-if="userDetail == 1">
+                                    <strong :class="index == 0 ? 'red' : ''">{{item.monthDay}}</strong>
+                                </a>
+                                <a :href="'../baobiao/daybaobiao.html?drawId=' + item.drawId+'&userId='+logUserId" class="gray" v-else>
+                                    <strong :class="index == 0 ? 'red' : ''">{{item.monthDay}}</strong>
+                                </a>
+                            </td>
+                            <td class="bg-yellow">{{item.vipTotalCount}}</td>
+                            <td class="bg-yellow">{{item.vipTotalMoney}}</td>
+                            <td class="bg-yellow">{{item.vipProfitLossMoney}}</td>
+                            <td class="bg-pink">{{item.childTotalMoney}}</td>
+                            <td class="bg-pink">{{item.childProfitLossMoney}}</td>
+                            <td class="bg-orange">{{item.selfTotalMoney}}</td>
+                            <td class="bg-orange">{{item.selfProfitLossMoney}}</td>
+                            <td class="bg-deeporg">{{item.selfReturnWater}}</td>
+                            <td class="bg-deeporg">{{item.selfTotalProfitLossMoney}}</td>
+                            <td class="bg-pink" v-if="selfRoleId == 1">
+                                <a :href="'../shipan/outDetail.html?drawId=' + item.drawId">{{item.parentTotalMoney}}</a>
+                            </td>
+                            <td class="bg-pink" v-else>
+                                {{item.parentTotalMoney}}
+                            </td>
+                            <td class="bg-pink">{{item.parentProfitLossMoney}}</td>
+                        </tr>
+                        <tr class="tfoot">
+                            <td class="tc">
+                                <span class="fb">{{$t('heji')}}</span>
+                            </td>
+                            <td class="fb">{{totalData.vipTotalCount}}</td>
+                            <td class="fb">{{totalData.vipTotalMoney}}</td>
+                            <td class="fb">{{totalData.vipProfitLossMoney}}</td>
+                            <td class="fb">{{totalData.childTotalMoney}}</td>
+                            <td class="fb">{{totalData.childProfitLossMoney}}</td>
+                            <td class="fb">{{totalData.selfTotalMoney}}</td>
+                            <td class="fb">{{totalData.selfProfitLossMoney}}</td>
+                            <td class="fb">{{totalData.selfReturnWater}}</td>
+                            <td class="fb">{{totalData.selfTotalProfitLossMoney}}</td>
+                            <td class="fb">{{totalData.parentTotalMoney}}</td>
+                            <td class="fb">{{totalData.parentProfitLossMoney}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody v-else>
+                        <tr>
+<!--                            <td colspan="12" i18n="report.table.noData">暂无数据！</td>-->
+                            <td colspan="12">{{$t('noData')}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script src="../../js/subMainReport/monthReport.js"></script>
+</body>
+</html>

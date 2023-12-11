@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>公告</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+        .layui-table-cell {
+            height: 20px;
+            line-height: 20px;
+            padding: 0 15px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .layui-table, .layui-table-view {
+             margin: 0;
+        }
+
+        .layui-table-cell{
+            font-size: 12px;
+        }
+
+        thead tr th{
+            font-weight: bold !important;
+        }
+
+        tbody tr td{
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="main" class="main" style="top: 0px;">
+    <div class="module">
+        <div name="module" id="st_notice" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.announcement.settings">  公告设置  </span>
+                </div>
+                <div class="fr">
+                    <a href="notice.html" class="fb red" id="notice" i18n="setting.announcement.settings">公告设置</a> |
+                    <a href="accountSetting.html" class="" i18n="setting.basic.information">基本资料</a> |
+                    <a href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a>
+                </div>
+            </div>
+            <div class="mt10" id="bd_nextperiod">
+                <form novalidate="novalidate"><input type="hidden" name="is_admin" value="1">
+                    <table class="t-1 mt10">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="6" i18n="setting.five.search.notice">搜索公告</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+
+<!--                                <label class="layui-form-label"  width="90">搜索公告标题</label>-->
+<!--                                <div class="layui-input-inline">-->
+<!--                                    <input class="layui-input" name="username"  autocomplete="off">-->
+<!--                                </div>-->
+
+                            <td width="90" class="bg3 tc"><span i18n="setting.five.search">搜索</span><span i18n="setting.five.notice.title">公告标题</span></td>
+                            <td width="60" class="tc"><input type="text" class="period_no" maxlength="16" name="title" id="title"></td>
+                            <td width="40" class="bg3 tc" i18n="setting.five.leixing">类型</td>
+                            <td width="80" class="tc">
+                                <select name="notice_type" id="notice_type">
+                                    <option value="">{{$t('allNotice')}}</option>
+                                    <option value="0">{{$t('receptionNotice')}}</option>
+                                    <option value="1">{{$t('backstageNotice')}}</option>
+                                    <option value="2">{{$t('recepBackNotice')}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="submit" lay-submit lay-filter="search" value="搜索" class="btn" i18n="setting.five.search">
+<!--                                <button class="layui-btn" lay-submit lay-filter="search">搜索</button>-->
+                            </td>
+                            <td width="100" class="tc"><a href="addNotice.html"
+                                                          class="btn dn" i18n="setting.five.add.notice">新增公告</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10" style="border: 1px solid #000000">
+<!--                <table class="t-1 tc">-->
+<!--                    <thead>-->
+<!--                    <tr class="bg1">-->
+<!--                        <td width="180">公告发布时间</td>-->
+<!--                        <td width="260">公告标题</td>-->
+<!--                        <td>公告内容</td>-->
+<!--                        <td width="80">发布位置</td>-->
+<!--                        <td width="80">显示状态</td>-->
+<!--                        <td width="100">操作</td>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody class="fn-hover" id="tbody">-->
+<!--                    <tr>-->
+<!--                        <td colspan="6">暂无数据！</td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+                <table class="layui-hide" id="t" lay-filter="t" ></table>
+            </div>
+<!--            <div name="module" id="pager" class="pager" action="setting.st_notice" pagebody="tbody"-->
+<!--                 template="tpl_notice_list" pagecount="1" param="notice_title=&amp;notice_type=&amp;is_admin=1"> 第 <span-->
+<!--                    class="pageindex red">1</span> 页 共 <span class="pagecount red">1</span> 页 共 <span-->
+<!--                    class="recordcount red">0</span> 条 <a href="javascript:void(0)" class="fn-first">首页</a> <a-->
+<!--                    href="javascript:void(0)" class="fn-prev">上一页</a> <a href="javascript:void(0)"-->
+<!--                                                                         class="fn-next">下一页</a> <a-->
+<!--                    href="javascript:void(0)" class="fn-last">尾页</a> <input type="text" class="input w30 fn-index">-->
+<!--                <input type="button" class="btn btn-gray w30 fn-go" value="GO"></div>-->
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+    <script type="text/html" id="tpl_notice_list">
+        {{if Data.Rows.length >0}}
+        {{each Data.Rows as item}}
+        <tr>
+            <td>{{item.create_time}}</td>
+            <td>{{item.notice_title}}</td>
+            <td>{{#item.notice_content}}</td>
+            <td>{{if item.notice_type == 3}}<span i18n="setting.five.around.notice">前后台公告</span>{{else if item.notice_type == 1}}<span i18n="setting.five.reception.notice">前台公告</span>{{else}}<span i18n="setting.five.backstage.notice">后台公告</span>{{/if}}</td>
+            <td>{{if item.show_frontend == 1}}<span i18n="setting.five.show">显示</span>{{else}}<span i18n="setting.five.noShow">不显示</span>{{/if}}</td>
+            <td>
+<!--                <a href="#!setting.st_notice_add|st_notice_add?type=notice&notice_id={{item.notice_id}}&OperateType=2&is_admin=1"-->
+<!--                   class="mr10">编辑</a>-->
+<!--                <a href="javascript:void(0)" class="fn-delete"-->
+<!--                   data-param='{"notice_id":"{{item.notice_id}}","PageIndex":"{{Data.PageIndex}}","is_admin":"1","pagesize":"20"}'>删除</a>-->
+            </td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="6" i18n="setting.three.zwsj">暂无数据！</td>
+        </tr>
+        {{/if }}
+    </script>
+</div>
+<script type="text/html" id="caozuo">
+    <a class="layui-btn  layui-btn-xs" lay-event="update" ><span i18n="setting.three.update" class="edit">编辑</span></a>
+    <a class="layui-btn layui-btn-xs layui-bg-red" lay-event="delete"  ><span i18n="setting.two.delete" class="delete">删除</span></a>
+</script>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+
+    const messages = {
+        zh: {
+            allNotice:"全部公告",
+            receptionNotice:"前台公告",
+            backstageNotice:"后台公告",
+            recepBackNotice:"前后台公告",
+        },
+        th: {
+            allNotice:"ประกาศทั้งหมด",
+            receptionNotice:"ประกาศด้านหน้า",
+            backstageNotice:"ประกาศด้านหลัง",
+            recepBackNotice:"ประกาศด้านหน้าและด้านหลัง",
+        }
+    }
+
+    var $ = layui.jquery;
+    var table = layui.table;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        // layui刷新表头
+        table.reload("tt",{
+            cols: [
+                [
+                    {title: i18np.prop('setting.five.serial.number'),type:'numbers',width:80 ,align: 'center'},
+                    {title: i18np.prop('setting.five.notice.releaseTime'),width: 160,align: 'center'},
+                    {title: i18np.prop('setting.five.notice.title'),width: 280,align: 'center'},
+                    {title: i18np.prop('setting.five.notice.content'),align: 'center'},
+                    {title: i18np.prop('setting.five.publishing.location'),width: 160,align: 'center'},
+                    {title: i18np.prop('setting.five.display.status'),width: 160,align: 'center'},
+                    {toolbar: "#caozuo",align : 'center',width:160, title: i18np.prop('setting.two.caozuo'),fixed: 'right'}
+                ]
+            ],
+            text:{none: i18np.prop('setting.three.zwsj')},
+        })
+    }
+
+    const vm = new Vue({
+        el: '#notice_type',
+        i18n,
+        data: {},
+        methods: {
+            init() {
+                console.log("初始化vue了")
+            }
+        }
+    })
+
+    $('#notice').on('click',function () {
+        layui.data('t_page', null);
+    })
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use(['i18np', 'form', 'jquery', 'table'], function(){
+        var form = layui.form;
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+        vm.init();
+
+        form.on('submit(search)',function(data){ //查询
+            var title = $("#title").val()
+            var showLocation = $("#notice_type").val()
+            table.reload('tt', {
+                where: {"title": title,"showLocation":showLocation}
+                , page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            // toolbar: '#tb',
+            url: HOST+'notice/selectNoticeByPage',
+            cols: [
+                [
+                    {title: i18np.prop('setting.five.serial.number'),type:'numbers',width:80 ,align: 'center'},
+                    {field: 'createTime',title: i18np.prop('setting.five.notice.releaseTime'),width: 160,align: 'center'},
+                    {field: 'title',title: i18np.prop('setting.five.notice.title'),width: 280,align: 'center'},
+                    {field: 'content',title: i18np.prop('setting.five.notice.content'),align: 'center'},
+                    {field: 'showLocation',title: i18np.prop('setting.five.publishing.location'),width: 160,align: 'center',templet:function(d){
+                        if(d.showLocation == 0){
+                            return i18np.prop('setting.five.reception.notice')
+                        }else if(d.showLocation == 1){
+                            return i18np.prop('setting.five.backstage.notice')
+                        }else if(d.showLocation == 2){
+                            return i18np.prop('setting.five.around.notice')
+                        }else{
+                            return ''
+                        }
+                        }},
+                    {field: 'isShow',title: i18np.prop('setting.five.display.status'),width: 160,align: 'center',templet:function(d){
+                        if(d.isShow == 0){
+                            return i18np.prop('setting.five.noShow')
+                        }else if(d.isShow){
+                            return i18np.prop('setting.five.show')
+                        }else {
+                            return ""
+                        }
+                        }},
+                    {toolbar: "#caozuo",align : 'center',width:160, title: i18np.prop('setting.two.caozuo'),fixed: 'right'}
+                ]
+            ],
+            text:{none: i18np.prop('setting.three.zwsj')},
+            page: true
+            ,page: {
+                curr: layui.data("t_page").index
+            },
+            done: (res, curr, count) => {
+                layui.data("t_page", {
+                    key: 'index',
+                    value: curr
+                });
+                $(".delete").html(i18np.prop('setting.two.delete'))
+                $(".edit").html(i18np.prop('setting.three.update'))
+            }
+        });
+        table.on('tool(t)', function (obj) {
+            var data = obj.data;
+            // console.log(data)
+            if (obj.event === 'update') {
+                window.location.href = 'editNotice.html?id=' + data.id ;
+            }else if(obj.event === 'delete'){
+                layer.confirm(i18np.prop('setting.five.delete.confirm'),{
+                    icon: 3,
+                    title:i18np.prop('setting.five.tips'),
+                    btn: [i18np.prop("setting.determine"),i18np.prop("setting.cancel")] //可以无限个按钮
+                },function (index) {
+                    $.ajax({
+                        type:"get",
+                        url: HOST+"notice/deleteNotice?id="+data.id,
+                        success:function (res) {
+                            if(res.code == 0){
+                                layer.close(layer.index);
+                                layer.msg(res.msg);
+                                setTimeout(function(){
+                                    table.reload('tt', {page: {curr:1}})
+                                }, 1000);
+                            }else{
+                                layer.msg(i18np.prop('setting.operation.failed'));
+                            }
+                        }
+                    })
+                })
+            }
+        });
+    });
+</script>
+</body>
+</html>

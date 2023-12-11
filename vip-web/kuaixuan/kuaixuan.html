@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>快选</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--    <link rel="stylesheet" href="../css/common.css" media="all">-->
+<!--    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">-->
+<!--    <link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/adminseccode.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>
+    <script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <style>
+        #showselectnumber tr td{
+            border: 1px solid #e0e0e0;
+            border-left: 0;
+            border-top: 0;
+        }
+        .tablecenter{
+            border: 1px solid black;
+        }
+
+        .activemenu{
+            background-color: green;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="module">
+    <div name="module" id="kuaixuan" class="kuaixuan">
+        <input type="hidden" id="template_type" value="erd">
+        <div class="left">
+            <div class="bd m5">
+                <table class="t-1">
+                    <thead> <tr class="bg1"> <td>生成号码框</td> </tr> </thead>
+                    <tbody id="showselectnumber">
+                        <tr id="noDataRow" class="hide">
+                            <td class="tc" style="height:400px">
+                                <div class="f16 fb " id="openStatusDesc">  已封盘  </div>
+                            </td>
+                        </tr>
+                        <tr id="showDataRow" class="hide">
+                            <td class="no-padding">
+                                <div style="overflow-y: auto; min-height: 240px; max-height: 600px;" id="bd_betno">
+                                    <!-- 号码展示区 -->
+<!--                                    <table class="t-2 tc" id="numberList" cellspacing="0" cellpadding="0">-->
+<!--                                        <tbody>-->
+<!--                                            <tr>-->
+<!--                                                <td width="12.5%">11XX</td>-->
+<!--                                                <td width="12.5%">12XX</td>-->
+<!--                                                <td width="12.5%">15XX</td>-->
+<!--                                                <td width="12.5%">21XX</td>-->
+<!--                                                <td width="12.5%">22XX</td>-->
+<!--                                                <td width="12.5%">25XX</td>-->
+<!--                                                <td width="12.5%">31XX</td>-->
+<!--                                                <td width="12.5%">32XX</td>-->
+<!--                                            </tr>-->
+<!--                                            <tr>-->
+<!--                                                <td width="12.5%">35XX</td>-->
+<!--                                                <td width="12.5%">41XX</td>-->
+<!--                                                <td width="12.5%">42XX</td>-->
+<!--                                                <td width="12.5%">45XX</td>-->
+<!--                                                <td width="12.5%">51XX</td>-->
+<!--                                                <td width="12.5%">52XX</td>-->
+<!--                                                <td width="12.5%">55XX</td>-->
+<!--                                            </tr>-->
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                    <div class="betStatus" id="betStatus1">-->
+<!--                                        <img src="/Images/loading.gif"> <br><span>0</span>个注单正在投注，已完成<i id="multi_count"></i>个-->
+<!--                                    </div>-->
+<!--                                    <div class="betStatus" id="betStatus2"> <img src="/Images/loading.gif"> <br><span>0</span>个注单正在处理... </div>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form id="sendForm" autocomplete="off" novalidate="novalidate" class="hide">
+                    <div class="mt10">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1"> <td colspan="2">发送框</td> </tr> </thead>
+                            <tbody>
+                            <tr>
+                                <td rowspan="2"> <span class="f16">金额</span>
+                                    <input id="bet_money" type="text" maxlength="8"
+                                           required="true" positive="true" class="text-large w70 14 bet-money" aria-required="true">
+                                    &nbsp; <input id="btn_bet" type="button" value="下注" style="width:50px" bet-type="0" class="btn btn-large bet-submit">&nbsp;
+                                    <input id="btn_bet_package" type="button" value="包牌" style="width:50px" bet-type="1" class="btn btn-large bet-submit">&nbsp;
+                                    <input id="btn_bet_will" type="button" value="录入汇总表" style="width:100px" bet-type="2" class="btn btn-large bet-submit">
+                                    <input type="hidden" name="operation_condition" id="operation_condition">
+                                </td>
+                                <td>笔数：<span id="numberCount"></span></td>
+                            </tr>
+                            <tr> <td>金额：<span id="numberAmount"></span>元</td> </tr> </tbody> </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="right">
+            <div class="bd m5"> <table class="tb-kuaixuan" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr class="tc" id="lotteryMethodsContainer">
+<!--                        <td class="on" width="16.7%"><input id="kx_erd" type="button" value="二字定" class="fn-module btn-large erd-btn" module="erd"> </td>-->
+<!--                        <td width="16.7%"> <input id="kx_sand" type="button" value="三字定" class="fn-module btn-large erd-btn" module="sand"> </td>-->
+<!--                        <td width="16.7%"> <input id="kx_sid" type="button" value="四字定" class="fn-module btn-large erd-btn" module="sid"> </td>-->
+<!--                        <td width="16.7%"> <input type="button" value="二字现" class="fn-module btn-large erd-btn" module="erx"> </td>-->
+<!--                        <td width="16.7%"> <input type="button" value="三字现" class="fn-module btn-large erd-btn" module="sanx"> </td>-->
+<!--                        <td width="16.7%"> <input type="button" value="四字现" class="fn-module btn-large erd-btn" module="six"> </td>-->
+                    </tr>
+                </tbody>
+                </table>
+                <form id="createForm"> <div id="bd_template" style="ime-mode: disabled;">
+                <table class="t-1">
+                    <tbody>
+                    <tr class="bg2" id="dingweiHeader">
+                        <td colspan="2" class="tc"> <strong class="red2">定位置</strong>
+                            <label><input type="checkbox" class="position-filter checkbox" positiontype="0" positionfilter="1"
+                                          NAME="__dingwei_chu" id="__dingwei_chu" onclick="showdis(this,'__dingwei_qu','fixLoc','',0);">除</label>
+                            <label><input type="checkbox" class="position-filter checkbox" positiontype="0" positionfilter="0"
+                                          NAME="__dingwei_qu" id="__dingwei_qu" onclick="showdis(this,'__dingwei_chu','fixLoc','',1);"
+                                          checked="checked">取</label>
+                        </td>
+                        <td colspan="2" class="tc" id="matchRotate"> <strong class="red2">配数全转</strong>
+                            <label><input type="checkbox" class="position-filter checkbox" positiontype="1" positionfilter="1"
+                                          NAME="__peishu_chu2" id="__peishu_chu" onclick="showdis(this,'__peishu_qu','match1','',0);">除</label>
+                            <label><input type="checkbox" class="position-filter checkbox" positiontype="1" positionfilter="0"
+                                          NAME="__peishu_qu" id="__peishu_qu" onclick="showdis(this,'__peishu_chu','match1','',1);">取</label>
+                        </td>
+                    </tr>
+                    <tr id="peishuContainer" class="bg2" style="display: none;">
+                        <td  colspan="4" class="tc">
+                            <strong class="red2">配数</strong>
+                            <label><INPUT TYPE="checkbox" class="position-filter checkbox" NAME="__peishu_chu2" id="__peishu_chu2" onclick="showdis(this,'__peishu_qu2','match2','',0);">除</label>
+                            <label><INPUT TYPE="checkbox" class="position-filter checkbox" NAME="__peishu_qu2" id="__peishu_qu2" onclick="showdis(this,'__peishu_chu2','match2','',1);" checked>取</label>
+                        </td>
+                    </tr>
+                    <tr class="fixed-input tc" id="dingweiContainer"> <td width="25%">仟</td> <td width="25%">佰</td> <td width="25%">拾</td> <td width="25%">个</td> </tr>
+                    <tr class="fixed-input tc" id="dingweiContainer-1">
+                        <td><input type="text" class="w90" boxnumber="1" name="qian" digits="true" maxlength="10" value=""
+                                   ID="__dingwei_1" onkeyup="limitRepeatNums(this,'fixCode',0)"></td>
+                        <td><input type="text" class="w90" boxnumber="2" name="bai" digits="true" maxlength="10" value=""
+                                   ID="__dingwei_2" onkeyup="limitRepeatNums(this,'fixCode',1)"></td>
+                        <td><input type="text" class="w90" boxnumber="3" name="shi" digits="true" maxlength="10" value=""
+                                   disabledID="__dingwei_3" onkeyup="limitRepeatNums(this,'fixCode',2)"></td>
+                        <td><input type="text" class="w90" boxnumber="4" name="ge" digits="true" maxlength="10" value=""
+                                   ID="__dingwei_4" onkeyup="limitRepeatNums(this,'fixCode',3)"></td>
+                    </tr>
+
+                    <tr id="peishuContainer-1" class="match-input hide">
+                        <td colspan="4" class="tc">
+                            <span id="ps1" style="display: none"><INPUT TYPE="text" NAME="peishu_1" ID="peishu_1" class="w90" digits="true"  maxlength=10  onkeyup="limitRepeatNums(this,'peishu',0)"></span>
+                            <span id="ps2" style="display: none"> 配,<INPUT TYPE="text" NAME="peishu_2" ID="peishu_2" class="w90"  maxlength=10  onkeyup="limitRepeatNums(this,'peishu',1)" ></span>
+                            <span id="ps3" style="display: none"> 配,<INPUT TYPE="text" NAME="peishu_3" ID="peishu_3" class="w90"  maxlength=10   onkeyup="limitRepeatNums(this,'peishu',2)"></span>
+                            <span id="ps4" style="display: none"> 配,<INPUT TYPE="text" NAME="peishu_4" ID="peishu_4" class="w90"  maxlength=10   onkeyup="limitRepeatNums(this,'peishu',3)"></span></td>
+                    </tr>
+
+                    <tr class="bg2 hide" id="hefenContainer">
+                        <td colspan="4" class="tc"> <strong class="red2">合</strong>&nbsp;&nbsp; <strong class="red2">分</strong>
+                            <label><input type="checkbox" class="remain-fixed-filter checkbox" remainfixedfilter="1"
+                                          NAME="__hefen_chu" id="__hefen_chu" onclick="showdis(this,'__hefen_qu','hefen','',0);">除</label>
+                            <label><input type="checkbox" class="remain-fixed-filter checkbox" remainfixedfilter="0" checked="checked"
+                                          NAME="__hefen_qu" id="__hefen_qu" onclick="showdis(this,'__hefen_chu','hefen','',1);">取</label> </td>
+                    </tr>
+                    <tr class="tc hide" id="hefenContainer1">
+                        <td class="remain-fixed-filter-item">
+                            1. <input type="checkbox" onclick="showChkResult(this,'hefenItem1',0)">
+                            <input type="checkbox" onclick="showChkResult(this,'hefenItem1',1)">
+                            <input type="checkbox"  onclick="showChkResult(this,'hefenItem1',2)">
+                            <input type="checkbox"  onclick="showChkResult(this,'hefenItem1',3)">
+                            <br> <input type="text" class="w90" name="he1" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'hefenItem1',0)"> </td>
+                        <td class="remain-fixed-filter-item">
+                            2. <input type="checkbox" onclick="showChkResult(this,'hefenItem2',0)"> <input type="checkbox" onclick="showChkResult(this,'hefenItem2',1)">
+                            <input type="checkbox" onclick="showChkResult(this,'hefenItem2',2)"> <input type="checkbox" onclick="showChkResult(this,'hefenItem2',3)">
+                            <br> <input type="text" class="w90" name="he2" digits="true" maxlength="10"  onkeyup="limitRepeatNums(this,'hefenItem2',0)"> </td>
+                        <td class="remain-fixed-filter-item">
+                            3. <input type="checkbox" onclick="showChkResult(this,'hefenItem3',0)"> <input type="checkbox" onclick="showChkResult(this,'hefenItem3',1)">
+                            <input type="checkbox" onclick="showChkResult(this,'hefenItem3',2)"> <input type="checkbox" onclick="showChkResult(this,'hefenItem3',3)">
+                            <br> <input type="text" class="w90" name="he3" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'hefenItem3',0)"> </td>
+                        <td class="remain-fixed-filter-item">
+                            4. <input type="checkbox" onclick="showChkResult(this,'hefenItem4',0)"> <input type="checkbox" onclick="showChkResult(this,'hefenItem4',1)">
+                            <input type="checkbox" onclick="showChkResult(this,'hefenItem4',2)"> <input type="checkbox" onclick="showChkResult(this,'hefenItem4',3)">
+                            <br> <input type="text" class="w90" name="he4" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'hefenItem4',0)"> </td>
+                    </tr>
+                    <tr id="bdweihefenContainer" class="hide">
+                        <td colspan="4" class="remain-match-filter-item"> <strong class="red2">不定位合分</strong>
+                        <label id="bd1"><input type="checkbox" remainmatchfilter="2" class="remain-match-filter checkbox"
+                                               id="__bdwhefen_1" name="__bdwhefen_1" onclick="showdis(this,'__bdwhefen_2','bdwhefen','sum2',0);">两数合</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label id="bd2"><input type="checkbox" remainmatchfilter="2" class="remain-match-filter checkbox"
+                                                   id="__bdwhefen_2" name="__bdwhefen_2" onclick="showdis(this,'__bdwhefen_1','bdwhefen','sum3',0);">三数合</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="text" class="w90" name="budinghe" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'sum2',0)" >
+                    </td>
+                    </tr>
+                    <tr id="otherRuleContainer" class="hide">
+                        <td colspan="4">
+                        <span id="quandao"><strong class="red2">全转</strong> <input type="text" class="transform-filter-item w50" name="quanzhuan"
+                                                                                   digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'quanzhuan',0)" ID="__quandao"></span>
+                        <span id="shangjiang"><strong class="red2">上奖</strong> <input type="text" class="upper-filter-item w50" name="shangjiang" digits="true" maxlength="10"
+                                                                                      onkeyup="limitRepeatNums(this,'shangjiang',0)" ID="__shangjiang" ></span>
+                        <span id="paichu"><strong class="red2">排除</strong> <input type="text" class="except-filter-item w50" name="paichu" digits="true"
+                                                                                  maxlength="10" onkeyup="limitRepeatNums(this,'paichu',0)" ID="__paichu"></span>
+                            <span id="zfw1"><strong class="red2">值 范 围</strong>
+                                <input type="text" class="except-filter-item w50" NAME="__zhifanwei_start" ID="__zhifanwei_start" onkeyup="limitRepeatNums(this,'valueRange',0)">
+                            值&nbsp;至&nbsp;&nbsp;
+                                <input TYPE="text" class="except-filter-item w50" NAME="__zhifanwei_end" ID="__zhifanwei_end" onkeyup="limitRepeatNums(this,'valueRange',1)" maxlength=8  >值
+                            </span>
+                        <span id="ch2"><strong class="red2">乘号位置</strong>
+                        <input type="checkbox" class="symbol-filter-item" NAME="__chenghao_1" id="__chenghao_1" onclick="showChkResult(this,'xlocArr',0)">
+                        <input type="checkbox" class="symbol-filter-item" NAME="__chenghao_2" id="__chenghao_2" onclick="showChkResult(this,'xlocArr',1)">
+                        <input type="checkbox" class="symbol-filter-item" NAME="__chenghao_3" id="__chenghao_3" onclick="showChkResult(this,'xlocArr',2)">
+                        <input type="checkbox" class="symbol-filter-item" NAME="__chenghao_4" id="__chenghao_4" onclick="showChkResult(this,'xlocArr',3)"></span>
+                    </td>
+                    </tr>
+                    <tr id="fushiContainer" class="hide">
+                        <td colspan="4">
+                            <label><input type="checkbox" class="contain-filter checkbox" containfilter="1" NAME="__chu_1" ID="__chu_1" onclick="showdis(this,'__qu_1','fushi','',0);">除</label>
+                            <label><input type="checkbox" class="contain-filter checkbox" containfilter="0" NAME="__qu_1" ID="__qu_1"
+                                          checked="checked" onclick="showdis(this,'__chu_1','fushi','',1);">取</label>
+                            <span id="ruleName1">二字定</span>含 <input type="text" class="contain-filter-item w80" name="han" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'includes',0)">
+                            <span id="ruleName2">二字定</span>复式 <input type="text" class="multiple-filter-item" name="fushi" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'fushi',0)">
+                        </td>
+                    </tr>
+                    <tr id="repeatTypeContainer" class="hide">
+                        <td colspan="4">
+                             <span id="repeat1" style="display: none;margin-right: 5px;">
+                                 <label><input TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_1" ID="__chu_chong_1" onclick="showdis(this,'__qu_chong_1','repeat','repeat1',0);">除</label>
+                                 <label><input TYPE="checkbox" NAME="__qu_chong_1" ID="__qu_chong_1" onclick="showdis(this,'__chu_chong_1','repeat','repeat1',1);">取</label>(<strong class="red2">双重</strong>)&nbsp;
+                            </span>
+                            <span id="repeat22" style="display: none;margin-right: 5px;">
+                                <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_2" ID="__chu_chong_2" onclick="showdis(this,'__qu_chong_2','repeat','repeat22',0);">除</label>
+                                <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__qu_chong_2" ID="__qu_chong_2"
+                                              onclick="showdis(this,'__chu_chong_2','repeat','repeat22',1);">取</label>(<strong class="red2">双双重</strong>)&nbsp;
+                            </span>
+                            <span id="repeat3" style="display: none;margin-right: 5px;">
+                                <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_3" ID="__chu_chong_3" onclick="showdis(this,'__qu_chong_3','repeat','repeat3',0);">除</label>
+                                <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__qu_chong_3" ID="__qu_chong_3"
+                                              onclick="showdis(this,'__chu_chong_3','repeat','repeat3',0);">取</label>(<strong class="red2">三重</strong>)&nbsp;
+                            </span>
+                            <span id="repeat4" style="display: none;margin-right: 5px;">
+                                <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_4" ID="__chu_chong_4" onclick="showdis(this,'__qu_chong_4','repeat','repeat4',0);">除</label>
+                                <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__qu_chong_4" ID="__qu_chong_4"
+                                              onclick="showdis(this,'__chu_chong_4','repeat','repeat4',1);">取</label>(<strong class="red2">四重</strong>)
+                            </span>
+<!--                            -->
+<!--                            <label><input type="checkbox" class="repeat-two-words-filter checkbox" repeatwordsfilter="1" >除</label>-->
+<!--                            <label><input type="checkbox" class="repeat-two-words-filter checkbox" repeatwordsfilter="0">取</label>-->
+<!--                            (<strong class="red2">双重</strong>)-->
+                        </td>
+                    </tr>
+
+                    <tr class="hide">
+                        <td colspan="4">
+                        <span id="xiongdi2">
+                            <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_1" ID="__chu_xiongdi_1"
+                                          onclick="showdis(this,'__qu_xiongdi_1','xiongdi','xiongdi1',0);">除</label>
+                            <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_1" ID="__qu_xiongdi_1"
+                                          onclick="showdis(this,'__chu_xiongdi_1','xiongdi','xiongdi1',1);">取</label>(<strong class="red2">二兄弟</strong>)&nbsp;
+                        </span>
+                            <span id="xiongdi3">
+                            <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_2" ID="__chu_xiongdi_2"
+                                          onclick="showdis(this,'__qu_xiongdi_2','xiongdi','xiongdi2',0);">除</label>
+                            <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_2" ID="__qu_xiongdi_2"
+                                          onclick="showdis(this,'__chu_xiongdi_2','xiongdi','xiongdi2',1);">取</label>(<strong class="red2">三兄弟</strong>)&nbsp;
+                        </span>
+                            <span id="xiongdi4">
+                            <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_3" ID="__chu_xiongdi_3"
+                                          onclick="showdis(this,'__qu_xiongdi_3','xiongdi','xiongdi3',0);">除</label>
+                            <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_3" ID="__qu_xiongdi_3"
+                                          onclick="showdis(this,'__chu_xiongdi_3','xiongdi','xiongdi3',1);">取</label>(<strong class="red2">四兄弟</strong>)
+                        </span>
+                        </td>
+                    </tr>
+
+
+                    <tr id="duishuContainer" style="display: none;">
+                        <td colspan="4"  class="logarithm-number-item">
+                            <label><INPUT TYPE="checkbox" NAME="__chu_duishu" ID="__chu_duishu" onclick="showdis(this,'__qu_duishu','duishu','',0);" class="logarithm-number-filter checkbox">除</label>
+                            <label><INPUT TYPE="checkbox" NAME="__qu_duishu" ID="__qu_duishu" onclick="showdis(this,'__chu_duishu','duishu','',1);" class="logarithm-number-filter checkbox">取</label>(<strong class="red2">对数</strong>)
+                            <INPUT TYPE="text" NAME="__duishu_1" ID="__duishu_1" class="w60"  maxlength=2  onkeyup="limitRepeatNums(this,'duishu',0)" >&nbsp;
+                            <INPUT TYPE="text" NAME="__duishu_2" ID="__duishu_2" class="w60"  maxlength=2  onkeyup="limitRepeatNums(this,'duishu',1)" >&nbsp;
+                            <INPUT TYPE="text" NAME="__duishu_3" ID="__duishu_3" class="w60"  maxlength=2  onkeyup="limitRepeatNums(this,'duishu',2)" >&nbsp;
+                            <INPUT TYPE="text" NAME="__duishu_4" ID="__duishu_4" class="w60"  maxlength=2  onkeyup="limitRepeatNums(this,'duishu',3)" >&nbsp;
+                            <INPUT TYPE="text" NAME="__duishu_5" ID="__duishu_5" class="w60"  maxlength=2  onkeyup="limitRepeatNums(this,'duishu',4)" >&nbsp;
+                        </td>
+                    </tr>
+
+<!--                    <tr> <td colspan="4" class="logarithm-number-item"> <label>-->
+<!--                        <input type="checkbox" class="logarithm-number-filter checkbox" logarithmnumberfilter="1">除</label>-->
+<!--                        <label><input type="checkbox" class="logarithm-number-filter checkbox" logarithmnumberfilter="0">取</label> (<strong class="red2">对数</strong>)-->
+<!--                        <input type="text" class="w60" name="duishu1" pairnumber="true" maxlength="2"> -->
+<!--                        <input type="text" class="w60" name="duishu2" pairnumber="true" maxlength="2">-->
+<!--                        <input type="text" class="w60" name="duishu3" pairnumber="true" maxlength="2">-->
+<!--                    </td>-->
+<!--                    </tr>-->
+                    <tr>
+                        <td colspan="2" id="dangshuContainer">
+                            <label><input type="checkbox" class="odd-number-filter checkbox" oddnumberfilter="1" NAME="__dan_chu" ID="__dan_chu" onclick="showdis(this,'__dan_qu','singleNum','',0);">除</label>
+                            <label><input type="checkbox" class="odd-number-filter checkbox" oddnumberfilter="0" NAME="__dan_qu" ID="__dan_qu" onclick="showdis(this,'__dan_chu','singleNum','',1);">取</label>
+                            (<strong class="red2">单</strong>)
+                            <input type="checkbox" class="odd-number-item checkbox" NAME="singleNumLocArr" id="__dan_1" value="1" onclick="showChkResult(this,'singleNum',0)">
+                            <input type="checkbox" class="odd-number-item checkbox" NAME="singleNumLocArr" id="__dan_2" value="2" onclick="showChkResult(this,'singleNum',1)">
+                            <input type="checkbox" class="odd-number-item checkbox" NAME="singleNumLocArr" id="__dan_3" value="3" onclick="showChkResult(this,'singleNum',2)">
+                            <input type="checkbox" class="odd-number-item checkbox" NAME="singleNumLocArr" id="__dan_4" value="4" onclick="showChkResult(this,'singleNum',3)">
+                            <span class="green fb f14"><span id="selectWord_odd"></span>&nbsp;&nbsp;<span id="selectCondition_odd"></span></span>
+                        </td>
+                        <td colspan="2">
+                            <label><input type="checkbox" class="even-number-filter checkbox" evennumberfilter="1" NAME="__shuang_chu" ID="__shuang_chu" onclick="showdis(this,'__shuang_qu','doubleNum','',0);">除</label>
+                            <label><input type="checkbox" class="even-number-filter checkbox" evennumberfilter="0" NAME="__shuang_qu" ID="__shuang_qu" onclick="showdis(this,'__shuang_chu','doubleNum','',1);">取</label> (<strong class="red2">双</strong>)
+                            <input type="checkbox" class="even-number-item checkbox" NAME="doubleNumLocArr" id="__shuang_1" value="1" onclick="showChkResult(this,'doubleNum',0)">
+                            <input type="checkbox" class="even-number-item checkbox" NAME="doubleNumLocArr" id="__shuang_2" value="1" onclick="showChkResult(this,'doubleNum',1)">
+                            <input type="checkbox" class="even-number-item checkbox" NAME="doubleNumLocArr" id="__shuang_3" value="1" onclick="showChkResult(this,'doubleNum',2)">
+                            <input type="checkbox" class="even-number-item checkbox" NAME="doubleNumLocArr" id="__shuang_4" value="1" onclick="showChkResult(this,'doubleNum',3)">
+                            <span class="green fb f14"><span id="selectWord_even"></span>&nbsp;&nbsp;<span id="selectCondition_even"></span></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label><input type="checkbox" class="big-number-filter checkbox" bignumberfilter="1" NAME="__max_chu" ID="__max_chu" onclick="showdis(this,'__max_qu','bigNum','',0);">除</label>
+                            <label><input type="checkbox" class="big-number-filter checkbox" bignumberfilter="0" NAME="__max_qu" ID="__max_qu" onclick="showdis(this,'__max_chu','bigNum','',1);">取</label> (<strong class="red2">大</strong>)
+                            <input type="checkbox" class="big-number-item checkbox" NAME="bigNumLocArr" id="__max_1" value="1" onclick="showChkResult(this,'bigNum',0)">
+                            <input type="checkbox" class="big-number-item checkbox" NAME="bigNumLocArr" id="__max_2" value="1" onclick="showChkResult(this,'bigNum',1)">
+                            <input type="checkbox" class="big-number-item checkbox" NAME="bigNumLocArr" id="__max_3" value="1" onclick="showChkResult(this,'bigNum',2)">
+                            <input type="checkbox" class="big-number-item checkbox" NAME="bigNumLocArr" id="__max_4" value="1" onclick="showChkResult(this,'bigNum',3)">
+                            <span class="green fb f14"><span id="selectWord_big"></span>&nbsp;&nbsp;<span id="selectCondition_big"></span></span>
+                        </td>
+                        <td colspan="2">
+                            <label><input type="checkbox" class="small-number-filter checkbox" smallnumberfilter="1" NAME="__min_chu" ID="__min_chu" onclick="showdis(this,'__min_qu','smallNum','',0);">除</label>
+                            <label><input type="checkbox" class="small-number-filter checkbox" smallnumberfilter="0" NAME="__min_qu" ID="__min_qu" onclick="showdis(this,'__min_chu','smallNum','',1);">取</label> (<strong class="red2">小</strong>)
+                            <input type="checkbox" class="small-number-item checkbox" NAME="smallNumLocArr" id="__min_1" value="1" onclick="showChkResult(this,'smallNum',0)">
+                            <input type="checkbox" class="small-number-item checkbox" NAME="smallNumLocArr" id="__min_2" value="1" onclick="showChkResult(this,'smallNum',1)">
+                            <input type="checkbox" class="small-number-item checkbox" NAME="smallNumLocArr" id="__min_3" value="1" onclick="showChkResult(this,'smallNum',2)">
+                            <input type="checkbox" class="small-number-item checkbox" NAME="smallNumLocArr" id="__min_4" value="1" onclick="showChkResult(this,'smallNum',3)">
+                            <span class="green fb f14"><span id="selectWord_small"></span>&nbsp;&nbsp;<span id="selectCondition_small"></span></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </form>
+            </div>
+            <div class="tc padding6 hide" id="btnGroup">
+                <input id="btn_create" type="button" value="生成" style="width:50px" class="btn btn-large" onclick="createCodes();">
+                <input id="btn_reset" type="button" value="复位" style="width:50px" class="btn btn-large" onclick="resetXuan()">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirm-dialog" class="g-dialog g-confirm" style="width: 350px;display: none">
+    <div class="dialog-bd">
+        <div> 现金现在已用是“0”，下注后已用应是“4”。<br>
+            <br>下注完成后请在会员信息里再次核对已用现金！<br>
+            <br>如果（已用）现金不相符。<br>
+            <br> 请先进入（快选）检查是否有发送中断号码。 <br>
+            <br> 如果有，请选择金额继续下注。 <br>
+            <br>如果没有，请检查是否有（目前停压号码）<br>
+            <br> 请认真检查
+        </div>
+    </div>
+    <div class="dialog-ft">
+        <input type="button" value="确定" class="btn">
+        <input type="button" value="取消" class="btn btn-gray">
+    </div>
+</div>
+
+<div id="print-odds-dialog" class="g-dialog g-confirm" style="width: 450px;display: none">
+    <div class="dialog-hd">
+        <div class="title fl">自定义打印赔率设置(可不填)</div>
+        <div class="fr"><a href="javascript:void(0)" class="btn-close fn-close">×</a></div>
+    </div>
+    <div class="dialog-bd">
+        <div name="module" id="kuaixuan_odds" class="pd10">
+            <form id="form" novalidate="novalidate">
+                <input type="hidden" value="" id="data">
+                <input type="hidden" value="2" id="collect_way">
+                <input type="hidden" value="" id="bet_log">
+                <input type="hidden" value="1" id="bet_last_type">
+                <input type="hidden" value="4" id="number_length">
+                <p class="m10 pb10">
+                    <label class="f16">打印赔率：</label>
+                    <input type="text" id="set_odds" value="" class="w60 h20 f16 mr10" min="1" max="100" maxlength="6">
+                    <span class="red">（打印赔率不填，默认系统赔率）</span> </p>
+                <p class="mt10 pt10 tc">
+                    <input type="submit" value="确定" class="btn mr20">
+                    <input type="button" value="取消" id="cloes" class="btn btn-gray">
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/projects/kuaixuan.js?v2"></script>
+<script type="text/javascript">
+    function upOpenStatus(msg) {
+        var drawOpenStatus = msg.openStatus;
+        if(drawOpenStatus==1){
+            if(msg.quickOrTxtCloseFlag==0) {//快选/导入栏目禁止下注标识
+                $("#openStatusDesc").html("停止下注");
+                $("#sendForm").addClass('hide');
+                $("#showDataRow").addClass('hide');
+                $("#btnGroup").addClass('hide');
+                $("#noDataRow").removeClass('hide');
+            }else{
+                $("#noDataRow").addClass('hide');
+                $("#showDataRow").removeClass('hide');
+                $("#sendForm").removeClass('hide');
+                $("#btnGroup").removeClass('hide');
+            }
+        }else{
+            if(drawOpenStatus==3){
+                $("#openStatusDesc").html("正在开盘中");
+            }else if(drawOpenStatus==2){
+                $("#openStatusDesc").html("未开盘");
+            }else if(drawOpenStatus==0){
+                $("#openStatusDesc").html("已封盘");
+            }
+            $("#sendForm").addClass('hide');
+            $("#showDataRow").addClass('hide');
+            $("#btnGroup").addClass('hide');
+            $("#noDataRow").removeClass('hide');;
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

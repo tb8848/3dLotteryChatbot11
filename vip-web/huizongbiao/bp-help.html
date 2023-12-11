@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="theme-color" content="#920783">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <title>会员</title>
+    <!--<link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="../css/adminseccode.css">-->
+    <link rel="stylesheet" type="text/css" href="../css/A-P5.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-Permutation5.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>
+    <script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>
+    <style type="text/css">
+        .success{
+            background-color: orange;
+        }
+
+        .t-1 td {
+            border: 1px solid #bdf0bc;
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            height: 22px;
+            border-width: 0 1px 1px 0;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+
+
+<div id="main">
+    <div class="module">
+        <div name="module" id="printhelp" class="m5 mt5">
+            <div> <table class="t-1 fb">
+                <thead> <tr class="bg1">
+                    <td> <a href="javascript:;" data-html="tpl_package" class="fn-tip-btn mr20 white red" i18n="bphelp.title">包牌预下注使用说明</a>
+                    </td> </tr> </thead>
+                <tbody>
+                <tr> <td> <div style="padding:0 10px;width:100%" class="f16" id="tip_con">  <br> <br>
+                    <h1 class="tc blue" i18n="bphelp.title1">包牌游戏说明</h1> <br> <br>
+                    <h2 i18n="bphelp.title1">包牌游戏说明</h2> <br>
+                    <ol> <li i18n="bphelp.ruleItem1">包牌是本站另一种的下注方式，指的是单次下注同类别的多组号码。</li>
+                        <ul> <li class="subline" i18n="bphelp.ruleItem2">口口XX 不能组合口XX口成为一次包牌下注。</li>
+                            <li class="subline" i18n="bphelp.ruleItem3">二字定不能组合四字定成为一次包牌下注。</li>
+                            <li class="subline" i18n="bphelp.ruleItem4">只有 "定” 能做包牌下注，"现” 目前不提供包牌下注。</li>
+                        </ul>
+                        <li i18n="bphelp.ruleItem5">包牌的赔率独立于散单的赔率，同类别中不同组数的包牌会有其相对应的赔率，显示于各类别的包牌汇总表页面右上方。</li>
+                        <li i18n="bphelp.ruleItem6">包牌下注中有一个号码中奖，则视为该号码中奖，结算方式同散单下注。中奖请参考规则说明第二章：游戏方法。</li>
+                        <li i18n="bphelp.ruleItem7">包牌的下注金额代表该次下注中对个别号码的下注金额。例：包牌下注 10 组号码，下注金额输入 1 块，则该次下注总共下注 10 块。</li>
+                    </ol> <br> <br>
+                    <h2 i18n="bphelp.title2">包牌游戏方法</h2> <br>
+                    <ol> <li i18n="bphelp.ruleItem8">包牌下注有以下四个入口页面：</li>
+                        <ul> <li class="subline" i18n="bphelp.erding">二字定</li>
+                            <li class="subline" i18n="bphelp.kuaixuan">快选</li>
+                            <li class="subline" i18n="bphelp.txtimport">txt导入</li>
+                            <li class="subline" i18n="bphelp.huizongbiao">各类别汇总表 (二字定汇总表、三字定汇总表、四字定汇总表)</li>
+                        </ul>
+                        <li i18n="bphelp.ruleItem9">二字定、快选页面的包牌下注：</li>
+                        <ol>
+                            <li class="subline" i18n="bphelp.ruleItem10">先到包牌汇总表查看组数对应的包牌赔率 (请参考包牌游戏说明第 3 点)。例：二字定包牌汇总表：10组-99、15组-98</li>
+                            <li class="subline" i18n="bphelp.ruleItem11">选定欲下注的类别。例：口口XX</li>
+                            <li class="subline" i18n="bphelp.ruleItem12">选择符合该类别包牌组数的号码数。例：00XX、10XX、20XX、30XX、40XX、50XX、60XX、70XX、80XX、90XX</li>
+                            <li class="subline" i18n="bphelp.ruleItem13">输入金额，金额代表对各号码的下注金额。例：1，代表对包牌内每一个号码都下注1块。</li>
+                            <li class="subline" i18n="bphelp.ruleItem14">点选 ”包牌" 按钮。若点选 “下注" 按钮则会进行散单下注。</li>
+                            <li class="subline" i18n="bphelp.ruleItem15">下注成功</li>
+                        </ol>
+                        <li i18n="bphelp.ruleItem16">txt导入的包牌下注：</li>
+                        <ol> <li class="subline" i18n="bphelp.ruleItem16">先到包牌汇总表查看组数对应的包牌赔率 (请参考包牌游戏说明第 3 点)。例：二字定包牌汇总表：10组-99、15组-98</li>
+                            <li class="subline" i18n="bphelp.ruleItem17">导入符合该类别包牌组数的档案。例：00XX、10XX、20XX、30XX、40XX、50XX、60XX、70XX、80XX、90XX</li>
+                            <li class="subline" i18n="bphelp.ruleItem18">提交确认后点选包牌按钮或是录入汇总表。若点选 “下注" 按钮则会进行散单下注。</li>
+                            <li class="subline" i18n="bphelp.ruleItem19">点选包牌按钮：下注成功。<br><span i18n="bphelp.ruleItem20">录入汇总表：参考下述汇总表的包牌下注继续进行下注。</span></li>
+                        </ol>
+                        <li i18n="bphelp.ruleItem21">汇总表的包牌下注：</li>
+                        <ol> <li class="subline" i18n="bphelp.ruleItem22">查看组数对应的包牌赔率 (请参考包牌游戏说明第 3 点)。例：二字定包牌汇总表：10组-99、15组-98</li>
+                            <li class="subline" i18n="bphelp.ruleItem23">依序输入欲下注的号码及金额，直到号码数符合包牌。</li>
+                            <li class="subline" i18n="bphelp.ruleItem24">点选包牌按钮。若点选 “下注" 按钮则会进行散单下注。</li>
+                            <li class="subline" i18n="bphelp.ruleItem25">确认后下注成功。</li>
+                        </ol>
+                    </ol> <br> <br>
+                    <h1 class="tc blue" i18n="bphelp.title3">包牌预下注使用说明</h1> <br> <br>
+                    <div class="tip-header" style="margin-bottom: 10px">
+                        <div class="fl tip-main" style="width: 400px">
+                            <p class="tc tip-title mb10" style="margin-bottom: 10px">
+                                <span class="f26 white" i18n="bphelp.step1">第一步</span><br>
+                                <span class="f26 white" i18n="bphelp.ruleItem26">预收注单下注</span><br>
+                                <span class="f16 red fb" i18n="bphelp.ruleItem27">注：不扣除现金余额</span>
+                            </p>
+                            <span class="f16"><a href="#kd_erd" i18n="bphelp.ruleItem28">1.快打-二字定包牌汇总表</a></span><br>
+                            <span class="f16"><a href="#kd_sad" i18n="bphelp.ruleItem29">2.快打-三字定包牌汇总表</a></span><br>
+                            <span class="f16"><a href="#kd_sid" i18n="bphelp.ruleItem30">3.快打-四字定包牌汇总表</a></span><br>
+                            <span class="f16"><a href="#kx_bet" i18n="bphelp.ruleItem31">4.快选-录入汇总表</a></span><br>
+                            <span class="f16"><a href="#txt_bet" i18n="bphelp.ruleItem32">5.TXT-录入汇总表</a></span><br>
+                            <span class="f16"><a href="#print" i18n="bphelp.ruleItem33">6.预收注单打印</a></span><br>
+                            <span class="f16"><a href="#delete" i18n="bphelp.ruleItem34">7.预收注单查询/删除</a></span>
+                        </div>
+                        <div class="fl tip-arrow"><p></p></div>
+                        <div class="fl tip-main" style="width: 400px">
+                            <p class="tc tip-title mb10">
+                                <span class="f26 white" i18n="bphelp.step2">第二步</span><br>
+                                <span class="f26 white" i18n="bphelp.ruleItem35">真实下注</span><br>
+                                <span class="f16 red fb" i18n="bphelp.ruleItem36">注：扣除现金余额</span>  </p> <span class="f16">
+                            <a href="#package_bet" i18n="bphelp.ruleItem37">1.包牌汇总表-包牌下注</a></span><br> <span class="f16">
+                            <a href="#san_bet" i18n="bphelp.ruleItem38">2.包牌汇总表-散单下注</a></span><br>
+                        </div>
+                        <div class="fl tip-arrow"><p></p></div>
+                        <div class="fl tip-main" style="width: 400px">
+                            <p class="tc tip-title mb10"> <span class="f26 white" i18n="bphelp.step3">第三步</span><br>
+                            <span class="f26 white" i18n="bphelp.ruleItem15">下注成功</span><br>  <span class="f16 red fb" i18n="bphelp.ruleItem39">注：完成现金余额扣除</span>
+                            </p>
+                            <span class="f16" i18n="bphelp.ruleItem40">1.下注明细查询/退码</span><br>
+                        </div>
+                    </div>
+                    <h3 i18n="bphelp.title4">一、预收注单下注</h3> <br> <br>
+                    <span id="kd_erd" i18n="bphelp.ruleItem28">1.快打-二字定包牌汇总表</span> <br>
+                    <img src="../img/package/1.jpeg">
+                    <br> <br> <span id="kd_sad" i18n="bphelp.ruleItem29">2.快打-三字定包牌汇总表</span> <br>
+                    <img src="../img/package/1-3.jpeg"> <br> <br>
+                    <span id="kd_sid" i18n="bphelp.ruleItem30">3.快打-四字定包牌汇总表</span> <br>
+                    <img src="../img/package/1-4.jpeg"> <br> <br> <img src="../img/package/2.jpeg"> <br> <br>
+                    <span id="kx_bet" i18n="bphelp.ruleItem31">4.快选-录入汇总表</span> <br> <img src="../img/package/3.jpeg"> <br> <br>
+                    <span id="txt_bet" i18n="bphelp.ruleItem32">5.TXT-录入汇总表</span> <br> <img src="../img/package/4.jpeg"> <br> <br>
+                    <span id="print" i18n="bphelp.ruleItem33">6、预收注单打印</span> <br> <br> <img src="../img/package/5.jpeg"> <br> <br>
+                    <span id="delete" i18n="bphelp.ruleItem34">7.预收注单查询/删除</span>
+                    <br>
+                    <br>
+                    <span i18n="bphelp.title5">A.汇总表历史中查询或删除</span> <br>
+                    <img src="../img/package/6.jpeg"> <br> <br>
+                    <span i18n="bphelp.title6">B.汇总表明细中查询或删除</span> <br>
+                    <img src="../img/package/7.jpeg"> <br> <br> <h3 i18n="bphelp.ruleItem35">二、真实下注</h3> <br> <br>
+                    <span id="package_bet" i18n="bphelp.ruleItem37">1.包牌汇总表-包牌下注</span> <br> <br> <img src="../img/package/8.jpeg"> <br> <br>
+                    <span id="san_bet" i18n="bphelp.ruleItem38">2.包牌汇总表-散单下注</span> <br> <br> <img src="../img/package/9.jpeg"> <br> <br>
+                </div>
+                </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+
+<script type="text/javascript">
+    window.parent.toPage("");
+
+</script>
+
+<script>
+    var moduleName = "bphelp";
+    var layer = layui.layer;
+    var $i18np = null;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+    }
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+</script>
+</body>
+</html>

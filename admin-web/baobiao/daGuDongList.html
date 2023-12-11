@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>大股东列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+</head>
+<body style="overflow-y: auto">
+<div id="main">
+    <template>
+    <div class="module">
+        <div name="module" id="report_account" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="report.top.location">位置 </a> &gt;&gt;
+                    <span class="red" i18n="report.top.monthReport"> 月报表 </span>
+                </div>
+                <div class="fr"></div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td width="40" i18n="report.table.head.no">序号</td>
+                        <td width="45%" i18n="report.table.head.account">账&nbsp;&nbsp;&nbsp;&nbsp;号</td>
+                        <td i18n="report.table.head.code">代&nbsp;&nbsp;&nbsp;&nbsp;号</td>
+                        <td width="90" i18n="report.table.see">查看</td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody" class="fn-hover">
+                    <tr v-for="(item, index) in dataList">
+                        <td>{{index + 1}}</td>
+                        <td>
+                            <a :href="'yuebaobiao.html?parentId=' + item.id">{{item.username}}</a>
+                        </td>
+                        <td>{{item.nickName}}</td>
+                        <td>
+                            <a :href="'yuebaobiao.html?parentId=' + item.id + '&start=' + start + '&end=' + end">{{$t('monthReport')}}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+    const messages = {
+        zh: {
+            monthReport:"月报表",
+        },
+        th: {
+            monthReport:"รายงานประจำเดือน",
+        }
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var moduleName = "report";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            dataList: [],
+        },
+        methods: {
+            init() {
+                const _this = this;
+                $.ajax({
+                    url:HOST+"report/getDgdList",
+                    success:function(res){
+                        if(res.code == 200) {
+                            _this.dataList = res.data
+                        }
+                    }
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>

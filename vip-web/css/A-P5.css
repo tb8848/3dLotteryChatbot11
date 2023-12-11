@@ -1,0 +1,45 @@
+.login {background-image:url(../img/bg-login-a.jpg)}
+.login .form-label {color:#ff3323;}
+
+.header {background:#589C35;}
+.header .bd {background-image:url(../img/3d-bg-1.webp)}
+.header .middle .title {}
+.header .middle .marquee {}
+.header .middle .systime {}
+
+
+.title-bar{
+    border-color: #bc2f18;
+    font-weight: bold;
+    color: #fff;
+    background: #bc2f18;
+    box-shadow: inset 1px 0 8px rgb(0 0 0 / 30%);
+}
+
+
+.btn-common:hover {
+    background-position: 0 -131px;
+}
+
+.btn-common {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    height: 25px;
+    padding: 0 12px;
+    line-height: 25px;
+    border-radius: 2px;
+    border: 1px #e9d9b2 solid;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+    font-size: 18px;
+    font-family: 'Microsoft Yahei';
+    color: #ca9035;
+    background: #fcf7e9 url(../img/bg-colors.png) repeat-x 0 -87px;
+    cursor: pointer;
+}
+.btn-common {
+    height: 25px;
+    vertical-align: middle;
+    padding: 0 5px;
+    *padding: 0;
+}

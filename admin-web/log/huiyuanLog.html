@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会员快选日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            padding: 4px;
+            outline: none;
+        }
+
+        /*.t-1 tbody td {*/
+        /*    line-height: 22px;*/
+        /*}*/
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        .layui-table-header {
+            height: 30px;
+        }
+        th .laytable-cell-1-0-5 {
+            width: 182px;
+        }
+
+        .layui-table thead tr th{
+            font-weight: bold !important;
+        }
+
+        .layui-table tbody tr td{
+            padding: 2px 0 2px 0 !important;
+            color: black;
+        }
+
+        .layui-table-cell{
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main" >
+    <div class="module">
+        <div name="module" id="log_select" class="m5 mt10">
+            <div name="module" id="guide_log" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="log.top.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="log.top.member.select">   会员快选日志  </span>
+                </div>
+                <div class="fr">
+                    <a href="qishuLog.html" class="" i18n="log.top.periods.operation">期数操作日志</a> |
+                    <a href="yeujiLog.html" class="" i18n="log.top.skip.operation">越级操作日志</a> |
+                    <a href="zijiCaozuoLog.html" class="" i18n="log.top.oneself.operation">自己操作日志</a> |
+                    <a href="dingpanLog.html" i18n="log.top.odds">赔率日志</a> |
+                    <a href="huiyuanLog.html" class="fb red" i18n="log.top.member.select">会员快选日志</a> |
+                    <a href="huiyuanUpdateLog.html" class="" i18n="log.top.member.data.update">会员资料修改日志</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <form novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1">
+                                <td colspan="8" i18n="log.top.member.select">会员快选日志</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="search">
+                            <td width="60">{{$t('operationAccount')}}</td>
+                            <td width="60">
+                                <input type="text" class="w90" id="userName" name="userName" maxlength="16">
+                            </td>
+                            <td width="60">
+                                <input type="text" class="w90" id="money" name="money" maxlength="10" number="true">
+                            </td>
+                            <td width="60">
+                                <span>{{$t('first')}}</span>
+                                <span>{{$t('moreThan')}}</span>
+                            </td>
+                            <td width="30">{{$t('class')}}</td>
+                            <td width="60">
+                                <select name="fix_num" id="fix_num">
+                                    <option value="">{{$t('all')}}</option>
+                                    <option value="-1">直选</option>
+                                    <option value="19">&nbsp;&nbsp;普通</option>
+                                    <option value="20">&nbsp;&nbsp;和值</option>
+                                    <option value="-2">组三</option>
+                                    <option value="21">&nbsp;&nbsp;普通</option>
+                                    <option value="22">&nbsp;&nbsp;胆拖</option>
+                                    <option value="23">&nbsp;&nbsp;和值</option>
+                                    <option value="-3">组六</option>
+                                    <option value="24">&nbsp;&nbsp;普通</option>
+                                    <option value="25">&nbsp;&nbsp;胆拖</option>
+                                    <option value="26">&nbsp;&nbsp;和值</option>
+                                    <option value="-4">1D</option>
+                                    <option value="13">&nbsp;&nbsp;1D</option>
+                                    <option value="14">&nbsp;&nbsp;猜1D</option>
+                                    <option value="-5">2D</option>
+                                    <option value="15">&nbsp;&nbsp;2D</option>
+                                    <option value="16">&nbsp;&nbsp;猜2D</option>
+                                    <option value="-6">包选</option>
+                                    <option value="17">&nbsp;&nbsp;包选三</option>
+                                    <option value="18">&nbsp;&nbsp;包选六</option>
+                                    <option value="-7">和数</option>
+                                    <option value="27">&nbsp;&nbsp;0/27</option>
+                                    <option value="28">&nbsp;&nbsp;1/26</option>
+                                    <option value="29">&nbsp;&nbsp;2/25</option>
+                                    <option value="30">&nbsp;&nbsp;3/24</option>
+                                    <option value="31">&nbsp;&nbsp;4/23</option>
+                                    <option value="32">&nbsp;&nbsp;5/22</option>
+                                    <option value="33">&nbsp;&nbsp;6/21</option>
+                                    <option value="34">&nbsp;&nbsp;7/20</option>
+                                    <option value="35">&nbsp;&nbsp;8/19</option>
+                                    <option value="36">&nbsp;&nbsp;9/18</option>
+                                    <option value="37">&nbsp;&nbsp;10/17</option>
+                                    <option value="38">&nbsp;&nbsp;11/16</option>
+                                    <option value="39">&nbsp;&nbsp;12/15</option>
+                                    <option value="40">&nbsp;&nbsp;13/14</option>
+                                    <option value="2">通选</option>
+                                    <option value="9">大小</option>
+                                    <option value="10">奇偶</option>
+                                    <option value="11">猜三同</option>
+                                    <option value="12">拖拉机</option>
+                                </select>
+                            </td>
+<!--                            <td width="30">{{$t('type')}}</td>-->
+<!--                            <td width="60">-->
+<!--                                <select name="is_package" id="is_package">-->
+<!--                                    <option value="">{{$t('all')}}</option>-->
+<!--                                    <option value="0">{{$t('cargo')}}</option>-->
+<!--                                    <option value="1">{{$t('package')}}</option>-->
+<!--                                    <option value="2">{{$t('packageCargo')}}</option>-->
+<!--                                    <option value="3">{{$t('summary')}}</option>-->
+<!--                                </select>-->
+<!--                            </td>-->
+                            <td>
+                                <button type="submit" lay-submit lay-filter="search" class="btn" style="cursor: pointer">{{$t('submit')}}</button>
+<!--                                <input type="submit" value="提交" lay-submit lay-filter="search" class="btn" i18n="log.table.submit">-->
+<!--                            </td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10" style="border: 1px solid #000000">
+                <table class="layui-hide" id="t" lay-filter="t" ></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    const messages = {
+        zh: {
+            class:"分类",
+            operationAccount:"操作账号",
+            first:"元",
+            moreThan:"以上",
+            all:"全部",
+            type:"类型",
+            cargo:"散货",
+            package:"包牌",
+            packageCargo:"包牌+散货",
+            summary:"汇总表",
+            submit:"提交",
+        },
+        th: {
+            class:"หมวดหมู่",
+            operationAccount:"บัญชีที่ดำเนินการ",
+            first:"หยวน",
+            moreThan:"มากกว่า",
+            all:"ทั้งหมด",
+            type:"ประเภท",
+            cargo:"สินค้าจำนวนมาก",
+            package:"แพ็คเกจเกมส์",
+            packageCargo:"แพ็คเกจเกมส์ + สินค้าจำนวนมาก",
+            summary:"ตารางสรุปข้อมูล",
+            submit:"ส่ง",
+        }
+    }
+
+    var table = layui.table;
+    var $ = layui.jquery;
+
+    var moduleName = "log";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        // getBettingMethods();
+
+        // layui刷新表头
+        table.reload("tt",{
+            cols: [
+                [
+                    {field: 'userName',title: i18np.prop('log.table.operation.account'), width: 125},
+                    {field: 'buyAmount',title: i18np.prop('log.table.bishu'), width: 105},
+                    {field: 'buyMoney',title: i18np.prop('log.table.money'), width: 90},
+                    {field: 'content',title: i18np.prop('log.table.operation.content')+' <span style="color: yellow">('+i18np.prop('log.table.title.msg')+')</span>',templet:function (d) {
+                            if (defaultLang=="th"){
+                                if (d.contentTh==null || d.contentTh=='' || d.contentTh==undefined){
+                                    return "";
+                                }
+                                return d.contentTh;
+                            }else{
+                                if (d.content==null || d.content=='' || d.content==undefined){
+                                    return "";
+                                }
+                                return d.content;
+                            }
+                        }},
+                    // {field: 'dataFrom',title: i18np.prop('log.table.types'),width: 115,templet: function (d) {
+                    //         if(d.dataFrom == 0){
+                    //             return i18np.prop('log.table.bulk.cargo')
+                    //         }else if(d.dataFrom == 1){
+                    //             return i18np.prop('log.table.package')
+                    //         }else if(d.dataFrom == 2){
+                    //             return i18np.prop('log.table.package.and.cargo')
+                    //         }else if(d.dataFrom == 3){
+                    //             return i18np.prop('log.table.summary')
+                    //         }else{
+                    //             return "--"
+                    //         }
+                    //     }},
+                    {field: 'operationTime',title: i18np.prop('log.table.operation.time') ,width: 150},
+                ]
+            ],
+            text:{none: i18np.prop('user.table.noData')},
+        })
+    }
+
+    const vm = new Vue({
+        el: '#search',
+        i18n,
+        data: {},
+        methods: {
+            init() {
+                console.log("初始化vue了")
+            }
+        }
+    })
+
+    //获取彩票玩法列表
+    // function getBettingMethods(){
+    //     $.ajax({
+    //         url:HOST+"lotteryMethod/selectListLotteryMethod" ,
+    //         success:function(res){
+    //             if(res.code == 0) {
+    //                 $("#fix_num").html("");
+    //                 $("#fix_num").append("<option value=''>"+i18np.prop('log.table.all')+"</option>");
+    //                 if (defaultLang=="zh"){
+    //                     for(var i in res.data) {
+    //                         $("#fix_num").append("<option value='"+res.data[i].id+"'>"+res.data[i].bettingMethod+"</option>")
+    //                     }
+    //                 }else{
+    //                     for(var i in res.data) {
+    //                         $("#fix_num").append("<option value='"+res.data[i].id+"'>"+res.data[i].bettingMethodTh+"</option>")
+    //                     }
+    //                 }
+    //                 form.render()
+    //             }
+    //         }
+    //     });
+    // }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np', 'form' , 'jquery','table'], function(){
+        var form = layui.form;
+
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+        vm.init();
+        // getBettingMethods();
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            url: HOST+'vip/betlog/selectVipQuickSelect',
+            limit: 40,
+            cols: [
+                [
+                    {field: 'userName',title: i18np.prop('log.table.operation.account'), width: 125},
+                    {field: 'buyAmount',title: i18np.prop('log.table.bishu'), width: 105},
+                    {field: 'buyMoney',title: i18np.prop('log.table.money'), width: 90},
+                    {field: 'content',title: i18np.prop('log.table.operation.content')+' <span style="color: yellow">('+i18np.prop('log.table.title.msg')+')</span>',templet: function (d) {
+                            if (defaultLang=="th"){
+                                if (d.contentTh==null || d.contentTh=='' || d.contentTh==undefined){
+                                    return "";
+                                }
+                                return d.contentTh;
+                            }else{
+                                if (d.content==null || d.content=='' || d.content==undefined){
+                                    return "";
+                                }
+                                return d.content;
+                            }
+                        }},
+                    // {field: 'dataFrom',title: i18np.prop('log.table.types'),width: 115,templet: function (d) {
+                    //         if(d.dataFrom == 0){
+                    //             return i18np.prop('log.table.bulk.cargo')
+                    //         }else if(d.dataFrom == 1){
+                    //             return i18np.prop('log.table.package')
+                    //         }else if(d.dataFrom == 2){
+                    //             return i18np.prop('log.table.package.and.cargo')
+                    //         }else if(d.dataFrom == 3){
+                    //             return i18np.prop('log.table.summary')
+                    //         }else{
+                    //             return "--"
+                    //         }
+                    //     }},
+                    {field: 'operationTime',title: i18np.prop('log.table.operation.time') ,width: 150},
+                ]
+            ],
+            page: true
+            ,page: {
+                curr: layui.data("t_page").index
+            },
+            text:{none: i18np.prop('user.table.noData')},
+            done: (res, curr, count) => {
+                form.render();
+                layui.data("t_page", {
+                    key: 'index',
+                    value: curr
+                });
+            }
+        });
+
+        //查询
+        form.on('submit(search)',function(data){
+            userName = $("#userName").val();
+            money = $("#money").val();
+            // opType = $("#is_package").val();
+            lotteryMethodId = $("#fix_num").val();
+            table.reload('tt', {
+                where: {"userName": userName,"buyMoney":money, "dataFrom":"","lotteryMethodId":lotteryMethodId}
+                , page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/common.css" media="all">
+    <link rel="stylesheet" href="css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="css/A-P5.css" media="all">
+</head>
+<style type="text/css">
+    #textfield {
+        border: 1px solid rgba(152, 166, 173, 0.15);
+        font-size: 13px;
+        height: 34px;
+        padding-left: 20px;
+        padding-right: 40px;
+        margin: 13px 15px 0px 25px;
+        background: rgba(152, 166, 173, 0.1);
+        box-shadow: none;
+        border-radius: 30px;
+        width: 200px;
+        cursor: text;
+        float: left;
+    }
+
+    #shusearch {
+        cursor: pointer;
+        width: 30px;
+        float: left;
+        margin-top: 20px;
+        margin-left: -40px;
+    }
+    .layui-layout-admin .layui-header a{
+        color: white;
+    }
+    .layui-layout-admin .layui-header a:hover{
+        color: red;
+    }
+    #xiaopiao{
+        cursor: pointer;
+    }
+
+    .layui-layout-admin .layui-side{
+        width:160px;
+    }
+
+    .layui-side-menu .layui-nav{
+        width:160px;
+    }
+
+    .layui-layout-admin .layui-header {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        border-bottom: none;
+    }
+
+    .main {
+        position:absolute; left:200px; right:0; bottom:0; top:0;
+        overflow:hidden;
+        _position:relative;
+        _height:100%;
+        overflow-y:hidden;
+        _overflow-y:hidden;
+        _left:0;}
+
+
+    .nav-bottom{
+        border-color: red;
+        font-weight: bold;
+        color: #fff;
+        background: red;
+        box-shadow: inset 1px 0 8px rgb(0 0 0 / 30%);
+    }
+
+    .nav-bottom a {
+        margin: 0 20px 0 0;
+        color: #fff;
+        font-size: 14px;
+    }
+
+    .nav-bottom a.on {
+        color: yellow;
+        font-size: 16px;
+    }
+
+    .nav-bottom li.on {
+        color: yellow;
+    }
+
+    .t-1 .bg1 td {
+        border-color: #bc2f18;
+        font-weight: bold;
+        color: #fff;
+        background: #d24036;
+        box-shadow: inset 1px 0 8px rgb(0 0 0 / 30%);
+        height: 27px;
+        border-right: none;
+        padding: 0 4px;
+    }
+
+    .bletip{
+        background-color: red;
+        font-size: 16px;
+        color:white;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        padding:5px;
+    }
+
+</style>
+<body>
+
+<div name="module" id="header" class="header">
+    <div class="hd">
+        <div class="company-name yellow"></div>
+    </div>
+    <div id="headerBD" class="bd">
+
+        <ul class="nav" id="nav" style="height: 60px;padding:0">
+<!--            <li><a href="javascript:void(0)" class="fn-switch-lines"><span i18n="main.changeLine">换线路</span></a></li>-->
+            <li name="betlist" id="betlist"><a href="#!betlist" name="betlist"><span i18n="main.buyDetail">下注明细</span></a></li>
+<!--            <li name="prebetlist"><a href="#!prebetlist" name="prebetlist" ><span i18n="main.prebuyDetail">汇总表明细</span></a></li>-->
+            <li name="lastbill"><a href="#!lastbill" name="lastbill" ><span i18n="main.historyBill">历史账单</span></a></li>
+            <li name="info"><a href="#!info" name="info"><span i18n="main.memberInfo">会员资料</span></a></li>
+<!--            <li name="packageodd" ><a href="#!packageodd" name="packageodd"><span class="hight-light" i18n="main.packageOdds">包牌赔率</span></a></li>-->
+            <li name="drawnumber"><a href="#!drawnumber" name="drawnumber"><span i18n="main.drawNumber">开奖号码</span></a></li>
+
+            <li name="rule"><a href="#!rule.rule_sequence" name="rule"><span i18n="main.rule">规则说明</span></a></li>
+            <li name="log"><a href="#!log" name="log"><span i18n="main.log">日志</span></a></li>
+            <li name="password" id="upPassword"><a href="#!password" name="password"><span i18n="main.updatePwd">修改密码</span></a></li>
+
+            <li><a href="javascript:void(0)" class="fn-logout" id="logout"><span i18n="main.logout">退出</span></a></li>
+<!--            <li class="ml20"><a href="javascript:void(0)" class="fn-speed f16" i18n="main.netSpeed">网络测速</a></li>-->
+            <div style="display: inline-block;float:right;margin-right: 10px">
+<!--                <a href="javascript:void(0)" class="fn-speed f16" i18n="main.netSpeed" style="margin-right: 30px;color:#ff0000">网络测速</a>-->
+                <a href="javascript:void(0)" onclick="changesLang('zh')" class="white yellow" id="lang-zh">简体中文</a>
+<!--                &nbsp;|&nbsp;-->
+<!--                <a href="javascript:void(0)" onclick="changesLang('th')" class="white yellow" id="lang-th">ภาษาไทย</a>-->
+            </div>
+        </ul>
+        <div class="middle" style="height: 30px">
+            <div class="fl">
+                <span class="title yellow f18">福彩3D</span>
+            </div>
+            <div class="fl">
+                <marquee scrollamount="2" class="marquee">
+                    <span  id="paomadeng"><!-- 跑马灯内容--></span>
+                </marquee>
+            </div>
+            <div class="fl">
+                <span id="statusName"><!--离停盘：--></span>
+                <span id="systime" class="systime white"><!--已封盘 --></span>
+            </div>
+
+        </div>
+        <div class="nav-bottom" id="subnav" style="height: 40px;margin:0;padding-left:200px;line-height: 40px;">
+<!--            <a href="#!erd?no_type_id=3&amp;type_erd=0" name="erd" id="erd" i18n="main.erziding">二字定</a>-->
+<!--            <a href="#!kuaida" name="kuaida" class="on" id="kuaida" i18n="main.kuaida">快打</a>-->
+<!--            <a href="#!kuaixuan?tpl_type=erd" name="kuaixuan" id="kuaixuan" i18n="main.kuaixuan">快选</a>-->
+
+            <a href="javascript:void(0)" name="fastbuy" id="fastbuy">快捷下注</a>
+
+
+            <a href="javascript:void(0)" name="zx" id="zx">直选</a>
+
+            <a href="javascript:void(0)" name="tx" id="tx">通选</a>
+
+            <a href="javascript:void(0)" name="zu3" id="zu3">组三</a>
+
+            <a href="javascript:void(0)" name="zu6" id="zu6">组六</a>
+
+            <a href="javascript:void(0)" name="hs" id="hs">和数</a>
+
+            <a href="javascript:void(0)" name="bx" id="bx">包选</a>
+
+            <a href="javascript:void(0)" name="1d" id="1d">1D</a>
+
+            <a href="javascript:void(0)" name="2d" id="2d">2D</a>
+
+            <a href="javascript:void(0)" name="dx" id="dx">大小</a>
+
+            <a href="javascript:void(0)" name="jo" id="jo">奇偶</a>
+
+            <a href="javascript:void(0)" name="tlj" id="tlj">拖拉机</a>
+
+            <a href="javascript:void(0)" name="c3t" id="c3t">猜三同</a>
+
+            <a href="javascript:void(0)" name="importtxt" id="importtxt" i18n="main.importTxt">txt导入</a>
+<!--            <a href="#!erdPackage?dict_no_type_id=3&amp;type_erd=1" name="erdPackage" id="erdPackage" i18n="main.erziding.baopai">二字定包牌汇总表</a>-->
+<!--            <a href="#!sadPackage?dict_no_type_id=7&amp;type_erd=1" name="sadPackage" id="sadPackage" i18n="main.sanziding.baopai">三字定包牌汇总表</a>-->
+<!--            <a href="#!sidPackage?dict_no_type_id=11&amp;type_erd=1" name="sidPackage" id="sidPackage" i18n="main.siziding.baopai">四字定包牌汇总表</a>-->
+            <a href="#!oddschange?fix_num=40" name="oddschange" id="oddschange" i18n="main.oddsChangeTable">赔率变动表</a>
+            <a href="#!rule_screenexplanation" name="rule_screenexplanation" id="rule_screenexplanation" i18n="main.fullCutDesc">全截说明</a>
+            <a href="app/app_qrcode.html" target="_blank" id="download"><span style="color:red;" i18n="main.appDownload">APP下载</span></a>
+<!--            <a href="javascript:void(0)" id="concurrenceTest"><span style="color:red;">并发测试</span></a>-->
+        </div>
+    </div>
+</div>
+
+<div id="doc" class="doc" style="top:130px">
+    <div class="side-left">
+        <div id="user" class="module">
+            <div class="bd">
+                <table class="t-1" id="myinfo">
+                    <thead> <tr class="bg1 tc"> <td colspan="2" i18n="main.vipInfo">会员信息</td> </tr></thead>
+                    <tbody class="bd-gray" >
+                    <tr>
+                        <td width="66" i18n="main.account">账号：</td> <td id="account"><!--test2111--></td> </tr>
+                    <tr>
+                        <td><span id="fundMode"><!--现金：--></span><br><span i18n="main.used">已用：</span> </td>
+                        <td><span id="credit"></span><br><span id="hasUsedCredit"></span><!-- 99184.6825<br>  0 -->  </td>
+                    </tr>
+                    <tr>
+                        <td><span i18n="main.drawNo">期号：</span>  <br> <span i18n="main.leftUse">可用：</span> </td>
+                        <td><span id="drawNo"></span><br><span id="canUseCredit"></span> <!-- 22343/0 --> </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt10 bg-white" id="showPrint">
+                <div class="tc"> <input type="button" i18n="main.setPrint" value="设置图示" class="fn_printhelp" id="fnPrintHelp"> </div>
+                <div class="mt10 tc" id="screencutRow">
+                    <input type="button" i18n="main.screenCut" value="截图" class="fn_screencut" id="screencut">
+                    <input type="button" i18n="main.fullScreenCut" value="全截" class="fn_screencut_all_header" id="screencutall">
+                    <input type="hidden" id="printInfo_header" value="0|">
+                </div>
+
+                <div class="bd hide" id="showLogo">
+                    <table class="t-1 tc mt10">
+                        <thead><tr class="bg1"><td i18n="main.using">正在使用</td></tr></thead>
+                        <tbody> <tr> <td><img src="img/3D-logo.png" style="border-radius: 10px;width: 100px;height: 100px">  </td></tr></tbody>
+                    </table>
+                </div>
+
+                <div id="bet_print" class="main-print hide">
+                    <div class="tr unit f15" id="unit" i18n="main.unitDesc">单位：元</div>
+                    <table class="t-2 f13" id="order_list">
+                        <thead>
+                            <tr> <td colspan="3" class="tc f15 print-title"><strong class="red">福彩3D</strong></td> </tr>
+                            <tr id="saleNameRow"> <td colspan="3" class="tc f15 print-title" id="saleName"><!--111111--></td> </tr>
+                            <tr>
+                                <td class="line20" colspan="3" id="printInfo">
+                                    <span i18n="main.time">时间:</span><span id="printTime"></span><br>
+                                    <span i18n="main.vip">会员:</span><span id="account2"></span><br>
+                                    <span i18n="main.printNo">编号:</span><span id="printNo"></span>
+                                </td>
+                            </tr>
+
+                        </thead>
+                        <tbody id="tbody_data">
+<!--                            <tr class="height22" align="center">-->
+<!--                                <td>号码</td> <td>赔率</td> <td>金额</td>-->
+<!--                            </tr>-->
+                            <!--<tr class="height22">-->
+                                <!--<td colspan="3" class="f15"> 笔数 <span class="recordsCount" id="recordsCount">0</span> 总金额 <span class="totalBetMoney">0</span>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                        </tbody>
+                        <tbody>
+                            <tr class="height22">
+                                <td colspan="3" class="f15">
+                                    <span i18n="main.amount">笔数</span>
+                                    <span class="recordsCount" id="recordsCount">0</span>
+                                    <span i18n="main.totalMoney">总金额</span>
+                                    <span class="totalBetMoney" id="totalBetMoney">0</span>
+                            </td>
+                            </tr>
+                        </tbody>
+                        <tbody id="clearPart">
+                            <tr class="height22">
+                                <td colspan="3" class="tc">
+                                    <input type="button" class="btn-common fn-clear margin-right10" i18n="main.clear" value="清空" onclick="clearData(this)">
+                                    <input type="button" value="打印" class="btn-common fn-print" id="btnPrint" onclick="print()">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table>
+                        <tbody>
+                            <tr class="border-none">
+                                <td colspan="3" class="f15" id="drawValid">
+                                    <span i18n="main.di">第</span>
+                                    <span id="drawNo1"></span>
+                                    <span i18n="main.qi">期</span>
+                                    &nbsp;
+                                    <span id="validDay1">3</span>
+                                    <span i18n="main.validinfo">天内有效</span>
+                                </td>
+                            </tr>
+                            <tr class="height22 hide" id="lastRows">
+                                <td colspan="3" class="fb f14">
+                                    <span i18n="main.totalAmount">总笔数</span>
+                                    <span class="red" id="allCounts">0</span>
+                                    <span i18n="main.totalMoney">总金额</span>
+                                    <span class="red" id="allMoneys">0</span>
+                                </td>
+                            </tr>
+                            <tr class="height22 hide" id="print_page_rows">
+                                <td colspan="3" class="fb f14" style="text-align: center">
+                                    <input type="button" class="btn-common fn-clear margin-right10" value="上一页" onclick="printPrevPage(this)" i18n="main.prevPage">
+                                    <span id="print_currpage"></span>&nbsp;/&nbsp;<span id="print_pages"></span>
+                                    <input type="button" class="btn-common fn-clear" style="margin-left:10px" value="下一页" onclick="printNextPage(this)" i18n="main.nextPage">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main" id="main">
+        <iframe name="mainframe" id="mainframe" src="empty.html"
+                frameborder="0" style="width: 100%;height: 100%" scrolling="no"></iframe>
+    </div>
+
+
+
+</div>
+
+<div id="xiaopiao-cut-dialog" class="g-dialog" style="width: 300px;display: none;height: auto">
+    <div class="dialog-bd">
+        <div name="module" id="screenCutWin">
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td width="70%">
+                                <div name="module" id="pager_screencut" class="pager"
+                                     pagecount="1" param="pageSize=500">
+                                    <input type="button" class="fn-prev" value="上一页" id="fnPrev" i18n="main.prevPage">
+                                    <span class="gray">
+                                        <span i18n="main.di">第</span>
+                                        <span class="pageindex" id="currPages">1</span> / <span id="totalPages">1</span>
+                                        <span i18n="main.ye">页</span>
+                                    </span>
+                                    <input type="button" class="fn-next" value="下一页" id="fnNext" i18n="main.nextPage">
+                                </div>
+                            </td>
+                            <td>
+                                <input type="button" class="fn-screencut btn-large bet-submit btn-common screencut" value="截图" id="btnScreenCut" i18n="main.screenCut"> </td>
+                            <td>
+                                <input type="button" class="fn-screencutall btn-large bet-submit btn-common screencutall" value="全截" id="btnScreenCutAll" i18n="main.fullScreenCut">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td> <p class="gray" i18n="main.screencutByPage">小票截图每页笔数</p> </td>
+                            <td> <select name="screenSelect" id="screenSelect">
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                                <option value="500" selected="selected">500</option> </select> </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+            </div>
+            <div id="tbody2_screen_pager">
+                <div class="bg-white ">
+                    <div id="bet_print_screen" class="main-print">
+                        <div class="tr unit f15" id="unit_1" i18n="main.unitDesc">单位：元</div>
+                        <table class="t-4 f13" id="order_list_1">
+                            <thead>
+                                <tr> <td colspan="3" class="tc f15 print-title"><strong class="red">福彩3D</strong></td> </tr>
+                                <tr id="saleNameRow2"> <td colspan="3" class="tc f15 print-title" id="saleName2"><!-- --></td> </tr>
+                                <tr><td class="line20" colspan="3" id="printInfo_1">
+                                    <span i18n="main.time">时间:</span><span id="printTime2"></span><br>
+                                    <span i18n="main.vip">会员:</span><span id="account3"></span><br>
+                                    <span i18n="main.printNo">编号:</span><span id="printNo2"></span>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody2_data">
+                                <!--<tr><td class="line20" colspan="3" id="printInfo_1"> 时间: <br> 会员:test2111 <br> 编号: </td> </tr>-->
+                                <!--<tr class="tc f14 height22"> <td>号码</td> <td>赔率</td> <td>金额</td> </tr>-->
+                            </tbody>
+                            <tbody id="tbody2_screen">
+                                <tr class="height22">
+                                    <td colspan="3" class="f15">
+                                        <span i18n="main.amount">笔数</span>
+                                        <span class="recordsCount" id="recordsCount_1">0</span>
+                                        <span i18n="main.totalMoney">总金额</span>
+                                        <span class="totalBetMoney" id="totalBetMoney_1">0</span> </td>
+                                </tr>
+                            </tbody>
+                            <tbody id="btnClear">
+                                <tr>
+                                    <td colspan="3" class="tc">
+                                        <input type="button" class="btn-common fn-clear clearinfo" value="清空" onclick="clearData(this)" i18n="main.clear">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
+                                <tr class="border-none">
+                                    <td colspan="3" class="f15" id="drawValid_1">
+                                        <span i18n="main.di">第</span>
+                                        <span id="drawNo2"></span>
+                                        <span i18n="main.qi">期</span>
+                                        &nbsp;
+                                        <span id="validDay2">3</span>
+                                        <span i18n="main.validinfo">天内有效</span>
+                                    </td>
+                                </tr>
+                                <tr class="height22">
+                                    <td colspan="3" class="fb f14">
+                                        <span i18n="main.totalAmount">总笔数：</span>
+                                        <span class="red" id="allCount">0</span>
+                                        <span i18n="main.totalMoney">总金额：</span>
+                                        <span class="red" id="allMoney">0</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="js/socket/sockjs.min.js"></script>
+<script src="js/socket/stomp.js?v1"></script>
+
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="js/jquery/jquery-migrate-1.2.1.min.js"></script>
+
+<script src="js/jquery.i18n.min.js"></script>
+
+<script src="js/layui/layui.all.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/canvas/html2canvas.js"></script>
+<script src="js/projects/main.js?10"></script>
+<script src="js/web_bluetooth_print.js?V1"></script>
+
+<script>
+
+    var isChrome = window.navigator.userAgent.toLowerCase().indexOf("chrome") !== -1;
+
+    var moduleName = "main";
+    var $$ = jQuery;
+    var $i18np = null;
+    var layer =layui.layer;
+    var lotteryName='福彩3D'
+    var drawNo = "";
+    var leftMillSeconds = 0;
+    var userName = "";
+    //保存主页路径
+    sessionStorage.setItem("pageBaseUrl",window.location.href);
+    var defaultLang = layui.data('langTab').langType;
+    $$("#lang-"+defaultLang).addClass("yellow").siblings("a").removeClass('yellow');
+
+    layui.config(
+        {base: 'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties("","main");
+            loadData();
+            getPageData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"js/"
+    })
+
+    function changesLang(lang){
+        defaultLang = lang;
+        $$("#lang-"+lang).addClass("yellow").siblings("a").removeClass('yellow');
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties("",moduleName);
+        window.frames[0].changeLang(lang);
+        getInfo();
+        getPageData();
+    }
+
+    function loadData(){
+        init()
+        initPwdUpdate();
+        showNotice();
+        getMarquee();
+        getInfo();
+        getCredit();
+        checkDrawStatus();
+        listenDraw({
+            "callback":handleNotification,
+            "logout":handleP2PNotification,
+            //"relogin":handleRelogin
+        });
+    }
+
+    function frameLoad(){
+        sendMsg = true;
+    }
+
+
+
+    function clearData(domThis){
+        //清空
+        if(printInfo.dataList.length>0){
+            domThis.value=$i18np.prop("main.isCutting");
+            domThis.disabled = true;
+            $.ajax({
+                url:HOST+"draw/clearPrint",
+                type:'post',
+                success:function (res) {
+                    if(res.code==0){
+                        domThis.value=$i18np.prop("main.clear");
+                        domThis.disabled = false;
+                        initPrintTable();
+                    }
+                }
+            })
+        }
+    }
+
+    async function doPrintByDevice(device,server,serviceList,printDataBytes,barByteData){
+        console.log("================doPrintByDevice");
+        var isFound = false;
+        let characteristic = null;
+        if(serviceList.length>0){
+            for(var i=0;i<serviceList.length;i++){
+                let s_uuid  = serviceList[i].uuid;
+                console.log("=====s_uuid==",s_uuid)
+                let service = await server.getPrimaryService(s_uuid)
+                let characterList = await service.getCharacteristics();
+                console.log("=====characterList==",characterList)
+                if(characterList.length>0){
+                    for(var j=0;j<characterList.length;j++){
+                        let c_uuid = characterList[j].uuid;
+                        characteristic = await service.getCharacteristic(c_uuid)
+                        console.log("=====characteristic==",characteristic)
+                        let notifyFlag = characteristic.properties.notify;
+                        let writeFlag = characteristic.properties.write;
+                        let writeNoResponse = characteristic.properties.writeWithoutResponse;
+                        if(notifyFlag && writeFlag && writeNoResponse){
+                            isFound = true;
+                            break;
+                        }
+                    }
+                }
+                if(isFound){
+                    break;
+                }
+            }
+
+            if(isFound){
+                showPrintTip();
+                characteristic.addEventListener(
+                    'characteristicvaluechanged', e => {
+                        console.log(e.target.value);
+                    }
+                );
+                await  characteristic.startNotifications();
+                //打印内容
+                var byteArr = printDataBytes;
+                //一次写入512
+                var sendTimes = Math.ceil(byteArr.length%512);
+                for(var i=1;i<=sendTimes;i++){
+                    var sindex = (i-1)*512;
+                    var eindex = i*512;
+                    if(eindex>byteArr.length){
+                        eindex = byteArr.length;
+                    }
+                    var sendDatas = byteArr.slice(sindex,eindex);
+                    await characteristic.writeValueWithoutResponse(new Uint8Array(sendDatas));
+                }
+                if(barByteData.length>0){
+                    var sendTimes1 = Math.ceil(barByteData.length%512);
+                    for(var i=1;i<=sendTimes1;i++){
+                        var sindex = (i-1)*512;
+                        var eindex = i*512;
+                        if(eindex>barByteData.length){
+                            eindex = barByteData.length;
+                        }
+                        var sendDatas = barByteData.slice(sindex,eindex);
+                        await characteristic.writeValueWithoutResponse(new Uint8Array(sendDatas));
+                    }
+                }
+            }
+            await device.gatt.disconnect();
+        }else{
+            layer.msg("无法获取设备"+devices.name+"的服务列表，请更换设备重试");
+        }
+    }
+
+    //蓝牙打印核心方法
+    //查找设备、设备服务、发送打印数据
+    async function doPrintByMatch(printDataBytes,barByteData,bleDevice){
+        console.log("================doPrintByMatchDevice");
+        var servicesList = bleDevice.services.split(",");
+        servicesList.forEach((ss,idx)=>{
+            servicesList[idx] = ss.trim();
+        })
+        let devices = await  navigator.bluetooth.requestDevice({
+            acceptAllDevices:true,
+            optionalServices:servicesList
+        });
+
+        console.log("=====device==",devices);
+        if(devices.name==null || devices.name==""){
+            layer.alert("无法连接此设备，请更改设备重试");
+            return;
+        }
+
+        let server = await devices.gatt.connect();
+        console.log("=====server==",server)
+        let serviceList = await server.getPrimaryServices();
+        console.log("=====serviceList==",serviceList)
+
+        var isFound = false;
+        let characteristic = null;
+        if(serviceList.length>0){
+            for(var i=0;i<serviceList.length;i++){
+                let s_uuid  = serviceList[i].uuid;
+                console.log("=====s_uuid==",s_uuid)
+                let service = await server.getPrimaryService(s_uuid)
+                let characterList = await service.getCharacteristics();
+                console.log("=====characterList==",characterList)
+                if(characterList.length>0){
+                    for(var j=0;j<characterList.length;j++){
+                        let c_uuid = characterList[j].uuid;
+                        characteristic = await service.getCharacteristic(c_uuid)
+                        console.log("=====characteristic==",characteristic)
+                        let notifyFlag = characteristic.properties.notify;
+                        let writeFlag = characteristic.properties.write;
+                        let writeNoResponse = characteristic.properties.writeWithoutResponse;
+                        if(notifyFlag && writeFlag && writeNoResponse){
+                            isFound = true;
+                            break;
+                        }
+                    }
+                }
+                if(isFound){
+                    break;
+                }
+            }
+
+            if(isFound){
+                showPrintTip();
+                characteristic.addEventListener(
+                    'characteristicvaluechanged', e => {
+                        console.log(e.target.value);
+                    }
+                );
+                await  characteristic.startNotifications();
+                //打印内容
+                var byteArr = printDataBytes;
+                //一次写入512
+                var sendTimes = Math.ceil(byteArr.length%512);
+                for(var i=1;i<=sendTimes;i++){
+                    var sindex = (i-1)*512;
+                    var eindex = i*512;
+                    if(eindex>byteArr.length){
+                        eindex = byteArr.length;
+                    }
+                    var sendDatas = byteArr.slice(sindex,eindex);
+                    await characteristic.writeValueWithoutResponse(new Uint8Array(sendDatas));
+                }
+                if(barByteData.length>0){
+                    var sendTimes1 = Math.ceil(barByteData.length%512);
+                    for(var i=1;i<=sendTimes1;i++){
+                        var sindex = (i-1)*512;
+                        var eindex = i*512;
+                        if(eindex>barByteData.length){
+                            eindex = barByteData.length;
+                        }
+                        var sendDatas = barByteData.slice(sindex,eindex);
+                        await characteristic.writeValueWithoutResponse(new Uint8Array(sendDatas));
+                    }
+                }
+            }
+            await devices.gatt.disconnect();
+            //await devices.forgot();
+        }else{
+            layer.msg("无法获取设备"+devices.name+"的服务列表，请更换设备重试");
+        }
+    }
+
+    //蓝牙打印核心方法
+    //查找设备、设备服务、发送打印数据
+    async function doPrint(printDataBytes,barByteData){
+        let devices = null;
+        let bleMatchDevicesInfo = window.localStorage.getItem("bleMatchDevices");
+        if(null == bleMatchDevicesInfo || undefined == bleMatchDevicesInfo){
+            let bleMatchDevices = [];
+            navigator.bluetooth.requestDevice({
+                acceptAllDevices: true
+            }).then(device => {
+                devices = device;
+                console.log("=====device==",device);
+                if(device.name==null || device.name==""){
+                    layer.alert("无法连接此设备，请更改设备重试");
+                }else{
+                    var deviceInfo = {
+                        name:devices.name,
+                        oriInfo:devices,
+                        services:""
+                    };
+                    device.gatt.connect().then(server=>{
+                        server.getPrimaryServices().then(serviceList=>{
+                            doPrintByDevice(device,server,serviceList,printDataBytes,barByteData);
+                        }).catch(err1=>{
+                            var tips = "";
+                            tips +='<p>无法获取蓝牙打印机服务，请按以下步骤操作：</p>'
+                            tips +='<p>1.复制链接：chrome://bluetooth-internals/#devices</p>'
+                            tips +='<p>2.在chrome浏览器中打开新标签页，输入第一步的链接地址</p>'
+                            tips +='<p>3.找到设备名为【'+devices.name+'】的Services</p>'
+                            tips +='<p>4.复制【'+devices.name+'】的Services的值，并粘贴到下方文本框中</p>'
+                            tips +='<p><textarea id = "deviceService" cols="30" rows="4"></textarea></p>'
+                            tips +='<p>5.关闭弹窗，重新点击打印</p>'
+                            layer.alert(tips,function(index){
+                                var slist = $("#deviceService").val();
+                                if(slist==""){
+                                    layer.msg("文本框未填写值")
+                                }else{
+                                    deviceInfo.services=slist;
+                                    bleMatchDevices.push(deviceInfo);
+                                    window.localStorage.setItem("bleMatchDevices",JSON.stringify(bleMatchDevices));
+                                    console.log(slist);
+                                    layer.close(index);
+                                }
+                            })
+                        });
+                    }).catch(err2=>{
+                        console.error(err2);
+                        layer.alert("无法连接设备【"+devices.name+"】，请更改设备重试");
+                    });
+                }
+            }).catch(error => {
+                console.error(error);
+                layer.alert("无法连接此设备，请更改设备重试");
+            });
+        }else{
+            let bleMatchDevices = JSON.parse(bleMatchDevicesInfo);
+            for(var i=0;i<bleMatchDevices.length;i++){
+                let bleDevice = bleMatchDevices[i];
+                await doPrintByMatch(printDataBytes,barByteData,bleDevice);
+            }
+        }
+    }
+
+    function showPrintTip(){
+        var popinfo = '<p i18n="main.printing" style="padding-bottom: 5px;text-align: center;font-size: 16px">'+$i18np.prop("main.printing")+'</p><p>1.<span i18n="main.print.tip1">'+$i18np.prop("main.print.tip1")+'</span>，<span i18n="main.print.tip2">'+$i18np.prop("main.print.tip2")+'</span>。</p><p>2.<span i18n="main.print.tip3">'+$i18np.prop("main.print.tip3")+'</span></p>';
+        layer.confirm(popinfo,
+            {title:$i18np.prop('main.tipTitle'),
+                btn:[$i18np.prop("main.confirm"),$i18np.prop("main.cancel")]},function (e) {
+                upPrintCount();
+                layer.closeAll();
+            },function (d) {
+                layer.closeAll();
+            })
+    }
+
+    //蓝牙打印
+    function printByBluetooth(){
+        var printContent = createPrintText(defaultLang,printInfo,userName,print_curpage,print_pages,drawNo,$i18np);
+        var byteArr = [];
+        if(defaultLang == 'th'){
+            byteArr = str2utf8(printContent);
+        }else{
+            byteArr = str2gbk(printContent);
+        }
+        $.ajax({
+            url:HOST+"print/getBarCode",
+            type:'post',
+            data:JSON.stringify({
+                id:printInfo.printCacheId,
+                screenCutCount:0
+            }),
+            success:function (resp) {
+                if(resp.code==0){
+                    var barData = resp.data.data;
+                    var barDataBytes = hexToBytes(barData);
+                    //doPrint(byteArr,barDataBytes);
+                    doPrint(byteArr,barDataBytes);
+                }else{
+                    layer.msg(resp.msg);
+                }
+            }
+        })
+    }
+
+    //打印按钮功能入口
+    function print() {
+        if(print_totals<1){
+            layer.alert($i18np.prop("main.noPrintData"),{title:$i18np.prop("main.tipTitle"),btn:[$i18np.prop("main.confirm")]});
+            return;
+        }
+        if(!isChrome){
+            printByNormal();
+        }else{
+            layer.confirm($i18np.prop("main.printer.select"),
+                {title:$i18np.prop('main.tipTitle'),
+                    btn:[$i18np.prop("main.printer.ble"),$i18np.prop("main.printer.noneble"),$i18np.prop("main.cancel")],
+                    area:['400px','auto']},function (e) {
+                    printByBluetooth();
+                    layer.close(e)
+                },function(e1){
+                    layer.close(e1)
+                    printByNormal();
+                },function (d) {
+                    layer.closeAll();
+                })
+        }
+
+    }
+
+    //非蓝牙打印
+    function printByNormal(){
+        var pagerInfo = $i18np.prop("main.di")+" "+print_curpage+"/"+print_pages+" "+$i18np.prop("main.ye")
+        const params = {
+            dataList:printInfo.dataList,
+            printCache: {
+                id:printInfo.printCacheId,
+                uname:sessionStorage.getItem("uname"),
+                printTime:printInfo.printTime,
+                batchNo:printInfo.batchNo,
+            },
+            validInfo:$("#drawValid").html(),
+            pagerInfo:pagerInfo
+        }
+        sessionStorage.setItem("printParams",JSON.stringify(params));
+        window.open("main-print.html")
+        layer.confirm($i18np.prop("main.printFinish.tip"),
+            {title:$i18np.prop('main.tipTitle'),
+                btn:[$i18np.prop("main.yes"),$i18np.prop("main.no")]},function (e) {
+                upPrintCount();
+                layer.closeAll();
+            },function (d) {
+                layer.closeAll();
+            })
+    }
+
+
+    function upPrintCount() {
+        $.ajax({
+            url:HOST+"print/upPrintCount",
+            type:'post',
+            data:JSON.stringify({
+                id:printInfo.printCacheId
+            }),
+            success:function(res){
+                if(res.code==0){
+                    printInfo.printCount+=1;
+                    layer.closeAll();
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        })
+    }
+
+
+    function getPageData(){
+        const params = [{name:'XXX',value:$i18np.prop("main.fullScreenCut")}];
+        $("#screencutall").val($i18np.propByPlaceholder("main.fullScreenCutValue",params))
+        $("#btnScreenCutAll").val($i18np.propByPlaceholder("main.fullScreenCutValue",params))
+        var drawValidInfo = $i18np.propByPlaceholder("main.validInfo",[{"name":'XXX',"value":drawNo},{"name":'YYY',"value":3}]);
+        $("#drawValid").html(drawValidInfo);
+        $("#drawValid_1").html(drawValidInfo);
+        if(openStatus==1 || openStatus==3){
+            var statusName = openStatus==1? $i18np.prop("main.drawCloseLeftTime"):$i18np.prop("main.drawOpeningLeftTime");
+            showLeftTimes(statusName,leftMillSeconds);
+        }else{
+            if(openStatus==0){
+                $("#systime").html('<span i18n="main.drawClose">'+$i18np.prop("main.drawClose")+'</span>')
+            }else if(openStatus==2){
+                $("#systime").html('<span i18n="main.drawUnopen">'+$i18np.prop("main.drawUnopen")+'</span>')
+            }
+        }
+    }
+
+    var $ = layui.jquery;
+    var stomp = null;
+    var isInitiative = false; //是否主动断开
+    function listenDraw(params){//监听开盘
+        var token = layui.data('local_store').token;
+        var sock = new SockJS(SOCKET_HOST);
+        stomp = Stomp.over(sock);
+        isInitiative = false;
+        stomp.connect( {Authorization:token},function (e) {
+            //console.log("连接成功");
+            stomp.subscribe("/topic/drawOpenStatus",params.callback);
+            stomp.subscribe("/user/queue/logout",params.logout);
+            //stomp.subscribe("/user/queue/relogin",params.relogin);
+        }, function (err){
+            //console.log("连接失败");
+            if (isInitiative==false)
+            {
+                listenDraw({
+                    "callback":handleNotification,
+                    "logout":handleP2PNotification,
+                    //"relogin":handleRelogin
+                });
+            }
+        });
+    }
+
+    function handleNotification(message) {
+        var msg = JSON.parse(message.body);
+        var drno = msg.drawNo;
+        drawId = msg.id;
+        $("#drawNo").html(drno);
+        var drawValidInfo = $i18np.propByPlaceholder("main.validInfo",[{"name":'XXX',"value":drno},{"name":'YYY',"value":3}]);
+        $("#drawValid").html(drawValidInfo);
+        $("#drawValid_1").html(drawValidInfo);
+        openStatus = msg.openStatus;
+        sessionStorage.setItem("drawOpenStatus",openStatus);
+        if(sendMsg){
+            window.frames[0].upOpenStatus(msg);
+            //window.frames[0].postMessage(msg,"*");
+        }
+        if(drawNo!=drno){ //是否是新一期数据
+            //getPrintInfo();
+            drawNo = drno;
+            initPrintTable();
+            getCredit();
+        }
+        if(msg.openStatus==1 || msg.openStatus==3){
+            var statusName = msg.openStatus==1? $i18np.prop("main.drawCloseLeftTime"):$i18np.prop("main.drawOpeningLeftTime");
+            var leftSeconds = msg.leftMillSeconds;
+            showLeftTimes(statusName,leftSeconds);
+        }else{
+            if(msg.openStatus==0){
+                $("#systime").html('<span i18n="main.drawClose">'+$i18np.prop("main.drawClose")+'</span>')
+            }else if(msg.openStatus==2){
+                $("#systime").html('<span i18n="main.drawUnopen">'+$i18np.prop("main.drawUnopen")+'</span>')
+            }
+        }
+    }
+
+    function handleP2PNotification(message) {
+        if (message.body=="强制下线")
+        {
+            layui.data('local_store',{key:'token',value:""});
+            sessionStorage.setItem("token","");
+            window.location.replace("index.html?err=2");
+            // layer.alert("在别处登录，被强制下线",function (e){
+            //     window.location.replace("index.html?relog=2");
+            // },function(e1){
+            //     window.location.replace("index.html");
+            // });
+        }
+    }
+
+    $("#screencut").on("click","",function (e) {
+        if(print_totals<1){
+            layer.alert($i18np.prop("main.noScreenCutData"),{title:$i18np.prop("main.tipTitle"),btn:[$i18np.prop("main.confirm")]});
+            return;
+        }
+        layer.open({
+            type:1,
+            content:$('#xiaopiao-cut-dialog'),
+            area:['310px','420px'],
+            title:$i18np.prop("main.ticketScreenCut")
+        })
+        return false;
+    })
+
+    $("#nav").on("click",'li>a',function(e){
+        //$(this).find('span').addClass('hight-light');
+        $(this).parent('li').addClass('on');
+        $(this).parent('li').siblings().removeClass('on');
+        $("#subnav").find('a').removeClass('on');
+        var pname = this.name;
+        console.log("pname==============",pname);
+        sendMsg = false;
+        var targetUrl = "";
+        switch(pname){
+            case 'betlist':
+                targetUrl = 'xiazhu/xiazhuDetail.html';
+                break;
+            case 'prebetlist':
+                targetUrl = 'huizongbiao/index.html';
+                break;
+            case 'lastbill':
+                targetUrl = 'history/history.html';
+                break;
+            case 'info':
+                targetUrl = 'user/user.html';
+                break;
+            case 'packageodd':
+                targetUrl = 'bpPeiRate/bpPeiRate.html';
+                break;
+            case 'drawnumber':
+                targetUrl = 'lotterynumber/lotterynumber.html';
+                break;
+            case 'rule':
+                targetUrl = 'explain/guizeExplain.html';
+                break;
+            case 'log':
+                targetUrl = 'system/logs.html';
+                break;
+            case 'password':
+                targetUrl = 'updatePassword.html';
+                break;
+            default:
+                targetUrl = '';
+        }
+        if(targetUrl!=''){
+            $("#mainframe").attr('src',targetUrl);
+        }
+
+    })
+
+    $("#subnav").on("click",'a',function(e){
+        $("#nav").find('li').removeClass('on');
+        $(this).addClass('on');
+        $(this).siblings().removeClass('on');
+        sendMsg = false;
+        var pname = this.name;
+        var targetUrl = "";
+        switch(pname){
+            case 'erd':
+                targetUrl = 'erziding/erziding.html';
+                break;
+            case 'kuaida':
+                targetUrl = 'kuaida/kuaida1.html';
+                break;
+            case 'kuaixuan':
+                targetUrl = 'kuaixuan/kuaixuan-3d.html';
+                break;
+            case 'importtxt':
+                targetUrl = 'txtimport/txtImport.html';
+                break;
+            case 'erdPackage':
+                targetUrl = 'huizongbiao/erziding-hzb.html';
+                break;
+            case 'sadPackage':
+                targetUrl = 'huizongbiao/sanziding-hzb.html';
+                break;
+            case 'sidPackage':
+                targetUrl = 'huizongbiao/siziding-hzb.html';
+                break;
+            case 'oddschange':
+                targetUrl = 'peilv/peilv.html';
+                break;
+            case 'rule_screenexplanation':
+                targetUrl = 'explain/quanjieExplain.html';
+                break;
+            case 'fastbuy':
+                targetUrl = 'kuaixuan/kuaixuan-3d-fastbuy.html';
+                break;
+            case 'zx':
+                targetUrl = 'kuaixuan/kuaixuan-3d-zx.html';
+                break;
+            case 'tx':
+                targetUrl = 'kuaixuan/kuaixuan-3d-tx.html';
+                break;
+            case 'zu3':
+                targetUrl = 'kuaixuan/kuaixuan-3d-zu3.html';
+                break;
+            case 'zu6':
+                targetUrl = 'kuaixuan/kuaixuan-3d-zu6.html';
+                break;
+            case 'c3t':
+                targetUrl = 'kuaixuan/kuaixuan-3d-c3t.html';
+                break;
+            case 'tlj':
+                targetUrl = 'kuaixuan/kuaixuan-3d-tlj.html';
+                break;
+            case 'jo':
+                targetUrl = 'kuaixuan/kuaixuan-3d-jo.html';
+                break;
+            case 'dx':
+                targetUrl = 'kuaixuan/kuaixuan-3d-dx.html';
+                break;
+            case 'hs':
+                targetUrl = 'kuaixuan/kuaixuan-3d-hs.html';
+                break;
+            case 'bx':
+                targetUrl = 'kuaixuan/kuaixuan-3d-bx.html';
+                break;
+            case '1d':
+                targetUrl = 'kuaixuan/kuaixuan-3d-1d.html';
+                break;
+            case '2d':
+                targetUrl = 'kuaixuan/kuaixuan-3d-2d.html';
+                break;
+        }
+        if(targetUrl!=''){
+            $("#mainframe").attr('src',targetUrl);
+        }
+    })
+
+    //截图说明
+    $("#fnPrintHelp").on("click","",function (e) {
+        $("#mainframe").attr('src','print_desc.html');
+    });
+
+    function getMarquee () {
+        $.ajax({
+            type: "get",
+            url: HOST+"notice/getMarquee",
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 0) {
+                    $("#paomadeng").html(res.data);
+                }
+            }
+        })
+    }
+
+    function getInfo(){
+        //$("#lotterName1").html(lotteryName);
+        //$("#lotterName2").html(lotteryName);
+        sessionStorage.setItem("lotteryName",lotteryName)
+        $.ajax({
+            url: HOST+"info",
+            type:'post',
+            success: function (res) {
+                if(res.code == 0){
+                    sessionStorage.setItem("account",res.data.uname)
+                    userName = res.data.uname;
+                    $("#drawNo").html(res.data.drawNo);
+                    $("#account").html(res.data.uname);
+                    $("#account2").html(res.data.uname);
+                    $("#account3").html(res.data.uname);
+                    // $("#hasUsedCredit").html(res.data.hasUsedCredit);
+                    // $("#canUseCredit").html(res.data.leftCredit);
+                    $("#credit").html(res.data.totalCredit);
+                    if(res.data.fundMode==0){
+                        const params = [{name:'XXX',value:$i18np.prop("main.fund")}]
+                        var fundModelValue = $i18np.propByPlaceholder("main.fundModeValue",params);
+                        $("#fundMode").html(fundModelValue);
+                    }else{
+                        const params = [{name:'XXX',value:$i18np.prop("main.credit")}]
+                        var fundModelValue = $i18np.propByPlaceholder("main.fundModeValue",params);
+                        $("#fundMode").html(fundModelValue);
+                    }
+                    var bs = res.data.vipBasicSetting
+                    if(bs.saleName==null){
+                        sessionStorage.setItem("saleName","");
+                        $("#saleNameRow").hide();
+                        $("#saleNameRow2").hide();
+                    }else{
+                        sessionStorage.setItem("saleName",bs.saleName);
+                        $("#saleNameRow").show();
+                        $("#saleNameRow2").show();
+                        $("#saleName").html(bs.saleName);
+                        $("#saleName2").html(bs.saleName);
+                    }
+                    if(bs!=null && bs.printScreencut==1){
+                        $("#screencutRow").show();
+                    }else{
+                        $("#screencutRow").hide();
+                    }
+                    if(bs!=null && bs.printOrShowLottery==1){
+                        $("#bet_print").removeClass('hide');
+                        $("#showLogo").addClass('hide')
+                    }else{
+                        $("#bet_print").addClass('hide');
+                        $("#showLogo").removeClass('hide')
+                    }
+                    initPrintTable();
+                }else{
+
+                }
+            }
+        })
+    }
+
+    //获取开盘状态
+    function checkDrawStatus(){
+        $.ajax({
+            url:HOST+'code/drawInfo',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    drawId = res.data.id;
+                    drawNo = res.data.drawNo;
+                    $("#drawNo").html(drawNo);
+                    openStatus = res.data.openStatus;
+                    upOpenStatus(res.data);
+                    var drawValidInfo = $i18np.propByPlaceholder("main.validInfo",[{"name":'XXX',"value":drawNo},{"name":'YYY',"value":3}]);
+                    //var drawValidInfo = "第"+drawNo+"期"+" 3天内有效";
+                    $("#drawValid").html(drawValidInfo);
+                    $("#drawValid_1").html(drawValidInfo);
+                    if(res.data.openStatus==0){
+                        $("#systime").html('<span i18n="main.drawClose">'+$i18np.prop("main.drawClose")+'</span>')
+                    }else if(res.data.openStatus==2){
+                        $("#systime").html('<span i18n="main.drawUnopen">'+$i18np.prop("main.drawUnopen")+'</span>')
+                    }else{
+                        var statusDesc = res.data.openStatus==1? $i18np.prop("main.drawCloseLeftTime"):$i18np.prop("main.drawOpeningLeftTime");
+                        leftMillSeconds = res.data.leftMillSeconds;
+                        showLeftTimes(statusDesc,leftMillSeconds);
+                    }
+                }
+            }
+        });
+    }
+
+
+    // function getPrintInfo() {
+    //     $.ajax({
+    //         url:HOST+'code/unOpenPrize',
+    //         type:'get',
+    //         success:function(res){
+    //             if(res.code==0){
+    //                 drawId = res.data.draw.id;
+    //                 drawNo = res.data.draw.drawId
+    //                 //localStorage.setItem("drawNo",drawNo);
+    //                 //$("#drawNo").html(drawNo);
+    //                 // $("#drawNo1").html(drawNo);
+    //                 // $("#drawNo2").html(drawNo);
+    //                 var drawValidInfo = "第"+drawNo+"期"+" 3天内有效";
+    //                 //var drawValidInfo = $i18np.prop("main.validInfo");
+    //                 console.log("=================drawValidInfo=========",drawValidInfo);
+    //                 // var drawValidInfo = $i18np.prop("main.drawValidInfo");
+    //                 $("#drawValid").html(drawValidInfo);
+    //                 $("#drawValid_1").html(drawValidInfo);
+    //                 if(res.data.draw.openStatus==0){
+    //                     $("#systime").html("已封盘")
+    //                 }else{
+    //                     //initPrintTable();
+    //                 }
+    //                 initPrintTable();
+    //             }
+    //         }
+    //     });
+    // }
+
+    function reloadPrintTable(){
+        print_curpage = 1;
+        screen_cut_curpage=1;
+        initPrintTable();
+    }
+
+    function initPrintTable(){
+        //表格1
+        $.ajax({
+            url:HOST + 'drawPC/printCachePager?page='+print_curpage+"&limit="+print_limit,
+            type:'get',
+            success:function(res) {
+                if (res.code == 0) {
+                    var totals = res.data.totals; //所有记录数
+                    var pageTotalMoney = res.data.totalMoneyOfPager;
+                    var allMoney = res.data.totalMoney;
+                    print_totals = totals;
+                    if (res.data.printCache != null) {
+                        printInfo.batchNo = res.data.printCache.batchNo;
+                        printInfo.printNo = res.data.printCache.lastPrintNo;
+                        printInfo.printTime = res.data.printCache.printTime;
+                        printInfo.printCount = res.data.printCache.printCount + 1;
+                        printInfo.printCacheId = res.data.printCache.id;
+                        printInfo.screenCutCount = res.data.printCache.screenCutCount + 1;
+                        printInfo.dataList = res.data.dataList;
+                        printInfo.totalMoney = pageTotalMoney; //每一页的总金额
+                    } else {
+                        printInfo.totalAmount = 0;
+                        printInfo.totalMoney = 0;
+                        printInfo.dataList = [];
+                        $("#printCount").html(1);
+                    }
+                    print_pages = totals%print_limit==0?parseInt(totals/print_limit):parseInt(totals/print_limit)+1;
+                    if(print_pages>1){
+                        $("#print_currpage").html(print_curpage);
+                        $("#print_pages").html(print_pages);
+                        $("#print_page_rows").removeClass('hide')
+                    }else{
+                        $("#print_page_rows").addClass('hide')
+                    }
+
+                    //$("#printInfo").html('时间: '+printInfo.printTime+'<br> 会员:'+$("#account").html()+' <br> 编号:'+ printInfo.batchNo);
+                    printInfo.totalAmount = res.data.dataList.length;
+                    $("#recordsCount").html(printInfo.totalAmount);
+                    $("#recordsCount_1").html(printInfo.totalAmount);
+                    $("#totalBetMoney").html(pageTotalMoney);
+                    $("#totalBetMoney_1").html(pageTotalMoney);
+                    $("#printTime").html(printInfo.printTime);
+                    $("#printNo").html(printInfo.batchNo);
+                    $("#printNo2").html(printInfo.batchNo);
+                    $("#printTime2").html(printInfo.printTime)
+                    var printhtml = "";
+                    var dataHeader = '<tr class="tc f14 height22" style="width:30%"><td i18n="main.buyCode">'+$i18np.prop("main.buyCode")+'</td> <td i18n="main.odds">'+$i18np.prop("main.odds")+'</td> <td i18n="main.buyMoney">'+$i18np.prop("main.buyMoney")+'</td></tr>';
+                    for(var i=0,len=printInfo.dataList.length;i<len;i++){
+                        var item = printInfo.dataList[i];
+                        var codeName = getCodePrintName(item.lotteryMethodId,"-",item.buyCodes);
+                        //var buyCode = item.hasOneFlag==1?'<span>'+item.buyCodes+'<span style="color: orangered;" i18n="main.isXian">'+$i18np.prop("main.isXian")+'</span></span>':item.buyCodes;
+                        var pr = item.param3;
+                        printhtml = printhtml + '<tr class="height22">'+'<td align="center" style="width:30%">'+codeName+'</td>'+'<td align="center">'+pr+'</td>'+'<td align="center">'+item.buyMoney+'</td></tr>'
+                    }
+
+
+                    printhtml = dataHeader + printhtml;
+                    $("#tbody_data").html(printhtml); //号码数据，包括编号等
+                    $("#tbody2_data").html(printhtml);
+                    // var cc = '<tr class="height22">' +
+                    //     '<td colspan="3" class="f15"><span id="heji"></span> 笔数 <span class="recordsCount" id="recordsCount">'+printInfo.totalAmount+'</span> 总金额 <span class="totalBetMoney" id="totalBetMoney">'+printInfo.totalMoney+'</span>' +
+                    //     '</td></tr>';
+                    // $("#tbody2").html(cc);
+                    $("#allCounts").html(totals);
+                    $("#allMoneys").html(allMoney);
+
+
+                    //$("#printInfo_1").html('时间: '+printInfo.printTime+'<br> 会员:'+$("#account").html()+' <br> 编号:'+ printInfo.batchNo);
+                    $("#allCount").html(totals);
+                    //$("#allMoney").html(totals);
+                    $("#allMoney").html(allMoney);
+
+                    screen_cut_pages = Math.ceil(totals/screen_cut_size);
+                    $("#totalPages").html(screen_cut_pages);
+                    $("#currPages").html(screen_cut_curpage);
+                    __pagerData();
+                }else{
+
+                }
+            }
+        })
+    }
+
+    function printPrevPage() {
+        if(print_curpage>1){
+            print_curpage--;
+            if(print_curpage<1){
+                print_curpage=1
+            }
+            initPrintTable()
+        }
+    }
+    function printNextPage() {
+        if(print_curpage<print_pages){
+            print_curpage++;
+            if(print_curpage>print_pages){
+                print_curpage=print_pages
+            }
+            initPrintTable()
+        }
+    }
+
+
+    function __pagerData(){
+        var startIdx = (screen_cut_curpage-1)*screen_cut_size;
+        var endIdx = (screen_cut_curpage)*screen_cut_size;
+        if(endIdx>total_size){
+            endIdx = total_size;
+        }
+        // var subList = printInfo.dataList.slice(startIdx,endIdx);
+        // var tc = 0;
+        // var tm = 0;
+        // var printhtml = "";
+        // var commInfo = '<tr class="tc f14 height22"><td i18n="main.buyCode">'+$i18np.prop("main.buyCode")+'</td> <td i18n="main.odds">'+$i18np.prop("main.odds")+'</td> <td i18n="main.buyMoney">'+$i18np.prop("main.buyMoney")+'</td></tr>';
+        // printhtml = printhtml+commInfo;
+        // $("#tbody2_data").html(printhtml);
+        // $("#recordsCount_1").html(tc);
+        // $("#totalBetMoney_1").html(tm)
+        // var bottonInfo = '<tr class="height22">' +
+        //     '<td colspan="3" class="f15"><span id="pagePart"></span> 笔数 <span class="recordsCount" id="recordsCount_1">'+tc+'</span> 总金额 <span class="totalBetMoney_1" id="totalBetMoney_1">'+tm+'</span>' +
+        //     '</td></tr>';
+        // $("#tbody2_screen").html(bottonInfo);
+    }
+
+
+
+
+
+    function showLeftTimes(statusDesc,leftSeconds){
+        //获取从1970年1月1日到现在的时间的毫秒数
+        if(leftSeconds>0){
+            var nowTime = +new Date();
+            //获取输入时间的毫秒数
+            var putTime = +new Date(leftSeconds);
+            //剩余时间总的毫秒数 除以 1000 变为总秒数
+            var dec =(putTime-nowTime)/ 1000;
+            //得到天 格式化成前缀加零的样式
+            var d =  parseInt(dec/60/60/24);
+            if(d<0){
+                d = 0;
+            }
+            d = d<10 ? '0'+ d : d;
+
+            //得到小时 格式化成前缀加零的样式
+            var h = parseInt(dec/60/60%24);
+            if(h<0){
+                h = 0;
+            }
+            h = h<10 ? '0'+ h : h;
+
+            //得到分钟 格式化成前缀加零的样式
+            var m= parseInt(dec/60%60);
+            if(m<0){
+                m = 0;
+            }
+            m = m<10 ? '0'+ m: m;
+
+            //得到秒 格式化成前缀加零的样式
+            var s= parseInt(dec%60);
+            if(s<0){
+                s = 0;
+            }
+            s = s<10 ? '0'+ s : s;
+
+            var timeStr = d+$i18np.prop("main.day")+h+$i18np.prop("main.hour")+m+$i18np.prop("main.minute")+s+$i18np.prop("main.second");
+            $("#systime").html(statusDesc+timeStr)
+        }else{
+            $("#systime").html('<span i18n="main.drawClose">'+$i18np.prop("main.drawClose")+'</span>')
+        }
+
+    }
+
+    function getCredit(){
+        $.ajax({
+            url: HOST+"admin/getCredits",
+            type:'post',
+            success: function (res) {
+                if(res.code == 0){
+                    var leftCredit = res.data.surplusCredit;
+                    var usedCredit = res.data.usedCredit;
+                    var totalCredit = res.data.totalCredit;
+                    if (leftCredit == "null" || leftCredit == "" || leftCredit == undefined){
+                        leftCredit = 0;
+                    }
+                    if (totalCredit == "null" || totalCredit == "" || totalCredit == undefined){
+                        totalCredit = 0;
+                    }
+                    sessionStorage.setItem("leftCredit",leftCredit);
+                    $("#canUseCredit").html(leftCredit);
+                    $("#hasUsedCredit").html(usedCredit);
+                    $("#credit").html(totalCredit);
+                }
+            }
+        })
+    }
+
+	//定时查看登录状态
+    setInterval(function () {
+        init()
+    }, 5000)
+
+    function init() {
+        $.ajax({
+            url: HOST+"verifyLogin",
+			success: function (res) {
+				if(res.code == 200){
+
+				}else if(res.code == 500){
+					//alert(res.msg);
+					window.location.replace("index.html");
+				}else{
+                    window.location.replace("index.html");
+				}
+            }
+        })
+    }
+
+
+
+    //退出登录
+    $("#logout").on("click","",function (e) {
+        $.ajax({
+            url:HOST+'logout2',
+            type:'get',
+            success:function(res){
+                if(res.code==200){
+                    layui.data('local_store',{key:'token',value:""});
+                    parent.location = "index.html";
+                }
+            }
+        });
+        return false;
+    })
+
+	function toKuaida(callFirst) {
+        getCredit();
+        $("#mainframe").attr("src","kuaida/kuaida1.html")
+    }
+
+    function initPwdUpdate(){
+        $.ajax({
+            url:HOST+'checkPwdInit',
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    var needUpdate = res.data;
+                    if(null!=needUpdate && needUpdate==0){
+                        window.location.href="updatePassword.html";
+                        //$("#mainframe").attr("src","updatePassword.html");
+                    }else{
+                        $("#zx").addClass("on");
+                        $("#mainframe").attr("src","kuaixuan/kuaixuan-3d-zx.html");
+                    }
+                }
+            }
+        })
+    }
+
+    function showNotice(){
+	    $.ajax({
+            url:HOST+'notice/getNewest',
+            type:'get',
+            success:function (res) {
+                if(res.data!=null){
+                    layer.alert(res.data.content,{
+                        title:res.data.title,
+                        btn:[$i18np.prop("main.confirm")]
+                    });
+                }
+            }
+        });
+    }
+
+    function toPage(pageName) {
+        if(pageName!='upPassword'){
+            getCredit();
+        }
+        $("#"+pageName).addClass('on');
+        $("#"+pageName).siblings().removeClass('on');
+        sendMsg = false;
+	    switch (pageName) {
+            case 'tx':
+                $("#mainframe").attr("src","kuaixuan/kuaixuan-3d-tx.html")
+                break;
+            case 'erdPackage':
+                $("#mainframe").attr("src","huizongbiao/erziding-hzb.html");
+                break;
+            case 'sadPackage':
+                $("#mainframe").attr("src","huizongbiao/sanziding-hzb.html");
+                break;
+            case 'sidPackage':
+                $("#mainframe").attr("src","huizongbiao/siziding-hzb.html");
+                break;
+            case 'upPassword':
+                $("#subnav").find("a").removeClass('on')
+                break;
+            default:
+                $("#nav").find('li').removeClass('on');
+                $("#subnav").find("a").removeClass('on')
+                break;
+        }
+    }
+
+
+    function navSelected(module,pageName) {
+
+        if(module==1){
+            //一级菜单
+            $("#subnav").find("a").removeClass('on')
+            $("#"+pageName).addClass('on');
+            $("#"+pageName).siblings().removeClass('on');
+        }else{
+            $("#nav").find('li').removeClass('on');
+            $("#"+pageName).addClass('on');
+            $("#"+pageName).siblings().removeClass('on');
+        }
+    }
+</script>
+</body>
+</html>
+
+

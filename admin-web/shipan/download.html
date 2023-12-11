@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>实盘</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../css/layui-redef.css"/>
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+</head>
+<body>
+
+<div id="main">
+    <div class="module">
+        <input type="hidden" value="3" id="backup_type">
+        <div name="module" id="backups_detail" class="m5 mt10">
+            <template>
+            <div name="module" id="guide_handicap" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="shipan.menu.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="shipan.menu.download">   下载  </span>
+                </div>
+                <div class="fr">
+                    <a href="outPan.html" class="" i18n="shipan.menu.outPan">《出货盘</a> |
+                    <a href="outDetail.html" class="" i18n="shipan.menu.outDetail">出货明细</a> |
+                    <a href="winOutDetail.html" class="" i18n="shipan.menu.winOutDetail">出货中奖明细</a> |
+                    <a href="javascript:void(0)" class="" onclick="popChild(1)" i18n="shipan.menu.chuhuo">出货</a> |
+                    <a href="outImport.html" class="" i18n="shipan.menu.outImport">出货导入</a> |
+                    <a href="javascript:void(0)" class="fb red" i18n="shipan.menu.download">下载》</a> |
+                    <a href="shiHuoDetail.html" class="" i18n="shipan.menu.shiHuoDetail">实货明细</a> |
+                    <a href="shiHuoZhongJiang.html" class="" i18n="shipan.menu.shiHuoZhongJiang">中奖明细</a> |
+                    <a href="shiPan-3d.html" class="" i18n="shipan.menu.shiPan">实盘</a>|
+<!--                    <a href="baopai_shipan.html" class="" i18n="shipan.menu.baopai.shipan">包牌实盘</a> |-->
+                    <a href="xupan-3d.html" class="" i18n="shipan.menu.xupan">虚盘</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <form action="" novalidate="novalidate"></form>
+            </div>
+            <div class="mt10">
+                <form action="" novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="6" i18n="shipan.table.quickly.backup.record"> 快选出货备份记录</td>
+                        </tr>
+                        <tr class="bg2">
+                            <td width="10%" i18n="shipan.table.delete">删除</td>
+                            <td width="20%" i18n="shipan.table.fileName">文件名</td>
+                            <td width="20%" i18n="shipan.table.time">时间</td>
+                            <td width="20%" i18n="shipan.query.select.type">类型</td>
+                            <td width="20%" i18n="shipan.table.size">尺寸</td>
+                        </tr>
+                        </thead>
+                        <tbody v-if="dataList.length==0">
+                        <tr><td colspan="5" align="center" i18n="shipan.table.noData">暂无数据</td></tr>
+                        </tbody>
+                        <tbody id="tbody" class="fn-hover" v-if="dataList.length>0">
+                        <tr title="下载请点击：鼠标右键另存为!" v-for="(item,idx) in dataList">
+                            <td align="center">
+                                <input type="checkbox" :checked="item.checked" @click="selectOne(item)"></td>
+                            <td>
+                                <!--<a :href="host+'upload/' + item.filePath"
+                                   target="_blank" title="下载请点击：鼠标右键另存为！">{{item.fileName}}</a>-->
+                                <a href="javascript:void(0)" @click="download(item)" title="下载请点击：鼠标右键另存为！">{{item.fileName}}</a>
+                            </td>
+                            <td>{{item.createTime}}</td>
+                            <td i18n="shipan.table.compact.backup">{{$t('yasuo')}}</td>
+                            <td>{{item.fileSize}}Bytes</td>
+                        </tr>
+                        <tr class="tfoot">
+                            <td align="center">
+                                <input type="checkbox" id="chk_select" @click="selectAll" :checked="isSelectAll">
+                                <span i18n="shipan.table.delete">{{$t('delete')}}</span>?
+                            </td>
+                            <td colspan="5">
+                                <button type="button" class="btn" id="btnDelete" @click="del">{{$t('submit')}}</button>
+<!--                                <input type="button" value="提交" class="btn" id="btnDelete" @click="del" i18n="shipan.submit">-->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div name="module" id="pager" class="pager" pagecount="1" v-if="pager.pages>1" >
+                        <span i18n="shipan.page.no">第</span> <span class="pageindex red">{{pager.currpage}}</span> <span i18n="shipan.page.page">页</span>
+                        <span i18n="shipan.page.total">共</span><span class="pagecount red">{{pager.pages}}</span> <span i18n="shipan.page.page">页</span>
+                        <span i18n="shipan.page.total">共</span>
+                        <span class="recordcount red">{{pager.total<0?0:pager.total}}</span> <span i18n="shipan.page.count">条</span>
+                        <a href="javascript:void(0)" class="fn-first" @click="firstPage()" i18n="shipan.page.firstPage">首页</a>
+                        <a href="javascript:void(0)" class="fn-prev" @click="prevPage()" i18n="shipan.page.prePage">上一页</a>
+                        <a href="javascript:void(0)" class="fn-next" @click="nextPage()" i18n="shipan.page.nextPage">下一页</a>
+                        <a href="javascript:void(0)" class="fn-last" @click="lastPage()" i18n="shipan.page.lastPage">尾页</a>
+                        <input type="text" class="input w30 fn-index" maxlength="10" digits="true" v-model="pager.toPage">
+                        <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="goPage()">
+                    </div>
+                </form>
+            </div>
+            </template>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> Copyright © 2017 xxx. All Rights Reserved</div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+    const messages = {
+        zh: {
+            delete:"删除",
+            submit:"提交",
+            yasuo:"压缩备份",
+        },
+        th: {
+            delete:"ลบ",
+            submit:"ส่ง",
+            yasuo:"สำรองข้อมูลอัดแน่น",
+        }
+    }
+
+    var layer = layui.layer;
+    var $ = layui.jquery;
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.getDatas();
+    });
+
+    function popChild(tag) {
+        layer.open({
+            type: 2,
+            // title: '出货',
+            title:i18np.prop("shipan.menu.chuhuo"),
+            content: 'kuaida.html',
+            area: ['80%', '650px']
+        })
+    }
+
+    const vm = new Vue({
+       el: '#backups_detail',
+       i18n,
+       data:{
+           isSelectAll:false,
+           dataList:[],
+           delList:[],
+           pager:{
+               currpage:1,
+               totals:0,
+               pages:0,
+               limit:20,
+               toPage:''
+           },
+           host:HOST
+       },
+       methods:{
+           getDatas(){
+               var that = this;
+                $.ajax({
+                    url:HOST + "download/list?page="+that.pager.currpage+"&limit="+that.pager.limit,
+                    success:function(res){
+                        if(res.code==0){
+                            that.dataList = res.data;
+                            that.pager.totals = res.count; //总条数
+                            that.initPager();
+                            that.dataList.forEach((item,idx)=>{
+                                item.checked = false;
+                            })
+                        }
+                    }
+
+                })
+           },
+           initPager(){
+               this.pager.pages = this.pager.totals%this.pager.limit==0?
+                   parseInt(this.pager.totals/this.pager.limit) : parseInt(this.pager.totals/this.pager.limit)+1;
+           },
+           del(){
+             var that = this;
+             console.log("长度："+that.delList.length)
+             if(that.delList.length<1){
+                 // layer.alert("未选择数据");
+                 layer.msg(i18np.prop("shipan.msg.no.selected.data"));
+                 return false;
+             }else{
+                 layer.msg(i18np.prop("shipan.msg.processing"),{icon:16,time:-1,shade:0.3});
+                 $.ajax({
+                     url:HOST+"download/del",
+                     contentType:"application/json",
+                     type:'post',
+                     data:JSON.stringify(that.delList),
+                     success:function(res){
+                         layer.closeAll();
+                         if(res.code==0){
+                             that.pager.currpage = 1;
+                             that.getDatas();
+                         }else{
+                             layer.msg(res.msg);
+                         }
+                     }
+                 })
+             }
+           },
+           selectAll(){
+             var that = this;
+             that.isSelectAll = !that.isSelectAll;
+             that.dataList.forEach((item,idx)=>{
+                 item.checked = that.isSelectAll;
+                 if(item.checked){
+                     if(!that.delList.includes(item.id)){
+                         that.delList.push(item.id)
+                     }
+                 }else{
+                     if(that.delList.includes(item.id)){
+                         that.delList.splice(that.delList.indexOf(item.id),1);
+                     }
+                 }
+             })
+           },
+           selectOne(checkItem){
+               var that = this;
+               checkItem.checked = !checkItem.checked;
+               that.dataList.forEach((item,idx)=>{
+                   if(item.id == checkItem.id){
+                       item.checked = checkItem.checked;
+                       if(item.checked){
+                           if(!that.delList.includes(item.id)){
+                               that.delList.push(item.id)
+                           }
+                       }else{
+                           if(that.delList.includes(item.id)){
+                               that.delList.splice(that.delList.indexOf(item.id),1);
+                           }
+                       }
+                   }
+               })
+               if(that.delList.length==that.dataList.length){
+                   that.isSelectAll = true;
+               }else{
+                   that.isSelectAll = false;
+               }
+           },
+           download(item) {
+               let url = HOST+"download/download?id="+item.id;
+               window.open(url);
+           },
+           firstPage(){
+               if (this.pager.currpage>1){
+                   this.pager.currpage=1;
+                   this.getDatas();
+               }
+           },
+           prevPage(){
+               if (this.pager.currpage>1){
+                   this.pager.currpage--;
+                   this.getDatas();
+               }
+           },
+           nextPage(){
+               if (this.pager.currpage<this.pager.pages){
+                   this.pager.currpage++;
+                   this.getDatas();
+               }
+           },
+           lastPage(){
+               if (this.pager.currpage<this.pager.pages){
+                   this.pager.currpage=this.pager.pages;
+                   this.getDatas();
+               }
+           },
+           go(){
+               if (this.pager.toPage==null || this.pager.toPage=="" || this.pager.toPage==undefined){
+                   // layer.msg("请输入页数！");
+                   layer.msg(i18np.prop("shipan.page.msg.inputPageNo"));
+                   return false;
+               }
+               if(this.pager.toPage*1 == this.pager.currpage*1){
+                   console.log("当前页不查询");
+               }else if(this.pager.toPage*1<=this.pager.pages*1){
+                   this.pager.currpage=this.pager.toPage;
+                   this.getDatas();
+               }
+           },
+       }
+    });
+
+    // vm.getDatas();
+
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+    // var layer = layui.layer;
+    // var $ = layui.$;
+    //
+    // function popChild(tag) {
+    //     layer.open({
+    //         type: 2,
+    //         title: '出货',
+    //         content: 'kuaida.html',
+    //         area: ['80%', '500px']
+    //     })
+    // }
+    //
+    // layui.use(['table', 'form', 'layer'], function () {
+    //     var layer = layui.layer;
+    //     var $ = layui.$;
+    //     var form = layui.form;
+    //     var table = layui.table;
+    //     form.render('checkbox');
+    //     table.render({
+    //         elem: '#dataTable'
+    //         , id: '#dataTable'
+    //         , height: 500
+    //         , url: HOST + "download/list"
+    //         , page: true //开启分页
+    //         , page: {
+    //             curr: layui.data("backup_page").index
+    //         }
+    //         , cols: [
+    //             [ //表头
+    //                 {
+    //                     field: '',
+    //                     title: '删除&nbsp;<input type="checkbox" lay-skin="primary" lay-filter="checkAll"/>',
+    //                     align: 'center',
+    //                     templet: function (d) {
+    //                         return '<input type="checkbox" lay-skin="primary" lay-filter="checkOne" value="' + d.id + '" id="chk-' + d.id + '"/>';
+    //                     }
+    //                 }
+    //                 , {
+    //                 field: 'fileName', title: '文件名', width: 500, align: 'left', templet: function (d) {
+    //                     return '<a href="' + HOST + 'upload/' + d.filePath + '" style="color:blue;" target="_blank">' + d.fileName + '</a>';
+    //                 }
+    //             }
+    //                 , {field: 'createTime', align: 'left', title: '时间'}
+    //                 , {
+    //                 field: 'backupType', align: 'left', title: '类型', templet: function (d) {
+    //                     return '压缩备份'
+    //                 }
+    //             }
+    //                 , {
+    //                 field: 'fileSize', title: '尺寸', align: 'left', templet: function (d) {
+    //                     return d.fileSize + 'Bytes'
+    //                 }
+    //             }
+    //             ]]
+    //         , done: (res, curr, count) => {
+    //             layui.data("backup_page", {
+    //                 key: 'index',
+    //                 value: curr
+    //             });
+    //         }
+    //     });
+    //
+    // })
+</script>
+</body>
+</html>

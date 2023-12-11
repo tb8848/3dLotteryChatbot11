@@ -1,0 +1,1522 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="theme-color" content="#920783">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <title>会员</title>
+    <!--<link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/adminseccode.css">
+    <link rel="stylesheet" type="text/css" href="../css/A-P5.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-Permutation5.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>
+    <script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>
+    <style type="text/css">
+        .success{
+            background-color: orange;
+        }
+
+        .t-1 td {
+            border: 1px solid #bdf0bc;
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            height: 22px;
+            border-width: 0 1px 1px 0;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="module" style="height:100%;">
+    <div name="module" id="erdPackage" class="erd-package">
+        <div class="right content-right-kd" style="width: 200px">
+            <div class="bd">
+                <div>
+                    <div class="package_odds_module mb10">
+                        <table class="t-1 package-list"> <thead>
+                        <tr class="bg1"><td colspan="2" class="tc" i18n="huizongbiao.baopai">包牌</td></tr>
+                        <tr class="bg2 tc"> <td width="33%" i18n="huizongbiao.groupCount">组数</td><td width="33%" i18n="huizongbiao.peirate">赔率</td> </tr></thead>
+                            <tbody class="tc" id="bpSettingList">
+                               <!--<tr class="package-item-50 "> <td class="bold f15">50组</td><td class="bold f15">96</td> </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="">
+                        <table class="t-2 f13">
+                            <thead class="t-1" style="outline:none;">
+                                <tr class="bg1"> <td colspan="3" class="tc" i18n="huizongbiao.prebuy.title">预下注项</td> </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="prebet_items" name="module" class="main-print">
+                        <table class="t-2 f13">
+                            <thead class="t-1" style="outline:none;">
+                                <tr> <td colspan="3"><div class="tr unit f15" id="unit" i18n="huizongbiao.unitDesc">单位：元</div></td> </tr>
+                            </thead>
+                            <thead>
+                                <tr class="bg1"> <td colspan="3" class="tc f15 print-title"> <strong class="red" id="lotteryName" i18n="huizongbiao.lotteryName">福彩3D</strong> </td> </tr>
+                                <tr id="saleNameRow"> <td colspan="3" class="tc f15 print-title" id="saleName"><!--111111--></td> </tr>
+                                <tr>
+                                    <td class="line20" colspan="3" id="printInfo"> <!--时间:2022-12-23 09:20:55 <br> 会员:test2111 <br> 编号:518054522384288465--> </td>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_prebet_items">
+                            <!--<tr class="tc list print-f15" id="1"> <td>15XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr class="tc list print-f15" id="2"> <td>16XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr class="tc list print-f15" id="3"> <td>25XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr class="tc list print-f15" id="4"> <td>26XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr class="tc list print-f15" id="5"> <td>35XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr class="tc list print-f15" id="6"> <td>36XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr class="tc list print-f15" id="7"> <td>45XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr class="tc list print-f15" id="8"> <td>46XX </td> <td>1:96</td> <td>1</td> </tr>-->
+                            <!--<tr>-->
+                                <!--<td colspan="3" class="f15"> 笔数 <span class="recordsCount" id="recordsCount2">8</span> 总金额 <span class="totalBetMoney">8</span> -->
+                                <!--</td> </tr> -->
+                            </tbody>
+                            <tfoot>
+                            <tr id="btnRow"> <td colspan="3" class="tc">
+                                <input class="btn fn-clear margin-right10" value="清空" type="button" id="clearPrint" i18n="huizongbiao.clear">
+                                <input value="打印" class="btn fn-print" type="button" id="toPrint" i18n="huizongbiao.print"> </td> </tr>
+                            <tr class="border-none"> <td colspan="3" class="f15" id="drawInfo"><!--第22343期, 3天内有效--></td> </tr>
+                            <tr id="pagerRow" class="hide">
+                                <td colspan="3" style="text-align: center">
+                                    <a href="javascript:void(0)" id="prevPage" i18n="huizongbiao.prevPage">上一页</a>
+                                    &nbsp;<span><span id="currpage"></span>&nbsp;/&nbsp;<span id="totalPage"></span></span>&nbsp;
+                                    <a href="javascript:void(0)" id="nextPage" i18n="huizongbiao.nextPage">下一页</a>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="left" style="margin-right: 210px" >
+            <div id="hasDataShow" class="bd m5 module erd-con hide">
+                <table class="t-1" id="package_module">
+                    <thead>
+                    <tr class="bg1">
+                        <td class="tc f14" id="settingsName">
+                            <!--<a href="javascript:void(0)" class="btn-number-type white " value="1">口口XX(8)</a>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<a href="javascript:void(0)" class="btn-number-type white " value="2">口X口X(0)</a>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<a href="javascript:void(0)" class="btn-number-type white red" value="3">口XX口(0)</a>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<a href="javascript:void(0)" class="btn-number-type white " value="4">X口X口(0)</a>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<a href="javascript:void(0)" class="btn-number-type white " value="5">X口口X(0)</a>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<a href="javascript:void(0)" class="btn-number-type white " value="6">XX口口(0)</a>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp; <span class="yellow">总金额：8</span>  -->
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr> <td>
+                        <div class="package_module bet-number">
+                            <table class="t-1 package-table" cellspacing="0" cellpadding="0">
+                                <thead>
+                                <tr class="bg bg_g">
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                    <td class="txt_center"><span class="no" i18n="huizongbiao.buyCode">号码</span>/<span i18n="huizongbiao.buyMoney">金额</span></td>
+                                </tr> </thead>
+                                <tbody id="erzidingList">
+                                <!--                                    <tr class="package-rows-">-->
+                                <!--                                    <td class="package-numbers ">-->
+                                <!--                                        <div class="bet-no">0XX0</div> <div class="odds-con f15 red fb">-->
+                                <!--                                        <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX0" bet-odds="" first-number="" second-number="">-->
+                                <!--                                    </div>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td class="package-numbers ">-->
+                                <!--                                        <div class="bet-no">0XX1</div>-->
+                                <!--                                        <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt;-->
+                                <!--                                            <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX1" bet-odds="" first-number="" second-number=""> </div>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td class="package-numbers "> <div class="bet-no">0XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">0XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">0XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">0XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">0XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">0XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">0XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">0XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="0XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">1XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">1XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="1XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">2XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">2XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="2XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">3XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">3XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="3XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">4XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">4XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="4XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">5XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">5XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="5XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">6XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">6XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="6XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">7XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">7XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="7XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">8XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">8XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="8XX9" bet-odds="" first-number="" second-number=""> </div> </td>   </tr><tr class="package-rows-">  <td class="package-numbers "> <div class="bet-no">9XX0</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX0" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX1</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX1" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX2</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX2" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX3</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX3" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX4</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX4" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX5</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX5" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX6</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX6" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX7</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX7" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX8</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX8" bet-odds="" first-number="" second-number=""> </div> </td>   <td class="package-numbers "> <div class="bet-no">9XX9</div> <div class="odds-con f15 red fb"> &lt;!&ndash;<span></span><br />&ndash;&gt; <input readonly="readonly" type="text" value="" class="w40" bet-number="9XX9" bet-odds="" first-number="" second-number=""> </div> -->
+                                <!--                                </td>   -->
+                                <!--                                </tr>-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+
+                <div>
+                    <form id="bet_form" novalidate="novalidate">
+                        <input type="hidden" id="dict_no_type_id" value="3">
+                        <table class="t-1">
+                            <tbody> <tr class="tr_y h40">
+                                <td class="f14 tc" width="60">
+                                    <label i18n="huizongbiao.quanzhuan">全转</label>&nbsp;
+                                    <input class="vab" type="checkbox" name="isfulltransform" value="1" style="width:14px;height:14px;" id="quanzhuan"></td>
+                                <td class="package-bet f21" width="800">
+                                    <span i18n="huizongbiao.buyCode">号码</span> <input name="bet_no" id="bet_betno" type="text"
+                                                           class="text-large w90 vab fb" value="" minlength="4" maxlength="4" required="true" aria-required="true">
+                                    <span i18n="huizongbiao.buyMoney">金额</span> <input name="bet_money" id="bet_money" type="text"
+                                                           class="text-large w90 vab fb" value="" maxlength="8" required="true" positive="true" aria-required="true">
+                                    <span class="mr20" i18n="huizongbiao.money.unit">元</span>
+                                    <input type="button" class="btn vab btn-large" value="确定" id="addOne" i18n="huizongbiao.queding"> </td>
+                                <td> <a href="bp-help.html" class="btn mr10 fr" i18n="huizongbiao.prebuy.desc">包牌预下注使用说明</a>
+                                    <strong class="hide f16" id="betno_odds"> <span i18n="huizongbiao.peirate">赔率</span>:<i id="limit_odds" class="blue"></i>&nbsp;&nbsp;&nbsp;&nbsp;  </strong> </td> </tr>
+                            <tr class="tr_y h40"> <td colspan="3"> <input type="button" class="btn fn-go-kuaixuan mr10 fr" value="跳转快选" i18n="huizongbiao.toKuaixuan">
+                                <input type="button" class="btn btn-bet-history mr10" value="三字定包牌汇总历史" i18n="huizongbiao.sanziding.history">
+                                <input type="button" class="btn btn-bet-single mr10" value="下注" i18n="huizongbiao.toBuy">
+                                <input type="button" class="btn btn-bet-package mr10" value="包牌" i18n="huizongbiao.baopai">
+                                <input type="button" class="btn btn-bet-cleanall mr10" value="一鍵清除" i18n="huizongbiao.clearAll">
+                                <span class="f16">
+                                    <span i18n="huizongbiao.zongbishu">总笔数</span>：
+                                    <span class="lbl-total-count mr10" id="total_count">0</span>
+                                    <span i18n="huizongbiao.totalMoney">总金额：</span>
+                                    <span class="mr10"><span class="red" id="total_money">0</span>
+                                        <span i18n="huizongbiao.money.unit">元</span>
+                                    </span>
+                                    <span i18n="huizongbiao.baopaiGroup">包牌组</span>：<span id="average_rate">
+                                    <span class="blue" i18n="huizongbiao.noGroupFound">暂无满足的包牌组。</span></span> </span> </td> </tr> </tbody> </table>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bd m5 module erd-con hide" id="noDataShow">
+                <table class="t-1">
+                    <thead> <tr class="bg1"> <td></td> </tr> </thead>
+                    <tbody> <tr> <td style="height:300px">
+                        <div class="f16 tc fb" id="openStatusDesc"><!--已封盘-->  </div>
+                    </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="xiazhu-dialog" style="display: none;width: 100%" class="g-dialog g-confirm">
+    <div class="dialog-bd">
+        <div name="module" id="erdPackageConfirm" class="confirm-wrapper">
+            <table class="tc history-table" cellspacing="0" cellpadding="0">
+                <thead> <tr>
+                            <td width="35%" i18n="huizongbiao.buyCode">号码</td>
+                            <td width="35%" i18n="huizongbiao.buyMoney">金额</td>
+                            <td i18n="huizongbiao.caozuo">操作</td>
+                    </tr>
+                </thead>
+                <tbody id="buyTable">
+                <!--                <tr> <td> 24XX </td> <td> 1 </td><td> <input type="button" class="remove-bet-number" value="删除" bet-number="24XX"> </td> </tr>-->
+                <!--                <tr> <td> 25XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="25XX"> </td> </tr>-->
+                <!--                <tr> <td> 26XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="26XX"> </td> </tr>-->
+                <!--                <tr> <td> 27XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="27XX"> </td> </tr>-->
+                <!--                <tr> <td> 34XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="34XX"> </td> </tr>-->
+                <!--                <tr> <td> 35XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="35XX"> </td> </tr>-->
+                <!--                <tr> <td> 36XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="36XX"> </td> </tr>-->
+                <!--                <tr> <td> 37XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="37XX"> </td> </tr>-->
+                <!--                <tr> <td> 42XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="42XX"> </td> </tr>-->
+                <!--                <tr> <td> 43XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="43XX"> </td> </tr>-->
+                <!--                <tr> <td> 44XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="44XX"> </td> </tr>-->
+                <!--                <tr> <td> 45XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="45XX"> </td> </tr>-->
+                <!--                <tr> <td> 46XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="46XX"> </td> </tr>-->
+                <!--                <tr> <td> 47XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="47XX"> </td> </tr>-->
+                <!--                <tr> <td> 52XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="52XX"> </td> </tr>-->
+                <!--                <tr> <td> 53XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="53XX"> </td> </tr>-->
+                <!--                <tr> <td> 54XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="54XX"> </td> </tr>-->
+                <!--                <tr> <td> 55XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="55XX"> </td> </tr>-->
+                <!--                <tr> <td> 56XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="56XX"> </td> </tr>-->
+                <!--                <tr> <td> 57XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="57XX"> </td> </tr>-->
+                <!--                <tr> <td> 62XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="62XX"> </td> </tr>-->
+                <!--                <tr> <td> 63XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="63XX"> </td> </tr>-->
+                <!--                <tr> <td> 64XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="64XX"> </td> </tr>-->
+                <!--                <tr> <td> 65XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="65XX"> </td> </tr>-->
+                <!--                <tr> <td> 72XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="72XX"> </td> </tr>-->
+                <!--                <tr> <td> 73XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="73XX"> </td> </tr>-->
+                <!--                <tr> <td> 74XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="74XX"> </td> </tr>-->
+                <!--                <tr> <td> 75XX </td> <td> 1 </td> <td> <input type="button" class="remove-bet-number" value="删除" bet-number="75XX"> </td> </tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog-ft">
+        <input type="button" value="确定" class="btn" id="confirmBuy" i18n="huizongbiao.queding">
+        <input type="button" value="取消" class="btn btn-gray" id="cancelBuy" i18n="huizongbiao.cancel">
+    </div>
+</div>
+
+<div id="huizongbiao-dialog" style="display: none;width: 100%" class="g-dialog g-confirm">
+    <div class="dialog-bd">
+        <div name="module" id="erdPackageHistory" class="history-wrapper">
+            <table class="tc history-table" cellspacing="0" cellpadding="0" id="history-table">
+                <thead> <tr class="hide">
+                    <td colspan="10" class="tr">
+                        <input type="button" value="全部删除" class="fn-del-all" data-type="20" i18n="huizongbiao.delAll">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="140" i18n="huizongbiao.xuhao">序号</td>
+                    <td width="60" i18n="huizongbiao.laiyuan">来源</td>
+                    <td width="140" i18n="huizongbiao.billTime">注单时间</td>
+                    <td width="80" i18n="huizongbiao.billCount">注单/注单数</td>
+                    <td width="80" i18n="huizongbiao.oneBillMoney">单注金额</td>
+                    <td width="80" i18n="huizongbiao.hejiMoney">合计金额</td>
+                    <td i18n="huizongbiao.caozuo">操作</td> </tr>
+                </thead>
+                <tbody id="history-table-body">
+                <!--<tr> <td rowspan="2">516727503235061273</td>-->
+                <!--<td>快选</td> <td>2022-12-22 11:22:39</td>-->
+                <!--<td>112</td> <td>1</td> <td>112</td>-->
+                <!--<td rowspan="2"><input type="button" class="remove-bet-history" data-print="0" serial="516727503235061273" value="删除"></td> </tr>-->
+                <!--<tr class="516727503235061273"><td colspan="5">[二定位]，配数“[取]”：第1位：[2345]，第2位：[4567]</td></tr>-->
+                <!--<tr> <td rowspan="2">516727503235061273</td> <td>快选</td> <td>2022-12-22 11:22:39</td> <td>112</td> <td>1</td> -->
+                <!--<td>112</td> <td rowspan="2"><input type="button" class="remove-bet-history" data-print="0" serial="516727503235061273" value="删除"></td> </tr>-->
+                <!--<tr class="516727503235061273"><td colspan="5">[二定位]，配数“[取]”：第1位：[2345]，第2位：[4567]</td></tr>   -->
+                <!---->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="baopai-dialog" class="g-dialog g-confirm" style="display: none;width: 100%">
+    <div class="dialog-bd">
+        <div name="module" id="erdPackageBet" class="m10">
+            <div class="f16 mb10 backage-count" id="packageCount"><!-- 可选组数:  暂无满足的包牌组；-->  </div>
+            <!--            <div class="get-package-status"> <img src="/Images/loading.gif"><br>正在获取包牌组，请等待... </div>-->
+            <div id="package_list">
+                <div style="max-height:300px;*height:300px;overflow-x: hidden;overflow-y: auto;_overflow-y: scroll; padding:1px;">
+                    <table class="tc t-1 f14" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr class="bg1">
+                            <td class="f16" i18n="huizongbiao.tips2" style="text-align: left;width:80%">系统为您找到如下包牌/散单，请勾选下注</td>
+                            <td style="width:80%"><label class=""><span i18n="huizongbiao.selectAll">全选</span><input type="checkbox" id="all_checkbox" class="vab"></label></td>
+                        </tr>
+                        </thead>
+                        <tbody id="bpGroupTable">
+                        <!--                        <tr class="f16 h40">  -->
+                        <!--                            <td class="tl bg-pack1"> 散货：<span class="red">8</span> 个号码，共 <span class="red">9</span> 元 </td>  -->
+                        <!--                            <td width="60">  <input class="fn-package-sel" type="checkbox" bet-count="8" bet-money="9" value="0">  </td> -->
+                        <!--                        </tr>  -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="h20 mt5 f16">
+                    <span i18n="huizongbiao.hasSelect">已选</span>
+                    <span id="sel_count" class="red">0</span><span i18n="huizongbiao.codeDesc">个号码</span>，
+                    <span i18n="huizongbiao.gong">共</span>
+                    <span id="sel_money_sum" class="red">0</span>
+                    <span i18n="huizongbiao.money.unit">元</span>，
+                    <span i18n="huizongbiao.leftSelect">剩余</span>
+                    <span id="last_count" class="red"></span><span i18n="huizongbiao.codeDesc">个号码</span>，
+                    <span i18n="huizongbiao.gong">共</span>
+                    <span id="last_money_sum" class="red"></span>
+                    <span i18n="huizongbiao.money.unit">元</span></div> </div> </div> </div>
+    <div class="dialog-ft"><input type="button" value="确定" class="btn" id="bpConfirm" i18n="huizongbiao.queding">
+        <input type="button" value="取消" class="btn btn-gray" id="bpCancel" i18n="huizongbiao.cancel"></div>
+</div>
+
+<span id="sound" style="display:none;padding:0;margin:0;border:0;z-index:2;top:0px;"></span>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script type="text/javascript">
+    var $$ = jQuery;
+    // //打印
+    // $$("#toPrint").on("click","",function (e) {
+    //     $$("#prebet_items").jqprint({
+    //         hideContent: ['#btnRow'],
+    //         cancel:function () {
+    //             $$('#btnRow').show();
+    //         }
+    //     })
+    // })
+</script>
+
+<!--<script src="../js/config.js"></script>-->
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+
+<script type="text/javascript">
+
+    var $ = layui.$;
+    var layer = layui.layer;
+    var childid=0;
+    var settingList=[];
+    var currSetting=null;
+    var totalAmount=0;
+    var totalMoney=1;
+
+    var buyCodesList=[];
+    var confirmList=[];
+    var historyList=[];
+    var quanzhuan = 0;
+    var ss=[];
+    var lmId =3;
+    var codesGroup= null;
+    var bpCombList=[];
+    var allDatas=[];
+
+    var selectBpCombList=[];
+
+    var printCodesList = []; //打印区号码
+    var printCacheInfo={
+        printTime:'',
+        batchNo:'',
+        uname:'',
+        id:''
+    }
+
+
+    var _soonset = {};
+    var lsId = null;
+
+    var pager = {
+        "pages":0,
+        "currpage":1,
+        "limit":500,
+        "total":0
+    };
+
+    var xzuuid = "";
+    window.onload=function () {
+        getuuid();
+    }
+    function getuuid(){
+        $.ajax({
+            url:HOST+'getUUid',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    xzuuid = res.data.saveXZ;
+                }
+            },
+            error:function (e) {
+
+            }
+        });
+    }
+
+
+    var moduleName = "huizongbiao";
+    var layer = layui.layer;
+    var $i18np = null;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    function changeLang(lang){
+        defaultLang = lang
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        layer.closeAll();
+        transContent();
+        _initHistoryTable()
+    }
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            getDrawInfo()
+            window.parent.frameLoad();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+
+    var drawNo = "";
+    var openStatus= 1;
+    function upOpenStatus(msg) {
+        openStatus = msg.openStatus;
+        if(openStatus==1){
+            $("#hasDataShow").removeClass('hide');
+            $("#noDataShow").addClass('hide');
+            if(drawNo!=msg.drawNo){
+                drawNo = msg.drawNo;
+                getSettings();
+            }
+        }else{
+            if(openStatus==3){
+                $("#openStatusDesc").html('<span i18n="huizongbiao.drawOpening">'+$i18np.prop("huizongbiao.drawOpening")+'</span>');
+            }else if(openStatus==2){
+                $("#openStatusDesc").html('<span i18n="huizongbiao.drawUnopen">'+$i18np.prop("huizongbiao.drawUnopen")+'</span>');
+            }else if(openStatus==0){
+                $("#openStatusDesc").html('<span i18n="huizongbiao.drawClose">'+$i18np.prop("huizongbiao.drawClose")+'</span>');
+            }
+            $("#hasDataShow").addClass('hide');
+            $("#noDataShow").removeClass('hide');
+        }
+    }
+
+
+    function transContent(){ //重新翻译内容
+        const params = [
+            {name:'XXX',value:drawNo},
+            {name:'YYY',value:"3"},
+        ]
+        var validInfo = $i18np.propByPlaceholder("huizongbiao.validInfo",params)
+        $("#drawInfo").html(validInfo);
+    }
+
+
+    function getDrawInfo(){
+        $.ajax({
+            url:HOST+'code/drawInfo',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    drawNo = res.data.drawNo;
+                    upOpenStatus(res.data);
+                    getSettings();
+                    // if(res.data.openStatus==1){
+                    //     getSettings();
+                    // }
+                }
+            }
+        });
+    }
+
+    //跳转到快选
+    $(".fn-go-kuaixuan").on("click","",function (e) {
+        window.parent.toPage('kuaida');
+    })
+
+    $("#bet_money").on("keyup","",function (e) {//金额输入框
+        if((e.key>='0' && e.key<='9') || e.key=="."){
+            if(this.value.indexOf(".")==0){
+                this.value = this.value.substr(1,this.value.length);
+            }
+        }else{
+            this.value = this.value.substr(0,this.value.length-1);
+        }
+    })
+
+    function getSettings(){
+        $.ajax({
+            url:HOST+'draw/erziding/settings?lotteryMethodId='+lmId,
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    settingList = res.data;
+                    initSettings();
+                }
+            }
+        })
+    }
+
+
+    function initSettings(){
+        var html = '';
+        var css = '';
+        settingList.forEach((item,idx)=>{
+            if(childid==0){
+                childid=item.id;
+                currSetting = settingList[0];
+            }
+            if(childid==item.id){
+                currSetting = item;
+                css = 'class="btn-number-type white red"';
+            }else{
+                css = 'class="btn-number-type white"';
+            }
+            //<a href="javascript:void(0)" class="btn-number-type white " value="1">口口XX(8)</a>
+            html += '<a href="javascript:void(0)" ' + css + 'onclick="childclick(this,' + item.id + ')">' + item.bettingRule + '(<span id="nums-'+item.id+'">0</span>)</a>&nbsp;&nbsp;';
+        });
+        html = html+'<span class="yellow" id="rdmoney" i18n="huizongbiao.totalMoney">'+$i18np.prop("huizongbiao.totalMoney")+'</span>';
+        $("#settingsName").html(html);
+        if(openStatus==1){
+            getRecords();
+            getBpComb();
+            getHistorys();
+        }
+        getBpSettings();
+        getPrePrintData();
+
+    }
+
+
+    function getBpSettings() {
+        $.ajax({
+            url:HOST+'baopai/getBpSetting?lotterySettingId='+currSetting.id,
+            type:'get',
+            success:function (res) {
+                var html = "";
+                if(res.code==0){
+                    var dlist = res.data;
+                    if(null!=dlist && dlist.length>0){
+                        for(var i=0,len=dlist.length;i<len;i++){
+                            var item = dlist[i];
+                            var pr = item.vipBpPeiRate==null?'':item.vipBpPeiRate;
+                            //var pr = item.peiRateChange==null?item.peiRate:item.peiRateChange;
+                            html = html + '<tr class="package-item-50"> <td class="bold f15">'+item.groupCount
+                                +'<span i18n="huizongbiao.baopai.unit">'+$i18np.prop("huizongbiao.baopai.unit")+'</span>'
+                                +'</td><td class="bold f15">'+pr+'</td> </tr>';
+                        }
+                        $("#bpSettingList").html(html);
+                    }else{
+                        $("#bpSettingList").html('<tr><td colspan="2" i18n="huizongbiao.noData">'+$i18np.prop("huizongbiao.noData")+'</td></tr>');
+                    }
+                }
+            }
+        })
+    }
+
+
+    function getPrePrintData(){
+        $.ajax({
+            url:HOST+'prebuy/printList?page='+pager.currpage+"&limit="+pager.limit,
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    _initPrintTable(res.data);
+                }
+            }
+        })
+    }
+
+
+    /**
+     * @param resData
+     * @private
+     */
+
+    function _initPrintTable(resData){
+        var tmoney = resData.totalMoney;
+        var pages = resData.pages;
+        pager.pages = pages;
+        var dataList = resData.dataList;
+        var tsize = resData.totalSize;
+        pager.total = tsize;
+        var draw = resData.draw;
+        var ct = resData.createTime;
+        var bno = resData.batchNo;
+        var cname =  sessionStorage.getItem("uname");
+        var saleName = sessionStorage.getItem("saleName");
+
+        printCacheInfo.saleName=saleName;
+        printCacheInfo.printTime = ct;
+        printCacheInfo.batchNo = bno;
+        printCacheInfo.uname = cname;
+        printCacheInfo.id = resData.printCacheId;
+        printCodesList = dataList;
+
+        //var lotteryName = sessionStorage.getItem("lotteryName");
+        //$("#lotteryName").html(lotteryName);
+        if(saleName==""){
+            $("#saleNameRow").hide();
+        }else{
+            $("#saleNameRow").show();
+            $("#saleName").html(saleName);
+        }
+        var thtml = "";
+        $("#printInfo").html('<span i18n="huizongbiao.time">'+$i18np.prop("huizongbiao.time")+'</span>'+ct
+            +'<br> <span i18n="huizongbiao.vip">'+$i18np.prop("huizongbiao.vip")+'</span>'+cname
+            +'<br><span i18n="huizongbiao.printNo">'+$i18np.prop("huizongbiao.printNo")+'</span>'+bno)
+        var dataHeader = '<tr class="tc f14 height22">' +
+            '<td i18n="huizongbiao.buyCode">'+$i18np.prop("huizongbiao.buyCode")+'</td> ' +
+            '<td i18n="huizongbiao.peirate">'+$i18np.prop("huizongbiao.peirate")+'</td> ' +
+            '<td i18n="huizongbiao.buyMoney">'+$i18np.prop("huizongbiao.buyMoney")+'</td>' +
+            '</tr>';
+        if(tsize>0){
+            for(var i=0,len=dataList.length;i<len;i++){
+                var item = dataList[i];
+                thtml = thtml +'<tr class="tc list print-f15" id="'+i+1+'"> <td>'+item.buyCodes+'</td> <td>1:'+item.peiRate+'</td> <td>'+item.buyMoney+'</td> </tr>'
+            }
+            thtml = thtml +'<tr><td colspan="3" class="f15"> ' +
+                '<span i18n="huizongbiao.bishu">'+$i18np.prop("huizongbiao.bishu")+'</span> ' +
+                '<span class="recordsCount" id="recordsCount2">'+dataList.length+'</span> ' +
+                '<span i18n="huizongbiao.totalMoney">'+$i18np.prop("huizongbiao.totalMoney")+'</span> ' +
+                '<span class="totalBetMoney" id="totalPrintMoney">'+tmoney+'</span> </td>' +
+                '</tr> ';
+
+        }
+        thtml = dataHeader + thtml;
+        $("#tbody_prebet_items").html(thtml);
+        const params = [
+            {name:'XXX',value:draw.drawId},
+            {name:'YYY',value:"3"},
+        ]
+        var validInfo = $i18np.propByPlaceholder("huizongbiao.validInfo",params)
+        $("#drawInfo").html(validInfo);
+        //$("#recordsCount2").html(tsize);
+        //$("#totalPrintMoney").html(tmoney);
+        initPagerRow();
+    }
+
+    //打印
+    $$("#toPrint").on("click","",function (e) {
+        if(printCodesList.length>0){
+
+            var pagerInfo = $i18np.prop("huizongbiao.di")+" "+pager.currpage+"/"+pager.pages+" "+$i18np.prop("huizongbiao.ye")
+            const params = {
+                dataList:printCodesList,
+                printCache:printCacheInfo,
+                validInfo:$("#drawInfo").html(),
+                pagerInfo:pagerInfo
+            }
+            sessionStorage.setItem("printParams",JSON.stringify(params));
+            window.open("prebuy-print.html")
+            layer.confirm($i18np.prop("printFinish.tip"),
+                {title:$i18np.prop('huizongbiao.alertTitle'),
+                    btn:[$i18np.prop("yes"),$i18np.prop("no")]},function (e) {
+                    upPrintCount();
+                    layer.closeAll();
+                },function (d) {
+                    layer.closeAll();
+                })
+        }else{
+            layer.alert($i18np.prop("noDataPrint"),
+                {title:$i18np.prop("huizongbiao.alertTitle"),
+                    btn:[$i18np.prop("huizongbiao.queding")]
+                }
+            )
+        }
+        // $$("#prebet_items").jqprint({
+        //     hideContent: ['#btnRow'],
+        //     cancel:function () {
+        //         $$('#btnRow').show();
+        //     }
+        // })
+    })
+
+    function upPrintCount() {//更新打印次数
+        $.ajax({
+            url:HOST+"prebuy/upPrintCount",
+            type:'post',
+            data:JSON.stringify({
+                id:printCacheInfo.id
+            }),
+            success:function(res){
+                if(res.code==0){
+                    layer.closeAll();
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        })
+    }
+
+
+    function initPagerRow(){
+        $("#currpage").html(pager.currpage);
+        $("#totalPage").html(pager.pages);
+        if(pager.pages>1){
+            $("#pagerRow").removeClass('hide');
+        }else{
+            $("#pagerRow").addClass('hide');
+        }
+    }
+
+    $("#prevPage").on("click","",function (e) {
+        if(pager.currpage>1){
+            pager.currpage--;
+            getPrePrintData();
+        }
+        return false;
+    })
+
+    $("#nextPage").on("click","",function (e) {
+        if(pager.currpage<pager.pages){
+            pager.currpage++;
+            getPrePrintData();
+        }
+        return false;
+    })
+
+    //清空预下注
+    $("#clearPrint").on("click","",function (e) {
+        $.ajax({
+            url:HOST+"prebuy/clearPrint",
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    getPrePrintData();
+                }
+            }
+        })
+        return false;
+    });
+
+
+
+
+
+    function childclick(obj,gid){
+        childid=gid;
+        $(obj).addClass("red");
+        $(obj).siblings().removeClass('red');
+        settingList.forEach((item,idx)=>{
+            if(item.id==gid){
+                currSetting = item;
+            }
+        })
+        buyCodesList=[];
+        confirmList=[];
+        codesGroup = null;
+        $("#total_count").html("0");
+        $("#total_money").html("0");
+        for(var i=0,len1=allDatas.length;i<len1;i++) {
+            var item = allDatas[i];
+            var id = item.lotterySettingId;
+            var itList = item.dataList;
+            $("#nums-" + id).html(item.totalMoney);
+            if (id == currSetting.id) {
+                $("#total_count").html(item.totalAmount);
+                $("#total_money").html(item.totalMoney);
+                buyCodesList = itList;
+                codesGroup = item.codesMoney;
+                confirmList = buyCodesList;
+                break;
+            }
+        }
+        getBpComb();
+        _initBuyTable();
+        rebuildCodesHtml();
+    }
+
+    function getBpComb(){
+        if (currSetting != null) {
+            $.ajax({
+                url: HOST + "prebuy/getBpGroupInfo1?lsId=" + currSetting.id+"&lmId="+lmId,
+                success: function (res) {
+                    if (res.code == 0) {
+                        bpCombList = res.data.groupList;
+                        selectBpCombList = bpCombList;
+                        _initBpGroupTable();
+                    }
+                }
+            })
+        }
+    }
+
+
+    function rebuildCodesHtml(){
+        var tmpList = [];
+        if(codesGroup!=null){
+            for(var k in codesGroup){
+                var v = codesGroup[k];
+                tmpList.push({
+                    'code':k,
+                    'money':v
+                })
+            }
+        }
+
+        if(tmpList.length>0){
+            var html = '';
+            var tdStr = '';
+            tmpList.forEach((item, idx) => {
+                if (parseInt(idx % 10) == 0 && idx > 0) {
+                    var a = '<tr>' + tdStr + "</tr>";
+                    html = html + a;
+                    tdStr = '';
+                }
+                tdStr = tdStr + '<td class="package-numbers active" id="e' + item.oriCode + '">'
+                    +'<div class="bet-no">' + item.code + '</div>'
+                    +'<div class="odds-con f15 red fb"><input type="text" readonly="readonly" bet-number="'+item.code+'" name="buyMoney" id="ezdm-' + item.code
+                    + '" maxlength=5 class="w40" value="'+item.money+'"/></div></td>'
+            })
+            var a = '<tr>' + tdStr + "</tr>";
+            html = html + a;
+            tdStr = '';
+            $("#erzidingList").html(html);
+        }else{
+            $("#erzidingList").html('<tr><td colspan="10" i18n="huizongbiao.noData">'+$i18np.prop("huizongbiao.noData")+'</td></tr>');
+        }
+    }
+
+    function  getRecords() {
+        $("input[name='buyMoney']").val("");
+        $("input[name='buyMoney']").parents("td").removeClass("active");
+        $.ajax({
+            url: HOST + "prebuy/groupBy?lmId="+lmId,
+            success: function (res) {
+                if (res.code == 0) {
+                    buyCodesList = [];
+                    codesGroup = null;
+                    allDatas = res.data.dataList;
+                    var dlist = res.data.dataList;
+                    $("#rdmoney").html("<span i18n='huizongbiao.totalMoney'>"+$i18np.prop("huizongbiao.totalMoney")+"</span>"+res.data.allMoney); //大类的总金额
+                    $("#total_count").html("0");
+                    $("#total_money").html("0");
+                    for(var i=0,len1=dlist.length;i<len1;i++) {
+                        var item = dlist[i];
+                        var id = item.lotterySettingId;
+                        var itList = item.dataList;
+                        $("#nums-" + id).html(item.totalMoney);
+                        if (id == currSetting.id) {
+                            $("#total_count").html(item.totalAmount);
+                            $("#total_money").html(item.totalMoney);
+                            buyCodesList = itList;
+                            codesGroup = item.codesMoney;
+                        }
+                    }
+                    confirmList = buyCodesList;
+                    $("#erzidingqueding").show();
+                    _initBuyTable();
+                    rebuildCodesHtml();
+                }else{
+                    //layer.msg(res.msg);
+                }
+            }
+        })
+    }
+
+
+    function getHistorys(){
+        $.ajax({
+            url: HOST + "prebuy/table/list?lmId="+lmId,
+            success: function (res) {
+                if (res.code == 0) {
+                    historyList = [];
+                    historyList = res.data;
+                    _initHistoryTable();
+                }else{
+                   // layer.msg(res.msg);
+                }
+            }
+        })
+    }
+
+    function _initBuyTable() {
+        if(confirmList.length>0){
+            var html = "";
+            for(var i=0,len=confirmList.length;i<len;i++){
+                var item = confirmList[i];
+                html = html + '<tr><td>'+item.buyCodes+'</td> <td>'+item.buyMoney+'</td><td> <input type="button" class="remove-bet-number" i18n="huizongbiao.delete" value="'+$i18np.prop("huizongbiao.delete")+'" bet-number="'+item.buyCodes+'" id="del-'+item.id+'"> </td> </tr>';
+            }
+            $("#buyTable").html(html)
+        }else{
+            var nodataTr = '<tr><td colspan="3" i18n="huizongbiao.noData">'+$i18np.prop("huizongbiao.noData")+'</td> </tr>';
+            $("#buyTable").html(nodataTr);
+        }
+
+    }
+
+    function _initHistoryTable() {
+        if(historyList.length>0){
+            var html = "";
+            for(var i=0,len=historyList.length;i<len;i++){
+                var item = historyList[i];
+                var cfrom = item.codesFrom;
+                switch(cfrom){
+                    case 1:
+                    case 3:
+                        var cell1 = item.billNo;
+                        var cell2 = cfrom==1?'<span i18n="huizongbiao.kuaida">'+$i18np.prop("huizongbiao.kuaida")+'</span>':'<span i18n="huizongbiao.txtImport">'+$i18np.prop("huizongbiao.txtImport")+'</span>';
+                        var cell3 = item.createTime;
+                        var cell4 = cfrom==1?item.buyCode:item.codesAmount;
+                        var cell5 = cfrom==1?item.buyMoney:"-";
+                        var cell6 = item.totalMoney;
+                        var cell7 = '<input type="button" class="remove-bet-history" i18n="huizongbiao.delete" value="'+$i18np.prop("huizongbiao.delete")+'"  id="his-'+item.id+'">';
+                        html = html + '<tr><td>'+cell1+'</td><td>'+cell2+'</td><td>'+cell3+'</td><td>'+cell4+'</td><td>'+cell5+'</td><td>'+cell6+'</td><td>'+cell7+'</td></tr>';
+                        break;
+                    case 2:
+                        var cell1 = item.billNo;
+                        var cell2 = '<span i18n="huizongbiao.kuaixuan">'+$i18np.prop("huizongbiao.kuaixuan")+'</span>';
+                        var cell3 = item.createTime;
+                        var cell4 = item.codesAmount;
+                        var cell5 = item.buyMoney;
+                        var cell6 = item.totalMoney;
+                        var cell7 = '<input type="button" class="remove-bet-his" i18n="huizongbiao.delete" value="'+$i18np.prop("huizongbiao.delete")+'"  id="his-'+item.id+'">';
+                        var tr1 = '<tr><td rowspan="2">'+cell1+'</td><td>'+cell2+'</td> <td>'+cell3+'</td><td>'+cell4+'</td> <td>'+cell5+'</td> <td>'+cell6+'</td>'
+                            +'<td rowspan="2"><input type="button" class="remove-bet-history" data-print="0" serial="'+cell1+'" i18n="huizongbiao.delete" value="'+$i18np.prop("huizongbiao.delete")+'"  id="his-'+item.id+'"></td>'
+                            +'</tr>';
+                        var tr2 = '<tr class="'+cell1+'"><td colspan="5">'+item.describ+'</td></tr>'
+                        if(defaultLang=='th'){
+                            tr2 = '<tr class="'+cell1+'"><td colspan="5">'+(item.describThai==null?'':item.describThai)+'</td></tr>';
+                        }
+                        html = html +tr1 + tr2;
+                        break;
+                }
+            }
+            $("#history-table-body").html(html)
+        }else{
+            var nodataTr = '<tr align="center"><td colspan="7" i18n="huizongbiao.noData">'+$i18np.prop("huizongbiao.noData")+'</td></tr>';
+            $("#history-table-body").html(nodataTr);
+        }
+
+    }
+
+
+
+
+    function _initBpGroupTable() {
+        var len = selectBpCombList.length;
+        var hasGroup = false;
+        var bpGroupSelect = '';
+        for (var i = 0; i < len; i++) {
+            var dd = bpCombList[i];
+            var bpSetting = dd.bpSetting;
+            if (dd.bpType == 1) {
+                hasGroup = true;
+                if (i == 0) {
+                    $("#average_rate").html(bpSetting.groupCount + '<span i18n="huizongbiao.baopai.unit">'+$i18np.prop("huizongbiao.baopai.unit")+'</span>');
+                }
+                var a = '<a href="javascript:void(0)" onclick="changeBpGroup(this,\'' + bpSetting.id + '\')" style="margin:0px 5px">' + bpSetting.groupCount
+                    +'<span i18n="huizongbiao.baopai.unit">'+$i18np.prop("huizongbiao.baopai.unit")+'</span></a>';
+                bpGroupSelect = bpGroupSelect + a;
+            }
+        }
+        if (hasGroup) {
+            bpGroupSelect = '<span i18n="huizongbiao.tips1">'+$i18np.prop("huizongbiao.tips1")+'</span>' + '<a href="javascript:void(0)" onclick="changeBpGroup(this,0)" style="margin:0px 5px" class="red" i18n="huizongbiao.buyStatus.all">'+$i18np.prop("huizongbiao.buyStatus.all")+'</a>'+bpGroupSelect;
+            //bpGroupSelect = "可选组数:" + '<a href="javascript:void(0)" onclick="changeBpGroup(this,0)" style="margin:0px 5px" class="red">全部</a>'+bpGroupSelect;
+            $("#packageCount").html(bpGroupSelect);
+        } else {
+            $("#average_rate").html('<span class="blue" i18n="huizongbiao.noGroupFound">'+$i18np.prop("huizongbiao.noGroupFound")+'</span>')
+            $("#packageCount").html('<span i18n="huizongbiao.tips1">'+$i18np.prop("huizongbiao.tips1")+'</span>'+'<span class="blue" i18n="huizongbiao.noGroupFound">'+$i18np.prop("huizongbiao.noGroupFound")+'</span>')
+        }
+        _initBpGroupSelectList();
+    }
+
+    function _initBpGroupSelectList() {
+        var tbodyHtml = "";
+        var totalMoney = 0;
+        var totalSize = 0;
+        var len = selectBpCombList.length;
+        for(var i=0;i<len;i++){
+            var dd = selectBpCombList[i];
+            var bpSetting = dd.bpSetting;
+            var bpname = dd.bpType==1?bpSetting.groupCount+'<span i18n="huizongbiao.baopai.unit">'+$i18np.prop("huizongbiao.baopai.unit")+'</span>':'<span i18n="huizongbiao.sanhuo">'+$i18np.prop("huizongbiao.sanhuo")+'</span>';
+            var bgColor = dd.bpType==1?'bg-pack':'bg-pack1';
+            totalSize = totalSize + dd.totalSize;
+            totalMoney = totalMoney + dd.totalMoney;
+            var tr = '<tr class="f16 h40">' +
+                '<td class="tl '+bgColor+'"> '+bpname+'：<span class="red">'+dd.totalSize+'</span> ' +
+                '<span i18n="huizongbiao.codeDesc">'+$i18np.prop("huizongbiao.codeDesc")+'</span>，' +
+                '<span i18n="huizongbiao.gong">'+$i18np.prop("huizongbiao.gong")+
+                '<span class="red">'+dd.totalMoney+'</span> ' +
+                '<span i18n="huizongbiao.baopai.unit">'+$i18np.prop("huizongbiao.baopai.unit")+'</span>' +
+                '</td>' +
+                '<td width="60"><input class="fn-package-sel" type="checkbox" bet-count="'+dd.totalSize+'" bet-money="'+dd.totalMoney+'" value="'+i+'"></td>' +
+                '</tr>';
+            tbodyHtml = tbodyHtml+tr;
+        }
+        $("#sel_count").html(0);
+        $("#sel_money_sum").html(0);
+        $("#bpGroupTable").html(tbodyHtml)
+        $("#last_count").html(totalSize);
+        $("#last_money_sum").html(totalMoney);
+
+    }
+
+    function changeBpGroup(othis,bpId){
+        $(othis).addClass('red');
+        $(othis).siblings("a").removeClass('red');
+        $("#all_checkbox").attr("checked",false);
+        if(bpId==0){
+            selectBpCombList = bpCombList;
+            _initBpGroupSelectList();
+            return;
+        }
+        selectBpCombList = [];
+        var len =  bpCombList.length;
+        for(var i=0;i<len;i++){
+            var dd = bpCombList[i];
+            var bpSetting = dd.bpSetting;
+            if(null!=bpSetting && bpSetting.id==bpId){
+                selectBpCombList.push(dd);
+            }
+        }
+        _initBpGroupSelectList();
+    }
+
+    // function _initBpGroupTable(){
+    //     var len =  bpCombList.length;
+    //     if(len==1){
+    //         $("#average_rate").html('<span class="blue">暂无满足的包牌组</span>');
+    //         $("#packageCount").html('可选组数:  暂无满足的包牌组； ');
+    //     }
+    //     var tbodyHtml = "";
+    //     var totalMoney = 0;
+    //     var totalSize = 0;
+    //     for(var i=0;i<len;i++){
+    //         var dd = bpCombList[i];
+    //         var bpSetting = dd.bpSetting;
+    //         if(dd.bpType==1){
+    //             $("#average_rate").html(bpSetting.groupCount+'组');
+    //             $("#packageCount").html('可选组数: '+bpSetting.groupCount);
+    //         }
+    //         var bpname = dd.bpType==1?bpSetting.groupCount+'组':'散货';
+    //         var bgColor = dd.bpType==1?'bg-pack':'bg-pack1';
+    //         totalSize = totalSize + dd.totalSize;
+    //         totalMoney = totalMoney + dd.totalMoney;
+    //         var tr = '<tr class="f16 h40">' +
+    //             '<td class="tl '+bgColor+'"> '+bpname+'：<span class="red">'+dd.totalSize+'</span> 个号码，共 <span class="red">'+dd.totalMoney+'</span> 元 </td>' +
+    //             '<td width="60"><input class="fn-package-sel" type="checkbox" bet-count="'+dd.totalSize+'" bet-money="'+dd.totalMoney+'" value="'+i+'"></td>' +
+    //             '</tr>';
+    //         tbodyHtml = tbodyHtml+tr;
+    //     }
+    //     $("#bpGroupTable").html(tbodyHtml)
+    //     $("#last_count").html(totalSize);
+    //     $("#last_money_sum").html(totalMoney);
+    // }
+
+    //包牌 单个选择
+    $("#bpGroupTable").on("click",'.fn-package-sel',function (e) {
+        _calBpSelCodes(this)
+        var hasChecked = $("#bpGroupTable").find(":checkbox:checked");
+        if(hasChecked.length===selectBpCombList.length){
+            $("#all_checkbox").attr("checked",true);
+        }else{
+            $("#all_checkbox").attr("checked",false);
+        }
+    })
+
+    //计算选中的号码数量和金额
+    function _calBpSelCodes(obj){
+        var betM = $(obj).attr("bet-money");
+        var betC = $(obj).attr('bet-count');
+        var hasSelC =$("#sel_count").html().trim();
+        var hasSelM = $("#sel_money_sum").html().trim();
+        var ttC =$("#last_count").html().trim();
+        var ttM = $("#last_money_sum").html().trim();
+        var idx = $(obj).val();
+
+        if(obj.checked){
+            ttC = accSub(parseInt(ttC),parseInt(betC));
+            hasSelC = parseInt(hasSelC)+parseInt(betC);
+            ttM = accSub(parseFloat(ttM),parseFloat(betM));
+            hasSelM = parseFloat(hasSelM)+parseFloat(betM);
+            selectBpCombList[idx].selfg = 1;
+        }else{
+            ttC = parseInt(ttC)+parseInt(betC);
+            ttM = parseFloat(ttM)+parseFloat(betM);
+            hasSelC = accSub(parseInt(hasSelC),parseInt(betC));
+            hasSelM = accSub(parseFloat(hasSelM),parseFloat(betM));
+            selectBpCombList[idx].selfg = 0;
+        }
+        $("#last_count").html(ttC);
+        $("#last_money_sum").html(ttM);
+        $("#sel_count").html(hasSelC);
+        $("#sel_money_sum").html(hasSelM);
+    }
+
+    //全选
+    $("#all_checkbox").on("click","",function (e) {
+        var obj = this;
+        var ttC = 0;
+        var ttM = 0;
+        selectBpCombList.forEach((item,idx)=>{
+            ttC = ttC + item.totalSize;
+            ttM = ttM + item.totalMoney;
+        })
+        var selfg = 0;
+        if(obj.checked){
+            $("#bpGroupTable").find(".fn-package-sel").each(function (idx) {
+                this.checked = true;
+            })
+            $("#last_count").html(0);
+            $("#last_money_sum").html(0);
+            $("#sel_count").html(ttC);
+            $("#sel_money_sum").html(ttM);
+            selfg = 1
+            selectBpCombList.forEach((item,idx)=>{
+                item.selfg=1;
+            })
+        }else{
+            $("#bpGroupTable").find(".fn-package-sel").each(function (idx) {
+                this.checked = false;
+            })
+            $("#last_count").html(ttC);
+            $("#last_money_sum").html(ttM);
+            $("#sel_count").html("0");
+            $("#sel_money_sum").html("0");
+            selfg = 0
+        }
+        selectBpCombList.forEach((item,idx)=>{
+            item.selfg=selfg;
+        })
+    })
+
+    //确定下注
+    $("#confirmBuy").on("click","",function(e){
+        if(confirmList.length<1){
+            layer.msg($i18np.prop("huizongbiao.noCodeBuy"));
+            return;
+        }
+        layer.closeAll();
+        layer.msg($i18np.prop("huizongbiao.chulizhong"), {icon: 16,shade: 0.3,time:-1});
+        $.ajax({
+            url:HOST+'prebuy/xiazhu?xzuuid='+xzuuid,
+            type:'post',
+            contentType:'application/json',
+            data:JSON.stringify(confirmList),
+            success:function(res){
+                layer.closeAll();
+                if(res.code==0){
+                    window.parent.toPage("kuaida");
+                    window.parent.getCredit();
+                    window.parent.reloadPrintTable()
+                    //createCodes();
+                }else{
+                    getuuid();
+                    layer.msg(res.msg);
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+            }
+        })
+        return false;
+    });
+
+
+    //取消下注
+    $("#cancelBuy").on("click","",function(e){
+        layer.closeAll();
+        return false;
+    });
+
+
+    $("#addOne").on("click","",function (e) {
+        var buyCode = $("#bet_betno").val();
+        buyCode = buyCode.toUpperCase();
+        if(buyCode==''){
+            layer.alert($i18np.prop("huizongbiao.noCodeInput"),{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+            return;
+        }
+        if(buyCode=='XXXX'){
+            layer.alert($i18np.prop("huizongbiao.invalidCode"),{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+            return;
+        }
+        if(buyCode.length<4){
+            layer.alert($i18np.prop("huizongbiao.codeError"),{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]})
+            return;
+        }
+        var money = $("#bet_money").val();
+        try{
+            money = parseFloat(money);
+        }catch (e) {
+            layer.alert($i18np.prop("huizongbiao.moneyError"),{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]})
+            return;
+        }
+
+        var qzCheck = document.getElementById("quanzhuan").checked;
+        var params = {
+            buyCodes:buyCode,
+            buyMoney:money,
+            quanzhuan:qzCheck?1:0,
+            lotterSettingId:lsId
+        }
+        console.log(JSON.stringify(params))
+
+        layer.msg($i18np.prop("huizongbiao.chulizhong"), {
+            icon: 16
+            ,shade: 0.3
+            ,time:-1
+        });
+        $.ajax({
+            url:HOST+'prebuy/addOne',
+            type:'post',
+            data:JSON.stringify(params),
+            success:function(res){
+                layer.closeAll();
+                $("#limit_odds").html("");
+                $("#betno_odds").hide();
+                $("#bet_money").val("");
+                $("#bet_betno").val("");
+                if(res.code==0){
+                    lsId = null;
+                    switch(res.count){
+                        case 3:
+                            getSettings();
+                            break;
+                        case 4:
+                            window.parent.toPage("sidPackage");
+                            break;
+                        case 2:
+                            window.parent.toPage("erdPackage");
+                            break;
+                            defalut:break;
+                    }
+                }else{
+                    layer.alert(res.msg,{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+                }
+            },
+            fail:function (e) {
+                layer.closeAll();
+            }
+        });
+        return false;
+    })
+
+    //确定包牌
+    $("#bpConfirm").on("click","",function (e) {
+        var selCount = 0;
+        var subList = [];
+        selectBpCombList.forEach((item,idx)=>{
+            if(item.selfg==1){
+                selCount++;
+                subList.push(item);
+            }
+        })
+        if(selCount<1){
+            layer.alert($i18np.prop("huizongbiao.noCodeBuy"),{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+            return;
+        }
+        layer.closeAll();
+        layer.msg($i18np.prop("huizongbiao.chulizhong"), {
+            icon: 16
+            ,shade: 0.3
+            ,time:-1
+        });
+        $.ajax({
+            url:HOST+'prebuy/bpxiazhu?xzuuid='+xzuuid,
+            type:'post',
+            contentType:'application/json',
+            data:JSON.stringify(subList),
+            success:function(res){
+                layer.closeAll();
+                if(res.code==0){
+                    window.parent.toPage("kuaida");
+                    window.parent.getCredit();
+                    window.parent.reloadPrintTable()
+                    //getRecords();
+                }else{
+                    getuuid();
+                    layer.alert(res.msg,{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+            }
+        })
+        return false;
+    });
+
+    //取消包牌下注
+    $("#bpCancel").on("click","",function(e){
+        layer.closeAll();
+        return false;
+    });
+
+
+    //删除单个号码
+    $("#buyTable").on("click",".remove-bet-number",function(e){
+        var id = this.id;
+        var newarr = [];
+        for(var i=0,len=confirmList.length;i<len;i++){
+            var item = confirmList[i];
+            var objId = "del-"+item.id;
+            if(objId!=id){
+                newarr.push(item);
+            }
+        }
+        confirmList = newarr;
+        _initBuyTable();
+    });
+
+    $(".btn-bet-cleanall").on("click","",function (e) {
+        console.log("============清除");
+        if(buyCodesList.length<1){
+            layer.alert($i18np.prop("huizongbiao.noCodeBuy"),{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+            return;
+        }
+        var params = [
+            {name:'XXX',value:currSetting.bettingRule}
+        ]
+        layer.confirm($i18np.propByPlaceholder("huizongbiao.sanding.clearTip",params),
+            {title:$i18np.prop("huizongbiao.alertTitle"),btn:[$i18np.prop("huizongbiao.queding"),$i18np.prop("huizongbiao.cancel")]},
+            function (e) {
+            layer.closeAll();
+            _clearAll();
+        })
+    })
+
+    //下注 确认弹窗
+    $(".btn-bet-single").on("click","",function(e){
+         layer.open({
+             type:1,
+             content:$("#xiazhu-dialog"),
+             title:'<span i18n="huizongbiao.bp.confirm">'+$i18np.prop("huizongbiao.bp.confirm")+'</span>',
+             area:['450px','470px']
+         })
+    })
+
+    //包牌弹窗
+    $(".btn-bet-package").on("click","",function(e){
+        if(buyCodesList.length<1){
+            layer.msg($i18np.prop("huizongbiao.noCodeBuy"));
+            return;
+        }
+        layer.open({
+            type:1,
+            content:$("#baopai-dialog"),
+            title:'<span i18n="huizongbiao.bp.selectTip1">'+$i18np.prop("huizongbiao.bp.selectTip1")+'</span><span class="red fb" i18n="huizongbiao.bp.selectTip2">'+$i18np.prop("huizongbiao.bp.selectTip2")+'</span>',
+            area:['750px','450px']
+        })
+        return false;
+    })
+
+
+    //删除历史
+    $(".btn-bet-history").on("click","",function(e){
+        layer.open({
+            type:1,
+            content:$("#huizongbiao-dialog"),
+            title:'<span i18n="huizongbiao.bp.confirm">'+$i18np.prop("huizongbiao.bp.confirm")+'</span>',
+            area:['750px','470px']
+        })
+    })
+
+    //删除历史记录
+    $("#history-table-body").on("click",'.remove-bet-history',function (e) {
+        var objId = this.id;
+        var id = objId.split("-")[1];
+        layer.confirm($i18np.prop("huizongbiao.delTip"),
+            {title:'<span i18n="huizongbiao.bp.confirm">'+$i18np.prop("huizongbiao.bp.confirm")+'</span>',
+                btn:[$i18np.prop("huizongbiao.queding"),$i18np.prop("huizongbiao.cancel")]},
+            function(idx){
+            layer.close(idx);
+            layer.msg($i18np.prop("huizongbiao.chulizhong"), {
+                icon: 16
+                ,shade: 0.3
+                ,time:-1
+            });
+            $.ajax({
+                url:HOST+'prebuy/table/del',
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify({
+                    id:id,
+                }),
+                success:function(res){
+                    layer.closeAll();
+                    if(res.code==0){
+                        //getHistorys();
+                        getSettings();
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll();
+                }
+            })
+        })
+    })
+
+    //号码输入事件
+    $("#bet_betno").on("keyup","",function(e){
+        if(e.key=='X' || e.key=='x' || (e.key>='0' && e.key<='9')){
+
+        }else{
+            this.value = this.value.substr(0,this.value.length-1);
+        }
+        this.value = this.value.toUpperCase();
+        if(this.value.length<4){
+            $("#limit_odds").html("");
+            $("#betno_odds").hide();
+            lsId = null;
+            return;
+        }
+        getPeiRate();
+    });
+
+    function getPeiRate(){
+        var buyCodes = $("#bet_betno").val();
+        buyCodes = buyCodes.toUpperCase();
+        if(buyCodes=='XXXX'){
+            $("#limit_odds").html("");
+            return;
+        }
+        $.ajax({
+            url:HOST+'draw/getPeiRate',
+            type:'post',
+            contentType:'application/json',
+            data:JSON.stringify({
+                buyCodes:buyCodes.toUpperCase(),
+                //drawId:drawId,
+                hasOneFlag:0
+            }),
+            success:function(res){
+                if(res.code==0){
+                    $("#limit_odds").html(res.data.peiRate);
+                    $("#betno_odds").show();
+                    lsId = res.data.settingId;
+                }else{
+                    $("#limit_odds").html("");
+                    $("#betno_odds").hide();
+                    lsId = "";
+                }
+            }
+        })
+    }
+
+
+    //一键清除
+    function _clearAll(){
+        layer.msg($i18np.prop("huizongbiao.chulizhong"), {
+            icon: 16
+            ,shade: 0.3
+            ,time:-1
+        });
+        var idlist = [];
+        buyCodesList.forEach((item,idx)=>{
+            idlist.push(item.id);
+        })
+        $.ajax({
+            url: HOST + "prebuy/del",
+            type:'post',
+            contentType:'application/json',
+            data:JSON.stringify(idlist),
+            success: function (res) {
+                layer.closeAll();
+                if (res.code == 0) {
+                    //createCodes();
+                    getSettings();
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        })
+        return false;
+    }
+
+
+
+</script>
+
+</body>
+
+
+
+</html>

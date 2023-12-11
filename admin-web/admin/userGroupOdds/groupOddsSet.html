@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>用户分批赔率</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!--    <link rel="stylesheet" href="./css/basicSetting.css" media="all">-->
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css" type="text/css" rel="stylesheet">
+
+    <style>
+        th {
+            background: url(../../img/bg-thead-pkg.jpg) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            padding: 4px;
+            outline: none;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="main">
+    <div class="module ">
+        <div name="module" id="st_batchodds" class="m5 mt10">
+            <template>
+            <input type="hidden" id="open_status" value="0">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red">A<span i18n="setting.four.batch.odds">分批赔率</span></span>
+                </div>
+                <div class="fr">
+                    <a href="../userList2.html" i18n="setting.fixed.plate">账号列表</a>
+                </div>
+            </div>
+            <div class="mt10" id="addbatchoddsarea" v-if="batchAddAreaShow">
+                <form novalidate="novalidate">
+                    <input type="hidden" value="90000" id="one_item_limit">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="12">
+                                《{{lsInfo.lsName}}》<span i18n="setting.add.batch.odds">{{$t('addBatchOdds')}}</span>
+                            <input type="hidden" name="fix_num" id="fix_num" value="20">
+                            <input type="hidden" name="no_type_id" id="no_type_id" value="1">
+                            <input type="hidden" name="is_package" id="ispackage" value="0">
+                        </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="bg3" width="10%" i18n="setting.dpdxsx"> {{$t('dpdxsx')}} </td>
+                            <td> {{lsInfo.maxNumberTypeCount}} </td>
+                            <td class="bg3" i18n="setting.four.plsx"> {{$t('plsx')}} </td>
+                            <td> <input id="one_item_max" type="text" class="w90" disabled="disabled" :value="lsInfo.peiRate"> </td>
+                            <td class="bg3" i18n="setting.four.plxx"> {{$t('plxx')}} </td>
+                            <td> <input id="one_item_min" type="text" class="w90 odds_min" disabled="" :value="lsInfo.peiRateLowerLimit"> </td>
+                            <td colspan="6"></td>
+                        </tr>
+                        <tr>
+                            <td class="bg3" width="10%" i18n="setting.dypfpts"> {{$t('dypfpts')}} </td>
+                            <td width=""><input type="text" class="w90" v-model="dl.group1.batch_count" name="batch_count1" required="required"
+                                                digits="true" min="1" maxlength="3" flag="1" aria-required="true" @blur="setGroup1()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.dypdytjzjef"> {{$t('dypdytjzjef')}} </td>
+                            <td> <input type="text" class="w90" v-model="dl.group1.first_batch_end_money" name="first_batch_end_money1" required="required"
+                                        digits="true" min="1" maxlength="10" flag="1" aria-required="true" @blur="setGroup1()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.dypjzjexhdz"> {{$t('dypjzjexhdz')}} </td>
+                            <td> <input type="text" class="w90" v-model="dl.group1.increment_money" name="increment_money1" required="required"
+                                        digits="true" min="1" maxlength="8" flag="1" aria-required="true" @blur="setGroup1()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.dyppvsxxhdj"> {{$t('dyppvsxxhdj')}} </td>
+                            <td> <input type="text" class="w90" v-model="dl.group1.odds_gap" name="odds_gap1" required="required"
+                                        exactdivisor="0.1" flag="1" aria-required="true" @blur="setGroup1()" autocomplete="false"> </td>
+                            <td i18n="setting.dyfpjzjew">{{$t('dyfpjzjew')}}</td>
+                            <td> <input type="text" disabled="" class="w120 total_money" flag="1" v-model="dl.group1.total_money" @blur="setGroup1()"> </td>
+                            <td i18n="setting.pljd"> {{$t('pljd')}} </td>
+                            <td> <input type="text" disabled="" class="w120 total_odds" flag="1" v-model="dl.group1.total_odds" @blur="setGroup1()"> </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3" width="10%" i18n="setting.depfpts"> {{$t('depfpts')}} </td>
+                            <td width=""> <input type="text" class="w90 fn-batch-odds" v-model="dl.group2.batch_count" name="batch_count2" digits="true"
+                                                 min="1" maxlength="3" flag="2" @blur="setGroup2()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.depdytjzjef"> {{$t('depdytjzjef')}} </td>
+                            <td> <input type="text" class="w90 fn-batch-odds" v-model="dl.group2.first_batch_end_money" name="first_batch_end_money2"
+                                        digits="true" min="1" maxlength="10" flag="2" @blur="setGroup2()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.depjzjexhdz"> {{$t('depjzjexhdz')}} </td>
+                            <td> <input type="text" class="w90 fn-batch-odds" v-model="dl.group2.increment_money" name="increment_money2" digits="true"
+                                        min="1" maxlength="8" flag="2" @blur="setGroup2()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.depplsxxhdj"> {{$t('deppvsxxhdj')}} </td>
+                            <td> <input type="text" class="w90 fn-batch-odds" v-model="dl.group2.odds_gap" name="odds_gap2" value="" exactdivisor="0.1"
+                                        flag="2" @blur="setGroup2()" autocomplete="false"> </td>
+                            <td i18n="setting.defpjzjew">{{$t('defpjzjew')}}</td>
+                            <td> <input type="text" disabled="" class="w120 total_money" flag="2" v-model="dl.group2.total_money" @blur="setGroup2()"> </td>
+                            <td i18n="setting.pljd"> {{$t('pljd')}} </td>
+                            <td> <input type="text" disabled="" class="w120 total_odds" flag="2" v-model="dl.group2.total_odds" @blur="setGroup2()"> </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3" width="10%" i18n="setting.dspfpts"> {{$t('dspfpts')}} </td>
+                            <td width=""> <input type="text" class="w90 fn-batch-odds" v-model="dl.group3.batch_count" name="batch_count3"
+                                                 digits="true" min="1" maxlength="3" flag="3" @blur="setGroup3()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.dspdytjzjef"> {{$t('dspdytjzjef')}} </td>
+                            <td> <input type="text" class="w90 fn-batch-odds"  v-model="dl.group3.first_batch_end_money" name="first_batch_end_money3"
+                                        digits="true" min="1" maxlength="10" flag="3" @blur="setGroup3()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.dspjzjexhdz"> {{$t('dspjzjexhdz')}} </td>
+                            <td> <input type="text" class="w90 fn-batch-odds"  v-model="dl.group3.increment_money" name="increment_money3"
+                                        digits="true" min="1" maxlength="8" flag="3" @blur="setGroup3()" autocomplete="false"> </td>
+                            <td class="bg3" i18n="setting.dspplsxxhdj"> {{$t('dsppvsxxhdj')}} </td>
+                            <td> <input type="text" class="w90 fn-batch-odds"  v-model="dl.group3.odds_gap" name="odds_gap3" value=""
+                                        exactdivisor="0.1" flag="3" @blur="setGroup3()" autocomplete="false"> </td>
+                            <td i18n="setting.dspjzjew">{{$t('dsfpjzjew')}}</td>
+                            <td> <input type="text" disabled="" class="w120 total_money" flag="3"  v-model="dl.group3.total_money" @blur="setGroup3()"> </td>
+                            <td i18n="setting.pljd"> {{$t('pljd')}} </td>
+                            <td> <input type="text" disabled="" class="w120 total_odds" flag="3"  v-model="dl.group3.total_odds" @blur="setGroup3()"> </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12" class="tc">  &nbsp;
+                                <button type="button" class="btn" @click="saveAdd">{{$t('submit')}}</button>
+<!--                                <input type="button" value="提交" class="btn" @click="saveAdd" i18n="setting.submit">-->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <form id="batchoddslist" novalidate="novalidate">
+                <div class="mt10">
+                    <div class="odds-btn-con relative">
+                        <div class="fl absolute">
+                            <span class="fb red mr5">《{{lsInfo.lsName}}》A<span i18n="setting.four.batch.odds">分批赔率</span></span>
+                            <input type="button" value="编辑" class="btn btn-edit mr5" @click="saveEdit" i18n="setting.three.update">
+                            <input type="button" value="新增分批" class="btn mr5 fn-add-batchodds" @click="showBatchAddOdds" i18n="setting.add.batch">
+                            <a href="javascript:history.back()" class="btn a_btn" id="back_to_handicap" data-no-back="1" i18n="setting.five.return">返回</a>
+                        </div>
+                    </div>
+                    <div class="mt10" v-if="syncAreaShow">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1">
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="checkbox" id="selectAllSync" :checked="selectAllSync" @click="changeSyncAllCheck">
+                                        <span i18n="setting.sync">{{$t('tongbu')}}</span>
+                                    </label>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody id="tbodySync" class="fn-hover">
+                            <tr>
+                                <td>
+                                    <label class="" v-for="(item,idx) in similarList">
+                                        <input type="checkbox" value="1" class="fn-target-type-id vm1 fn-sync-check" :checked="item.checked" @click="changeSyncOneCheck(item)">&nbsp;{{item.bettingRule}}&nbsp;&nbsp;&nbsp;&nbsp;</label>
+<!--                                    <label class=""><input type="checkbox" value="2" class="fn-target-type-id vm1 fn-sync-check">&nbsp;口X口X</label>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                    <label class="" style="color: #fe9100"><input type="checkbox" value="3" class="fn-target-type-id vm1 ">&nbsp;口XX口</label>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                    <label class=""><input type="checkbox" value="4" class="fn-target-type-id vm1 fn-sync-check">&nbsp;X口X口</label>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                    <label class=""><input type="checkbox" value="5" class="fn-target-type-id vm1 fn-sync-check">&nbsp;X口口X</label>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                    <label class=""><input type="checkbox" value="6" class="fn-target-type-id vm1 fn-sync-check">&nbsp;XX口口</label>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt10">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1">
+                                <td>
+                                    <label>
+                                        <input type="checkbox" class="checkbox" id="selectAll" :checked="selectAll" @click="changeSelectAll">
+                                        <span i18n="setting.select.all">全选</span>
+                                    </label>
+                                </td>
+                                <td i18n="setting.shifoufc">是否放出</td>
+                                <td i18n="setting.ksje">开始金额</td>
+                                <td i18n="setting.jzje">截止金额</td>
+                                <td i18n="setting.four.plsx">赔率上限</td>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody" class="fn-hover" v-if="dataList.length==0">
+                                <tr>
+                                    <td align="center" colspan="5" i18n="setting.three.zwsj">暂无数据！</td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="dataList.length>0" class="fn-hover">
+                                <tr v-for="(item,idx) in dataList" :id="item.id" >
+                                    <td> <label> {{idx+1}} <input type="checkbox" name="is_use0" _name="is_use" :id="item.id"
+                                                                  :checked="item.checked"  @click="changeSelectOne(item)"> </label> </td>
+                                    <td>
+                                        <span class="red" v-if="item.isOut==1" i18n="setting.two.shi">{{$t('yes')}}</span>
+                                        <span v-else i18n="setting.two.shi">{{$t('no')}}</span>
+                                    </td>
+                                    <td> <input type="text" name="start_money0" _name="start_money" disabled="disabled" :value="item.startAmount" autocomplete="false"> </td>
+                                    <td> <input v-if="idx+1==dataList.length" disabled="disabled" type="text" name="end_money0" _name="end_money" _limit="num" required="required"
+                                                digits="true" maxlength="8" aria-required="true" v-model="item.endAmount" @blur="editDataItem(item,idx)" autocomplete="false">
+                                        <input v-else type="text" name="end_money0" _name="end_money" _limit="num" required="required"
+                                               digits="true" maxlength="8" aria-required="true" v-model="item.endAmount" @blur="editDataItem(item,idx)" autocomplete="false">
+                                    </td>
+                                    <td> <input type="text" name="odds_limit0" _name="odds_limit"  v-model="item.peiRateUpperLimit" @blur="editDataItem(item,idx)" required="required"
+                                                multiodds="true" maxlength="30" aria-required="true" autocomplete="false">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt10 tc" v-if="dataList.length>0">
+                        <button type="button" class="btn fn-batchdelete" @click="saveDel">{{$t('delete')}}</button>
+<!--                        <input type="button" value="删除" class="btn fn-batchdelete" @click="saveDel" i18n="setting.two.delete">-->
+                    </div>
+                    <br>
+                </div>
+            </form>
+            </template>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> Copyright © 2023 xxx. All Rights Reserved </div>
+    </div>
+</div>
+
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/projects/validate.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script src="../../js/projects/user_group_peirate_setting.js?v1"></script>
+<script>
+    // vm.init(0);
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties("admin_vip-"+moduleName);
+            vm.init(0);
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties("admin_vip-"+moduleName);
+        i18n.locale=lang;
+
+        vm.init(0);
+    }
+
+
+    // window.parent.navSelect("setting");
+    // $("#addFp").on('click', function () {
+    //     $("#addbatchoddsarea").show();
+    // })
+    //
+    // function GetQueryString(name){
+    //     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    //     var a = decodeURI(window.location.search);
+    //     var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+    //     if(r!=null)return  unescape(r[2]); return null;
+    // }
+
+    // window.onload = function () {
+    //
+    //     // var id = GetQueryString("id");
+    //     // lsId = id;
+    //     // lmId = GetQueryString("lmId");
+    //     // $("#lotterySettingId").val(id);
+    //     // // 四定位隐藏同步
+    //     // if (id == 15 || id == "15") {
+    //     //     $("#sync").hide();
+    //     // }
+    //
+    //     $.ajax({
+    //         url: HOST+"dingPan/getPeiRate?lotterySettingId=" + id
+    //         , type: "get"
+    //         , success: function (res) {
+    //             if (res.code == 200) {
+    //                 $("#dpSingleItemUpperLimit").html(res.data.maxNumberTypeCount);
+    //                 $("#peiRateUpperLimit").val(res.data.peiRate);
+    //                 $("#peiRateLowerLimit").val(res.data.peiRateLowerLimit);
+    //                 $("#settingName").html("《"+res.data.bettingRule+"》分批赔率")
+    //                 $("#ruleName2").html("《"+res.data.bettingRule+"》");
+    //             }
+    //         }
+    //         , error: function () {
+    //             console.log("ajax error");
+    //         }
+    //     });
+    // }
+    //
+    //
+    //
+    // $(".group").blur(function () {
+    //     var firstGroupCount = $("input[name='firstGroupCount']").val();
+    //     var firstEndAmount = $("input[name='firstEndAmount']").val();
+    //     var firstEndAmountLoopAdd = $("input[name='firstEndAmountLoopAdd']").val();
+    //     var firstPeiRateUpperLimitLoopSubtract = $("input[name='firstPeiRateUpperLimitLoopSubtract']").val();
+    //     var peiRateUpperLimit = $("#peiRateUpperLimit").val();
+    //     var peiRateLowerLimit = $("#peiRateLowerLimit").val();
+    //     if (firstGroupCount != null && firstGroupCount != "" &&
+    //         firstEndAmount != null && firstEndAmount != "" &&
+    //         firstEndAmountLoopAdd != null && firstEndAmountLoopAdd != "" &&
+    //         firstPeiRateUpperLimitLoopSubtract != null && firstPeiRateUpperLimitLoopSubtract != "") {
+    //         var totalMoney = parseInt(firstEndAmount) + ((parseInt(firstGroupCount) * parseInt(firstEndAmountLoopAdd)) - parseInt(firstEndAmountLoopAdd));
+    //         var totalOdds = parseInt(firstGroupCount) * parseFloat(firstPeiRateUpperLimitLoopSubtract);
+    //         var leftOdds = parseFloat(peiRateUpperLimit)-totalOdds;
+    //         if(leftOdds<parseFloat(peiRateLowerLimit)){
+    //             leftOdds = peiRateLowerLimit;
+    //         }
+    //         $("input[name='firstEndAmount2']").val(totalMoney);
+    //         $("input[name='firstPeiRateLower']").val(leftOdds);
+    //         dl.firstItem = {
+    //             endAmount:firstEndAmount,
+    //             groupCount:firstGroupCount,
+    //             amountLoopAdd:firstEndAmountLoopAdd,
+    //             peiRateLoopSubstract:firstPeiRateUpperLimitLoopSubtract
+    //         }
+    //     }
+    // })
+    //
+    // $(".group2").blur(function () {
+    //     var secondGroupCount = $("input[name='secondGroupCount']").val();
+    //     var secondEndAmount = $("input[name='secondEndAmount']").val();
+    //     var secondEndAmountLoopAdd = $("input[name='secondEndAmountLoopAdd']").val();
+    //     var secondPeiRateUpperLimitLoopSubtract = $("input[name='secondPeiRateUpperLimitLoopSubtract']").val();
+    //     var totalMoney = $("input[name='firstEndAmount2']").val();
+    //     var totalOdds = $("input[name='firstPeiRateLower']").val();
+    //     var peiRateUpperLimit = $("#peiRateUpperLimit").val();
+    //     var peiRateLowerLimit = $("#peiRateLowerLimit").val();
+    //     if (totalMoney == null || totalMoney == "" || totalOdds == null || totalOdds == "") {
+    //         layerOne.msg("请先填写第一批分批条数数据");
+    //         return;
+    //     }
+    //     if (secondGroupCount != null && secondGroupCount != "" &&
+    //         secondEndAmount != null && secondEndAmount != "" &&
+    //         secondEndAmountLoopAdd != null && secondEndAmountLoopAdd != "" &&
+    //         secondPeiRateUpperLimitLoopSubtract != null && secondPeiRateUpperLimitLoopSubtract != "") {
+    //         if(parseFloat(secondEndAmount)<parseFloat(totalMoney)){
+    //             return
+    //         }
+    //         var totalMoney2 = parseFloat(secondEndAmount) + parseFloat(secondEndAmountLoopAdd) * (parseInt(secondGroupCount)-1);
+    //         var totalOdds2 = totalOdds - (secondGroupCount * secondPeiRateUpperLimitLoopSubtract);
+    //         if(totalOdds2<parseFloat(peiRateLowerLimit)){
+    //             totalOdds2 = peiRateLowerLimit;
+    //         }
+    //         $("input[name='secondEndAmount2']").val(totalMoney2);
+    //         $("input[name='secondPeiRateLower']").val(totalOdds2);
+    //         dl.secondItem = {
+    //             endAmount:secondEndAmount,
+    //             groupCount:secondGroupCount,
+    //             amountLoopAdd:secondEndAmountLoopAdd,
+    //             peiRateLoopSubstract:secondPeiRateUpperLimitLoopSubtract
+    //         }
+    //     }
+    // })
+    //
+    //
+    // $(".group3").blur(function () {
+    //     var thirdGroupCount = $("input[name='thirdGroupCount']").val();
+    //     var thirdEndAmount = $("input[name='thirdEndAmount']").val();
+    //     var thirdEndAmountLoopAdd = $("input[name='thirdEndAmountLoopAdd']").val();
+    //     var thirdPeiRateUpperLimitLoopSubtract = $("input[name='thirdPeiRateUpperLimitLoopSubtract']").val();
+    //     var totalMoney = $("input[name='secondEndAmount2']").val();
+    //     var totalOdds = $("input[name='secondPeiRateLower']").val();
+    //     var peiRateUpperLimit = $("#peiRateUpperLimit").val();
+    //     var peiRateLowerLimit = $("#peiRateLowerLimit").val();
+    //     if (totalMoney == null || totalMoney == "" || totalOdds == null || totalOdds == "") {
+    //         layerOne.msg("请先填写第二批分批条数数据");
+    //         return;
+    //     }
+    //     if (thirdGroupCount != null && thirdGroupCount != "" &&
+    //         thirdEndAmount != null && thirdEndAmount != "" &&
+    //         thirdEndAmountLoopAdd != null && thirdEndAmountLoopAdd != "" &&
+    //         thirdPeiRateUpperLimitLoopSubtract != null && thirdPeiRateUpperLimitLoopSubtract != "") {
+    //         if(parseFloat(thirdEndAmount)<parseFloat(totalMoney)){
+    //             return
+    //         }
+    //         var totalMoney2 = parseFloat(thirdEndAmount) + parseFloat(thirdEndAmountLoopAdd) * (parseInt(thirdGroupCount)-1);
+    //         var totalOdds2 = totalOdds - (thirdGroupCount * thirdPeiRateUpperLimitLoopSubtract);
+    //         if(totalOdds2<parseFloat(peiRateLowerLimit)){
+    //             totalOdds2 = peiRateLowerLimit;
+    //         }
+    //         $("input[name='thirdEndAmount2']").val(totalMoney2);
+    //         $("input[name='thirdPeiRateLower']").val(totalOdds2);
+    //         dl.thirdItem = {
+    //             endAmount:thirdEndAmount,
+    //             groupCount:thirdGroupCount,
+    //             amountLoopAdd:thirdEndAmountLoopAdd,
+    //             peiRateLoopSubstract:thirdPeiRateUpperLimitLoopSubtract
+    //         }
+    //     }
+    // })
+    //
+    //
+    // layui.use(['table'], function() {
+    //     var table = layui.table;
+    //     var layer = layui.layer;
+    //     var form = layui.form;
+    //     var $ = layui.jquery;
+    //
+    //     layer.msg("数据加载中...",{time:-1,shade:0.3,icon:16})
+    //
+    //     $.ajax({
+    //         url: HOST+"lotterySetting/getList?lmId=" + GetQueryString("lmId")
+    //         , type: "get"
+    //         , success: function (res) {
+    //             if (res.code == 0) {
+    //                 similarList = res.data;
+    //                 initSync(res.data);
+    //                 getTableData();
+    //             }else{
+    //                 layer.closeAll();
+    //                 layer.msg(res.msg);
+    //             }
+    //         }
+    //         , error: function () {
+    //             layer.closeAll();
+    //             console.log("ajax error");
+    //         }
+    //     });
+    //
+    //     form.render("checkbox");
+    //
+    //     function initSync(dataList){
+    //         if(dataList!=null && dataList.length>1){
+    //             var tdhtml = '';
+    //             dataList.forEach((item,idx)=>{
+    //                 tdhtml = tdhtml + '<span style="margin-right:10px"><input type="checkbox" id="sync-'+item.id+'" value="'+item.id+'" lay-skin="primary" lay-filter="syncOne" title="'+item.bettingRule+'" class="sync"/></span>'
+    //             })
+    //             $("#tbodySync").html('<tr><td>'+tdhtml+'</td></tr>');
+    //         }else{
+    //             $("#sync").hide();
+    //         }
+    //         form.render();
+    //     }
+    //
+    //     function getTableData(){
+    //         $.ajax({
+    //             url:HOST + 'fpPeiRate/listAll?lotterySettingId='+GetQueryString("id"),
+    //             type:'get',
+    //             success:function(res){
+    //                 layer.closeAll();
+    //                 if(res.code==0){
+    //
+    //                     dataList = res.data;
+    //                     for(var i=0,len=dataList.length;i<len;i++){
+    //                         dataList[i].initStartAmount = dataList[i].startAmount;
+    //                         dataList[i].initEndAmount=dataList[i].endAmount;
+    //                         dataList[i].initPeiRateUpperLimit=dataList[i].peiRateUpperLimit;
+    //                     }
+    //                     console.log("=======dataList",dataList)
+    //                     // dataList.forEach((item,idx)=>{
+    //                     //     item.initStartAmount = item.startAmount;
+    //                     //     item.initEndAmount=item.endAmount;
+    //                     //     item.initPeiRateUpperLimit=item.peiRateUpperLimit;
+    //                     // })
+    //                     renderTable()
+    //                 }else{
+    //                     layer.msg(res.msg);
+    //                 }
+    //
+    //             },
+    //             error:function (e) {
+    //                 layer.closeAll();
+    //             }
+    //         })
+    //     }
+    //
+    //     function renderTable(){
+    //         table.render({
+    //             elem: '#test'
+    //             , id: 'fpPeiRate-table-id'//重载需要
+    //             ,data:dataList
+    //             //, url: HOST + 'fpPeiRate/listAll'
+    //             //, where: {lotterySettingId: GetQueryString("id")}
+    //             , cols: [[
+    //                 {field:'',title: '<input type="checkbox" id="checkAll" lay-skin="primary" lay-filter="checkAll">',
+    //                     templet: function (d) {
+    //                         if (d.isOut==0) {
+    //                             return '<input type="checkbox" value="' + d.id + '" lay-skin="primary" lay-filter="checkOne" id="chk-' + d.id + '" class="emptycls">';
+    //                         }
+    //                         else if (d.isOut==1) {
+    //                             delList.push(d.id);
+    //                             return '<input type="checkbox" value="' + d.id + '" lay-skin="primary" lay-filter="checkOne" id="chk-' + d.id + '" checked class="emptycls">';
+    //                         }
+    //                     }
+    //                 }
+    //                 , {field: 'isOut',align : 'center',title: '是否放出',templet: function (d) {
+    //                         if (d.isOut==0) return "否";
+    //                         else if (d.isOut==1) return "<span style='color:red'>是</span>";
+    //                     }
+    //                 }
+    //                 , {field: 'startAmount',align : 'center', title: '开始金额',edit:'text'}
+    //                 , {field: 'endAmount', align: 'center', title: '截止金额',edit:'text'}
+    //                 , {field: 'peiRateUpperLimit', align: 'center', title: '赔率上限',edit:'text'}
+    //                 , {type: 'number', hide:true}
+    //             ]]
+    //             //, page: false
+    //             // ,page: {
+    //             //     curr: layui.data("t_page").index
+    //             // }
+    //             // ,done: (res, curr, count) => {
+    //             //     dataList = res.data;
+    //             //     dataList.forEach((item,idx)=>{
+    //             //         item.initStartAmount = item.startAmount;
+    //             //         item.initEndAmount=item.endAmount;
+    //             //         item.initPeiRateUpperLimit=item.peiRateUpperLimit;
+    //             //     })
+    //             //     layui.data("t_page", {
+    //             //         key: 'index',
+    //             //         value: curr
+    //             //     });
+    //             // }
+    //         });
+    //
+    //
+    //     }
+    //
+    //
+    //     //新增
+    //     $("#add").on("click","",function () {
+    //         var firstEndAmount2 = $("input[name='firstEndAmount2']").val();
+    //         if(firstEndAmount2==null || firstEndAmount2==''){
+    //             return;
+    //         }
+    //         var secondEndAmount = $("input[name='secondEndAmount']").val();
+    //         if(secondEndAmount!=null && secondEndAmount!=""){
+    //             if(parseFloat(secondEndAmount)<parseFloat(firstEndAmount2)){
+    //                 layerOne.msg("第2批次的截止金额:"+secondEndAmount+" 必须大于第1批次的最大截止金额:"+firstEndAmount2+"。");
+    //                 return;
+    //             }
+    //         }
+    //         var thirdEndAmount = $("input[name='thirdEndAmount']").val();
+    //         if(thirdEndAmount!=null && thirdEndAmount!=""){
+    //             var secondEndAmount2 = $("input[name='secondEndAmount2']").val();
+    //             if(parseFloat(thirdEndAmount)<parseFloat(secondEndAmount2)){
+    //                 layerOne.msg("第3批次的截止金额:"+thirdEndAmount+" 必须大于第2批次的最大截止金额:"+secondEndAmount2+"。");
+    //                 return;
+    //             }
+    //
+    //         }
+    //
+    //         layer.msg('正在处理中...', {
+    //             icon: 16
+    //             ,shade: 0.3
+    //             ,time:-1
+    //         });
+    //
+    //         dl.lotterySettingId = lsId;
+    //         dl.syncList = syncList;
+    //
+    //
+    //         $.ajax({
+    //             url:HOST+'fpPeiRate/save',
+    //             type:'post',
+    //             contentType:'application/json',
+    //             data:JSON.stringify(dl),
+    //             success:function (res) {
+    //                 layer.closeAll();
+    //                 clearSyncCheck();
+    //                 if(res.code==0) {
+    //                     $("#addbatchoddsarea").hide();
+    //                     getTableData();
+    //                 }
+    //             },
+    //             error:function (e) {
+    //                 layer.closeAll();
+    //             }
+    //         })
+    //         return false;
+    //     })
+    //
+    //
+    //     //删除
+    //     $('.fn-batchdelete').on("click","",function (d) {
+    //         if(delList.length<1){
+    //             layerOne.msg("未选择记录");
+    //             return;
+    //         }
+    //         layer.msg('正在处理中...', {
+    //             icon: 16
+    //             ,shade: 0.3
+    //             ,time:-1
+    //         });
+    //         $.ajax({
+    //             url:HOST+'fpPeiRate/del',
+    //             type:'post',
+    //             contentType:'application/json',
+    //             data:JSON.stringify({
+    //                 dlist:delList,
+    //                 lotterySettingId:lsId
+    //             }),
+    //             success:function (res) {
+    //                 layer.closeAll();
+    //                 if(res.code==0){
+    //                     $("#addbatchoddsarea").hide();
+    //                     table.reload('fpPeiRate-table-id',{
+    //                     })
+    //                     delList=[];
+    //                 }else{
+    //                     layer.msg(res.msg);
+    //                 }
+    //
+    //             },
+    //             error:function (e) {
+    //                 layer.closeAll();
+    //             }
+    //         })
+    //
+    //         return false;
+    //     })
+    //
+    //
+    //     //编辑
+    //     $('.btn-edit').on("click","",function (d) {
+    //         if(editError){
+    //             layer.msg("修改内容有误，请核查");
+    //             return false;
+    //         }
+    //         editList = dataList;
+    //         // if(editList.length<1){
+    //         //     layer.msg("无修改的内容");
+    //         //     return false;
+    //         // }
+    //         layer.msg('正在处理中...', {
+    //             icon: 16
+    //             ,shade: 0.3
+    //             ,time:-1
+    //         });
+    //         $.ajax({
+    //             url:HOST+"fpPeiRate/update",
+    //             type:'post',
+    //             contentType:'application/json',
+    //             data:JSON.stringify({
+    //                 editList:editList,
+    //                 syncList:syncList,
+    //                 dlist:delList
+    //             }),
+    //             success:function (res) {
+    //                 layer.closeAll();
+    //                 if(res.code==0){
+    //                     clearSyncCheck();
+    //                     table.reload('fpPeiRate-table-id',{
+    //                     })
+    //                 }else{
+    //                     layer.msg(res.msg);
+    //                 }
+    //
+    //             },
+    //             error:function (e) {
+    //                 layer.closeAll();
+    //             }
+    //         })
+    //
+    //         return false;
+    //     })
+    //
+    //
+    //
+    //     form.on('checkbox(checkAll)', function(data){//全选
+    //         var isChecked = data.elem.checked;
+    //         dataList.forEach((item,idex)=>{
+    //             $("#chk-"+item.id).prop("checked",isChecked);
+    //             if(isChecked){
+    //                 if(!delList.includes(item.id)){
+    //                     delList.push(item.id);
+    //                 }
+    //             }else{
+    //                 if(delList.includes(item.id)){
+    //                     delList.splice(delList.indexOf(item.id),1);
+    //                 }
+    //             }
+    //
+    //         })
+    //         form.render();
+    //         console.log("================checkAll",delList);
+    //     });
+    //
+    //
+    //     form.on('checkbox(checkOne)', function(data){
+    //         if(data.elem.checked){
+    //             if(delList.length<1){
+    //                 delList.push(data.value)
+    //             }else{
+    //                 if(!delList.includes(data.value)){
+    //                     delList.push(data.value)
+    //                 }
+    //             }
+    //         }else{
+    //             if(delList.includes(data.value)){
+    //                 delList.splice(delList.indexOf(data.value),1);
+    //             }
+    //         }
+    //
+    //         var chkList = $(".layui-table").find(".emptycls")
+    //         if(delList.length==chkList.length-1){
+    //             $("#checkAll").prop("checked",true);
+    //         }else{
+    //             $("#checkAll").prop("checked",false);
+    //         }
+    //         form.render();
+    //
+    //     });
+    //
+    //
+    //     form.on('checkbox(syncAll)', function(data){//全选
+    //         console.log("syncAll",JSON.stringify(data));
+    //         var isChecked = data.elem.checked;
+    //         console.log("isChecked",isChecked);
+    //         similarList.forEach((item,idex)=>{
+    //             $("#sync-"+item.id).prop("checked",isChecked);
+    //             if(isChecked){
+    //                 if(!syncList.includes(item.id)){
+    //                     syncList.push(item.id);
+    //                 }
+    //             }else{
+    //                 if(syncList.includes(item.id)){
+    //                     syncList.splice(syncList.indexOf(item.id),1);
+    //                 }
+    //             }
+    //
+    //         })
+    //         form.render();
+    //         console.log("================syncAll",syncList)
+    //         if(syncList.includes(lsId)){
+    //             syncList.splice(syncList.indexOf(lsId),1);
+    //         }
+    //     });
+    //
+    //
+    //     function clearSyncCheck(){
+    //         similarList.forEach((item,idex)=>{
+    //             $("#sync-"+item.id).prop("checked",false);
+    //
+    //         })
+    //         $("#syncAll").prop("checked",false);
+    //         form.render();
+    //     }
+    //
+    //
+    //     form.on('checkbox(syncOne)', function(data){
+    //         if(data.elem.checked){
+    //             if(syncList.length<1){
+    //                 syncList.push(data.value)
+    //             }else{
+    //                 if(!syncList.includes(data.value)){
+    //                     syncList.push(data.value)
+    //                 }
+    //             }
+    //         }else{
+    //             if(syncList.includes(data.value)){
+    //                 syncList.splice(syncList.indexOf(data.value),1);
+    //             }
+    //         }
+    //
+    //         var chkList = $(".sync")
+    //         if(syncList.length==chkList.length){
+    //             $("#syncAll").prop("checked",true);
+    //         }else{
+    //             $("#syncAll").prop("checked",false);
+    //         }
+    //         form.render();
+    //         console.log("================syncAll",syncList)
+    //         if(syncList.includes(lsId)){
+    //             syncList.splice(syncList.indexOf(lsId),1);
+    //         }
+    //
+    //     });
+    //
+    //
+    //     function __getDataBy(did){
+    //         for(var i=0,len=dataList.length;i<len;i++){
+    //             if(dataList[i].id==did){
+    //                 return dataList[i];
+    //             }
+    //         }
+    //         return null;
+    //     }
+    //
+    //     function __getPreDataBy(st){
+    //         for(var i=0,len=dataList.length;i<len;i++){
+    //             if(dataList[i].initEndAmount==st) {
+    //                 return dataList[i];
+    //             }
+    //         }
+    //         return null;
+    //     }
+    //
+    //     function __getNextDataBy(et){
+    //         for(var i=0,len=dataList.length;i<len;i++){
+    //             if(dataList[i].initStartAmount==et){
+    //                 return dataList[i];
+    //             }
+    //         }
+    //     }
+    //
+    //     function __syncDataList(currData,preData,nextData){
+    //         for(var i=0,len=dataList.length;i<len;i++){
+    //             if(currData!=null && dataList[i].id==currData.id){
+    //                 dataList[i] = currData;
+    //             }
+    //             if(preData!=null && dataList[i].id==preData.id){
+    //                 dataList[i] = preData;
+    //             }
+    //             if(nextData!=null && dataList[i].id==nextData.id){
+    //                 dataList[i] = nextData;
+    //             }
+    //         }
+    //         console.log("======syncDataList",dataList);
+    //         renderTable();
+    //     }
+    //
+    //
+    //     table.on('edit(fpPeiRate)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+    //         console.log(obj);
+    //         var oriData = __getDataBy(obj.data.id);
+    //         var preData = __getPreDataBy(oriData.initStartAmount)
+    //         var nextData = __getNextDataBy(oriData.initEndAmount);
+    //         if(obj.field=='startAmount'){
+    //             if(preData!=null){
+    //
+    //                 if(parseInt(obj.value)<preData.endAmount){
+    //                     editError = true;
+    //                     layer.msg("开始金额不能小于："+preData.endAmount);
+    //                     return;
+    //                 }
+    //                 if(parseInt(obj.value)>oriData.initEndAmount){
+    //                     editError = true;
+    //                     layer.msg("开始金额不能大于："+oriData.initEndAmount);
+    //                     return;
+    //                 }
+    //                 preData.endAmount = obj.value;
+    //                 preData.initEndAmount = preData.endAmount;
+    //                 editError = false;
+    //             }
+    //         }
+    //
+    //             if(obj.field=='endAmount'){
+    //                 if(nextData!=null){
+    //                     if(parseInt(obj.value)<oriData.initStartAmount){
+    //                         editError = true;
+    //                         layer.msg("截止金额不能小于："+oriData.initStartAmount);
+    //                         return;
+    //                     }
+    //                     if(parseInt(obj.value)>nextData.initEndAmount){
+    //                         editError = true;
+    //                         layer.msg("截止金额不能大于："+nextData.initEndAmount);
+    //                         return;
+    //                     }
+    //                     nextData.startAmount = obj.value;
+    //                     nextData.initStartAmount = obj.value;
+    //                     editError = false;
+    //                 }
+    //
+    //          }
+    //         __syncDataList(oriData,preData,nextData);
+    //
+    //     });
+    //
+    //
+    //
+    //
+    //
+    // });
+
+</script>
+</body>
+</html>

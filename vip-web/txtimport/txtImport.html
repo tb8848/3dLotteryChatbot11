@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>txt文件导入</title>
+<!--    <link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/adminseccode.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>-->
+    <!--<script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>-->
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <style type="text/css">
+        .moneycode{
+            background-color:#bbb;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div class="module">
+    <div name="module" id="txtImport" class="m5 mt5">
+        <div class="hide" id="noDataRow">
+            <table class="t-1 f16">
+                <thead>
+                    <tr class="title-bar"> <td></td> </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="height:300px">
+                            <div class="f16 tc fb" id="openStatusDesc" ><!--  已封盘  --></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="hide" id="showDataRow">
+            <form enctype="multipart/form-data" target="ifr_upload" action="/Member/UpLoadBetNos" method="post" id="form1" novalidate="novalidate">
+                <table class="t-1 f14">
+                    <thead> <tr class="title-bar"> <td colspan="3" class="tc" i18n="txtimport.title">txt导入</td> </tr> </thead>
+                    <tbody>
+                    <tr>
+                        <td width="10%" i18n="txtimport.filepath"> 文件路径 </td>
+                        <td width="30%">
+                            <input type="button" i18n="txtimport.choosefile" value="选择文件" id="chooseBtn" onclick="chooseFile">
+                            <span id="fileName"></span>
+                            <input type="file" name="file" accept=".txt" required="true" aria-required="true" id="fileinput" class="hide">
+                        </td>
+                        <td width="50%"> <input type="button" value="提交" class="btn-common" id="fileinput_but" i18n="txtimport.submit"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <strong i18n="txtimport.formatA">格式A：</strong>
+                            <span>类别|号码</span>，<span>类别|号码</span>，<span>类别|号码</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong >格式B：</strong>
+                            <span>类别|号码=金额</span>，<span>类别|号码=金额</span>，<span>类别|号码=金额</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="red" i18n="txtimport.memo1">(逗号也可以用空格代表)</span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <strong>格式C：</strong>
+                            <span>拖拉机</span>，<span>三同号</span>，<span>大</span>，<span>小</span>，<span>奇</span>，<span>偶</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong >格式D：</strong>
+                            <span>拖拉机=金额</span>，<span>三同号=金额</span>，<span>大=金额</span>，<span>小=金额</span>，<span>奇=金额</span>，<span>偶=金额</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="red" i18n="txtimport.memo1">(逗号也可以用空格代表)</span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <strong>例如：</strong>
+                            <span>ZX|123(表示直选号码123)</span>，
+                            <span>ZX|0(表示直选和值0)</span>，
+                            <span>TX|123(表示通选123)</span>，
+                            <span>HS|0(表示和数0)</span>，
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <strong>类别简称：</strong>
+                            <span>直选(ZX)</span>，<span>通选(TX)</span>，<span>组三(Z3)</span>，<span>组六(Z6)</span>，<span>和数(HS)</span>，
+                            <span>包选三(B3)</span>，<span>包选六(B6)</span>，<span>1D(1D)</span>，<span>2D(2D)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" i18n="txtimport.buyMemo"> 说明：由于各会员使用的（txt文件）的格式不一样，如果不符合网站上要求的格式，有可能导入到网站（没有下注之前）的号码内容和自己（txt文件）里号码内容不一致，操作时请认真检查，如果出现内容不一致，请不要下注。 </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+
+            <form id="form2" novalidate="novalidate">
+                <input type="hidden" name="bets" id="bets">
+                <input type="hidden" name="way" value="103">
+                <input type="hidden" name="guid" id="guid" value="">
+                <input type="hidden" name="is_package" id="is_package" value="0">
+                <div class="mt10">
+                    <table class="t-1 tc f14">
+                        <thead> <tr class="title-bar"> <td colspan="10" i18n="txtimport.filedetail">文件明细</td> </tr> </thead>
+                        <tbody id="tbody">
+<!--                            <tr class="bg2">-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                                <td width="10%">号码</td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td dict_no_type_id="11" bet_no="3333">3333</td>-->
+<!--                                <td dict_no_type_id="11" bet_no="4444">4444</td>-->
+<!--                                <td dict_no_type_id="11" bet_no="5555">5555</td>-->
+<!--                            </tr>-->
+<!--                            <tr class="fb bg2">-->
+<!--                                <td>合计笔数</td>-->
+<!--                                <td>3</td>-->
+<!--                                <td>合计金额</td>-->
+<!--                                <td class="keyup-total-money">0</td>-->
+<!--                                <td colspan="6"></td>-->
+<!--                            </tr>-->
+                        </tbody>
+                        <tbody id="btnContainer" class="hide">
+                            <tr> <td colspan="10">
+                                <input type="hidden" name="TotalCount" value="3">
+                                <input type="hidden" name="TotalBetMoney" value="0">
+                                <span class="f21" id="bet_money_lbl" i18n="txtimport.buyMoney">金额</span>
+                                <input type="text" name="bet_money" id="bet_money" class="text-large w70 box-radius" style="width: 150px" maxlength="10" required="true" positive="true">
+                                <input type="button" id="bet_submit" value="下注" i18n="txtimport.toBuy" _name="下注" is-package="0" class="btn-common btn-large bet-submit f14">&nbsp;&nbsp;&nbsp;&nbsp;
+
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<!--    <script src="../js/token.js"></script>-->
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/web_bluetooth_print.js"></script>
+
+
+<script>
+        var $ = layui.$;
+
+        function upOpenStatus(msg) {
+            var drawOpenStatus = msg.openStatus;
+            if(drawOpenStatus==1){
+                if(msg.quickOrTxtCloseFlag==0){//快选/导入栏目禁止下注标识
+                    $("#openStatusDesc").html('<span i18n="txtimport.stopBuy">'+$i18np.prop("txtimport.stopBuy")+"</span>");
+                    $("#showDataRow").addClass();
+                    $("#noDataRow").removeClass();
+                }else{
+                    $("#noDataRow").addClass('hide');
+                    $("#showDataRow").removeClass('hide');
+                }
+            }else{
+                if(drawOpenStatus==3){
+                    $("#openStatusDesc").html('<span i18n="txtimport.drawOpening">'+$i18np.prop("txtimport.drawOpening")+"</span>");
+                }else if(drawOpenStatus==2){
+                    $("#openStatusDesc").html('<span i18n="txtimport.drawUnopen">'+$i18np.prop("txtimport.drawUnopen")+"</span>");
+                }else if(drawOpenStatus==0){
+                    $("#openStatusDesc").html('<span i18n="txtimport.drawClose">'+$i18np.prop("txtimport.drawClose")+"</span>");
+                }
+                $("#showDataRow").addClass('hide');
+                $("#noDataRow").removeClass('hide');
+            }
+        }
+
+        function getuuid(){
+            $.ajax({
+                url:HOST+'getUUid',
+                headers:{
+                    "token":layui.data('local_store').token,
+                    "lang":layui.data('langTab').langType
+                },
+                type:'get',
+                success:function(res){
+                    if(res.code==0){
+                        xzuuid = res.data.saveXZ;
+                    }
+                },
+                error:function (e) {
+
+                }
+            });
+        }
+
+
+        function getDrawInfo(){
+            $.ajax({
+                url:HOST+'code/drawInfo',
+                headers:{
+                    "token":layui.data('local_store').token
+                },
+                type:'get',
+                success:function(res){
+                    if(res.code==0){
+                        upOpenStatus(res.data);
+                    }
+                }
+            });
+        }
+    var moduleName = "txtImport";
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    var $i18np = null;
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use(['i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            initPageData();
+            getDrawInfo();
+            initUpload();
+            window.parent.frameLoad();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+    }
+
+    var buyCodesList = [];
+    var moneyGivenList=[]; //已指定金额的列表
+    var noMoneyList=[]; //未指定金额的列表
+    var needSetMoney = false;
+    var hasXian = false;
+    var totalMoney = 0;
+    var totalCount = 0;
+    var xzuuid = "";
+
+    window.onload=function () {
+        getuuid();
+    }
+
+    function chooseFile() {
+        $("#fileinput").trigger("click","");
+        //upload.choose();
+    }
+
+    $("#chooseBtn").on("click","",function(){
+        $("#fileinput").click();
+    });
+
+    function initPageData(){
+        getDrawInfo();
+        initUpload();
+    }
+    function getDrawInfo(){
+        $.ajax({
+            url:HOST+'code/drawInfo',
+            headers:{
+                "token":layui.data('local_store').token,
+                "lang":layui.data('langTab').langType
+            },
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    upOpenStatus(res.data);
+                }
+            }
+        });
+    }
+
+    //初始化上传组件
+
+    function initUpload(){
+        layui.use(['upload','element'], function () {
+            var element = layui.element;
+            var upload = layui.upload;
+            //单文件上传
+            upload.render({
+                elem: '#fileinput',
+                url: HOST+"import/uploadTxt",
+                //accept: 'file',
+                multiple: false,
+                auto: false,
+                exts:'txt',
+                headers:{
+                    "token":layui.data('local_store').token,
+                    "lang":layui.data('langTab').langType,
+                    "reqFrom":"pc"
+                },
+                size: 50 * 1024,//单位kb
+                bindAction: '#fileinput_but',
+                before:function(obj){
+                    layer.msg($i18np.prop("txtimport.chulizhong"), {icon: 16,shade: 0.3,time:-1});
+                },
+                choose: function (obj) {
+                    obj.preview(function (index, file, result) {
+                        //$("#fileDiv").val(file.name);
+                        $("#fileName").html(file.name)
+                    });
+                },
+                done: function (res, index, upload) {
+                    layer.closeAll();
+                    $("#tbody").html("");
+                    moneyGivenList = [];
+                    noMoneyList=[];
+                    if (res.code == 0) { //上传成功
+                        layer.msg($i18np.prop("txtimport.uploadSuccess"));
+                        buyCodesList = res.data.dataList;
+                        var hejiCount = 0;
+                        buyCodesList.forEach((cc,idx)=>{
+                            hejiCount = accAdd(hejiCount,cc.buyAmount);
+                        })
+                        totalCount = hejiCount;
+                        totalMoney = res.data.totalMoney;
+                        initData();
+                        $("#btnContainer").show();
+                    }
+                    else {
+                        $("#btnContainer").hide();
+                        layer.alert(res.msg,{title:$i18np.prop("txtimport.alertTitle"),btn:[$i18np.prop("txtimport.confirm")]});
+                    }
+                },
+                error: function (index, upload) {
+                    layer.closeAll();
+                    layer.msg($i18np.prop("req.error"));
+                }
+            });
+
+
+                function initData(){
+                    hasXian = false;
+                    if(buyCodesList.length>0){
+                        buyCodesList.forEach((item,idx)=>{
+                            if(item.isXian==1){
+                                hasXian = true;
+                            }
+                            if(item.buyMoney>0){
+                               moneyGivenList.push(item);
+                           }else{
+                               noMoneyList.push(item);
+                           }
+                        });
+                        var html1 = initHtmlForMoneyGiveList();
+                        var html2 = initHtmlForNoMoneyGiveList();
+                        var sumTR ='<tr class="fb bg2">' +
+                            '<td i18n="txtimport.hejibishu">'+$i18np.prop("txtimport.hejibishu")+'</td>' +
+                            '<td>'+totalCount+'</td>' +
+                            '<td i18n="txtimport.hejimoney">'+$i18np.prop("txtimport.hejimoney")+'</td>' +
+                            '<td class="keyup-total-money">'+totalMoney+'</td>' +
+                            '<td colspan="6"></td>' +
+                            '</tr>';
+                        $("#tbody").html(html1+html2+sumTR);
+                        $("#bet_submit").show();
+                        $("#bet_submit_package").show();
+                        $("#bet_his_package").show();
+                        if(noMoneyList.length>0){ //需要输入金额后才能下注
+                            $("#bet_money").show();
+                            $("#bet_money_lbl").show();
+                            needSetMoney = true;
+                        }else{ //不需要输入金额，直接下注
+                            $("#bet_money").hide();
+                            needSetMoney = false;
+                            $("#bet_money_lbl").hide();
+                        }
+                        // $("#import_tsm").show();
+                         $("#import_t").show();
+                        //
+                        if(hasXian){
+                            $("#bet_his_package").prop("disabled",true);
+                            $("#bet_submit_package").prop("disabled",true);
+                            $("#tips").show();
+                        }else{
+                            $("#bet_his_package").prop("disabled",false);
+                            $("#bet_submit_package").prop("disabled",false);
+                            $("#tips").hide();
+                        }
+                    }
+                }
+
+                function initHtmlForMoneyGiveList(){
+                    var html = "";
+                    if(moneyGivenList.length>0){
+                        var styles='';
+                        var dataLen = moneyGivenList.length;
+                        var trHeader = '';
+                        var trData = "";
+                        for(var i=1,len=dataLen;i<=len;i++){
+                            var idx = i-1;
+                            var item  =  moneyGivenList[idx];
+                            var code = item.buyCode;
+                            var codeFullName = getCodePrintName(item.lotteryMethodId,"|",code)
+                            var amount = item.buyAmount;
+                            codeFullName = codeFullName +"<span style='color:red;font-size: 12px'>&nbsp;["+amount+"注]</span>"
+
+                            trHeader = trHeader+"<td width='10%' style='"+styles+"' i18n='txtimport.buyCode'>"+$i18np.prop("txtimport.buyCode")+"</td><td style='"+styles+"' i18n='txtimport.buyMoney'>"+$i18np.prop("txtimport.buyMoney")+"</td>";
+                            trData = trData + "<td style='"+styles+"' width='10%'>"+codeFullName+"</td><td style='"+styles+"' width='10%'>"+item.buyMoney+"</td>"
+                            var modValue = parseInt(i%5);
+                            if(i>0 && modValue==0){
+                                trHeader = '<tr class="bg2">'+trHeader+"</tr>";
+                                trData = '<tr>'+trData+"</tr>";
+                                html = html +trHeader + trData;
+                                trHeader = '';
+                                trData = "";
+                            }
+                        }
+                        // trHeader = '<tr class="bg2">'+trHeader+"</tr>";
+                        // trData = '<tr>'+trData+"</tr>";
+                        // html = html +trHeader + trData;
+                        // trHeader = '';
+                        // trData = "";
+                        var leftLen = 5-parseInt(dataLen%5);
+                        if(leftLen>0 && leftLen<5){
+                            for(var j=0;j<leftLen;j++){
+                                trHeader = trHeader+"<td width='10%' style='"+styles+"'></td><td width='10%' style='"+styles+"'></td>";
+                                trData = trData + "<td style='"+styles+"' width='10%'></td><td style='"+styles+"' width='10%'></td>"
+                            }
+                            trHeader = '<tr class="bg2">'+trHeader+"</tr>";
+                            trData = '<tr>'+trData+"</tr>";
+                            html = html +trHeader + trData;
+                        }
+                    }
+                    return html;
+                }
+
+
+            function initHtmlForNoMoneyGiveList(){
+                var html = '';
+                if(noMoneyList.length>0){
+                    var dataLen = noMoneyList.length;
+                    var trHeader = '';
+                    var trData = "";
+                    for(var i=1,len=dataLen;i<=len;i++){
+                        var idx = i-1;
+                        var item  =  noMoneyList[idx];
+                        var code = item.buyCode;
+                        var codeFullName = getCodePrintName(item.lotteryMethodId,"|",code)
+                        var amount = item.buyAmount;
+                        codeFullName = codeFullName +"<span style='color:red;font-size: 12px'>&nbsp;["+amount+"注]</span>"
+
+                        trHeader = trHeader+"<td i18n='txtimport.buyCode' width='10%'>"+$i18np.prop("txtimport.buyCode")+"</td>";
+                        trData = trData + "<td width='10%'>"+codeFullName+"</td>"
+                        var modValue = parseInt(i%10);
+                        if(i>0 && modValue==0){
+                            trHeader = '<tr class="bg2">' + trHeader+"</tr>";
+                            trData = "<tr>"+ trData+"</tr>";
+                            html = html +trHeader + trData;
+                            trHeader = '';
+                            trData = "";
+                        }
+                    }
+                    var leftLen = 10-parseInt(dataLen%10);
+                    if(leftLen>0 && leftLen<10){
+                        for(var j=0;j<leftLen;j++){
+                            trHeader = trHeader+"<td i18n='txtimport.buyCode' width='10%'></td>";
+                            trData = trData + "<td width='10%'></td>"
+                        }
+                        trHeader = '<tr class="bg2">' + trHeader+"</tr>";
+                        trData = "<tr>"+ trData+"</tr>";
+                        html = html +trHeader + trData;
+                    }
+                }
+                return html;
+            }
+        });
+    }
+
+    //下注
+    $("#bet_submit").on("click","",function (e) {
+        if(noMoneyList.length>0){
+            var money = $("#bet_money").val();
+            if(money==''){
+                layer.msg($i18np.prop("txtimport.noMoneyInput"));
+                return;
+            }
+            noMoneyList.forEach((item,idx)=>{
+                item.buyMoney = money;
+            })
+        }
+        subBuyCodes();
+    })
+
+    function subBuyCodes(){
+
+        layer.msg("正在处理", {
+            icon: 16,shade: 0.3,time:-1
+        });
+
+        var bindCodeList = [];
+        noMoneyList.forEach((item,idx)=>{
+            bindCodeList.push(item);
+        });
+        moneyGivenList.forEach((item,idx)=>{
+            bindCodeList.push(item);
+        });
+        let noHsList = [];
+        bindCodeList.forEach((cc)=>{
+            var lmId = cc.lotteryMethodId;
+            if(lmId=="5"){
+                noHsList.push({
+                    uuid:guid(),
+                    huizongName:"和数单式",
+                    hzList:[cc.buyCode],
+                    value:cc.buyCode,
+                    buyAmount:cc.buyAmount,
+                    lmId:cc.lotteryMethodId,
+                    lsTypeId:cc.lsType,
+                    buyMoney:cc.buyMoney
+                })
+            }else if(lmId=="9" || lmId=="10" || lmId=="11" || lmId=="12"){
+                var hzname = (lmId=='9'?'大小单式':lmId=="10"?'奇偶单式':lmId=="11"?'猜三同单式':lmId=="12"?'拖拉机单式':'');
+                noHsList.push({
+                    uuid:guid(),
+                    huizongName:hzname,
+                    value:cc.buyCode,
+                    buyCodes:cc.buyCode,
+                    buyAmount:cc.buyAmount,
+                    lmId:cc.lotteryMethodId,
+                    lsTypeId:cc.lsType,
+                    buyMoney:cc.buyMoney
+                })
+            }else{
+                var record = null;
+                var hzname = "";
+                var lsType = cc.lsType
+                var buyCodes = cc.buyCode;
+                var arr = buyCodes.split("");
+                if(lmId=="1" && lsType==1){
+                    hzname = "直选单式";
+                    record = {
+                        huizongName:hzname,
+                        value:arr.join(","),
+                        bai:arr[0],
+                        shi:arr[1],
+                        ge:arr[2],
+                        buyCodes:buyCodes,
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="1" && lsType==2){
+                    hzname = "直选和值"
+                    record = {
+                        huizongName:hzname,
+                        hzList:[buyCodes],
+                        buyAmount:cc.buyAmount,
+                        value:buyCodes,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="2"){
+                    hzname = "通选单式"
+                    record={
+                        huizongName:hzname,
+                        value:arr.join(","),
+                        buyCodes:buyCodes,
+                        bai:arr[0],
+                        shi:arr[1],
+                        ge:arr[2],
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="3" && lsType==3){
+                    hzname = "组三和值"
+                    record ={
+                        huizongName:hzname,
+                        hzList:[buyCodes],
+                        value:buyCodes,
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="3"){
+                    hzname = "组三单式"
+                    record={
+                        huizongName:hzname,
+                        value:arr.join(","),
+                        bai:arr[0],
+                        shi:arr[1],
+                        ge:arr[2],
+                        buyCodes:buyCodes,
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="4" && lsType==3){
+                    hzname = "组六和值"
+                    record ={
+                        huizongName:hzname,
+                        hzList:[buyCodes],
+                        value:buyCodes,
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="4"){
+                    hzname = "组六单式"
+                    record = {
+                        huizongName:hzname,
+                        value:arr.join(","),
+                        bai:arr[0],
+                        shi:arr[1],
+                        ge:arr[2],
+                        buyCodes:buyCodes,
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="6" && lsType==1){
+                    hzname = "1D单式"
+                    var bai = arr[0]=="X"?'-':arr[0];
+                    var shi = arr[1]=="X"?'-':arr[1];
+                    var ge = arr[2]=="X"?'-':arr[2];
+                    record = {
+                        huizongName: hzname,
+                        value: bai + ","+shi+","+ge,
+                        bai:bai,
+                        shi:shi,
+                        ge:ge,
+                        buyCode: "",
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="6" && lsType==2){
+                    hzname = "猜1D单式"
+                    record ={
+                        huizongName: hzname,
+                        value: buyCodes,
+                        buyCodes: buyCodes,
+                        buyAmount:cc.buyAmount,
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }else if(lmId=="7"){
+                    if(lsType==1){
+                        hzname = "2D单式"
+                        var bai = arr[0]=="X"?'-':arr[0];
+                        var shi = arr[1]=="X"?'-':arr[1];
+                        var ge = arr[2]=="X"?'-':arr[2];
+                        record={
+                            huizongName: hzname,
+                            value: bai + ","+shi+","+ge,
+                            bai:bai,
+                            shi:shi,
+                            ge:ge,
+                            buyCodes:'',
+                            buyAmount:cc.buyAmount,
+                            lmId:cc.lotteryMethodId,
+                            lsTypeId:cc.lsType,
+                            buyMoney:cc.buyMoney
+                        }
+                    }else if(lsType==2){
+                        hzname = "猜2D单式"
+                        record={
+                            huizongName:hzname,
+                            value:buyCodes.replace("X","-"),
+                            buyCodes:buyCodes.replace("X","-"),
+                            buyAmount:cc.buyAmount,
+                            lmId:cc.lotteryMethodId,
+                            lsTypeId:cc.lsType,
+                            buyMoney:cc.buyMoney
+                        }
+                    }
+
+                } else if(lmId=="8"){
+                    if(lsType==1){
+                        hzname = "包选三单式"
+                    }else if(lsType==2){
+                        hzname = "包选六单式"
+                    }
+                    record = {
+                        huizongName:hzname,
+                        value:arr.join(","),
+                        buyAmount:cc.buyAmount,
+                        bai:arr[0],
+                        shi:arr[1],
+                        ge:arr[2],
+                        lmId:cc.lotteryMethodId,
+                        lsTypeId:cc.lsType,
+                        buyMoney:cc.buyMoney
+                    }
+                }
+                noHsList.push(record)
+            }
+        })
+
+        $.ajax({
+            url:HOST+"draw/pc/buy3d",
+            //url:HOST+"import/batchBuy?xzuuid="+xzuuid,
+            type:'post',
+            contentType:'application/json',
+            headers:{
+                "token":layui.data('local_store').token,
+                "reqFrom":"pc",
+                "lang":layui.data('langTab').langType
+            },
+            data:JSON.stringify(noHsList),
+            success:function (res) {
+                layer.closeAll();
+                if(res.code==0){
+                    layer.msg("下注成功");
+                    window.parent.toPage('tx');
+                    window.parent.getCredit();
+                    window.parent.reloadPrintTable()
+                }else{
+                    getuuid();
+                    layer.msg(res.msg)
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+            }
+        })
+
+        return false;
+    }
+
+    $("#bet_money").on("keyup","",function (e) {//金额输入框
+        if((e.key>='0' && e.key<='9') || e.key=="."){
+
+            }else{
+                this.value = this.value.substr(0,this.value.length-1);
+            }
+            if(this.value.startsWith(".")){
+                this.value = this.value.substr(1,this.value.length-1);
+            }
+            var v = this.value;
+            if(noMoneyList.length>0 && v!=""){
+                $(".keyup-total-money").html(noMoneyList.length * parseFloat(v))
+            }else{
+                $(".keyup-total-money").html("0")
+            }
+            return false;
+        })
+
+</script>
+
+
+</body>
+
+</html>

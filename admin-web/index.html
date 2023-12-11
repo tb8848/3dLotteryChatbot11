@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>后台登录</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!--    <link rel="stylesheet" href="js/layui/css/layui.css">-->
+<!--    <link rel="stylesheet" href="css/login.css">-->
+
+    <link href="css/style-SevenStar.css?v=2" type="text/css" rel="stylesheet">
+    <link href="css/login-A.css?v=2" type="text/css" rel="stylesheet">
+    <link href="css/A-P5.css?v=2" type="text/css" rel="stylesheet">
+</head>
+<style>
+	.layui-anim-upbit{
+		color:black !important;
+	}
+</style>
+
+
+<body style="overflow:auto;">
+<div id="login" class="login">
+<!--    <div style="padding-left: 10px;">-->
+<!--        <label style="font-size: 18px;color:white;font-weight: bolder" i18n="index.switch.lang">选择语言:</label>-->
+<!--        <select id="langSelect">-->
+<!--            <option value="zh">简体中文</option>-->
+            <!--<option value="en">English</option>-->
+<!--            <option value="th">ภาษาไทย</option>-->
+<!--        </select>-->
+<!--    </div>-->
+    <div class="tc logo-con" style="height:76px;"></div>
+
+    <form autocomplete="off">
+        <div class="bd">
+            <div class="hdd"></div>
+            <p class="input-p"><input id="Account" name="Account" type="text" value="" inputPlaceholder="index.username.placeholder" placeholder="请输入用户名"
+                                      class="input account" autocomplete="off" maxlength="16" style="width:250px"></p>
+            <p class="input-p"><input id="Password" name="Password" type="password" value="" inputPlaceholder="index.password.placeholder" placeholder="请输入密码"
+                                      style="width:250px" class="input password" onpaste="return false" autocomplete="new-password" maxlength="16"></p>
+            <p class="input-p hide"><input id="CaptchaCode" name="CaptchaCode" type="text" value=""
+                                           placeholder="请输入验证码" class="input captchacode" maxlength="10"> <img src="" id="imgCaptcha" title="刷新验证码"></p>
+            <p class="input-p"><button type="button" i18n="index.login" class="btn-login" id="btn-submit">登 录</button></p>
+        </div>
+
+        <!--        <div id="tip_con" class="mask" style="display:none"></div>-->
+        <!--        <div id="login_tip" class="login-tip g-dialog g-alert">-->
+        <!--            <div class="dialog-hd">-->
+        <!--                <div class="title fl">提示</div>-->
+        <!--                <div class="fr"></div>-->
+        <!--            </div>-->
+        <!--            <div class="dialog-bd">-->
+        <!--                <div id="tip_txt"></div>-->
+        <!--            </div>-->
+        <!--            <div class="dialog-ft">-->
+        <!--                <span id="tip_btn" class="btn">确定</span>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <input type="hidden" id="hd_LoginErrorCount">-->
+    </form>
+</div>
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/layui/layui.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script>
+
+    var $ = layui.$;
+    var layer = layui.layer;
+
+    var moduleName = "index";
+    // var defaultLang = "zh";
+    var defaultLang = layui.data('langTab').langType;
+    if (defaultLang==null || defaultLang=="" || defaultLang==undefined){
+        defaultLang = "zh";
+        $("#langSelect").val(defaultLang);
+    }else{
+        $("#langSelect").val(defaultLang);
+    }
+
+    var i18np = null;
+    layui.config(
+        {base: 'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            //var $ = layui.$;
+            i18np = layui.i18np;
+            i18np.loadProperties(moduleName);
+
+            var err = GetQueryString("err");
+            if(err=="2"){
+                layer.alert(i18np.prop('index.msg.sessionExpired'),{
+                    title: i18np.prop('index.alter.title'),
+                    btn: [i18np.prop('index.alter.btn.ok')]
+                });
+            }else if(err=="1"){
+                layer.alert(i18np.prop('index.msg.accountLoggedIn'),{
+                    title: i18np.prop('index.alter.title'),
+                    btn: [i18np.prop('index.alter.btn.ok')]
+                });
+            }
+        })
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"js/"
+    })
+
+    $("#langSelect").on("change","",function (e){//选择语言
+        defaultLang = this.value;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        //layui.data('lang',{key:'lang',value:defaultLang});
+    })
+
+    // var err = GetQueryString("err");
+    // if(err=="2"){
+    //     layer.alert(i18np.prop('index.msg.sessionExpired'),{
+    //         title: i18np.prop('index.alter.title'),
+    //         btn: [i18np.prop('index.alter.btn.ok')]
+    //     });
+    // }else if(err=="1"){
+    //     layer.alert(i18np.prop('index.msg.accountLoggedIn'),{
+    //         title: i18np.prop('index.alter.title'),
+    //         btn: [i18np.prop('index.alter.btn.ok')]
+    //     });
+    // }
+
+    //回车登录
+    $("body").on("keydown", function(e) {
+        if (e.keyCode === 13) {
+            $("#btn-submit").click();
+        }
+    });
+
+    $("#btn-submit").click(function (e) {
+        e.preventDefault();
+        var _this;
+        var username = $("#Account").val();
+        var password = $("#Password").val();
+        if(username==null || username==''){
+            layer.msg(i18np.prop("index.msg.usernameNotNull"));
+            $("#Account").focus();
+            return false;
+        }
+        if(password==null || password==''){
+            layer.msg(i18np.prop("index.msg.passwordNotNull"));
+            $("#Password").focus();
+            return false;
+        }
+        layer.msg(i18np.prop("index.msg.SigningIn"),{time:-1,shade:0.3,icon:16})
+        $.ajax({
+            url: HOST+'admin/adminLogin?username='+username+'&password='+password,
+            type: 'get',
+            /*data: {
+                username:username,
+                password:password,
+            },*/
+            success:function (data) {
+                layer.closeAll();
+                if(data.code==200){
+                    localStorage.setItem("pwdUpdate",data.data.user.initPwdUpdate);
+                    localStorage.setItem("uname",data.data.user.username);
+                    localStorage.setItem("userRoleName",data.data.userRoleName);
+                    localStorage.setItem("userRoleNameId",data.data.userRoleNameId);
+                    localStorage.setItem("id",data.data.id);
+                    localStorage.setItem("token",data.data.token);
+                    layui.data('local_store',{key:'token',value:data.data.token});
+                    localStorage.setItem("notice",1);
+                    if (data.data.user.gaFlag != 0 && data.data.loginRole != 2){
+                        localStorage.setItem("loginRole",data.data.loginRole);
+                        window.location.href="googleAuthenticator.html?gaFlag="+data.data.user.gaFlag;
+                    }else{
+                        layer.msg(i18np.prop('index.msg.loginSuccess'),{
+                                time:2000,
+                                end:function () {
+                                    // window.location.href="main.html";
+                                    window.location.href="agreement.html?loginRole="+data.data.loginRole + "&initPwd=" + data.data.initPwd;
+                                }
+                            }
+                        );
+                    }
+                }else{
+                    layer.msg(data.msg,{time:2000});
+                }
+            },
+            erorr:function(){
+                layer.closeAll();
+                // layer.msg("网络异常");
+                layer.msg(i18np.prop("index.ajax.error"));
+            }
+        });
+        return false;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>出货导入</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../css/layui-redef.css"/>
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+</head>
+<body>
+<div id="main" class="main" style="top: 0px;">
+    <div class="module">
+        <div name="module" id="handicap_out_import_txt" class="m5 mt10">
+            <div name="module" id="guide_handicap" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="shipan.menu.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="shipan.menu.outImport">   出货导入  </span>
+                </div>
+                <div class="fr">
+                    <a href="outPan.html" class="" i18n="shipan.menu.outPan">《出货盘</a> |
+                    <a href="outDetail.html" class="" i18n="shipan.menu.outDetail">出货明细</a> |
+                    <a href="winOutDetail.html" class="" i18n="shipan.menu.winOutDetail">出货中奖明细</a> |
+                    <a href="javascript:void(0)" class="fn-out" onclick="popChild(1)" i18n="shipan.menu.chuhuo">出货</a> |
+                    <a href="outImport.html" class="fb red" i18n="shipan.menu.outImport">出货导入</a> |
+                    <a href="download.html" class="" i18n="shipan.menu.download">下载》</a> |
+                    <a href="shiHuoDetail.html" class="" i18n="shipan.menu.shiHuoDetail">实货明细</a> |
+                    <a href="shiHuoZhongJiang.html" class="" i18n="shipan.menu.shiHuoZhongJiang">中奖明细</a> |
+                    <a href="shiPan-3d.html" class="" i18n="shipan.menu.shiPan">实盘</a>|
+                    <!--                    <a href="baopai_shipan.html" class="" i18n="shipan.menu.baopai.shipan">包牌实盘</a> |-->
+                    <a href="xupan-3d.html" class="" i18n="shipan.menu.xupan">虚盘</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <form action="" novalidate="novalidate"></form>
+            </div>
+            <div class="mt10">
+              <form action="" novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="3" class="tc" i18n="shipan.menu.outImport">出货导入</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td width="20%" i18n="shipan.table.filepath"> 文件路径</td>
+                            <td width="30%">
+                                <!--<input type="file" name="file" id="fileInput" required="true" aria-required="true">-->
+                                <input type="button" i18n="shipan.choosefile" value="选择文件" id="chooseBtn" onclick="chooseFile">
+                                <span id="fileName"></span>
+                                <input type="file" name="file" accept=".txt" required="true" aria-required="true" id="fileinput" class="hide">
+                            </td>
+                            <td width="50%"><button id="fileInputBtn" class="btn" type="button" i18n="shipan.submit" style="cursor: pointer">提交</button></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3">
+                                <strong i18n="txtimport.formatA">格式A：</strong>
+                                <span>类别|号码</span>，<span>类别|号码</span>，<span>类别|号码</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong >格式B：</strong>
+                                <span>类别|号码=金额</span>，<span>类别|号码=金额</span>，<span>类别|号码=金额</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="red" i18n="txtimport.memo1">(逗号也可以用空格代表)</span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>格式C：</strong>
+                                <span>拖拉机</span>，<span>三同号</span>，<span>大</span>，<span>小</span>，<span>奇</span>，<span>偶</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong >格式D：</strong>
+                                <span>拖拉机=金额</span>，<span>三同号=金额</span>，<span>大=金额</span>，<span>小=金额</span>，<span>奇=金额</span>，<span>偶=金额</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="red" i18n="txtimport.memo1">(逗号也可以用空格代表)</span>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>例如：</strong>
+                                <span>ZX|123(表示直选号码123)</span>，
+                                <span>ZX|0(表示直选和值0)</span>，
+                                <span>TX|123(表示通选123)</span>，
+                                <span>HS|0(表示和数0)</span>，
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>类别简称：</strong>
+                                <span>直选(ZX)</span>，<span>通选(TX)</span>，<span>组三(Z3)</span>，<span>组六(Z6)</span>，<span>和数(HS)</span>，
+                                <span>包选三(B3)</span>，<span>包选六(B6)</span>，<span>1D(1D)</span>，<span>2D(2D)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" i18n="txtimport.buyMemo"> 说明：由于各会员使用的（txt文件）的格式不一样，如果不符合网站上要求的格式，有可能导入到网站（没有下注之前）的号码内容和自己（txt文件）里号码内容不一致，操作时请认真检查，如果出现内容不一致，请不要下注。 </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+               </form>
+
+                <div class="mt10 hide" id="drawStop">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1"> <td></td> </tr> </thead>
+                        <tbody> <tr> <td style="height:300px"> <div class="f16 tc fb" id="openStatusDesc"></div> </td> </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="mt10 hide" id="drawOpen">
+
+                    <table class="t-1 tc">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="10" i18n="shipan.table.document.details">文件明细</td>
+                        </tr>
+                        </thead>
+                        <tbody id="importList"></tbody>
+                    </table>
+
+                    <table id="import_t" class="t-1 tc">
+                        <tbody>
+                        <tr>
+                            <td class="rdmoney" style="text-align: center">
+
+                            <span class='import_sntxt' style="display:none" i18n="shipan.table.please.betagain">
+                                发送中断，请再次下注。
+                            </span>
+                            <span id="import_t2" style="display:none">
+                                <span i18n="shipan.query.amount">金额</span><input type="text" id="importmoney" name="importmoney" maxlength=5/>
+                            </span>
+
+                            <span id="import_t3">
+                                <span i18n="shipan.odds">赔率</span><input type="text" id="importodds" name="importodds"/>
+                            </span>
+
+                            <span class='import_sntxt'>
+                                 <button id="import_but3" class="btn importbut" type="button" i18n="shipan.table.betting">下注</button>
+<!--                                <button id="importprint_but" class="btn importbut" type="button">打印</button>-->
+<!--                                <button id="importreset_but" class="btn importbut" type="button">清空</button>-->
+                            </span>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+
+                    <!--<table class="t-1 tc">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="10">文件明细</td>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        <tr class="bg2">
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                            <td width="10%">号码</td>
+                        </tr>
+                        <tr>
+                            <td dict_no_type_id="13" bet_no="333">333<span class="red">现</span></td>
+                        </tr>
+                        <tr class="fb bg2">
+                            <td>合计笔数</td>
+                            <td>1</td>
+                            <td>合计金额</td>
+                            <td class="keyup-total-money">0</td>
+                            <td colspan="6"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="10"><input type="hidden" name="TotalCount" value="1"> <input type="hidden"
+                                                                                                      name="TotalBetMoney"
+                                                                                                      value="0">
+                                <span class="f14">出货金额</span> <input type="text" name="bet_money" id="bet_money"
+                                                                     class="text-large w70 box-radius"
+                                                                     required="true" positive="true"> &nbsp;&nbsp;
+                                <span class="f14">赔率</span> <input type="text" name="bet_odds" id="bet_odds"
+                                                                   class="text-large w70 box-radius" required="true"
+                                                                   positive="true"> &nbsp; <input type="submit"
+                                                                                                  id="bet_submit"
+                                                                                                  value="确定"
+                                                                                                  _name="确定"
+                                                                                                  is-package="0"
+                                                                                                  class="btn btn-large bet-submit w60">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script><script src="../js/kuaixuan-3d.js"></script>
+<script>
+    var $ = layui.$;
+    var buyCodesList = [];
+
+    var moneyGivenList=[]; //已指定金额的列表
+    var noMoneyList=[]; //未指定金额的列表
+    var needSetMoney = false;
+    var totalMoney = 0;
+    var openStatus = 0;
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        initUpload();
+    });
+
+    function chooseFile() {
+        $("#fileinput").trigger("click","");
+        //upload.choose();
+    }
+
+    $("#chooseBtn").on("click","",function(){
+        $("#fileinput").click();
+    });
+
+    // $(function(){
+    //     initUpload();
+    // });
+
+    function popChild(tag){
+        layer.open({
+            type:2,
+            // title:'出货',
+            title:i18np.prop("shipan.menu.chuhuo"),
+            content:'kuaida.html',
+            area:['80%','650px']
+        })
+    }
+    //初始化上传组件
+    function initUpload(){
+        layui.use(['upload','element'], function () {
+            var element = layui.element;
+            var upload = layui.upload;
+            //单文件上传
+            upload.render({
+                elem: '#fileinput',
+                url: HOST+"chuHuo/uploadTxt",
+                //accept: 'file',
+                multiple: false,
+                auto: false,
+                exts:'txt',
+                size: 50 * 1024,//单位kb
+                bindAction: '#fileInputBtn',
+                before:function(obj){
+                    layer.msg(i18np.prop("shipan.msg.uploading"), {
+                        icon: 16
+                        ,shade: 0.3
+                        ,time:-1
+                    });
+                },
+                choose: function (obj) {
+                    // obj.preview(function (index, file, result) {
+                    //     $("#fileDiv").val(file.name);
+                    // });
+                    obj.preview(function (index, file, result) {
+                        //$("#fileDiv").val(file.name);
+                        $("#fileName").html(file.name)
+                    });
+                },
+                done: function (res, index, upload) {
+                    layer.closeAll();
+                    $("#importList").html("");
+                    moneyGivenList = [];
+                    noMoneyList=[];
+                    if (res.code == 200) { //上传成功
+                        // layer.alert("上传成功");
+                        layer.msg(i18np.prop("shipan.msg.upload.success"));
+                        buyCodesList = res.data.dataList;
+                        totalMoney = res.data.totalMoney;
+                        openStatus = res.data.openStatus;
+                        if(openStatus==1){
+                            $("#drawOpen").removeClass('hide');
+                            $("#drawStop").addClass('hide');
+                            initData();
+                        }else{
+                            $("#drawOpen").addClass('hide');
+                            $("#drawStop").removeClass('hide');
+                            switch(openStatus){
+                                case 0:
+                                    $("#openStatusDesc").html(i18np.prop("shipan.status.yifengpan"));
+                                    break;
+                                case 2:
+                                    $("#openStatusDesc").html(i18np.prop("shipan.status.weikaipan"));
+                                    break;
+                                case 3:
+                                    $("#openStatusDesc").html(i18np.prop("shipan.status.kaipanzhong"));
+                                    break;
+                                default:
+                                    $("#openStatusDesc").html("");
+                                    break;
+                            }
+                        }
+                    }
+                    else {
+                        layer.msg(res.msg);
+                        //$("#import_tsm").hide()
+                        $("#import_t").hide();
+                    }
+                },
+                error: function (index, upload) {
+                    layer.closeAll();
+                    // layer.alert("请求失败");
+                    layer.msg(i18np.prop("shipan.msg.request.error"));
+                }
+            });
+
+
+            function initData(){
+                if(buyCodesList.length>0){
+                    buyCodesList.forEach((item,idx)=>{
+                        if(item.buyMoney>0){
+                            moneyGivenList.push(item);
+                        }else{
+                            noMoneyList.push(item);
+                        }
+                    });
+                    var html1 = initHtmlForMoneyGiveList();
+                    var html2 = initHtmlForNoMoneyGiveList();
+                    $("#importList").html(html1+html2);
+                    if(noMoneyList.length>0){ //需要输入金额后才能下注
+                        $("#import_t2").show();
+                        $("#import_t1").hide();
+                        needSetMoney = true;
+                    }else{ //不需要输入金额，直接下注
+                        $("#import_t2").hide();
+                        $("#import_t1").show();
+                        needSetMoney = false;
+                    }
+                    $("#import_tsm").show();
+                    $("#import_t").show();
+                }
+            }
+
+            function initHtmlForMoneyGiveList(){
+                var html = "";
+                if(moneyGivenList.length>0){
+                    var styles='background-color:#eee;color:#000';
+                    var dataLen = moneyGivenList.length;
+                    var trHeader = "";
+                    var trData = "";
+                    var xianStr = '';
+                    for(var i=1,len=dataLen;i<=len;i++){
+                        var idx = i-1;
+                        var item  =  moneyGivenList[idx];
+                        var code = item.buyCode;
+                        var codeFullName = getCodePrintName(item.lotteryMethodId,"|",code)
+                        var amount = item.buyAmount;
+                        codeFullName = codeFullName +"<span style='color:red;font-size: 12px'>&nbsp;["+amount+"注]</span>"
+                        trHeader = trHeader+"<td style='"+styles+"' i18n='shipan.number'>号码</td><td style='"+styles+"' i18n='shipan.query.amount'>金额</td>";
+                        trData = trData + "<td style='"+styles+"'>"+codeFullName+"</td><td style='"+styles+"'>"+item.buyMoney+"</td>"
+
+                        var modValue = parseInt(i%5);
+                        if(i>0 && modValue==0){
+                            trHeader = "<tr>"+trHeader+"</tr>";
+                            trData = "<tr>"+trData+"</tr>";
+                            html = html +trHeader + trData;
+                            trHeader = trData = "";
+                        }
+                    }
+
+                    var leftLen = 5-parseInt(dataLen%5);
+                    if(leftLen>0 && leftLen < 5){
+                        /*trHeader = "<tr>";
+                        trData = "<tr>";*/
+                        for(var j=0;j<leftLen;j++){
+                            trHeader = trHeader+"<td style='"+styles+"' i18n='shipan.number'>号码</td><td style='"+styles+"' i18n='shipan.query.amount'>金额</td>";
+                            trData = trData + "<td style='"+styles+"'>--</td><td style='"+styles+"'>--</td>"
+                        }
+                        trHeader = "<tr>"+trHeader+"</tr>";
+                        trData = "<tr>"+trData+"</tr>";
+                        html = html +trHeader + trData;
+                    }
+                }
+                return html;
+            }
+
+
+            function initHtmlForNoMoneyGiveList(){
+                var html = '';
+                if(noMoneyList.length>0){
+                    var dataLen = noMoneyList.length;
+                    var trHeader = "";
+                    var trData = "";
+                    var xianStr = '';
+                    for(var i=1,len=dataLen;i<=len;i++){
+                        var modValue = parseInt(i%10);
+                        var idx = i-1;
+                        var item  =  noMoneyList[idx];
+                        var code = item.buyCode;
+                        var codeFullName = getCodePrintName(item.lotteryMethodId,"|",code)
+                        var amount = item.buyAmount;
+                        codeFullName = codeFullName +"<span style='color:red;font-size: 12px'>&nbsp;["+amount+"注]</span>"
+
+                        // trHeader = trHeader+"<td i18n='shipan.number'>号码</td>";
+                        trHeader = trHeader+"<td i18n='shipan.number'>"+i18np.prop('shipan.number')+"</td>";
+                        trData = trData + "<td>"+codeFullName+"</td>"
+
+                        if(i>0 && modValue==0){
+                            trHeader = "<tr>"+trHeader+"</tr>";
+                            trData = "<tr>"+trData+"</tr>";
+                            html = html +trHeader + trData;
+                            trHeader = trData = "";
+                        }
+
+                    }
+                    var leftLen = 10-parseInt(dataLen%10);
+                    if(leftLen>0 && leftLen<10){
+                        for(var j=0;j<leftLen;j++){
+                            trHeader = trHeader+"<td i18n='shipan.number'>"+i18np.prop('shipan.number')+"</td>";
+                            trData = trData + "<td>--</td>"
+                        }
+                        trHeader = "<tr>"+trHeader+"</tr>";
+                        trData = "<tr>"+trData+"</tr>";
+                        html = html +trHeader + trData;
+
+                    }
+                }
+                return html;
+            }
+        });
+    }
+
+    $("#import_but3").on("click","",function (e) {
+        if(noMoneyList.length>0){
+            var money = $("#importmoney").val();
+            if(money==''){
+                // layer.msg("请输入金额");
+                layer.msg(i18np.prop("shipan.msg.input.money"));
+                return;
+            }
+            noMoneyList.forEach((item,idx)=>{
+                item.buyMoney = money;
+            })
+        }
+        var odds = $("#importodds").val();
+        if(odds==''){
+            // layer.msg("请输入赔率");
+            layer.msg(i18np.prop("shipan.msg.input.odds"));
+            return;
+        }
+        subBuyCodes();
+    })
+
+    function subBuyCodes(){
+        var odds = $("#importodds").val();
+        var money = $("#importmoney").val();
+        var bindCodeList = [];
+        var lmId = "";
+        var lsType = 1;
+        noMoneyList.forEach((item,idx)=>{
+            //item.peiRate = odds;
+            item.codesList.forEach((cc,ii)=>{
+                bindCodeList.push({
+                    buyCode:cc,
+                    buyMoney:money,
+                    peiRate:odds,
+                    lsType:item.lsType,
+                    lotteryMethodId:item.lotteryMethodId,
+                    buyAmount:1
+                });
+            })
+
+            lmId = item.lotteryMethodId;
+            lsType = item.lsType;
+        });
+        moneyGivenList.forEach((item,idx)=>{
+            //item.peiRate = odds;
+            item.codesList.forEach((cc,ii)=>{
+                bindCodeList.push({
+                    buyCode:cc,
+                    buyMoney:item.buyMoney,
+                    peiRate:odds,
+                    lsType:item.lsType,
+                    lotteryMethodId:item.lotteryMethodId,
+                    buyAmount:1
+
+                });
+            })
+            //bindCodeList.push(item);
+            lmId = item.lotteryMethodId;
+            lsType = item.lsType;
+        });
+
+        var params = {
+            "codesList":bindCodeList,
+            "chOdds":odds,
+            "amount":money,
+            "chType":0,
+            "lotteryMethodId":lmId,
+            "lsType":lsType
+        }
+
+
+        // var params = {
+        //     peiRate:odds,
+        //     amount:money,
+        //     codesList:bindCodeList,
+        //     chType:0
+        // }
+
+        layer.msg(i18np.prop("shipan.msg.processing"), {
+            icon: 16
+            ,shade: 0.3
+            ,time:-1
+        });
+
+        $.ajax({
+            url:HOST+"chuHuo/import/3d",
+            type:'post',
+            contentType:'application/json',
+            headers:{
+                "token":layui.data('local_store').token
+            },
+            data:JSON.stringify(params),
+            success:function (res) {
+                layer.closeAll();
+                if(res.code==200){
+                    $("#importList").html("");
+                    window.location.href="outDetail.html";
+                    //window.parent.toKuaida(false);
+                }else{
+                    layer.msg(res.msg)
+                }
+            },
+            fail:function (e) {
+                layer.closeAll();
+            }
+        })
+    }
+</script>
+</body>
+</html>

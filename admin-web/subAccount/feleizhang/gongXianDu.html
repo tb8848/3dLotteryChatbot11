@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贡献度</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+    <style>
+        .queryParam a, td a {
+            color: blue;
+        }
+        .guide a.red {
+            color: #CC0000 !important;
+        }
+        .red {
+            color: red !important;
+        }
+        input,select{
+            font-weight: normal !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font: 12px Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div id="main" class="main" style="top: 0px;">
+    <template>
+    <div class="module">
+        <div name="module" id="reportgxd" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account">位置 </a>
+                    <span class="red">&gt;&gt; 贡献度</span> &gt;&gt;
+                    <span id="navPath"></span>
+                    <!--<a class="blue"-->
+                       <!--href="#!reportgxd?level=6&amp;report_type=1&amp;period_no=&amp;member_id=74&amp;all=&amp;month=&amp;period_day="-->
+                       <!--title="查看up66862"> up66862(总监) </a>-->
+                </div>
+                <div class="fr">
+                    <a href="gongXianDu.html" class="fb red">贡献度</a> |
+                    <a href="dayfelei.html" class="">日分类帐</a> |
+                    <a href="yuefelei.html?all=1" class="">月分类账</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <div style="height:20px" class="queryParam">
+                    <span id="month_list" class="month_list">
+                        <a :href="'gongXianDu.html?months='+month" v-for="month in yearMonthList" :class="monthData==month ? 'red' : ''">【{{month}}】</a>
+                    </span>
+                    <a :href="'gongXianDu.html?report=1'" :class="report != 1 ? '' :'red'">【周】</a>
+                    <a :href="'gongXianDu.html?drawFlag=0'" id="lnkThisPeriod" :class="drawFlag == 0 ? 'red' :''">【本期】</a>
+                    <a :href="'gongXianDu.html?all=1'" :class="all != 1 ? '' :'red'">【全部】</a>
+                </div>
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1" v-show="report!=1">
+                        <td colspan="7" v-if="userId == null || userId == '' || userId == undefined"> 贡献度</td>
+                        <td colspan="8" v-else> 贡献度</td>
+                        <td align="center">
+                            <select class="w110" id="draw" member_id="" @change="changeSelect()" v-show="drawFlag==0"></select>
+                        </td>
+                    </tr>
+                    <tr class="bg1" v-show="report==1">
+                        <td colspan="6" style="border-right: none"> 周贡献度 &nbsp;&nbsp;&gt;&gt; 时间范围
+                            <input type="hidden" name="level" value="6">
+                            <input type="hidden" name="link" value="">
+                            <input type="hidden" id="week_start_period_day" value="">
+                            <input type="hidden" id="week_end_period_day" value="">
+                            <input type="hidden" id="report_type" name="report_type" value="2">
+                            <!--<input class="w120" type="text" id="start_period_day" name="start_period_day" autocomplete="off" value="">
+                            -
+                            <input class="w120" type="text" id="end_period_day" name="end_period_day" autocomplete="off" value="">-->
+                            <input type="text" id="start_date" name="start_data" autocomplete="off" class="w120">
+                            -
+                            <input type="text" id="end_date" name="end_date" autocomplete="off" class="w120">
+                            <input type="button" id="last_week" value="上周" class="btn">
+                            <input type="button" id="this_week" value="本周" class="btn">
+                            <input type="button" id="sel_week_report" name="sel_week_report" value="查询" class="btn" @click="queryWeek()">
+                        </td>
+                        <td align="center"></td>
+                    </tr>
+                    <tr class="bg2" v-if="userId == null || userId == '' || userId == undefined">
+                        <td width="12%" v-if="report != 1"> 日期</td>
+                        <td width="12%"> {{roleName}}</td>
+                        <td width="12%">贡献金额</td>
+                        <td width="12%">总金额</td>
+                        <td width="12%">贡献总盈亏</td>
+                        <td width="12%">百分比贡献盈亏</td>
+                        <td width="12%">实际贡献盈亏</td>
+                        <td width="12%">贡献度</td>
+                    </tr>
+                    <tr class="bg2" v-else>
+                        <td width="12%" v-if="report != 1"> 日期</td>
+                        <td width="12%"> {{roleName}}</td>
+                        <td width="12%">占成金额</td>
+                        <td width="12%">占成总金额</td>
+                        <td width="12%">占成总盈亏</td>
+                        <td width="12%">百分比占成盈亏</td>
+                        <td width="12%">实际占成盈亏</td>
+                        <td width="12%">占成百分比</td>
+                        <td width="12%">贡献度</td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody" class="fn-hover">
+                    <tr v-for="data in dataList">
+                        <td v-if="report!=1 && drawFlag==0"> {{data.drawId}}</td>
+                        <td v-else-if="report!=1 && drawFlag!=0"> {{data.dateStr}}</td>
+                        <td v-if="data.nickName != null && data.nickName != '' && data.nickName != undefined">
+                            <a :href="'gongXianDu.html?userId=' + data.userId">{{data.username}}({{data.nickName}})</a>
+                        </td>
+                        <td v-else>
+                            <a :href="'gongXianDu.html?userId=' + data.userId">{{data.username}}</a>
+                        </td>
+                        <td>{{data.gxAmount}}</td>
+                        <td>{{data.totalAmount}}</td>
+                        <td>{{data.gxTotalYk}}</td>
+                        <td>{{data.percentYk}}</td>
+                        <td>{{data.practicalYk}}</td>
+                        <td v-show="userId != null && userId != '' && userId == undefined">{{data.zcPercent}}</td>
+                        <td> {{data.gxd}}</td>
+                    </tr>
+                    <tr class="tfoot" v-if="dataList.length > 0">
+                        <td class="tc">合计</td>
+                        <td v-if="report!=1"></td>
+                        <td class="fb">{{sumAmount}}</td>
+                        <td></td>
+                        <td></td>
+                        <td class="fb">{{sumPercentYk}}</td>
+                        <td class="fb">{{sumPracticalYk}}</td>
+                        <td></td>
+                    </tr>
+                    <tr class="tfoot" v-else>
+                        <td colspan="9">暂无数据！</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+    </template>
+</div>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script>
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        data: {
+            yearMonthList: [],
+            dataList: [],
+            drawId: "",
+            month: "",
+            startDate: "",
+            endDate: "",
+            userId: "",
+            roleName: "",
+            sumAmount: "",
+            sumPercentYk: "",
+            sumPracticalYk: "",
+            report: "",
+            monthData: "",
+            drawFlag: "",
+            all: "",
+            userName:"",
+            isBack:"0"
+        },
+        methods: {
+            initData() {
+                this.userId = GetQueryString("userId");
+                this.report = GetQueryString("report");
+                this.drawFlag = GetQueryString("drawFlag");
+                this.isBack = GetQueryString("isBack");
+                this.all = GetQueryString("all");
+                this.initQueryParam();
+                const monthQuery = GetQueryString("months");
+                if (monthQuery != null && monthQuery != "" && monthQuery != undefined) {
+                    this.month = monthQuery;
+                    this.monthData = monthQuery;
+                }
+                this.getDrawList();
+            },
+            initQueryParam() {
+                const _this = this;
+                $.ajax({
+                    url: HOST + "gongXianDu/initQueryParam"
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            if (GetQueryString("drawFlag") == 0) {
+                                _this.drawId = res.data.drawId
+                            }
+                            _this.yearMonthList = res.data.yearMonthList
+                            _this.roleName = res.data.roleName;
+                            _this.userName = res.data.userName;
+                            _this.initGongXianDuList();
+                            var qs = {
+                                uid:_this.userId,
+                                roleName:_this.roleName,
+                                userName:_this.userName,
+                                report:_this.report,
+                                drawFlag:_this.drawFlag,
+                                all:_this.all,
+                                isBack:1
+                            }
+                            _this.buildNavPath(qs);
+                        } else {
+                            layer.msg("数据异常");
+                        }
+                    }
+                });
+            },
+            getDrawList() {
+                $.ajax({
+                    url: HOST + "draw/getDrawList68",
+                    success: function (res) {
+                        if (res.code == 200) {
+                            for (var i in res.data) {
+                                $("#draw").append("<option value='" + res.data[i].drawId + "'>" + res.data[i].drawIdStr + "</option>")
+                            }
+                        }
+                    }
+                });
+            },
+            initGongXianDuList() {
+                const _this = this;
+                layer.msg("数据加载中...",{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                $.ajax({
+                    url: HOST + "gongXianDu/getGongXianDuList?drawId=" + _this.drawId + "&userId=" + _this.userId + "&month=" + _this.month + "&startDate=" + _this.startDate + "&endDate=" + _this.endDate
+                    , type: "get"
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 0) {
+                            _this.dataList = res.data.dataList
+                            _this.sumAmount = res.data.sumAmount
+                            _this.sumPercentYk = res.data.sumPercentYk
+                            _this.sumPracticalYk = res.data.sumPracticalYk
+                        } else {
+                            layer.msg("数据异常");
+                        }
+                    }
+                });
+            },
+            changeSelect() {
+                this.drawId = $("#draw").val();
+                this.initGongXianDuList();
+            },
+            queryWeek () {
+                this.startDate = $("#start_date").val();
+                this.endDate = $("#end_date").val();
+                this.initGongXianDuList();
+            },
+            buildNavPath(qs){
+                var pp = sessionStorage.getItem("yueji_nav");
+                var navPath = [];
+                var pathStr = "";
+                if(pp==null || pp==""){
+                    navPath.push(qs)
+                }else{
+                    var newArr=[];
+                    navPath=JSON.parse(pp);
+                    var exist = false;
+                    for(var i=0,len=navPath.length;i<len;i++){
+                        var item = navPath[i];
+                        newArr.push(item);
+                        if(item.uid==uid){
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if(exist && isBack=="1"){
+                        navPath = newArr;
+                    }else{
+                        navPath.push(qs)
+                    }
+                }
+                navPath.forEach((item,idx)=>{
+                    var url = "gongXianDu.html?userId="+item.uid+"&drawFlag="+item.drawFlag+"&isBack="+item.isBack+"&all="+item.all+"&report="+item.report;
+                    var alink = '<a class="blue" href="'+url+'" title="查看'+item.userName+'">\n' +
+                        '<span style="color: #0000FF;">'+item.userName+'</span>\n' +
+                        '<span style="color: #0000FF;">('+item.roleName+')</span>\n' +
+                        '</a>';
+                    if(pathStr==''){
+                        pathStr = alink;
+                    }else{
+                        pathStr = pathStr + ">>"+alink;
+                    }
+                });
+                $("#navPath").html(pathStr);
+                console.log("===================",navPath);
+                sessionStorage.setItem("yueji_nav",JSON.stringify(navPath))
+            }
+        }
+    })
+    vm.initData();
+</script>
+<script>
+    layui.use(['form' , 'jquery','laydate'], function(){
+        var $ = layui.jquery;
+        let weekStartDate = getWeek(0, 0); //本周开始日期
+        let weekEndDate = getWeek(0, 1); // 本周结束日期
+        //getWeek(1, 0) // 获取下周开始日期
+        //getWeek(1, 1) // 获取下周结束日期
+
+        $("#last_week").on('click', function () {
+            let preWeekStartDate = getWeek(-1, 0) // 上周开始日期
+            let preWeekEngDate = getWeek(-1, 1) // 上周结束日期
+            $("#end_date").val(preWeekEngDate);
+            $("#start_date").val(preWeekStartDate);
+        })
+
+        $("#this_week").on('click', function () {
+            $("#end_date").val(weekEndDate);
+            $("#start_date").val(weekStartDate);
+        })
+
+        function getWeek(n, type) { // 周
+            let now = new Date()
+            let day = now.getDay() //返回星期几的某一天;
+            if (!type) {
+                if (n == 1) {
+                    let dayNumber = day == 0 ? 0 : 7 - day
+                    now.setDate(now.getDate() + dayNumber + 1)
+                } else if (n == -1) {
+                    let dayNumber = day == 0 ? 6 : day - 1
+                    now.setDate(now.getDate() - dayNumber - 7)
+                } else {
+                    let dayNumber = day == 0 ? 6 : day - 1
+                    now.setDate(now.getDate() - dayNumber)
+                }
+            } else {
+                if (n == 1) {
+                    let dayNumber = day == 0 ? 0 : 7 - day
+                    now.setDate(now.getDate() + dayNumber + 1 + 6) // 在周开始的日期上+6天=周结束
+                } else if (n == -1) {
+                    let dayNumber = day == 0 ? 6 : day - 1
+                    now.setDate(now.getDate() - dayNumber - 7 + 6)
+                } else {
+                    let dayNumber = day == 0 ? 0 : 7 - day
+                    now.setDate(now.getDate() + dayNumber)
+                }
+            }
+            let date = now.getDate()
+            let month = now.getMonth() + 1
+
+            let s = now.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date)
+            return s
+        };
+        const laydate = layui.laydate;
+        const endDate= laydate.render({
+            elem: '#end_date',//选择器结束时间
+            type: 'date',
+            value: weekEndDate,
+            done: function(value,date){
+                startDate.config.max={
+                    year:date.year,
+                    month:date.month-1,//关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                }
+            }
+        });
+        //日期范围
+        const startDate=laydate.render({
+            elem: '#start_date',
+            type: 'date',
+            value: weekStartDate,
+            done: function(value, date){
+                endDate.config.min ={
+                    year:date.year,
+                    month:date.month-1, //关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                };
+            }
+        });
+    });
+</script>
+</body>
+</html>

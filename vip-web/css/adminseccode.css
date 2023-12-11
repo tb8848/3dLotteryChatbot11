@@ -1,0 +1,103 @@
+#showwapmsg{
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;}
+.FeiZoumain a{color:#0088cc;text-decoration:none;font-weight: normal;font-size: 20px;vertical-align:middle;}
+.bgseccoderight {float: right; cursor:pointer;vertical-align:middle;}
+.bgseccodeleft {margin-right:20px;}
+.bgseccodemain {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  display:none;
+  color:#555666;
+  z-index: 9999999;
+
+}
+
+.bgseccode{
+  position: absolute;
+  z-index: 9999999;
+  zoom: 2;
+  filter: alpha(opacity=50);
+  display: inline-block;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #e0e8e0;
+  opacity: 0.75;
+
+
+}
+.bgseccodedx{
+  background: #fff;
+  z-index: 99999999;
+  padding: 4px;
+  width: 300px;
+  height: 210px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  left: 50%;
+  top: 50%;
+
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+
+  -webkit-box-shadow: 5px 5px 2px #888888;
+  -moz-box-shadow: 5px 5px 2px #888888; /* 鑰佺殑 Firefox */
+  box-shadow: 5px 5px 2px #888888;
+  border: 1px solid #555666;
+
+
+  margin-left: -150px!important;
+  margin-top: -60px!important;
+  margin-top: 0px;
+
+  position: fixed!important;
+  position: absolute;
+  _top: expression(eval(document.compatMode &&
+     document.compatMode=="CSS1Compat") ?
+     documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 :/*IE6*/
+     document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2);
+
+
+}
+.bgseccodedx input{font-size: 14px;vertical-align:middle;}
+.bgseccodedx img{vertical-align:middle;}
+#seccodelogin{padding: 4px 8px;font-size: 18px;}
+.bgseccodedxtit{
+  width: 100%;
+  font-size: 22px;
+  border-bottom: 1px solid #555666;
+  height:25px;
+  margin-bottom:7px;
+  font-weight:bold;
+}
+.clear{ clear:both}
+.bgseccodedx ul{    padding: 0;margin: 4px 8px;}
+.bgseccodedx li{display:inline-block;*display:inline;*zoom:1;padding:0;margin-left:4px;list-style:none;white-space:nowrap;}
+.mainkey{
+  width:100%;position:relative;
+}
+#mainkey td{
+  background-color:#54206c;
+  color:#d4acf4;
+  text-align:center;
+  width:16.6%;
+  line-height:35px;height:35px;cursor:pointer; font-size: 18px;font-weight: bold;
+  -webkit-touch-callout:none;
+}
+
+#seccodeverify{-webkit-touch-callout:none;cursor:pointer;}
+

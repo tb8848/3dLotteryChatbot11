@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>新增IP</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+</head>
+<body>
+<div id="main" class="main">
+    <div class="module">
+        <div name="module" id="st_notice_add" class="m5 mt10">
+            <form id="notice_add" novalidate="novalidate">
+                <div class="mt10">
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1">
+                                <td colspan="2" class="tc">新增IP</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td width="120" class="bg3 tc">IP：</td>
+                            <td><input type="text" name="ip" class="w460" value="" maxlength="30" placeholder="格式为ip:端口，如：127.0.0.1:8080"></td>
+                        </tr>
+                        <tr>
+                            <td class="bg3 tc" i18n="setting.five.content">地区：</td>
+                            <td>
+                                <input type="text" name="province" class="w220" value="" maxlength="30">省
+                                <input type="text" name="city" class="w220" value="" maxlength="30"> 市
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3 tc">代理账号：</td>
+                            <td>
+                                <input type="text" name="username" class="w460" value="" maxlength="30">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3 tc">代理密码：</td>
+                            <td>
+                                <input name="password" type="password" class="w460" value="" maxlength="30">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3 tc">到期时间：</td>
+                            <td>
+                                <input type="text" id="dueTime" name="dueTime" class="w460" value="" maxlength="30">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt10 tc">
+                        <button class="btn" id="add" lay-submit lay-filter="add" style="cursor: pointer;" i18n="setting.submit">提交</button>
+                        <a id="goback" class="btn" style="padding: 4px 8px;text-decoration: none;cursor: pointer;" onclick="back()" i18n="setting.five.return">返回</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+
+    var $ = layui.jquery;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        data: {},
+        methods: {
+            init() {
+                console.log("初始化vue了")
+            }
+        }
+    })
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use(['i18np','form','jquery'], function(){
+        var form = layui.form;
+
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+        vm.init();
+
+        form.on('submit(add)',function(data) {
+            //标题
+            var ip = $("input[name='ip']").val();
+            if (ip==null || ip=="" || ip==undefined){
+                layer.msg("IP不能为空");
+                return false;
+            }
+            data.field.ip = ip;
+            //内容
+            var province = $("input[name='province']").val();
+            if (province==null || province=="" || province==undefined){
+                layer.msg("省份不能为空");
+                return false;
+            }
+            data.field.province = province;
+            var city = $("input[name='city']").val();
+            data.field.city = city;
+            var username = $("input[name='username']").val();
+            if (username==null || username=="" || username==undefined){
+                layer.msg("代理账号不能为空");
+                return false;
+            }
+            data.field.username = username;
+            var password = $("input[name='password']").val();
+            if (password==null || password=="" || password==undefined){
+                layer.msg("代理密码不能为空");
+                return false;
+            }
+            data.field.password = password;
+            var dueTime = $("input[name='dueTime']").val();
+            data.field.dueTime = dueTime;
+            $.ajax({
+                url: HOST + 'admin/proxy/addProxy'
+                , type: "POST"
+                , contentType: 'application/json'
+                , data: JSON.stringify(data.field)
+                , success: function (res) {
+                    if (res.code == 200) {
+                        // layer.msg("添加成功");
+                        layer.confirm(i18np.prop("setting.five.save.success"), {
+                            title:i18np.prop("setting.five.tips"),
+                            btn: [i18np.prop("setting.determine")] //可以无限个按钮
+                        }, function(index, layero){
+                            //按钮【按钮一】的回调
+                            window.location.href='proxyList.html'
+                        });
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                }
+                , error: function () {
+                    console.log("ajax error");
+                }
+            });
+            return false;
+        })
+    });
+    back = function () {
+        window.location.href='proxyList.html'
+    }
+</script>
+<script>
+    layui.use(['form' , 'jquery','laydate'], function(){
+        var laydate = layui.laydate;
+        var endDate= laydate.render({
+            elem: '#end_time',//选择器结束时间
+            type: 'datetime',
+            min:"1970-1-1",//设置min默认最小值
+            done: function(value,date){
+                startDate.config.max={
+                    year:date.year,
+                    month:date.month-1,//关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                }
+            }
+        });
+
+        //日期范围
+        var startDate=laydate.render({
+            elem: '#dueTime',
+            type: 'datetime',
+            max:"2099-12-31",//设置一个默认最大值
+            done: function(value, date){
+                endDate.config.min ={
+                    year:date.year,
+                    month:date.month-1, //关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                };
+            }
+        });
+    });
+</script>
+</body>
+</html>

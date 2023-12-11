@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>拦货金额日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            padding: 4px;
+            outline: none;
+        }
+
+        /*.t-1 tbody td {*/
+        /*    line-height: 22px;*/
+        /*}*/
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        .layui-table-header {
+            height: 30px;
+        }
+        th .laytable-cell-1-0-5 {
+            width: 182px;
+        }
+
+        .layui-table thead tr th{
+            font-weight: bold !important;
+        }
+
+        .layui-table tbody tr td{
+            padding: 2px 0 2px 0 !important;
+            color: black;
+        }
+
+        .layui-table-cell{
+            font-size: 12px;
+        }
+
+        tr:hover td{
+            background:#fffeaa !important;
+            color: red !important;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main" >
+    <div class="module">
+        <div name="module" id="log_select" class="m5 mt10">
+            <div name="module" id="guide_log" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="log.top.position">位置 </a> &gt;&gt;
+                    <span class="red" i18n="lanhuo.log">  拦货金额日志  </span>
+                </div>
+                <div class="fr">
+                    <a href="yeujiLog.html" class="" i18n="log.top.skip.operation">越级操作日志</a> |
+                    <a href="zijiCaozuoLog.html" class="" i18n="log.top.oneself.operation">自己操作日志</a> |
+                    <a href="lanhuoLog.html" class="fb red" i18n="lanhuo.log">拦货金额日志</a> |
+                    <a href="huiyuanLog.html" class="" i18n="log.top.member.select">会员快选日志</a>
+                </div>
+            </div>
+            <div class="mt10" style="border: 1px solid #000000">
+                <table class="layui-hide" id="t" lay-filter="t" ></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+
+    var table = layui.table;
+    var $ = layui.jquery;
+
+    var moduleName = "log";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties('subMain-' + moduleName);
+
+        // layui刷新表头
+        table.reload("tt",{
+            cols: [
+                [
+                    {field: 'userName',title: i18np.prop('log.table.operation.account'), width: 150},
+                    {field: 'content',title: i18np.prop('log.table.operation.content'),templet:function (d) {
+                            if (defaultLang=="zh"){
+                                if(d.content!=null && d.content!="" && d.content!=undefined){
+                                    return d.content;
+                                }
+                                return "";
+                            }
+                            if(d.contentTh!=null && d.contentTh!="" && d.contentTh!=undefined){
+                                return d.contentTh;
+                            }
+                            return "";
+                            // if (d.content.length > 0){
+                            //     var content = "";
+                            //     var arr = d.content.split("改为");
+                            //     for (var i=0;i<arr.length;i++){
+                            //         var arrm = arr[i].split("；");
+                            //         console.log(arr[i]+"；"+arrm.length);
+                            //         if (arrm.length == 1){
+                            //             var arry = arr[i].split("由");
+                            //             if (arry.length > 1){
+                            //                 content = content + arry[0] + "由" + "<span style='color: red'>"+arry[1]+"</span>"
+                            //             }
+                            //         }else if (arrm.length == 2){
+                            //             content = content + i18np.prop('log.table.change') + "<span style='color: red'>"+arrm[0]+"</span>" + "；"
+                            //             var arrmm = arrm[1].split("由");
+                            //             if (arrmm.length > 1){
+                            //                 content = content + arrmm[0] + "由"  + "<span style='color: red'>"+arrmm[1]+"</span>"
+                            //             }
+                            //         }
+                            //     }
+                            //     return content;
+                            // }
+                        }},
+                    {field: 'opTime',title: i18np.prop('log.table.operation.time') ,width: 180},
+                    {field: 'ip',title: i18np.prop('log.table.operation.ip') ,width: 180},
+                ]
+            ],
+            text:{none: i18np.prop('user.table.noData')},
+        })
+    }
+
+    layui.config({base: '../../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np', 'form' , 'jquery','table'], function(){
+
+        i18np = layui.i18np;
+        i18np.loadProperties('subMain-'+ moduleName);
+
+        var form = layui.form;
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            url: HOST+'stopGoodsMoneyLog/getStopGoodsMoneyLog',
+            limit: 40,
+            cols: [
+                [
+                    {field: 'userName',title: i18np.prop('log.table.operation.account'), width: 150},
+                    {field: 'content',title: i18np.prop('log.table.operation.content'),templet:function (d) {
+                            if (defaultLang=="zh"){
+                                if(d.content!=null && d.content!="" && d.content!=undefined){
+                                    return d.content;
+                                }
+                                return "";
+                            }
+                            if(d.contentTh!=null && d.contentTh!="" && d.contentTh!=undefined){
+                                return d.contentTh;
+                            }
+                            return "";
+                        // if (d.content.length > 0){
+                        //     var content = "";
+                        //     var arr = d.content.split("改为");
+                        //     for (var i=0;i<arr.length;i++){
+                        //         var arrm = arr[i].split("；");
+                        //         console.log(arr[i]+"；"+arrm.length);
+                        //         if (arrm.length == 1){
+                        //             var arry = arr[i].split("由");
+                        //             if (arry.length > 1){
+                        //                 content = content + arry[0] + "由" + "<span style='color: red'>"+arry[1]+"</span>"
+                        //             }
+                        //         }else if (arrm.length == 2){
+                        //             content = content + i18np.prop('log.table.change') + "<span style='color: red'>"+arrm[0]+"</span>" + "；"
+                        //             var arrmm = arrm[1].split("由");
+                        //             if (arrmm.length > 1){
+                        //                 content = content + arrmm[0] + "由"  + "<span style='color: red'>"+arrmm[1]+"</span>"
+                        //             }
+                        //         }
+                        //     }
+                        //     return content;
+                        // }
+                        }},
+                    {field: 'opTime',title: i18np.prop('log.table.operation.time') ,width: 180},
+                    {field: 'ip',title: i18np.prop('log.table.operation.ip') ,width: 180},
+                ]
+            ],
+            page: true
+            ,page: {
+                curr: layui.data("t_page").index
+            },
+            text:{none: i18np.prop('user.table.noData')},
+            done: (res, curr, count) => {
+                form.render();
+                layui.data("t_page", {
+                    key: 'index',
+                    value: curr
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

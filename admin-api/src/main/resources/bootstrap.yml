@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: prop
+  application:
+    name: 3d_chatbot_admin_web
+  messages:
+    basename: i18n/messages
+
+lang:
+  open: true

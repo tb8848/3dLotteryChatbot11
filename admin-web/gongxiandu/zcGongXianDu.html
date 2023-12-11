@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>占成贡献度</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <style>
+        .queryParam a, td a {
+            color: blue;
+        }
+
+        .guide a.red {
+            color: #CC0000 !important;
+        }
+
+        .red {
+            color: red !important;
+        }
+
+        input, select {
+            font-weight: normal !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font: 12px Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div id="main" class="main" style="top: 0px;">
+    <template>
+    <div class="module">
+        <div name="module" id="reportgxd" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="gxd.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="gxd.top.zcGxd"> 占成贡献度</span>
+                </div>
+                <div class="fr">
+                    <a href="gongXianDu.html?drawFlag=0" i18n="gxd.top.gxd">贡献度</a> |
+                    <a href="zcGongXianDu.html?drawFlag=0" class="fb red" i18n="gxd.top.zcGxd">占成贡献度</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <div style="height:20px" class="queryParam">
+                    <span id="month_list" class="month_list">
+                        <a :href="'zcGongXianDu.html?months='+month" v-for="month in yearMonthList"
+                           :class="monthData==month ? 'red' : ''">【{{month}}】</a>
+                    </span>
+                    <a :href="'zcGongXianDu.html?drawFlag=0'" id="lnkThisPeriod"
+                       :class="drawFlag == 0 ? 'red' :''" i18n="gxd.query.thisDraw">【本期】</a>
+                    <a :href="'zcGongXianDu.html?all=1'" :class="all != 1 ? '' :'red'" i18n="gxd.query.all">【全部】</a>
+                </div>
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td colspan="8" i18n="gxd.top.zcGxd"> 占成贡献度</td>
+                        <td align="center" v-show="drawFlag==0">
+                            <select class="w110" id="draw" member_id="" @change="changeSelect()"></select>
+                        </td>
+                    </tr>
+                    <tr class="bg2" v-if="drawFlag==0">
+                        <td width="8%" i18n="gxd.table.head.date"> 日期</td>
+                        <td width="12%"> {{roleName}}</td>
+                        <td width="12%" i18n="gxd.table.head.gxAmount">贡献金额</td>
+                        <td width="12%" i18n="gxd.table.head.percentProfitLoss">百分比贡献盈亏</td>
+                        <td width="12%" i18n="gxd.table.head.actualProfitLoss">实际贡献盈亏</td>
+                        <td width="12%">{{$t('zhancheng')}}</td>
+                        <td width="12%" i18n="gxd.zc.table.head.surplusGxAmount">剩余贡献金额</td>
+                        <td width="12%" i18n="gxd.zc.table.head.zcProfitLoss">占成盈亏</td>
+                        <td width="12%" i18n="gxd.zc.table.head.surplusProfitLoss">剩余盈亏</td>
+                    </tr>
+                    <tr class="bg2" v-else>
+                        <td width="12%" i18n="gxd.table.head.date"> 日期</td>
+                        <td width="12%"> {{roleName}}</td>
+                        <td width="12%" i18n="gxd.zc.table.head.surplusGxAmount">剩余贡献金额</td>
+                        <td width="12%" i18n="gxd.zc.table.head.zcProfitLoss">占成盈亏</td>
+                        <td width="12%" i18n="gxd.zc.table.head.surplusProfitLoss">剩余盈亏</td>
+                        <td width="12%"><span>{{$t('fuli')}}</span>(<span>{{$t('tong')}}</span><input type="checkbox">)</td>
+                        <td width="12%" i18n="gxd.zc.table.head.welfareAmount">福利金额</td>
+                        <td width="12%" i18n="gxd.zc.table.head.totalResult">总结果</td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody" class="fn-hover" v-if="dataList.length > 0 && drawFlag==0">
+                    <tr v-for="data in dataList">
+                        <td> {{data.drawId}}</td>
+                        <td v-if="data.nickName != null && data.nickName != '' && data.nickName != undefined">
+                            {{data.username}}({{data.nickName}})
+                        </td>
+                        <td v-else>
+                            {{data.username}}
+                        </td>
+                        <td>{{data.gxAmount.toString().indexOf('.')!=-1 ? data.gxAmount.toFixed(2).split(".")[0]+'.' : data.gxAmount}}<span style="color: #c2c1c1;">{{data.gxAmount.toString().indexOf('.')!=-1 ? data.gxAmount.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td>{{data.practicalYk.toString().indexOf('.')!=-1 ? data.practicalYk.toFixed(2).split(".")[0]+'.' : data.practicalYk}}<span style="color: #c2c1c1;">{{data.practicalYk.toString().indexOf('.')!=-1 ? data.practicalYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td>{{data.percentYk.toString().indexOf('.')!=-1 ? data.percentYk.toFixed(2).split(".")[0]+'.' : data.percentYk}}<span style="color: #c2c1c1;">{{data.percentYk.toString().indexOf('.')!=-1 ? data.percentYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td >0</td>
+                        <td>{{data.gxAmount.toString().indexOf('.')!=-1 ? data.gxAmount.toFixed(2).split(".")[0]+'.' : data.gxAmount}}<span style="color: #c2c1c1;">{{data.gxAmount.toString().indexOf('.')!=-1 ? data.gxAmount.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td >0</td>
+                        <td>{{data.percentYk.toString().indexOf('.')!=-1 ? data.percentYk.toFixed(2).split(".")[0]+'.' : data.percentYk}}<span style="color: #c2c1c1;">{{data.percentYk.toString().indexOf('.')!=-1 ? data.percentYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                    </tr>
+                    <tr class="tfoot">
+                        <td class="tc">{{$t('heji')}}</td>
+                        <td></td>
+                        <td class="fb">{{sumAmount.toString().indexOf('.')!=-1 ? sumAmount.toFixed(2).split(".")[0]+'.' : sumAmount}}<span style="color: #c2c1c1;">{{sumAmount.toString().indexOf('.')!=-1 ? sumAmount.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td class="fb">{{sumPercentYk.toString().indexOf('.')!=-1 ? sumPercentYk.toFixed(2).split(".")[0]+'.' : sumPercentYk}}<span style="color: #c2c1c1;">{{sumPercentYk.toString().indexOf('.')!=-1 ? sumPercentYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td class="fb">{{sumPracticalYk.toString().indexOf('.')!=-1 ? sumPracticalYk.toFixed(2).split(".")[0]+'.' : sumPracticalYk}}<span style="color: #c2c1c1;">{{sumPracticalYk.toString().indexOf('.')!=-1 ? sumPracticalYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td></td>
+                        <td class="fb">{{sumAmount.toString().indexOf('.')!=-1 ? sumAmount.toFixed(2).split(".")[0]+'.' : sumAmount}}<span style="color: #c2c1c1;">{{sumAmount.toString().indexOf('.')!=-1 ? sumAmount.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td>0</td>
+                        <td class="fb">{{sumPracticalYk.toString().indexOf('.')!=-1 ? sumPracticalYk.toFixed(2).split(".")[0]+'.' : sumPracticalYk}}<span style="color: #c2c1c1;">{{sumPracticalYk.toString().indexOf('.')!=-1 ? sumPracticalYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                    </tr>
+                    </tbody>
+                    <tbody v-if="dataList.length > 0 && drawFlag!=0">
+                    <tr v-for="data in dataList">
+                        <td> {{data.dateStr}}</td>
+                        <td v-if="data.nickName != null && data.nickName != '' && data.nickName != undefined">
+                            {{data.username}}({{data.nickName}})
+                        </td>
+                        <td v-else>
+                            {{data.username}}
+                        </td>
+                        <td>{{data.gxAmount.toString().indexOf('.')!=-1 ? data.gxAmount.toFixed(2).split(".")[0]+'.' : data.gxAmount}}<span style="color: #c2c1c1;">{{data.gxAmount.toString().indexOf('.')!=-1 ? data.gxAmount.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td>0</td>
+                        <td>{{data.practicalYk.toString().indexOf('.')!=-1 ? data.practicalYk.toFixed(2).split(".")[0]+'.' : data.practicalYk}}<span style="color: #c2c1c1;">{{data.practicalYk.toString().indexOf('.')!=-1 ? data.practicalYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td>
+                            <select class="weal" :id="data.id + 'weal'" @change="flChange(data.gxAmount, data.practicalYk, data.id)">
+                                <option value="0">0</option>
+                                <option value="0.001">0.001</option>
+                                <option value="0.002">0.002</option>
+                                <option value="0.003">0.003</option>
+                                <option value="0.004">0.004</option>
+                                <option value="0.005">0.005</option>
+                                <option value="0.006">0.006</option>
+                                <option value="0.007">0.007</option>
+                                <option value="0.008">0.008</option>
+                                <option value="0.009">0.009</option>
+                                <option value="0.01">0.01</option>
+                            </select>
+                        </td>
+                        <td><span :id="data.id"></span></td>
+                        <td><span :id="data.id + 'result'">{{data.practicalYk}}</span></td>
+                    </tr>
+                    <tr class="tfoot">
+                        <td class="tc">{{$t('heji')}}</td>
+                        <td></td>
+                        <td class="fb">{{sumAmount.toString().indexOf('.')!=-1 ? sumAmount.toFixed(2).split(".")[0]+'.' : sumAmount}}<span style="color: #c2c1c1;">{{sumAmount.toString().indexOf('.')!=-1 ? sumAmount.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td class="fb">0</td>
+                        <td class="fb">{{sumPracticalYk.toString().indexOf('.')!=-1 ? sumPracticalYk.toFixed(2).split(".")[0]+'.' : sumPracticalYk}}<span style="color: #c2c1c1;">{{sumPracticalYk.toString().indexOf('.')!=-1 ? sumPracticalYk.toFixed(2).split(".")[1] : ''}}</span></td>
+                        <td></td>
+                        <td></td>
+                        <td><span id="totalResult"></span></td>
+                    </tr>
+                    </tbody>
+                    <tbody v-else-if="dataList.length == 0">
+                        <tr class="tfoot" v-if="drawFlag == 0">
+                            <td colspan="9">{{$t('noData')}}</td>
+                        </tr>
+                        <tr class="tfoot" v-else>
+                            <td colspan="8">{{$t('noData')}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    const messages = {
+        zh: {
+            heji:"合计",
+            noData:"暂无数据！",
+            fuli:"福利",
+            tong:"同",
+            zhancheng:"占成",
+        },
+        th: {
+            heji:"รวม",
+            noData:"ไม่มีข้อมูล!",
+            fuli:"สวัสดิการ",
+            tong:"เหมือนกัน",
+            zhancheng:"การแบ่งสัดส่วนกำไร",
+        }
+    }
+
+    var moduleName = "gongxiandu";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.initData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        vm.initData();
+    }
+
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    window.sessionStorage.setItem("yueji_nav","");
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            yearMonthList: [],
+            dataList: [],
+            drawId: "",
+            month: "",
+            startDate: "",
+            endDate: "",
+            userId: "",
+            roleName: "",
+            sumAmount: "",
+            sumPercentYk: "",
+            sumPracticalYk: "",
+            monthData: "",
+            drawFlag: "",
+            all: "",
+        },
+        methods: {
+            initData() {
+                this.userId = GetQueryString("userId");
+                this.drawFlag = GetQueryString("drawFlag");
+                this.all = GetQueryString("all");
+                this.initQueryParam();
+                const monthQuery = GetQueryString("months");
+                if (monthQuery != null && monthQuery != "" && monthQuery != undefined) {
+                    this.month = monthQuery;
+                    this.monthData = monthQuery;
+                }
+                this.getDrawList();
+            },
+            initQueryParam() {
+                const _this = this;
+                $.ajax({
+                    url: HOST + "gongXianDu/initQueryParam"
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            if (GetQueryString("drawFlag") == 0) {
+                                _this.drawId = res.data.drawId
+                            }
+                            _this.yearMonthList = res.data.yearMonthList
+                            _this.roleName = res.data.roleName
+                            _this.initGongXianDuList();
+                        } else {
+                            layer.msg(i18np.prop('gxd.ajax.errorMsg'));
+                        }
+                    }
+                });
+            },
+            getDrawList() {
+                $.ajax({
+                    url: HOST + "draw/getDrawList68",
+                    success: function (res) {
+                        if (res.code == 200) {
+                            $("#draw").html("");
+                            for (var i in res.data) {
+                                $("#draw").append("<option value='" + res.data[i].drawId + "'>" + res.data[i].drawIdStr + "</option>")
+                            }
+                        }
+                    }
+                });
+            },
+            initGongXianDuList() {
+                this.dataList = [];
+                const _this = this;
+                $.ajax({
+                    url: HOST + "gongXianDu/getGongXianDuList?drawId=" + _this.drawId + "&userId=" + _this.userId + "&month=" + _this.month + "&startDate=" + _this.startDate + "&endDate=" + _this.endDate
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 0) {
+                            if (res.data.dataList != null && res.data.dataList != "" && res.data.dataList != undefined){
+                                _this.dataList = res.data.dataList
+                            }
+                            _this.sumAmount = res.data.sumAmount
+                            _this.sumPercentYk = res.data.sumPercentYk
+                            _this.sumPracticalYk = res.data.sumPracticalYk
+                        } else {
+                            layer.msg(i18np.prop('gxd.ajax.errorMsg'));
+                        }
+                    }
+                });
+            },
+            changeSelect() {
+                this.drawId = $("#draw").val();
+                this.initGongXianDuList();
+            },
+            flChange(amount, practicalYk, id) {
+                const weal = $("#" + id + "weal").val();
+                console.log(weal);
+                const flAmount = parseFloat(amount) * parseFloat(weal);
+                const result = parseFloat(practicalYk) - flAmount;
+                $("#" + id).html(flAmount.toFixed(2));
+                $("#" + id + "result").html(result.toFixed(2))
+            }
+        }
+    })
+    // vm.initData();
+</script>
+<script>
+    layui.use(['form', 'jquery', 'laydate'], function () {
+        var $ = layui.jquery;
+        let weekStartDate = getWeek(0, 0); //本周开始日期
+        let weekEndDate = getWeek(0, 1); // 本周结束日期
+        //getWeek(1, 0) // 获取下周开始日期
+        //getWeek(1, 1) // 获取下周结束日期
+
+        $("#last_week").on('click', function () {
+            let preWeekStartDate = getWeek(-1, 0) // 上周开始日期
+            let preWeekEngDate = getWeek(-1, 1) // 上周结束日期
+            $("#end_date").val(preWeekEngDate);
+            $("#start_date").val(preWeekStartDate);
+        })
+
+        $("#this_week").on('click', function () {
+            $("#end_date").val(weekEndDate);
+            $("#start_date").val(weekStartDate);
+        })
+
+        function getWeek(n, type) { // 周
+            let now = new Date()
+            let day = now.getDay() //返回星期几的某一天;
+            if (!type) {
+                if (n == 1) {
+                    let dayNumber = day == 0 ? 0 : 7 - day
+                    now.setDate(now.getDate() + dayNumber + 1)
+                } else if (n == -1) {
+                    let dayNumber = day == 0 ? 6 : day - 1
+                    now.setDate(now.getDate() - dayNumber - 7)
+                } else {
+                    let dayNumber = day == 0 ? 6 : day - 1
+                    now.setDate(now.getDate() - dayNumber)
+                }
+            } else {
+                if (n == 1) {
+                    let dayNumber = day == 0 ? 0 : 7 - day
+                    now.setDate(now.getDate() + dayNumber + 1 + 6) // 在周开始的日期上+6天=周结束
+                } else if (n == -1) {
+                    let dayNumber = day == 0 ? 6 : day - 1
+                    now.setDate(now.getDate() - dayNumber - 7 + 6)
+                } else {
+                    let dayNumber = day == 0 ? 0 : 7 - day
+                    now.setDate(now.getDate() + dayNumber)
+                }
+            }
+            let date = now.getDate()
+            let month = now.getMonth() + 1
+
+            let s = now.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date)
+            return s
+        };
+        const laydate = layui.laydate;
+        const endDate = laydate.render({
+            elem: '#end_date',//选择器结束时间
+            type: 'date',
+            value: weekEndDate,
+            done: function (value, date) {
+                startDate.config.max = {
+                    year: date.year,
+                    month: date.month - 1,//关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0
+                }
+            }
+        });
+        //日期范围
+        const startDate = laydate.render({
+            elem: '#start_date',
+            type: 'date',
+            value: weekStartDate,
+            done: function (value, date) {
+                endDate.config.min = {
+                    year: date.year,
+                    month: date.month - 1, //关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0
+                };
+            }
+        });
+    });
+</script>
+</body>
+</html>

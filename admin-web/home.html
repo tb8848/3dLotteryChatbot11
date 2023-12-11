@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>首页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/common.css" media="all">
+
+    <link href="css/style-Permutation5.css?" type="text/css" rel="stylesheet">
+    <link href="css/A-P5.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="main">
+    <template>
+        <div class="module">
+            <div name="module" id="online_account" class="m5 mt10">
+                <div class="guide">
+                    <a href="#!online_account" i18n="home.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="home.top.home"> 首页</span>
+                </div>
+                <div class="mt10">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td>
+                                <span i18n="home.onlineAccount">在线账号</span>（<span i18n="home.totalCount">总人数</span>：{{onlineCount}}）
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span i18n="home.todayMaxOnlineCount">今天最高在线人数</span>（<span i18n="home.vip">会员</span>：{{maxVipCount}}，
+                                <span i18n="home.middleman">中间商</span>：{{maxAgentCount}}，
+                                <span i18n="home.total">合计</span>：{{maxCount}}）
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span i18n="home.vipTotalCount">会员总数</span>：{{vipCount}}
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody" v-if="dataList.length > 0">
+                        <tr>
+                            <td> <span v-for="data in dataList">&nbsp;&nbsp;{{data}}</span></td>
+                        </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+                                <td i18n="home.not.Data">暂无数据！</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--<div name="module" id="pager" class="pager" action="online_account" pagebody="tbody" template="tpl_refresh"pagecount="1" param="">
+            第 <span class="pageindex red">1</span> 页
+            共 <span class="pagecount red">1</span> 页
+            共 <span class="recordcount red">2</span> 条
+            <a href="javascript:void(0)" class="fn-first">首页</a>
+            <a href="javascript:void(0)" class="fn-prev">上一页</a>
+            <a href="javascript:void(0)" class="fn-next">下一页</a>
+            <a href="javascript:void(0)" class="fn-last">尾页</a>
+            <input type="text" class="input w30 fn-index">
+            <input type="button" class="btn btn-gray w30 fn-go" value="GO">
+        </div>-->
+        <div name="module" id="footer" class="footer">
+            <div class="bd"></div>
+        </div>
+    </template>
+</div>
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/vue/vue.js"></script>
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script>
+    var $ = layui.jquery;
+
+    var moduleName = "home";
+    var defaultLang = layui.data('langTab').langType;
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        vm.initData();
+    }
+
+    layui.config({base: 'js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.initData();
+    });
+
+    const vm = new Vue({
+        el: '#main',
+        data: {
+            dataList:[],
+            vipCount: 0,
+            onlineCount: 0,
+            maxVipCount: 0,
+            maxAgentCount: 0,
+            maxCount: 0,
+        },
+        methods: {
+            initData () {
+                const _this = this;
+                $.ajax({
+                    url:HOST+"admin/getOnlineInfo" ,
+                    success:function(res){
+                        if(res.code == 200) {
+                            _this.dataList = res.data.onlineUserList
+                            _this.onlineCount = res.data.onlineCount
+                            _this.vipCount = res.data.vipCount
+                            _this.maxVipCount = res.data.maxVipCount
+                            _this.maxAgentCount = res.data.maxAgentCount
+                            _this.maxCount = res.data.maxCount
+                        }
+                    }
+                });
+            },
+        }
+    })
+    // vm.initData();
+</script>
+</body>
+</html>

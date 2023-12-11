@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title i18n="kuaixuan.title">快选</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link href="css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/3603d/reset.css" />
+    <link rel="stylesheet" href="css/3603d/i6fzam.css" />
+    <link rel="stylesheet" href="css/3603d/mod.caiz.css" />
+    <link rel="stylesheet" href="css/3603d/mod.mv.css" />
+    <link rel="stylesheet" href="css/3603d/tools_infor.css" />
+    <style type="text/css">
+        .on{
+            color:white;
+        }
+        #doc3{
+            width:900px !important;
+        }
+        .mod-select-bolls .boll-item-col3 .t{
+            width:260px
+        }
+        .kuaixuan .right .bd{
+            border: none;
+        }
+
+        .hsValueRow{
+            background-color:lightgoldenrodyellow;
+        }
+
+        .hsValueRow td{
+            border:1px solid #EEEEEE;
+        }
+    </style>
+
+    <style>
+
+        .ballLabel{
+            padding-right: 5px;
+            text-align:right;
+            color:red;
+            font-size: 14px;
+            font-weight: bolder;
+        }
+        .lsItem{
+            width: 60px;
+            height: 30px;
+            border-right: 1px solid #E4E7ED;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        .lsItem .last{
+            border-right: none;
+        }
+
+        .ballCol{
+            display: flex;
+            justify-content: center;
+            width:10%
+        }
+
+        .border-active{
+            border:1px solid red;
+        }
+
+        .border-inactive{
+            border:1px solid #E4E7ED;
+        }
+
+        .fixBottom{
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            height: 50px;
+            background-color: red;
+            padding: 5px;
+            z-index:10000;
+        }
+
+        .hide{
+            display: none;
+        }
+
+        .ballsRow{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ballsRow .oneBall{
+            border-radius: 15px;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+
+        }
+
+        .ballsRow .oneBall-large{
+            border-radius: 30px;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            font-weight: bolder;
+            font-size: 20px;
+
+        }
+
+        .fontred{
+            background-color: red;
+            color: white;
+        }
+
+        .red:active{
+            background-color: #ebeb75 !important;
+        }
+
+        .zise{
+            background-color: #8A2BCF;
+            color: white;
+        }
+        .gray{
+            background-color: #cfcfcf;
+            color: black;
+        }
+
+        .ls_title{
+            padding:10px;
+            color:red;
+            border-bottom:3px solid orangered;
+        }
+
+        .tableCell10{
+            width:10%
+        }
+
+        .btnAll{
+            width: 60px;
+            height: 28px;
+            line-height:28px;
+            background-color: blueviolet;
+            border-radius: 5px;
+            margin: 3px 5px;
+            text-align: center;
+            color:white
+        }
+
+        .btnAll:active{
+            background-color: #ebeb75 !important;
+        }
+
+        .chkScale{
+            transform:scale(0.8)
+        }
+
+        .ruleItem{
+            width:18%;
+            margin:0 1% 3px 1%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background-color: #aaa;
+            color:white;
+        }
+
+        .ruleItemSelected{
+            background-color: red;
+        }
+
+        .locItem{
+            width:11px;
+            height: 10px;
+            margin:5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .locInput{
+            border:1px solid #bbb;
+            padding:1px;
+            text-align: center;
+            margin:0px 2px;
+        }
+
+        .width120{
+            width:60px;
+        }
+
+        .width100{
+            width:50px;
+        }
+
+        .width80{
+            width:40px;
+        }
+
+        .width70{
+            width:35px
+        }
+
+        .locInputLbl{
+            text-align: center;
+            margin-top:5px;
+        }
+
+        .row{
+            display: flex;
+            margin-bottom:5px;
+            border-bottom: 1px solid #999;
+            padding:4px;
+        }
+
+        .column-center{
+            display: flex;
+            flex-direction: column;
+            margin:5px 0px;
+            border-bottom: 1px solid #999;
+            padding:4px;
+        }
+
+        .ruleNamelbl{
+            color:blueviolet;
+            margin-right: 5px;
+        }
+
+
+        .content {
+            padding: 15px;
+        }
+
+        .text {
+            font-size: 14px;
+            color: #666;
+            line-height: 20px;
+        }
+
+        .btnBuy{
+            text-align:center;
+            margin:0px 5px;
+            height: 35px;
+            width: 70px;
+            line-height: 35px;
+            background-color:#A52A2A;
+            border-radius: 5px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            color: white;
+            font-size: 18px;
+        }
+
+        .btnAll:active,.btnBuy:active{
+            background-color: #ebeb75 !important;
+        }
+
+
+
+    </style>
+
+</head>
+<body style="overflow-y: auto;">
+
+<div class="module">
+    <div name="module" id="kuaixuan" class="kuaixuan">
+        <template>
+            <input type="hidden" id="template_type" value="erd">
+
+            <div @click="goBack" style="text-align: right;padding: 10px;background-color: orangered"><img src="img/close.png" width="25px" height="25px"/></div>
+            <div >
+                <div class="bd m5">
+                    <table class="tb-kuaixuan" width="100%" cellspacing="0" cellpadding="0">
+                        <tbody id="xiaopingmu">
+                        <tr class="title-bar" id="lotteryMethodsContainer">
+                            <td v-for="(item,idx) in lotteryMethodList.slice(0,5)"
+                                :class="item.id==lotteryMethodId?'on':'off'"  style="width:16.6%;">
+                                <input type="button" :value="item.bettingMethod" class="fn-module btn-large erd-btn" @click="changeLotteryMethod(item)">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <form id="createForm">
+                        <div id="bd_template" style="ime-mode: disabled;">
+                            <table class="t-1">
+                                <tr class="fixed-input tc" id="baozu" v-show="lotteryMethodId==2 || lotteryMethodId==3 || lotteryMethodId==4">
+                                    <td width="25%">&nbsp;</td>
+                                    <td width="25%"><input type="radio" name="bm"  :checked="buyMethod==1" @click="setBuyMethod(1)">按组数下注</td>
+                                    <td width="25%"><input type="radio" name="bm" :checked="buyMethod==0" @click="setBuyMethod(0)">按笔数下注</td>
+                                    <td width="25%">&nbsp;</td>
+
+                                </tr>
+                                <tr class="fixed-input tc" v-show="(lotteryMethodId==2 || lotteryMethodId==3 || lotteryMethodId==4)">
+
+                                    <td colspan="4">号码:<input type="input" v-model="ncode" @keyup="limitRepeatNums(this,'ncode',0)"></td>
+
+                                </tr>
+                            </table>
+
+                            <table class="t-1" v-show="buyMethod==0">
+                                <tbody>
+
+
+
+                                <tr class="bg2" id="dingweiHeader" v-show="lotteryMethodId==1 || lotteryMethodId==2 || lotteryMethodId==6 || lotteryMethodId==7">
+                                    <td colspan="3" class="tc">
+                                        <strong class="red2" >定位置</strong>
+                                        <label><input type="checkbox" class="position-filter checkbox" positiontype="0" positionfilter="1"
+                                                      :checked="rules.fixCode.excluded==1" id="dingwei_chu" @click="showdis(this,'dingwei_qu','fixLoc','',0);">
+                                            <span>除</span>
+                                        </label>
+                                        <label><input type="checkbox" class="position-filter checkbox" positiontype="0" positionfilter="0"
+                                                      id="dingwei_qu" :checked="rules.fixCode.included==1" @click="showdis(this,'dingwei_chu','fixLoc','',1);"
+                                                      checked="checked">
+                                            <span>取</span>
+                                        </label>
+                                    </td>
+
+                                </tr>
+
+                                <tr class="fixed-input tc" id="dingweiContainer" v-show="lotteryMethodId==1 || lotteryMethodId==2 || lotteryMethodId==6 || lotteryMethodId==7">
+                                    <!--<td width="25%" i18n="kuaixuan.rules.qian">{{$t('message.kuaixuan.rules_qian')}}</td>-->
+                                    <td width="25%">百</td>
+                                    <td width="25%">十</td>
+                                    <td width="25%">个</td>
+                                </tr>
+                                <tr class="fixed-input tc" id="dingweiContainer-1" v-show="lotteryMethodId==1 || lotteryMethodId==6 || lotteryMethodId==7 || lotteryMethodId==2">
+                                    <td><input type="text" class="w90" boxnumber="1" v-model="rules.fixCode.loc1" digits="true" maxlength="10"
+                                               ID="__dingwei_1" @keyup="limitRepeatNums(this,'fixCode',0)"></td>
+                                    <td><input type="text" class="w90" boxnumber="2" v-model="rules.fixCode.loc2" digits="true" maxlength="10"
+                                               ID="__dingwei_2" @keyup="limitRepeatNums(this,'fixCode',1)"></td>
+                                    <td><input type="text" class="w90" boxnumber="3" v-model="rules.fixCode.loc3" digits="true" maxlength="10"
+                                               disabledID="__dingwei_3" @keyup="limitRepeatNums(this,'fixCode',2)"></td>
+                                    <!--<td><input type="text" class="w90" boxnumber="4" v-model="rules.fixCode.loc4" digits="true" maxlength="10"-->
+                                               <!--ID="__dingwei_4" @keyup="limitRepeatNums(this,'fixCode',3)"></td>-->
+                                </tr>
+
+                                <!--<tr id="peishuContainer-1" class="match-input" v-show="ruleItemIndex>1 && (rules.matchCodes.excluded==1 || rules.matchCodes.included==1)">-->
+                                    <!--<td colspan="4" class="tc">-->
+                                        <!--<span id="ps1" v-show="ruleItemIndex>1"><INPUT TYPE="text" v-model="rules.matchCodes.loc1" ID="peishu_1" class="w90" digits="true"  maxlength=10  @keyup="limitRepeatNums(this,'peishu',0)"></span>-->
+                                        <!--<span id="ps2" v-show="ruleItemIndex>1"> <span i18n="kuaixuan.rules.match">{{$t('message.kuaixuan.rules_match')}}</span>,<INPUT TYPE="text"  v-model="rules.matchCodes.loc2" ID="peishu_2" class="w90"  maxlength=10  @keyup="limitRepeatNums(this,'peishu',1)" ></span>-->
+                                        <!--<span id="ps3" v-show="ruleItemIndex>2"> <span i18n="kuaixuan.rules.match">{{$t('message.kuaixuan.rules_match')}}</span>,<INPUT TYPE="text" v-model="rules.matchCodes.loc3" ID="peishu_3" class="w90"  maxlength=10   @keyup="limitRepeatNums(this,'peishu',2)"></span>-->
+                                        <!--<span id="ps4" v-show="ruleItemIndex>3"> <span i18n="kuaixuan.rules.match">{{$t('message.kuaixuan.rules_match')}}</span>,<INPUT TYPE="text"  v-model="rules.matchCodes.loc4" ID="peishu_4" class="w90"  maxlength=10   @keyup="limitRepeatNums(this,'peishu',3)"></span>-->
+
+                                    <!--</td>-->
+                                <!--</tr>-->
+
+                                <tr class="bg2" id="hefenContainer" v-show="lotteryMethodId==1 || lotteryMethodId==2 || lotteryMethodId==7">
+                                    <td colspan="4" class="tc">
+                                        <strong class="red2">合</strong>&nbsp;&nbsp;
+                                        <strong class="red2" >分</strong>
+                                        <label><input type="checkbox" class="remain-fixed-filter checkbox" remainfixedfilter="1" :checked="rules.hefen.excluded==1"
+                                                      NAME="__hefen_chu" id="__hefen_chu" @click="showdis(this,'__hefen_qu','hefen','',0);"><span i18n="kuaixuan.rules.chu">除</span></label>
+                                        <label><input type="checkbox" class="remain-fixed-filter checkbox" remainfixedfilter="0" :checked="rules.hefen.included==1"
+                                                      NAME="__hefen_qu" id="__hefen_qu" @click="showdis(this,'__hefen_chu','hefen','',1);"><span i18n="kuaixuan.rules.qu">取</span></label> </td>
+                                </tr>
+                                <tr class="tc" id="hefenContainer1" v-show="lotteryMethodId==1 || lotteryMethodId==2 || lotteryMethodId==7">
+                                    <td class="remain-fixed-filter-item">
+                                        1. <input type="checkbox" @click="showChkResult(this,'hefenItem1',0)" :checked="rules.hefen.binds[0].locArr[0]==1">
+                                        <input type="checkbox" @click="showChkResult(this,'hefenItem1',1)" :checked="rules.hefen.binds[0].locArr[1]==1">
+                                        <input type="checkbox"  @click="showChkResult(this,'hefenItem1',2)" :checked="rules.hefen.binds[0].locArr[2]==1">
+
+                                        <br> <input type="text" class="w90" v-model="rules.hefen.binds[0].value" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'hefenItem1',0)"> </td>
+                                    <td class="remain-fixed-filter-item">
+                                        2. <input type="checkbox" @click="showChkResult(this,'hefenItem2',0)" :checked="rules.hefen.binds[1].locArr[0]==1">
+                                        <input type="checkbox" @click="showChkResult(this,'hefenItem2',1)" :checked="rules.hefen.binds[1].locArr[1]==1">
+                                        <input type="checkbox" @click="showChkResult(this,'hefenItem2',2)" :checked="rules.hefen.binds[1].locArr[2]==1">
+
+                                        <br> <input type="text" class="w90" v-model="rules.hefen.binds[1].value" digits="true" maxlength="10"  @keyup="limitRepeatNums(this,'hefenItem2',0)"> </td>
+                                    <td class="remain-fixed-filter-item">
+                                        3. <input type="checkbox" @click="showChkResult(this,'hefenItem3',0)" :checked="rules.hefen.binds[2].locArr[0]==1">
+                                        <input type="checkbox" @click="showChkResult(this,'hefenItem3',1)" :checked="rules.hefen.binds[2].locArr[1]==1">
+                                        <input type="checkbox" @click="showChkResult(this,'hefenItem3',2)" :checked="rules.hefen.binds[2].locArr[2]==1">
+
+                                        <br> <input type="text" class="w90" v-model="rules.hefen.binds[2].value" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'hefenItem3',0)"> </td>
+
+                                </tr>
+                                <tr id="bdweihefenContainer" v-show="lotteryMethodId==3 || lotteryMethodId==4">
+                                    <td colspan="4" class="remain-match-filter-item"> <strong class="red2" >不定位合分</strong>
+                                        <label id="bd1">
+                                            <input type="checkbox" remainmatchfilter="2" class="remain-match-filter checkbox" :checked="rules.sum2.sumType==2"
+                                                   id="__bdwhefen_1" name="__bdwhefen_1" @click="showdis(this,'__bdwhefen_2','bdwhefen','sum2',0);">
+                                            <span>两数和</span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label id="bd2">
+                                            <input type="checkbox" remainmatchfilter="2" class="remain-match-filter checkbox" :checked="rules.sum2.sumType==3"
+                                                   id="__bdwhefen_2" name="__bdwhefen_2" @click="showdis(this,'__bdwhefen_1','bdwhefen','sum3',0);">
+                                            <span>三数和</span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="text" class="w90" v-model="rules.sum2.sum" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'sum2',0)" >
+                                    </td>
+                                </tr>
+                                <tr id="otherRuleContainer" >
+                                    <td colspan="4">
+                                <span id="quandao" v-show="lotteryMethodId==1 || lotteryMethodId==7">
+                                    <strong class="red2">全转</strong>
+                                    <input type="text" class="transform-filter-item w50" name="quanzhuan" v-model="rules.others.fullChange"
+                                           digits="true" maxlength="10" @keyup="limitRepeatNums(this,'quanzhuan',0)" ID="__quandao">
+                                </span>
+                                        <span id="shangjiang" v-show="lotteryMethodId==1 || lotteryMethodId==7">
+                                    <strong class="red2">上奖</strong>
+                                    <input type="text" class="upper-filter-item w50" name="shangjiang" digits="true" maxlength="10" v-model="rules.others.shangJiang"
+                                           @keyup="limitRepeatNums(this,'shangjiang',0)" ID="__shangjiang" >
+                                </span>
+                                        <span id="paichu" v-show="lotteryMethodId==1 || lotteryMethodId==2 || lotteryMethodId==3 || lotteryMethodId==4 || lotteryMethodId==7">
+                                    <strong class="red2" i18n="kuaixuan.rules.paichu">排除</strong>
+                                    <input type="text" class="except-filter-item w50" name="paichu" digits="true" v-model="rules.others.excludes"
+                                           maxlength="10" @keyup="limitRepeatNums(this,'paichu',0)" ID="__paichu">
+                                </span>
+
+                                        <span id="zfw1" v-show="lotteryMethodId==1 || lotteryMethodId==2 || lotteryMethodId==3 || lotteryMethodId==4">
+                                    <strong class="red2">和值范围</strong>
+                                        从<input type="text" class="except-filter-item w50" NAME="__zhifanwei_start" ID="__zhifanwei_start"  v-model="rules.others.valueRange[0]"
+                                                                                         @keyup="limitRepeatNums(this,'valueRange',0)">
+                                    <span i18n="kuaixuan.rules.value">值</span>&nbsp;<span i18n="kuaixuan.rules.valueTo">至</span>&nbsp;
+                                        <input TYPE="text" class="except-filter-item w50" NAME="__zhifanwei_end" ID="__zhifanwei_end"   v-model="rules.others.valueRange[1]"
+                                               @keyup="limitRepeatNums(this,'valueRange',1)" maxlength=8  ><span>值</span>
+
+                                </span>
+                                        <span id="ch2" v-show="lotteryMethodId==6 || lotteryMethodId==7">
+                                    <strong class="red2">乘号位置</strong>
+                                    <input type="checkbox" :checked="rules.others.locArr[0]==1" class="symbol-filter-item" NAME="__chenghao_1" id="__chenghao_1" @click="showChkResult(this,'xlocArr',0)">
+                                    <input type="checkbox" :checked="rules.others.locArr[1]==1" class="symbol-filter-item" NAME="__chenghao_2" id="__chenghao_2" @click="showChkResult(this,'xlocArr',1)">
+                                    <input type="checkbox" :checked="rules.others.locArr[2]==1" class="symbol-filter-item" NAME="__chenghao_3" id="__chenghao_3" @click="showChkResult(this,'xlocArr',2)">
+
+                                </span>
+                                    </td>
+                                </tr>
+                                <tr id="fushiContainer" v-show="lotteryMethodId!=6 && lotteryMethodId!=2">
+                                    <td colspan="4">
+                                        <label><input type="checkbox" class="contain-filter checkbox" containfilter="1" NAME="__chu_1" ID="__chu_1" :checked="rules.fushi.excluded==1"
+                                                      @click="showdis(this,'__qu_1','fushi','',0);"><span>除</span></label>
+                                        <label><input type="checkbox" class="contain-filter checkbox" containfilter="0" NAME="__qu_1" ID="__qu_1" :checked="rules.fushi.included==1"
+                                                      checked="checked" @click="showdis(this,'__chu_1','fushi','',1);">取</label>
+                                        <span id="ruleName1">{{ruleName}}</span>&nbsp;
+                                        <span i18n="kuaixuan.rules.han">含</span>
+                                        <input type="text" class="contain-filter-item w80" v-model="rules.fushi.contains" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'includes',0)">
+                                        <span id="ruleName2">{{ruleName}}</span>&nbsp;
+                                        <span i18n="kuaixuan.rules.fushi">复式</span>
+                                        <input type="text" class="multiple-filter-item" v-model="rules.fushi.combines" name="fushi" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'fushi',0)">
+                                    </td>
+                                </tr>
+                                <tr id="repeatTypeContainer" v-show="lotteryMethodId==1 || lotteryMethodId==2 || lotteryMethodId==3 || lotteryMethodId==7">
+                                    <td colspan="3">
+                                         <span id="repeat1" style="margin-right: 5px;" v-show="lotteryMethodId==1 || lotteryMethodId==3 || lotteryMethodId==7 || lotteryMethodId==2">
+                                             <label><input TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_1" ID="__chu_chong_1"
+                                                           @click="showdis(this,'__qu_chong_1','repeat','repeat1',0);" :checked="rules.repeat.double1.excluded==1"><span>除</span></label>
+                                             <label><input TYPE="checkbox" NAME="__qu_chong_1" ID="__qu_chong_1"
+                                                           @click="showdis(this,'__chu_chong_1','repeat','repeat1',1);" :checked="rules.repeat.double1.included==1">
+                                                 <span i18n="kuaixuan.rules.qu">取</span></label>(<strong class="red2">双重</strong>)&nbsp;
+                                        </span>
+
+                                        <span id="repeat3" style="margin-right: 5px;" v-show="lotteryMethodId==1 || lotteryMethodId==2">
+                                            <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_3" ID="__chu_chong_3"
+                                                          @click="showdis(this,'__qu_chong_3','repeat','repeat3',0);" :checked="rules.repeat.triple.excluded==1"><span>除</span></label>
+                                            <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__qu_chong_3" ID="__qu_chong_3"
+                                                          @click="showdis(this,'__chu_chong_3','repeat','repeat3',1);" :checked="rules.repeat.triple.included==1">
+                                                <span>取</span></label>(<strong class="red2">三重</strong>)&nbsp;
+                                        </span>
+
+                                    </td>
+                                </tr>
+
+                                <tr v-show="lotteryMethodId==1 || lotteryMethodId==3 || lotteryMethodId==4 || lotteryMethodId==7 || lotteryMethodId==2">
+                                    <td colspan="3">
+                                <span id="xiongdi2" v-show="lotteryMethodId==1 || lotteryMethodId==3 || lotteryMethodId==7 || lotteryMethodId==2">
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_1" ID="__chu_xiongdi_1"
+                                                  @click="showdis(this,'__qu_xiongdi_1','xiongdi','xiongdi1',0);" :checked="rules.brothers.br2.excluded==1"><span >除</span></label>
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_1" ID="__qu_xiongdi_1"
+                                                  @click="showdis(this,'__chu_xiongdi_1','xiongdi','xiongdi1',1);" :checked="rules.brothers.br2.included==1">
+                                        <span >取</span></label>(<strong class="red2">二兄弟</strong>)&nbsp;
+                                </span>
+                                        <span id="xiongdi3" v-show="lotteryMethodId==1 || lotteryMethodId==4 || lotteryMethodId==2">
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_2" ID="__chu_xiongdi_2"
+                                                  @click="showdis(this,'__qu_xiongdi_2','xiongdi','xiongdi2',0);" :checked="rules.brothers.br3.excluded==1"><span>除</span></label>
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_2" ID="__qu_xiongdi_2"
+                                                  @click="showdis(this,'__chu_xiongdi_2','xiongdi','xiongdi2',1);" :checked="rules.brothers.br3.included==1">
+                                        <span i18n="kuaixuan.rules.qu">取</span></label>(<strong class="red2" >三兄弟</strong>)&nbsp;
+                                </span>
+
+                                    </td>
+                                </tr>
+
+
+                                <tr id="duishuContainer" v-show="lotteryMethodId==1 || lotteryMethodId==3 || lotteryMethodId==4 || lotteryMethodId==7 || lotteryMethodId==2">
+                                    <td colspan="4"  class="logarithm-number-item">
+                                        <label><INPUT TYPE="checkbox" NAME="__chu_duishu" ID="__chu_duishu" @click="showdis(this,'__qu_duishu','duishu','',0);"
+                                                      class="logarithm-number-filter checkbox" :checked="rules.pairs.excluded==1"><span>除</span></label>
+                                        <label><INPUT TYPE="checkbox" NAME="__qu_duishu" ID="__qu_duishu" @click="showdis(this,'__chu_duishu','duishu','',1);"
+                                                      class="logarithm-number-filter checkbox" :checked="rules.pairs.included==1">
+                                            <span i18n="kuaixuan.rules.qu">取</span></label>(<strong class="red2">对数</strong>)
+                                        <INPUT TYPE="text" v-model="rules.pairs.pair1" ID="__duishu_1" class="w60"  maxlength=2  @keyup="limitRepeatNums(this,'duishu',0)" >&nbsp;
+                                        <INPUT TYPE="text" v-model="rules.pairs.pair2" ID="__duishu_2" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',1)" >&nbsp;
+                                        <INPUT TYPE="text" v-model="rules.pairs.pair3" ID="__duishu_3" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',2)" >&nbsp;
+                                        <!--                                <INPUT TYPE="text" v-model="rules.pairs.pair4" ID="__duishu_4" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',3)" >&nbsp;-->
+                                        <!--                                <INPUT TYPE="text" v-model="rules.pairs.pair5" ID="__duishu_5" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',4)" >&nbsp;-->
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" id="dangshuContainer">
+                                        <label><input type="checkbox" class="odd-number-filter checkbox" oddnumberfilter="1" NAME="__dan_chu" ID="__dan_chu"
+                                                      @click="showdis(this,'__dan_qu','singleNum','',0);" :checked="rules.singleNum.excluded==1"><span>除</span></label>
+                                        <label><input type="checkbox" class="odd-number-filter checkbox" oddnumberfilter="0" NAME="__dan_qu" ID="__dan_qu"
+                                                      @click="showdis(this,'__dan_chu','singleNum','',1);" :checked="rules.singleNum.included==1">
+                                            <span >取</span></label>
+                                        (<strong class="red2" >单</strong>)
+                                        <input type="checkbox" class="odd-number-item checkbox" :checked="rules.singleNum.locArr[0]==1" id="__dan_1" value="1" @click="showChkResult(this,'singleNum',0)">
+                                        <input type="checkbox" class="odd-number-item checkbox" :checked="rules.singleNum.locArr[1]==1" id="__dan_2" value="1" @click="showChkResult(this,'singleNum',1)">
+                                        <input type="checkbox" class="odd-number-item checkbox" :checked="rules.singleNum.locArr[2]==1" id="__dan_3" value="1" @click="showChkResult(this,'singleNum',2)">
+
+                                        <span class="green fb f14">
+                                    <span id="selectWord_odd"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_odd"></span>
+                                </span>
+                                    </td>
+                                    <td colspan="2">
+                                        <label><input type="checkbox" class="even-number-filter checkbox" evennumberfilter="1" NAME="__shuang_chu" ID="__shuang_chu"
+                                                      @click="showdis(this,'__shuang_qu','doubleNum','',0);" :checked="rules.doubleNum.excluded==1"><span>除</span></label>
+                                        <label><input type="checkbox" class="even-number-filter checkbox" evennumberfilter="0" NAME="__shuang_qu" ID="__shuang_qu"
+                                                      @click="showdis(this,'__shuang_chu','doubleNum','',1);" :checked="rules.doubleNum.included==1">
+                                            <span i18n="kuaixuan.rules.qu">取}</span></label> (<strong class="red2">双</strong>)
+                                        <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[0]==1" id="__shuang_1" value="1" @click="showChkResult(this,'doubleNum',0)">
+                                        <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[1]==1" id="__shuang_2" value="1" @click="showChkResult(this,'doubleNum',1)">
+                                        <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[2]==1" id="__shuang_3" value="1" @click="showChkResult(this,'doubleNum',2)">
+
+                                        <span class="green fb f14">
+                                    <span id="selectWord_even"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_even"></span>
+                                </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <label><input type="checkbox" class="big-number-filter checkbox" bignumberfilter="1" NAME="__max_chu" ID="__max_chu"
+                                                      @click="showdis(this,'__max_qu','bigNum','',0);" :checked="rules.bigNum.excluded==1"><span>除</span></label>
+                                        <label><input type="checkbox" class="big-number-filter checkbox" bignumberfilter="0" NAME="__max_qu" ID="__max_qu"
+                                                      @click="showdis(this,'__max_chu','bigNum','',1);" :checked="rules.bigNum.included==1">
+                                            <span i18n="kuaixuan.rules.qu">取</span></label> (<strong class="red2" >大</strong>)
+                                        <input type="checkbox" class="big-number-item checkbox" :checked="rules.bigNum.locArr[0]==1" id="__max_1" value="1" @click="showChkResult(this,'bigNum',0)">
+                                        <input type="checkbox" class="big-number-item checkbox" :checked="rules.bigNum.locArr[1]==1" id="__max_2" value="1" @click="showChkResult(this,'bigNum',1)">
+                                        <input type="checkbox" class="big-number-item checkbox" :checked="rules.bigNum.locArr[2]==1" id="__max_3" value="1" @click="showChkResult(this,'bigNum',2)">
+
+                                        <span class="green fb f14">
+                                    <span id="selectWord_big"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_big"></span>
+                                </span>
+                                    </td>
+                                    <td colspan="2">
+                                        <label><input type="checkbox" class="small-number-filter checkbox" smallnumberfilter="1" NAME="__min_chu" ID="__min_chu"
+                                                      @click="showdis(this,'__min_qu','smallNum','',0);" :checked="rules.smallNum.excluded==1"><span >除</span></label>
+                                        <label><input type="checkbox" class="small-number-filter checkbox" smallnumberfilter="0" NAME="__min_qu" ID="__min_qu"
+                                                      @click="showdis(this,'__min_chu','smallNum','',1);" :checked="rules.smallNum.included==1">
+                                            <span i18n="kuaixuan.rules.qu">取</span></label> (<strong class="red2" >小</strong>)
+                                        <input type="checkbox" class="small-number-item checkbox" :checked="rules.smallNum.locArr[0]==1" id="__min_1"  @click="showChkResult(this,'smallNum',0)">
+                                        <input type="checkbox" class="small-number-item checkbox" :checked="rules.smallNum.locArr[1]==1" id="__min_2"  @click="showChkResult(this,'smallNum',1)">
+                                        <input type="checkbox" class="small-number-item checkbox" :checked="rules.smallNum.locArr[2]==1" id="__min_3"  @click="showChkResult(this,'smallNum',2)">
+
+                                        <span class="green fb f14">
+                                    <span id="selectWord_small"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_small"></span>
+                                </span>
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <div class="tc padding6" id="btnGroup" v-show="openStatus==1 && isStopBuy==0">
+                    <input id="btn_create" type="button" value="生成" style="width:50px;height: 30px;" class="btn-common" @click="createCodes()">
+                    <input id="btn_reset" type="button" value="复位" style="width:50px;height: 30px;" class="btn-common" @click="resetXuan()">
+                </div>
+            </div>
+            <div style="padding-bottom: 100px">
+                <div class="bd m5">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="title-bar">
+                            <td>号码生成区</td>
+                        </tr>
+                        </thead>
+                        <tbody id="showselectnumber">
+                        <tr id="noDataRow" v-show="openStatus!=1 || (openStatus==1 && isStopBuy==1)">
+                            <td class="tc" style="height:200px;">
+                                <div class="f16 fb " id="openStatusDesc" style="height: 200;overflow-y: scroll">{{openStatusDesc}}</div>
+                            </td>
+                        </tr>
+                        <tr id="showDataRow" v-show="openStatus==1 && isStopBuy==0">
+                            <td class="no-padding">
+                                <div style="overflow-y: auto; " id="bd_betno" :class="[isPhone?'wap-max-height':'pc-max-height']" @scroll="loadTableData">
+                                    <!--号码展示区 -->
+                                    <table class="t-2 tc" cellspacing="0" cellpadding="0" v-show="codesList.length>0" >
+                                        <tbody ref="tableDataBox" v-html="tableDataHtml">
+                                        <!--                                                <tr v-for="(lineNo,ii) in showLines">-->
+                                        <!--                                                    <td style="width:12.5%" v-for="(loc,cc) in 8">-->
+                                        <!--                                                        <span v-if="(lineNo-1)*8+loc-1<tableData.dataList.length">{{tableData.dataList[(lineNo-1)*8+loc-1].buyCode}}</span>-->
+                                        <!--                                                    </td>-->
+                                        <!--&lt;!&ndash;                                                    <td width="12.5%">12XX</td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;                                                    <td width="12.5%">15XX</td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;                                                    <td width="12.5%">21XX</td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;                                                    <td width="12.5%">22XX</td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;                                                    <td width="12.5%">25XX</td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;                                                    <td width="12.5%">31XX</td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;                                                    <td width="12.5%">32XX</td>&ndash;&gt;-->
+                                        <!--                                                </tr>-->
+                                        </tbody>
+                                    </table>
+                                    <table class="t-2 tc" cellspacing="0" cellpadding="0" v-show="codesList.length==0 && created">
+                                        <tbody>
+                                        <tr>
+                                            <td colspan="8">未找到符合条件的号码</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="betStatus" id="betStatus1">
+                                        <img src="/Images/loading.gif"> <br><span>0</span>个注单正在投注，已完成<i id="multi_count"></i>个
+                                    </div>
+                                    <div class="betStatus" id="betStatus2"> <img src="/Images/loading.gif"> <br><span>0</span>个注单正在处理... </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div>
+                <form style="position:fixed;bottom:0;left:0;width: 97%;padding:0px 1%" id="sendForm" autocomplete="off" novalidate="novalidate" v-show="openStatus==1">
+                    <div class="mt10" v-show="dt==0">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="title-bar"> <td colspan="2">发送</td> </tr> </thead>
+                            <tbody>
+                            <tr>
+                                <td rowspan="2">
+                                    <span class="f16">金额</span>
+                                    <input id="bet_money" type="text" maxlength="8" v-model="buyMoney" @keyup="moneyInput"
+                                           required="true" positive="true" class="text-large w70 14 bet-money" aria-required="true">
+                                    &nbsp; <input id="btn_bet" type="button" @click="toBuy"  value="下注" style="width:50px;height: 30px" bet-type="0" class="btn-common">&nbsp;
+
+                                    <input type="hidden" name="operation_condition" id="operation_condition">
+                                </td>
+                                <td><span >笔数</span>：<span id="numberCount">{{codesNum}}</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>金额</span>：
+                                    <span id="numberAmount">{{totalMoney}}</span>
+                                    <span>元</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="mt10" v-show="dt==1">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="title-bar"> <td colspan="2">发送</td> </tr> </thead>
+                            <tbody>
+                            <tr>
+                                <td><span >笔数</span>：<span>{{codesNum}}</span></td>
+                                <td rowspan="2">
+                                    <input  type="button" @click="toBuy"  value="下注" style="width:50px;height: 30px" bet-type="0" class="btn-common">&nbsp;
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+
+        </template>
+    </div>
+</div>
+
+<script src="js/socket/sockjs.min.js"></script>
+<script src="js/socket/stomp.js?v1"></script>
+
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/layui/layui.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/projects/kuaixuan-fastbuy-utils-other.js"></script>
+<script src="js/projects/kuaixuan-fastbuy-utils.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/vue/vue.js"></script>
+<script src="js/projects/kuaixuan-3d.js"></script>
+
+
+<script type="text/javascript">
+
+    //window.parent.navSelected(2,"kuaixuan");
+
+
+
+
+    // var $ = layui.$;
+    // layui.config(
+    //     {base: baseUrl+'js/'})
+    //     .extend({i18np: 'i18n'})
+    //     .use(['i18np'], function () {
+    //         $i18np = layui.i18np;
+    //         $i18np.loadProperties(baseUrl,moduleName);
+    //         vm.init();
+    //         window.parent.frameLoad();
+    //
+    //         var width_screen = sessionStorage.getItem("width_screen");
+    //         // var height_screen = sessionStorage.getItem("height_screen");
+    //         $("#xiaopingmu").hide();
+    //         if (width_screen*1 < 1445 && defaultLang=="th"){
+    //             $("#dapingmu").hide();
+    //             $("#xiaopingmu").show();
+    //         }else{
+    //             $("#dapingmu").show();
+    //             $("#xiaopingmu").hide();
+    //         }
+    //     })
+    //
+    //
+
+    // function upOpenStatus(msg) {
+    //     vm.setOpenStatus(msg);
+    // }
+    // function changeLang(lang){
+    //     console.log("================lang="+lang);
+    //     reloadI18n({
+    //         defaultLang:lang,
+    //         filePath: baseUrl+"js/i18n/"+moduleName+"/",
+    //         module:moduleName,
+    //     })
+    //     $i18np.loadProperties(baseUrl,moduleName);
+    //     i18n.locale=lang;
+    //     vm.initLotteryMethodI18nName();
+    //
+    //     var width_screen = sessionStorage.getItem("width_screen");
+    //     if (width_screen*1 < 1445 && lang=="th"){
+    //         $("#dapingmu").hide();
+    //         $("#xiaopingmu").show();
+    //     }else{
+    //         $("#dapingmu").show();
+    //         $("#xiaopingmu").hide();
+    //     }
+    // }
+</script>
+
+<script>
+    var $ = layui.jquery;
+    const vm = new Vue({
+        el:'#kuaixuan',
+        data:{
+            "buyMethod":0,
+            "ncode":"",
+            dt:0,
+            rules:{
+                "codes":"",
+
+                "isXian":0,
+                "count":1,
+                "lotteryMethodId":'',
+                "fixCode":{
+                    "name":'定位置',
+                    "included":1,
+                    "excluded":0,
+                    "loc1":"",
+                    "loc2":"",
+                    "loc3":"",
+                    "isShow":true
+                },
+                "matchCodes":{
+                    "name":'配数',
+                    "included":0,
+                    "excluded":0,
+                    "loc1":"",
+                    "loc2":"",
+                    "loc3":"",
+                    "loc4":"",
+                    "isXian":0,
+                    "isShow":false
+                },
+                "repeat":{
+                    "name":'重数',
+                    "double1":{
+                        "name":"双重",
+                        "included":0,
+                        "excluded":0,
+                        "nums":2,
+                    },
+                    "triple":{
+                        "name":"三重",
+                        "included":0,
+                        "excluded":0,
+                        "nums":3,
+                    },
+                },
+                "brothers":{
+                    "name":"兄弟",
+                    "br2":{
+                        "name":"两兄弟",
+                        "included":0,
+                        "excluded":0,
+                        "nums":2,
+                    },
+                    "br3":{
+                        "name":"三兄弟",
+                        "included":0,
+                        "excluded":0,
+                        "nums":3,
+                    },
+                },
+                "pairs":{
+                    "name":"对数",
+                    "included":0,
+                    "excluded":0,
+                    "pair1":"",
+                    "pair2":"",
+                    "pair3":"",
+                    "pair4":"",
+                    "pair5":""
+                },
+                "singleNum":{
+                    "name":"单数",
+                    "included":0,
+                    "excluded":0,
+                    "locArr":[0,0,0],
+                },
+                "doubleNum":{
+                    "name":"双数",
+                    "included":0,
+                    "excluded":0,
+                    "locArr":[0,0,0],
+                },
+                "bigNum":{
+                    "name":"大数",
+                    "included":0,
+                    "excluded":0,
+                    "locArr":[0,0,0],
+                },
+                "smallNum":{
+                    "name":"小数",
+                    "included":0, //1:取
+                    "excluded":0, //1：除
+                    "locArr":[0,0,0],//位置,
+
+                },
+                "sum2":{
+                    "name":"两(或三)数合",
+                    "included":0, //1:取
+                    "excluded":0, //1：除
+                    "sum":"",
+                    "sumType":0, //2：两数和；3：三数和
+                },
+                "others":{
+                    "name":'其他规则',
+                    "fullChange":'', //全转
+                    "shangJiang":'', //上奖
+                    'excludes':'', //排除
+                    'locArr':[0,0,0],//乘号规则
+                    "valueRange":["",""] //值范围
+                },
+                "fushi":{
+                    "name":'复式规则',
+                    "included":1,
+                    "excluded":0,
+                    "contains":'', //含
+                    "combines":'' //复式
+                },
+                "hefen":{
+                    "name":'合分',
+                    "included":1,
+                    "excluded":0,
+                    "binds":[
+                        {
+                            "name":'',
+                            "value":'',
+                            "locArr":[0,0,0]
+                        },
+                        {
+                            "name":'',
+                            "value":'',
+                            "locArr":[0,0,0]
+                        },
+                        {
+                            "name":'',
+                            "value":'',
+                            "locArr":[0,0,0]
+                        },
+                    ]
+                }
+            },
+            ruleName:'',
+            lotteryMethodId:"",
+            lotteryMethodList:[
+                {
+                    id:1,bettingMethod:"直选"
+                },
+                {
+                    id:2,bettingMethod:"复式"
+                },
+                {
+                    id:3,bettingMethod:"组三"
+                },
+                {
+                    id:4,bettingMethod:"组六"
+                },
+                {
+                    id:6,bettingMethod:"1D"
+                },
+                {
+                    id:7,bettingMethod:"2D"
+                }
+            ],
+            ruleItemIndex:0,
+            isXian:0,
+            codesNum:0,
+            codesList:[],
+            showLines:0,
+            emptyRules:{},
+            reCreate:0,
+            buyMoney:'',
+            buyAmount:0,
+            totalMoney:0,
+            quickSelectSetting:{
+
+            },
+            openStatus:1,
+            isStopBuy:0, //是否停止下注
+            openStatusDesc:'',
+            recreateId:'',
+            printOdds:'',
+            currLm:'',
+            created:false,
+            isPhone:false,
+            tableData:{
+                currpage:1,
+                limit:1000,
+                dataList:[]
+            },
+            tableBox:null,
+            tableDataHtml:'',
+            xzuuid:'',
+            fastBuyDesc:""
+
+        },
+        methods:{
+
+            goBack(){
+                window.parent.hideFrame();
+            },
+
+            setBuyMethod(v){
+              this.buyMethod = v;
+            },
+            loadTableData(e){
+                let el = e.target;
+                var currpage = this.tableData.currpage;
+                let totalPages = Math.ceil(this.codesList.length/this.tableData.limit);
+                const scrollDistance = el.scrollHeight - el.scrollTop - el.clientHeight;
+                if(scrollDistance<=10){
+                    if(currpage<totalPages){
+                        currpage++;
+                        var st = (currpage-1)*this.tableData.limit;
+                        var et = (currpage)*this.tableData.limit;
+                        if(et>this.codesList.length){
+                            et = this.codesList.length;
+                        }
+                        var pageData = this.codesList.slice(st,et);
+                        //this.tableData.dataList = this.codesList.slice(0,(currpage)*this.tableData.limit);
+                        //this.showLines = Math.ceil(this.tableData.dataList.length/8);
+                        //console.log("============showLines ==",this.showLines)
+                        this.tableData.currpage=currpage;
+                        this.appendTableData(pageData)
+                    }
+                }
+            },
+            initLotteryMethodI18nName(){
+                //this.openStatusTrans();
+                var that = this;
+            //     that.lotteryMethodList.forEach((item,idx)=>{
+            //         var betMethodName = item.bettingMethod;
+            //     switch(item.id){
+            //         case "1":
+            //             betMethodName = that.$t("message.yiding");
+            //             break;
+            //         case "2":
+            //             betMethodName = that.$t("message.erding");
+            //             break;
+            //         case "3":
+            //             betMethodName = that.$t("message.sanding");
+            //             break;
+            //         case "4":
+            //             betMethodName = that.$t("message.siding");
+            //             break;
+            //         case "5":
+            //             betMethodName = that.$t("message.erxian");
+            //             break;
+            //         case "6":
+            //             betMethodName = that.$t("message.sanxian");
+            //             break;
+            //         case "7":
+            //             betMethodName = that.$t("message.sixian");
+            //             break;
+            //     }
+            //     if(that.currLm.id==item.id){
+            //         that.ruleName = betMethodName;
+            //     }
+            //     item.bettingMethod = betMethodName;
+            // })
+            },
+            appendTableData(pageData){
+                var newHtml = "";
+                var tr = "";
+                var td = "";
+                for(var i=0,len=pageData.length;i<len;i++){
+                    if(parseInt(i%8)==0 && i>0){
+                        tr = '<tr>'+td+'</tr>';
+                        newHtml = newHtml + tr;
+                        td = '';
+                    }
+                    td = td +'<td style="width:12.5%">'+pageData[i].buyCode+'</td>';
+                }
+
+                tr = '<tr>'+td+'</tr>';
+                newHtml = newHtml + tr;
+                this.tableDataHtml = this.tableDataHtml + newHtml;
+
+                //$("#tableData").append(newHtml);
+            },
+            setOpenStatus(msg){
+                this.openStatus = msg.openStatus;
+                if(msg.quickOrTxtCloseFlag==0) {//快选/导入栏目禁止下注标识
+                    this.isStopBuy = 1;
+                    this.openStatusDesc = $i18np.prop("kuaixuan.stopBuy"); //停止下注
+                }else{
+                    this.isStopBuy = 0;
+                    this.openStatusDesc = "";
+                }
+                if(this.openStatus==3){
+                    this.openStatusDesc = $i18np.prop("kuaixuan.drawOpening"); //"正在开盘中";
+                }else if(this.openStatus==2){
+                    this.openStatusDesc = $i18np.prop("kuaixuan.drawUnopen"); //"未开盘";
+                }else if(this.openStatus==0){
+                    this.openStatusDesc = $i18np.prop("kuaixuan.drawClose"); //"已封盘";
+                }else{
+                    this.openStatusDesc = "";
+                }
+            },
+            openStatusTrans(){
+                if(this.openStatus==3){
+                    this.openStatusDesc = $i18np.prop("kuaixuan.drawOpening"); //"正在开盘中";
+                }else if(this.openStatus==2){
+                    this.openStatusDesc = $i18np.prop("kuaixuan.drawUnopen"); //"未开盘";
+                }else if(this.openStatus==0){
+                    this.openStatusDesc = $i18np.prop("kuaixuan.drawClose"); //"已封盘";
+                }else{
+                    this.openStatusDesc = "";
+                }
+            },
+            init(){
+                var that = this;
+                this.emptyRules = JSON.stringify(this.rules);
+                this.recreateId = GetQueryString("recreateId");
+                this.dt = GetQueryString("dt");
+                this.getLotteryMethods();
+                if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                    this.isPhone=true;
+                }
+                //this.getuuid();
+            },
+            getuuid(){
+                var that = this;
+                $.ajax({
+                    url:HOST+'getUUid',
+                    type:'get',
+                    success:function(res){
+                        if(res.code==0){
+                            that.xzuuid = res.data.saveXZ;
+                        }
+                    },
+                    error:function (e) {
+
+                    }
+                });
+            },
+            getDrawInfo(){
+                var that = this;
+                $.ajax({
+                    url:HOST+'code/drawInfo',
+                    type:'get',
+                    success:function(res){
+                        if(res.code==0){
+                            that.setOpenStatus(res.data);
+                            if(res.data.openStatus==1){
+                                if(that.recreateId!=null){
+                                    that.recreateCodes();
+                                }
+                            }
+                            that.initParams();
+                            that.getQuickSelectSetting();
+                        }
+                    }
+                });
+            },
+
+            getLotteryMethods(){
+                var that = this;
+                that.currLm = that.lotteryMethodList[0];
+                that.lotteryMethodId =that.currLm.id;
+                that.rules.lotteryMethodId = that.currLm.id;
+                that.ruleName = that.currLm.bettingMethod;
+                //that.getDrawInfo();
+            },
+            getQuickSelectSetting(){
+                var that = this;
+                $.ajax({
+                    url:HOST+'basicsetting/quick',
+                    type:'get',
+                    success:function(res){
+                        if(res.code==0){
+                            that.quickSelectSetting = res.data;
+                        }
+                    }
+                })
+            },
+            checkCreateCondition(){
+                if(this.ncode.length>0){
+                    return true;
+                }
+                var hasSetCondi = false;
+                if(this.rules.fixCode.included==1 || this.rules.fixCode.excluded==1){
+                    if(this.rules.fixCode.loc1!="" || this.rules.fixCode.loc2!="" || this.rules.fixCode.loc3!=""){
+                        return true;
+                    }
+                }
+                if(this.rules.brothers.br2.included==1 || this.rules.brothers.br2.excluded==1){
+                    return true;
+                }
+                if(this.rules.brothers.br3.included==1 || this.rules.brothers.br3.excluded==1){
+                    return true;
+                }
+
+                if(this.rules.repeat.double1.included==1 || this.rules.repeat.double1.excluded==1){
+                    return true;
+                }
+                if(this.rules.repeat.triple.included==1 || this.rules.repeat.triple.excluded==1){
+                    return true;
+                }
+                if(this.rules.sum2.sumType==2 || this.rules.sum2.sumType==3){
+                    if(this.rules.sum2.sum!=""){
+                        return true;
+                    }
+                }
+                if(this.rules.others.fullChange!="" || this.rules.others.excludes!="" || this.rules.others.shangJiang!=""
+                    || this.rules.others.locArr[0]==1 || this.rules.others.locArr[1]==1  || this.rules.others.locArr[2]==1
+                    ||  (this.rules.others.valueRange[0]!="" || this.rules.others.valueRange[1]!="")){
+                    return true;
+                }
+                if(this.rules.singleNum.included==1 || this.rules.singleNum.excluded==1){
+                    if(this.rules.singleNum.locArr[0]==1 || this.rules.singleNum.locArr[1]==1
+                        || this.rules.singleNum.locArr[2]==1 ) {
+                        return true;
+                    }
+                }
+                if(this.rules.doubleNum.included==1 || this.rules.doubleNum.excluded==1){
+                    if(this.rules.doubleNum.locArr[0]==1 || this.rules.doubleNum.locArr[1]==1
+                        || this.rules.doubleNum.locArr[2]==1 ) {
+                        return true;
+                    }
+                }
+                if(this.rules.bigNum.included==1 || this.rules.bigNum.excluded==1){
+                    if(this.rules.bigNum.locArr[0]==1 || this.rules.bigNum.locArr[1]==1
+                        || this.rules.bigNum.locArr[2]==1 ) {
+                        return true;
+                    }
+                }
+                if(this.rules.smallNum.included==1 || this.rules.smallNum.excluded==1){
+                    if(this.rules.smallNum.locArr[0]==1 || this.rules.smallNum.locArr[1]==1
+                        || this.rules.smallNum.locArr[2]==1 ) {
+                        return true;
+                    }
+                }
+                if(this.rules.fushi.included==1 || this.rules.fushi.excluded==1){
+                    if(this.rules.fushi.contains!="" || this.rules.fushi.combines!=""){
+                        return true;
+                    }
+                }
+                if(this.rules.pairs.included==1 || this.rules.pairs.excluded==1){
+                    if(this.rules.pairs.pair1!=""){
+                        if(this.rules.pairs.pair1.length!=2){ //kuaixuan.tipTitle
+                            layer.alert("对数号码的差值不为5",{title:"提示",btn:["确定"]})
+                            return false;
+                        }
+                        var arr = this.rules.pairs.pair1.split("");
+                        var sum = accSub(arr[0],arr[1]);
+                        if(sum!=5 && sum!=-5){
+                            //layer.alert($i18np.prop("kuaixuan.duishi.tip"),{title:$i18np.prop("kuaixuan.tipTitle"),btn:[$i18np.prop("kuaixuan.printOdds.confirm")]})
+                            layer.alert("对数号码的差值不为5",{title:"提示",btn:["确定"]})
+                            return false;
+                        }
+                    }
+                    if(this.rules.pairs.pair2!=""){
+                        if(this.rules.pairs.pair2.length!=2){
+
+                            layer.alert("对数号码的差值不为5",{title:"提示",btn:["确定"]})
+                            return false;
+                        }
+                        var arr = this.rules.pairs.pair2.split("");
+                        var sum = accSub(arr[0],arr[1]);
+                        if(sum!=5 && sum!=-5){
+                            layer.alert("对数号码的差值不为5",{title:"提示",btn:["确定"]})
+                            //layer.alert($i18np.prop("kuaixuan.duishi.tip"),{title:$i18np.prop("kuaixuan.tipTitle"),btn:[$i18np.prop("kuaixuan.printOdds.confirm")]})
+                            return false;
+                        }
+                    }
+                    if(this.rules.pairs.pair3!=""){
+                        if(this.rules.pairs.pair3.length!=2){
+                            layer.alert("对数号码的差值不为5",{title:"提示",btn:["确定"]})
+                            //layer.alert($i18np.prop("kuaixuan.duishi.tip"),{title:$i18np.prop("kuaixuan.tipTitle"),btn:[$i18np.prop("kuaixuan.printOdds.confirm")]})
+                            return false;
+                        }
+                        var arr = this.rules.pairs.pair3.split("");
+                        var sum = accSub(arr[0],arr[1]);
+                        if(sum!=5 && sum!=-5){
+                            layer.alert("对数号码的差值不为5",{title:"提示",btn:["确定"]})
+                            //layer.alert($i18np.prop("kuaixuan.duishi.tip"),{title:$i18np.prop("kuaixuan.tipTitle"),btn:[$i18np.prop("kuaixuan.printOdds.confirm")]})
+                            return false;
+                        }
+                    }
+                    hasSetCondi = true;
+                }
+
+                if(this.rules.hefen.included==1 || this.rules.hefen.excluded==1){
+                    for(var i=0;i<3;i++){
+                        if(this.rules.hefen.binds[i].locArr[i]==1 ){
+                            if(this.rules.hefen.binds[i].value!=""){
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                if(!hasSetCondi){
+                    layer.alert("请设置过滤条件",{title:"提示",btn:["确定"]});
+                    return false;
+                }
+                return true;
+            },
+
+            createCodes() {
+                var that = this;
+
+                if(this.buyMethod==1 && (this.lotteryMethodId=="2" || this.lotteryMethodId=="3" || this.lotteryMethodId=="4") ){
+                    var len = this.ncode.length;
+                    var prefix = "";
+                    if(this.lotteryMethodId=="3"){
+                        var prefix = "组三";
+                        if(len<2){
+                            layer.alert("请至少输入2个号码");
+                            return;
+                        }
+                    }else if(this.lotteryMethodId=="4"){
+                        var prefix = "组六";
+                        if(len<3){
+                            layer.alert("请至少输入3个号码");
+                            return;
+                        }
+                    }else if(this.lotteryMethodId=="2"){
+                        var prefix = "复式";
+                        if(len<3){
+                            layer.alert("请至少输入3个号码");
+                            return;
+                        }
+                    }
+
+                    var arr = this.ncode.split("");
+                    arr.sort();
+                    this.ncode = arr.join("");
+                    var buyDesc = "";
+                    if(len==10){
+                        buyDesc = prefix+"全包:"+this.ncode;
+                    }else{
+                        buyDesc = prefix+changeDigitToChinese(len,"码")+":"+this.ncode;
+                    }
+                    this.codesList = [this.ncode];
+                    this.tableDataHtml = "<tr><td>"+buyDesc+"</td></tr>";
+                    //console.log("======",this.tableDataHtml);
+                    that.codesNum=1;
+                    this.fastBuyDesc = buyDesc;
+                    return;
+                }
+
+
+                var hasSetCondi = this.checkCreateCondition();
+                if(hasSetCondi){
+                    if(that.codesList.length>0){
+                        layer.confirm('上次生成的数据还没有下注完成，需要重新生成吗?',
+                            {title:'提示',btn:['确定','取消'] },
+                            function (index) {
+                                layer.closeAll();
+                                that.doCreateCode();
+                            },function (index) {
+                                layer.close(index);
+                            })
+                    }else{
+                        that.doCreateCode();
+                    }
+                }
+            },
+            doCreateCode(){
+                this.tableDataHtml="";
+                var that = this;
+                // layer.msg($i18np.prop("kuaixuan.chulizhong"), {
+                //     icon: 16
+                //     , shade: 0.3
+                //     , time: -1
+                // });
+                layer.closeAll();
+                var backData = createPeirateSettingCode(this.rules,this.lotteryMethodId,1);
+
+                var codeList = backData.data; //createPeirateSettingCode(this.rules,this.lotteryMethodId,1);
+                this.fastBuyDesc = backData.buyDesc;
+
+                that.created = true;
+                layer.closeAll();
+                if(codeList.length==0){
+                    layer.alert("未找到符合条件的号码");
+                    return;
+                }
+                //console.log("=========",codeList);
+                that.codesList = codeList;
+
+                that.showLines = Math.ceil(codeList.length/8);
+                that.appendTableData(codeList)
+                that.codesNum =codeList.length;
+                return false;
+            },
+            resetXuan(){
+                this.clearInput();
+                // if(this.lotteryMethodList.length>0){
+                //     this.lotteryMethodId = this.lotteryMethodList[0].id;
+                //     this.rules.lotteryMethodId = this.lotteryMethodList[0].id;
+                //     this.ruleName = this.lotteryMethodList[0].bettingMethod;
+                //     this.initParams();
+                // }else{
+                //     this.getLotteryMethods();
+                // }
+            },
+            clearInput() {
+                this.codesList = [];
+                this.totalMoney = 0;
+                this.buyMoney = '';
+                this.codesNum = 0;
+                this.rules = JSON.parse(this.emptyRules);
+                this.ncode = "";
+            },
+            initParams(){
+                var lmId = parseInt(this.lotteryMethodId);
+                this.rules.lotteryMethodId = this.lotteryMethodId;
+                this.rules.count = lmId;
+            },
+            changeLotteryMethod(item){
+                this.currLm = item;
+                this.ruleName = item.bettingMethod;
+                this.created = false;
+                if(this.lotteryMethodId!=item.id){
+                    this.clearInput();
+                }
+                this.lotteryMethodId = item.id;
+                this.initParams();
+                if(this.lotteryMethodId=="6" || this.lotteryMethodId=="7" || this.lotteryMethodId=="1"){
+                    this.buyMethod=0;
+                }
+                this.ncode = "";
+
+            },
+            showChkResult(my,ruleTypeName,itemIdx) {
+                switch(ruleTypeName){
+                    case 'bigNum':
+                        this.rules.bigNum.locArr[itemIdx]= this.rules.bigNum.locArr[itemIdx]==1?0:1;
+                        break;
+                    case 'smallNum':
+                        this.rules.smallNum.locArr[itemIdx]=this.rules.smallNum.locArr[itemIdx]==1?0:1;
+                        break;
+                    case 'doubleNum':
+                        this.rules.doubleNum.locArr[itemIdx]=this.rules.doubleNum.locArr[itemIdx]==1?0:1;
+                        break;
+                    case 'singleNum':
+                        this.rules.singleNum.locArr[itemIdx]=this.rules.singleNum.locArr[itemIdx]==1?0:1;
+                        break;
+                    case 'xlocArr':
+                        this.rules.others.locArr[itemIdx]=this.rules.others.locArr[itemIdx]==1?0:1;
+                        break;
+                    case 'hefenItem1':
+                        this.rules.hefen.binds[0].locArr[itemIdx]=this.rules.hefen.binds[0].locArr[itemIdx]==1?0:1;
+                        break;
+                    case 'hefenItem2':
+                        this.rules.hefen.binds[1].locArr[itemIdx]=this.rules.hefen.binds[1].locArr[itemIdx]==1?0:1;
+                        break;
+                    case 'hefenItem3':
+                        this.rules.hefen.binds[2].locArr[itemIdx]=this.rules.hefen.binds[2].locArr[itemIdx]==1?0:1;
+                        break;
+                }
+            },
+            showdis(my, to,ruleTypeName,ruleName,included) {
+                switch(ruleTypeName){
+                    case 'fushi':
+                        if(included==0){
+                            this.rules.fushi.excluded=this.rules.fushi.excluded==1?0:1;
+                            this.rules.fushi.included=0;
+                        }else if(included==1){
+                            this.rules.fushi.excluded=0;
+                            this.rules.fushi.included=this.rules.fushi.included==1?0:1;
+                        }else{
+                            this.rules.fushi.excluded=0;
+                            this.rules.fushi.included=0;
+                        }
+                        break;
+                    case 'hefen':
+                        if(included==0){
+                            this.rules.hefen.excluded=this.rules.hefen.excluded==1?0:1;
+                            this.rules.hefen.included=0;
+                        }else if(included==1){
+                            this.rules.hefen.excluded=0;
+                            this.rules.hefen.included=this.rules.hefen.included==1?0:1;
+                        }else{
+                            this.rules.hefen.excluded=0;
+                            this.rules.hefen.included=0;
+                        }
+                        break;
+                    case 'fixLoc':
+                        this.rules.matchCodes.excluded = 0;
+                        this.rules.matchCodes.included = 0;
+                        this.rules.matchCodes.isXian=0;
+                        if(included==0){
+                            this.rules.fixCode.excluded=this.rules.fixCode.excluded==1?0:1;
+                            this.rules.fixCode.included=0;
+                        }else if(included==1){
+                            this.rules.fixCode.excluded=0;
+                            this.rules.fixCode.included=this.rules.fixCode.included==1?0:1;
+                        }
+                        if(this.rules.fixCode.excluded==0 && this.rules.fixCode.included==0){
+                            this.rules.fixCode.loc1='';
+                            this.rules.fixCode.loc2='';
+                            this.rules.fixCode.loc3='';
+                        }
+                        break;
+                    case 'match1': //配数全转
+                        this.rules.fixCode.excluded = 0;
+                        this.rules.fixCode.included = 0;
+                        if(included==0){
+                            this.rules.matchCodes.excluded=this.rules.matchCodes.excluded==1?0:1;
+                            this.rules.matchCodes.included=0;
+                        }else if(included==1){
+                            this.rules.matchCodes.excluded=0;
+                            this.rules.matchCodes.included=this.rules.matchCodes.included==1?0:1;
+                        }
+                        if(this.rules.matchCodes.excluded==0 && this.rules.matchCodes.included==0){
+                            this.rules.matchCodes.loc1='';
+                            this.rules.matchCodes.loc2='';
+                            this.rules.matchCodes.loc3='';
+                            this.rules.matchCodes.loc4='';
+                        }
+                        this.rules.matchCodes.isXian=0;
+                        break;
+                    case 'match2': //配数
+                        if(included==0){
+                            this.rules.matchCodes.excluded=this.rules.matchCodes.excluded==1?0:1;
+                            this.rules.matchCodes.included=0;
+                        }else if(included==1){
+                            this.rules.matchCodes.excluded=0;
+                            this.rules.matchCodes.included=this.rules.matchCodes.included==1?0:1;
+                        }
+                        if(this.rules.matchCodes.excluded==0 && this.rules.matchCodes.included==0){
+                            this.rules.matchCodes.loc1='';
+                            this.rules.matchCodes.loc2='';
+                            this.rules.matchCodes.loc3='';
+                            this.rules.matchCodes.loc4='';
+                        }
+                        this.rules.matchCodes.isXian=1;
+                        break;
+                    case 'repeat':
+                        this.initRepeatRule(ruleName,included,my.checked)
+                        break;
+                    case 'xiongdi':
+                        this.initXiongdiRule(ruleName,included,my.checked)
+                        break;
+                    case 'bigNum':
+                        if(included==0){
+                            this.rules.bigNum.excluded=this.rules.bigNum.excluded==1?0:1;
+                            this.rules.bigNum.included=0;
+                        }else if(included==1){
+                            this.rules.bigNum.excluded=0;
+                            this.rules.bigNum.included=this.rules.bigNum.included==1?0:1;
+                        }
+                        if(this.rules.bigNum.excluded==0 && this.rules.bigNum.included==0){
+                            this.rules.bigNum.locArr=[0,0,0]
+                        }
+                        break;
+                    case 'smallNum':
+                        if(included==0){
+                            this.rules.smallNum.excluded=this.rules.smallNum.excluded==1?0:1;
+                            this.rules.smallNum.included=0;
+                        }else if(included==1){
+                            this.rules.smallNum.excluded=0;
+                            this.rules.smallNum.included=this.rules.smallNum.included==1?0:1;
+                        }
+                        if(this.rules.smallNum.excluded==0 && this.rules.smallNum.included==0){
+                            this.rules.smallNum.locArr=[0,0,0]
+                        }
+                        break;
+                    case 'doubleNum':
+                        if(included==0 ){
+                            this. rules.doubleNum.excluded=this.rules.doubleNum.excluded==1?0:1;
+                            this. rules.doubleNum.included=0;
+                        }else if(included==1){
+                            this.rules.doubleNum.excluded=0;
+                            this.rules.doubleNum.included=this.rules.doubleNum.included==1?0:1;
+                        }
+                        if(this.rules.doubleNum.excluded==0 && this. rules.doubleNum.included==0){
+                            this.rules.doubleNum.locArr=[0,0,0]
+                        }
+                        break;
+                    case 'singleNum':
+                        if(included==0){
+                            this.rules.singleNum.excluded=this.rules.singleNum.excluded==1?0:1;
+                            this.rules.singleNum.included=0;
+                        }else if(included==1){
+                            this.rules.singleNum.excluded=0;
+                            this.rules.singleNum.included=this.rules.singleNum.included==1?0:1;
+                        }
+                        if(this.rules.singleNum.excluded==0 && this.rules.singleNum.included==0){
+                            this.rules.singleNum.locArr=[0,0,0]
+                        }
+                        break;
+                    case 'bdwhefen':
+                        if(ruleName==='sum2'){
+                            this.rules.sum2.sumType=this.rules.sum2.sumType==2?0:2;
+                            if(this.rules.sum2.sumType==2){
+                                this.rules.sum2.included=1;
+                            }else{
+                                this.rules.sum2.included=0;
+                                this.rules.sum2.sum='';
+                            }
+                        }else if(ruleName==='sum3'){
+                            this.rules.sum2.sumType=this.rules.sum2.sumType==3?0:3;
+                            if(this.rules.sum2.sumType==3){
+                                this.rules.sum2.included=1;
+                            }else{
+                                this.rules.sum2.included=0;
+                                this.rules.sum2.sum='';
+                            }
+                        }
+                        break;
+                    case 'duishu':
+                        if(included==0){
+                            this.rules.pairs.excluded=this.rules.pairs.excluded==1?0:1;
+                            this.rules.pairs.included=0;
+                        }else if(included==1){
+                            this.rules.pairs.excluded=0;
+                            this.rules.pairs.included=this.rules.pairs.included==1?0:1;
+                        }
+                        if(this.rules.pairs.excluded==0 && this.rules.pairs.included==0){
+                            this.rules.pairs.pair1="";
+                            this.rules.pairs.pair2="";
+                            this.rules.pairs.pair3="";
+                        }
+                        break;
+                }
+            },
+            initRepeatRule(ruleName,included,checked){
+                switch(ruleName){
+                    case 'repeat1':
+                        if(included==0){
+                            this.rules.repeat.double1.excluded=this.rules.repeat.double1.excluded==1?0:1;
+                            this.rules.repeat.double1.included=0;
+                        }else if(included==1){
+                            this.rules.repeat.double1.excluded=0;
+                            this.rules.repeat.double1.included=this.rules.repeat.double1.included==1?0:1;
+                        }else{
+                            this.rules.repeat.double1.excluded=0;
+                            this.rules.repeat.double1.included=0;
+                        }
+                        break;
+                    case 'repeat3':
+                        if(included==0){
+                            this.rules.repeat.triple.excluded=this.rules.repeat.triple.excluded==1?0:1;
+                            this.rules.repeat.triple.included=0;
+                        }else if(included==1){
+                            this.rules.repeat.triple.excluded=0;
+                            this.rules.repeat.triple.included=this.rules.repeat.triple.included==1?0:1;
+                        }else{
+                            this.rules.repeat.triple.excluded=0;
+                            this.rules.repeat.triple.included=0;
+                        }
+                        break;
+
+                }
+            },
+            delSameNum(v){//删除重复的数字
+                var n = v;
+                var arr = n.split("");
+                arr = Array.from(new Set(arr));
+                v = arr.join("");
+                v = v.replace(/[^0-9]/g, "");
+                return v;
+            },
+            limitRepeatNums(t,ruleTypeName,itemIdx) {
+                switch (ruleTypeName) {
+                    case 'ncode':
+                        this.ncode = this.delSameNum(this.ncode);
+                        this.rules.codes = this.ncode;
+                        break;
+                    case 'sum2':
+                        this.rules.sum2.sum = this.delSameNum(this.rules.sum2.sum);
+                        break;
+                    case 'duishu':
+                        this.pairCodeRuleValues(itemIdx, t.value);
+                        break;
+                    case 'peishu':
+                        this.matchRuleValues(itemIdx, t.value);
+                        break;
+                    case 'fixCode':
+                        this.fixCodeRuleValues(itemIdx, t.value);
+                        break;
+                    case 'hefenItem1':
+                        this.rules.hefen.binds[0].value = this.delSameNum(this.rules.hefen.binds[0].value);
+                        break;
+                    case 'hefenItem2':
+                        this.rules.hefen.binds[1].value = this.delSameNum(this.rules.hefen.binds[1].value);
+                        break;
+                    case 'hefenItem3':
+                        this.rules.hefen.binds[2].value = this.delSameNum(this.rules.hefen.binds[2].value);
+                        break;
+                    case 'fushi':
+                        this.rules.fushi.combines = this.delSameNum(this.rules.fushi.combines);
+                        break;
+                    case 'quanzhuan':
+                        //this.rules.others.fullChange = this.delSameNum(this.rules.others.fullChange);
+                        break;
+                    case 'paichu':
+                        //this.rules.others.excludes = this.delSameNum(this.rules.others.excludes);
+                        break;
+                    case 'includes':
+                        this.rules.fushi.contains = this.delSameNum(this.rules.fushi.contains);
+                        break;
+                    case "shangjiang":
+                        //this.rules.others.shangJiang = this.delSameNum(this.rules.others.shangJiang);
+                        break;
+                    case "valueRange":
+                        //this.rules.others.valueRange[itemIdx] = this.delSameNum(this.rules.others.valueRange[itemIdx]);
+                        break;
+                }
+            },
+            initXiongdiRule(ruleName,included,checked){
+                switch(ruleName){
+                    case 'xiongdi1':
+                        if(included==0){
+                            this.rules.brothers.br2.excluded=this.rules.brothers.br2.excluded==1?0:1;
+                            this.rules.brothers.br2.included=0;
+                        }else if(included==1){
+                            this.rules.brothers.br2.excluded=0;
+                            this.rules.brothers.br2.included= this.rules.brothers.br2.included==1?0:1;
+                        }else{
+                            this.rules.brothers.br2.excluded=0;
+                            this.rules.brothers.br2.included=0;
+                        }
+                        break;
+                    case 'xiongdi2':
+                        if(included==0){
+                            this.rules.brothers.br3.excluded=this.rules.brothers.br3.excluded==1?0:1;
+                            this.rules.brothers.br3.included=0;
+                        }else if(included==1){
+                            this.rules.brothers.br3.excluded=0;
+                            this.rules.brothers.br3.included=this.rules.brothers.br3.included==1?0:1;
+                        }else{
+                            this.rules.brothers.br3.excluded=0;
+                            this.rules.brothers.br3.included=0;
+                        }
+                        break;
+                }
+            },
+            buyBaozu(){
+                var that = this;
+                var buyList = [];
+                var ls3 = [4,5,6,7,8,9,10,11,12];
+                var ls6 = [4,5,6,7,8,9,10,11];
+                var ls1 = [1,2,3,4,5,6,7,8];
+                var toPageName="";
+                if(this.lotteryMethodId=="4" && this.buyMethod==1){
+                    toPageName = "z6";
+                    var numLen = this.ncode.length;
+                    var typeId = ls6[numLen-3];
+                    var buyDesc = "";
+                    if(numLen==10){
+                        buyDesc = "组六全包"
+                    }else{
+                        buyDesc = '组六'+changeDigitToChinese(numLen,"码")
+                    }
+                    var zuValue = this.ncode;
+                    buyDesc +=":"+zuValue;
+                    buyList.push({
+                        huizongName:buyDesc,
+                        value:zuValue,
+                        buyCodes:zuValue,
+                        bai:zuValue,
+                        shi:"",
+                        ge:"",
+                        buyAmount:1,
+                        lmId:200,
+                        lsTypeId:typeId,
+                        buyMoney:this.buyMoney,
+                        codeList:[zuValue],
+                        buyDesc:buyDesc,
+                        typeFlag:1,
+                        buyMethod:1
+                    })
+
+                }
+
+                if(this.lotteryMethodId=="3" && this.buyMethod==1){
+                    toPageName = "z3"
+                    var numLen = this.ncode.length;
+                    var typeId = ls3[numLen-2];
+                    var buyDesc = "";
+                    if(numLen==10){
+                        buyDesc = "组三全包"
+                    }else{
+                        buyDesc = '组三'+changeDigitToChinese(numLen,"码")
+                    }
+                    var zuValue = this.ncode;
+                    buyDesc +=":"+zuValue;
+                    buyList.push({
+                        huizongName:buyDesc,
+                        value:zuValue,
+                        buyCodes:zuValue,
+                        bai:zuValue,
+                        shi:"",
+                        ge:"",
+                        buyAmount:1,
+                        lmId:100,
+                        lsTypeId:typeId,
+                        buyMoney:this.buyMoney,
+                        codeList:[zuValue],
+                        buyDesc:buyDesc,
+                        typeFlag:1,
+                        buyMethod:1
+                    })
+                }
+
+                if(this.lotteryMethodId=="2" && this.buyMethod==1){
+                    toPageName = "tx";
+                    var numLen = this.ncode.length;
+                    var typeId = ls1[numLen-3];
+                    var buyDesc = "";
+                    if(numLen==10){
+                        buyDesc = "复式全包"
+                    }else{
+                        buyDesc = '复式'+changeDigitToChinese(numLen,"码")
+                    }
+                    var zuValue = this.ncode;
+                    buyDesc +=":"+zuValue;
+                    buyList.push({
+                        huizongName:buyDesc,
+                        value:zuValue,
+                        buyCodes:zuValue,
+                        bai:zuValue,
+                        shi:"",
+                        ge:"",
+                        buyAmount:1,
+                        lmId:300,
+                        lsTypeId:typeId,
+                        buyMoney:this.buyMoney,
+                        codeList:[zuValue],
+                        buyDesc:buyDesc,
+                        typeFlag:1,
+                        buyMethod:1
+                    })
+                }
+
+
+                var buyDesc = [];
+                var lastDesc = null;
+                buyList.forEach((item,idx)=>{
+                    if(lastDesc==null){
+                        lastDesc = item.buyDesc;
+                        buyDesc.push(lastDesc+"各"+that.buyMoney+"\r\n")
+                        //buyDesc+=lastDesc+"各"+that.buyMoney+"\r\n";
+                    }
+                    if(lastDesc != item.buyDesc){
+                        buyDesc.push(item.buyDesc+"各"+that.buyMoney+"\r\n")
+                        //buyDesc+=item.buyDesc+"各"+that.buyMoney+"\r\n";
+                    }
+                    lastDesc = item.buyDesc;
+                })
+
+                window.parent.fastBuy(buyList,buyDesc,false);
+                // var loading = layer.msg("正在提交...",{icon:16,time:-1,shade:0.3})
+                //
+                // $.ajax({
+                //     url:HOST+"draw/pc/buy3d",
+                //     type:'post',
+                //     data:JSON.stringify(buyList),
+                //     success:function (res) {
+                //         layer.close(loading);
+                //         if(res.code==0){
+                //             window.parent.getCredit();
+                //             window.parent.reloadPrintTable();
+                //             window.parent.toPage(toPageName);
+                //         }else{
+                //             layer.alert(res.msg)
+                //         }
+                //     }
+                // })
+
+            },
+
+            validateMoney(money) {
+                var moneyReg=/^(([1-9][0-9]*)|(([0]\.\d{1}|[1-9][0-9]*\.\d{1})))$/;
+                return moneyReg.test(money)
+            },
+
+            toBuy(){
+                var that = this;
+                if(this.dt==0){
+                    //定投
+                    if(this.buyMoney==""){
+                        layer.alert("请输入金额",{title:"提示",btn:["确定"]}) //请输入金额
+                        return;
+                    }
+                    if (!this.validateMoney(this.buyMoney)) {
+                        layer.alert("下注金额格式错误");
+                        return;
+                    }
+                }
+                //下注
+                if(this.codesNum>0) {
+
+                    var selectList = [];
+                    if((this.lotteryMethodId=="2" || this.lotteryMethodId=="3" || this.lotteryMethodId=="4") && this.buyMethod==1){
+                        this.buyBaozu();
+                        return;
+                    }
+
+
+                    if(this.lotteryMethodId=="1" || this.lotteryMethodId==1){
+                        this.fastBuyDesc = '直选快选'+this.fastBuyDesc;
+                        var hzname = '直选快选';
+                        var codeSet = [];
+                        this.codesList.forEach((item, idx)=>{
+                            codeSet.push(item.buyCode);
+                        });
+
+                        selectList.push({
+                            huizongName: hzname,
+                            value: codeSet.join(","),
+                            buyCodes: "",
+                            buyAmount: codeSet.length,
+                            lmId: that.lotteryMethodId,
+                            lsTypeId: 1,
+                            buyMoney: that.buyMoney,
+                            rules: that.rules,
+                            buyDesc: hzname,
+                            codeList:codeSet,
+                        })
+
+                    }else if(this.lotteryMethodId=="3" || this.lotteryMethodId==3){
+                        var hzname = '组三快选';
+                        this.fastBuyDesc = '组三快选'+this.fastBuyDesc;
+                        var codeSet = [];
+                        this.codesList.forEach((item, idx)=>{
+                            codeSet.push(item.buyCode);
+                        });
+
+                        selectList.push({
+                            huizongName: hzname,
+                            value: codeSet.join(","),
+                            buyCodes: "",
+                            buyAmount: codeSet.length,
+                            lmId: that.lotteryMethodId,
+                            lsTypeId: 1,
+                            buyMoney: that.buyMoney,
+                            rules: that.rules,
+                            buyDesc: hzname,
+                            codeList:codeSet,
+                            typeFlag:1,
+                        })
+
+                    }else if(this.lotteryMethodId=="4" || this.lotteryMethodId==4){
+                        var hzname = '组六快选';
+                        this.fastBuyDesc = '组六快选'+this.fastBuyDesc;
+                        var codeSet = [];
+                        this.codesList.forEach((item, idx)=>{
+                            codeSet.push(item.buyCode);
+                        });
+
+                        selectList.push({
+                            huizongName: hzname,
+                            value: codeSet.join(","),
+                            buyCodes: "",
+                            buyAmount: codeSet.length,
+                            lmId: that.lotteryMethodId,
+                            lsTypeId: 1,
+                            buyMoney: that.buyMoney,
+                            rules: that.rules,
+                            buyDesc: hzname,
+                            codeList:codeSet,
+                            typeFlag:1,
+                        })
+
+                    }else if(this.lotteryMethodId=="6" || this.lotteryMethodId==6){
+                        var hzname = '1D快选';
+                        this.fastBuyDesc = '1D快选'+this.fastBuyDesc;
+                        var codeSet = [];
+                        this.codesList.forEach((item, idx)=>{
+                            codeSet.push(item.buyCode);
+                        });
+
+                        selectList.push({
+                            huizongName: hzname,
+                            value: codeSet.join(","),
+                            buyCodes: "",
+                            buyAmount: codeSet.length,
+                            lmId: that.lotteryMethodId,
+                            lsTypeId: 1,
+                            buyMoney: that.buyMoney,
+                            rules: that.rules,
+                            buyDesc: hzname,
+                            codeList:codeSet
+                        })
+
+                    }else if(this.lotteryMethodId=="7" || this.lotteryMethodId==7){
+                        var hzname = '2D快选';
+                        this.fastBuyDesc = '2D快选'+this.fastBuyDesc;
+                        var codeSet = [];
+                        this.codesList.forEach((item, idx)=>{
+                            codeSet.push(item.buyCode);
+                        });
+
+                        selectList.push({
+                            huizongName: hzname,
+                            value: codeSet.join(","),
+                            buyCodes: "",
+                            buyAmount: codeSet.length,
+                            lmId: that.lotteryMethodId,
+                            lsTypeId: 1,
+                            buyMoney: that.buyMoney,
+                            rules: that.rules,
+                            buyDesc: hzname,
+                            codeList:codeSet
+                        })
+
+                    }else if(this.lotteryMethodId=="2" || this.lotteryMethodId==2){
+                        var hzname = '复式快选';
+                        var codeSet = [];
+                        this.codesList.forEach((item, idx)=>{
+                            codeSet.push(item.buyCode);
+                        });
+
+                        selectList.push({
+                            huizongName: hzname,
+                            value: codeSet.join(","),
+                            buyCodes: "",
+                            buyAmount: codeSet.length,
+                            lmId: that.lotteryMethodId,
+                            lsTypeId: 1,
+                            buyMoney: that.buyMoney,
+                            rules: that.rules,
+                            buyDesc: hzname,
+                            codeList:codeSet,
+                        })
+                    }
+
+
+
+                    if (selectList.length < 1) {
+                        layer.alert("请选择号码");
+                        return;
+                    }
+
+                    var buyDesc = [];
+                    var lastDesc = null;
+                    selectList.forEach((item,idx)=>{
+                        if(lastDesc==null){
+                            lastDesc = item.buyDesc;
+                            buyDesc.push(lastDesc+"各"+that.buyMoney+"\r\n")
+                            //buyDesc+=lastDesc+"各"+that.buyMoney+"\r\n";
+                        }
+                        if(lastDesc != item.buyDesc){
+                            buyDesc.push(item.buyDesc+"各"+that.buyMoney+"\r\n")
+                            //buyDesc+=item.buyDesc+"各"+that.buyMoney+"\r\n";
+                        }
+                        lastDesc = item.buyDesc;
+                    })
+
+                    //var loading = layer.msg("正在提交...", {icon: 16, time: -1, shade: 0.3})
+
+                    console.log("=========666");
+                    window.parent.fastBuy(selectList,[this.fastBuyDesc],true);
+
+
+
+                    // $.ajax({
+                    //     url:HOST+"draw/pc/buy3d/fast",
+                    //     type: 'post',
+                    //     data: JSON.stringify(selectList),
+                    //     success: function (res) {
+                    //         layer.close(loading);
+                    //         if (res.code == 0) {
+                    //             layer.msg("下注成功")
+                    //             that.resetXuan();
+                    //             window.parent.getCredit();
+                    //             window.parent.reloadPrintTable();
+                    //         } else {
+                    //             layer.alert(res.msg)
+                    //         }
+                    //     }
+                    // })
+                }
+            },
+            moneyInput(e){//金额输入
+                if((e.key>='0' && e.key<='9') || e.key=="."){
+
+                }else{
+                    this.buyMoney = this.buyMoney.substr(0,this.buyMoney.length-1);
+                    if(this.buyMoney.startsWith(".")){
+                        this.buyMoney = this.buyMoney.substr(1,this.buyMoney.length-1);
+                    }
+                }
+                if(this.buyMoney!="" && this.codesNum>0){
+                    this.totalMoney =  parseFloat(this.buyMoney)*this.codesNum;
+                }else{
+                    this.totalMoney='';
+                }
+                return false;
+            },
+            matchRuleValues(locIdx,val){
+                switch(locIdx){
+                    case 0:
+                        this.rules.matchCodes.loc1=this.delSameNum(this.rules.matchCodes.loc1);
+                        break;
+                    case 1:
+                        this.rules.matchCodes.loc2=this.delSameNum(this.rules.matchCodes.loc2);
+                        break;
+                    case 2:
+                        this.rules.matchCodes.loc3=this.delSameNum(this.rules.matchCodes.loc3);
+                        break;
+                    case 3:
+                        this.rules.matchCodes.loc4=this.delSameNum(this.rules.matchCodes.loc4);
+                        break;
+                }
+            },
+            fixCodeRuleValues(locIdx,val){
+                switch(locIdx){
+                    case 0:
+                        this.rules.fixCode.loc1=this.delSameNum(this.rules.fixCode.loc1);
+                        break;
+                    case 1:
+                        this.rules.fixCode.loc2=this.delSameNum(this.rules.fixCode.loc2);
+                        break;
+                    case 2:
+                        this.rules.fixCode.loc3=this.delSameNum(this.rules.fixCode.loc3);
+                        break;
+                    case 3:
+                        this.rules.fixCode.loc4=this.delSameNum(this.rules.fixCode.loc4);
+                        break;
+                }
+            },
+
+            pairCodeRuleValues(locIdx,val){
+                switch(locIdx){
+                    case 0:
+                        this.rules.pairs.pair1=this.delSameNum(this.rules.pairs.pair1);
+                        break;
+                    case 1:
+                        this.rules.pairs.pair2=this.delSameNum(this.rules.pairs.pair2);
+                        break;
+                    case 2:
+                        this.rules.pairs.pair3=this.delSameNum(this.rules.pairs.pair3);
+                        break;
+                    case 3:
+                        this.rules.pairs.pair4=this.delSameNum(this.rules.pairs.pair4);
+                        break;
+                    case 4:
+                        this.rules.pairs.pair5=this.delSameNum(this.rules.pairs.pair5);
+                        break;
+                }
+            }
+        }
+    });
+    vm.init();
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

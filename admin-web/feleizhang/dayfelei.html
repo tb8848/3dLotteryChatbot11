@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日分类账</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main1">
+    <template>
+    <div class="module">
+        <div name="module" id="reportclass" class="m5 mt10 reportclass">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="ledger.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="ledger.top.dayLedger">   日分类帐    &gt;&gt;
+                        <a class="blue" href="dayfelei.html"> {{userName}}({{userRoleName}}) </a>
+                    </span>
+                </div>
+                <div class="fr">
+                    <a href="dayfelei.html" class="fb red" i18n="ledger.top.dayLedger">日分类帐</a> |
+                    <a href="yuefelei.html?all=1" class="" i18n="ledger.top.monthLedger">月分类账</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td colspan="5">
+                            <span i18n="ledger.table.head.title.ledger">分类账 </span>
+                            <span i18n="ledger.table.head.title.drawNo">期号</span>{{drawId}}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr class="bg2">
+                        <td width="14%"> {{roleName}}</td>
+                        <td width="14%" i18n="ledger.table.head.type">类别</td>
+                        <td width="14%" i18n="ledger.table.head.count">笔数</td>
+                        <td width="14%" i18n="ledger.table.head.betAmount">下注金额</td>
+                        <td width="14%" i18n="ledger.table.head.backWater">回水</td>
+                        <td width="14%" i18n="ledger.table.head.winLottery">中奖</td>
+                        <td width="14%" i18n="ledger.table.head.profitLoss">盈亏</td>
+                    </tr>
+                    </thead>
+                    <tbody v-if="zhList != null">
+                        <tr class="fn-hover">
+                            <td class="bg3">
+                                <a :href="'subDayFenLei.html?userId=' + userId + '&drawId=' + drawId" v-if="nickName != ''">{{userName}}({{nickName}})</a>
+                                <a :href="'subDayFenLei.html?userId=' + userId + '&drawId=' + drawId" v-else>{{userName}}</a>
+                            </td>
+                            <td class="blue">
+                                <span class="ico-open"></span>
+                                <a href="javascript:void(0)" class="fn-getledger" _target="a" @click="totalCargo()" i18n="ledger.table.totalGoods">总货合计</a>
+                            </td>
+                            <td class="bg3 f14">{{zhTotal.exchangeCount == null ? '--' : zhTotal.exchangeCount}}</td>
+                            <td class=" f14">
+                                {{zhTotal.amount == null ? '--' : (zhTotal.amount.toString().indexOf('.')!=-1 ? zhTotal.amount.toFixed(2).split(".")[0]+'.' : zhTotal.amount)}}<span style="color: #c2c1c1;">{{zhTotal.amount == null ? '' : (zhTotal.amount.toString().indexOf('.')!=-1 ? zhTotal.amount.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                            <td class="bg3 f14">
+                                {{zhTotal.backWater == null ? '--' : (zhTotal.backWater.toString().indexOf('.')!=-1 ? zhTotal.backWater.toFixed(2).split(".")[0]+'.' : zhTotal.backWater)}}<span style="color: #c2c1c1;">{{zhTotal.backWater == null ? '' : (zhTotal.backWater.toString().indexOf('.')!=-1 ? zhTotal.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                            <td class="f14">
+                                {{zhTotal.drawAmount == null ? '--' : (zhTotal.drawAmount.toString().indexOf('.')!=-1 ? zhTotal.drawAmount.toFixed(2).split(".")[0]+'.' : zhTotal.drawAmount)}}<span style="color: #c2c1c1;">{{zhTotal.drawAmount == null ? '' : (zhTotal.drawAmount.toString().indexOf('.')!=-1 ? zhTotal.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                            <td class="bg3 f14">
+                                {{zhTotal.ykAmount == null ? '--' : (zhTotal.ykAmount.toString().indexOf('.')!=-1 ? zhTotal.ykAmount.toFixed(2).split(".")[0]+'.' : zhTotal.ykAmount)}}<span style="color: #c2c1c1;">{{zhTotal.ykAmount == null ? '' : (zhTotal.ykAmount.toString().indexOf('.')!=-1 ? zhTotal.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                        </tr>
+                        <tr class="hide" id="totalCargoDetail">
+                            <td colspan="7" class="no-padding" id="a">
+                                <table class="t-1" v-for="zh in zhList">
+                                    <tbody class="fn-hover">
+                                        <tr class="">
+                                            <td width="14%" class="bg6"></td>
+                                            <td width="14%">{{zh.betRule}}</td>
+                                            <td width="14%" class="bg3 f14">{{zh.exchangeCount == null ? '--' : zh.exchangeCount}}</td>
+                                            <td width="14%" class="f14">
+                                                {{zh.amount == null ? '--' : (zh.amount.toString().indexOf('.')!=-1 ? zh.amount.toFixed(2).split(".")[0]+'.' : zh.amount)}}<span style="color: #c2c1c1;">{{zh.amount == null ? '' : (zh.amount.toString().indexOf('.')!=-1 ? zh.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                            </td>
+                                            <td width="14%" class="bg3 f14">
+                                                {{zh.backWater == null ? '--' : (zh.backWater.toString().indexOf('.')!=-1 ? zh.backWater.toFixed(2).split(".")[0]+'.' : zh.backWater)}}<span style="color: #c2c1c1;">{{zh.backWater == null ? '' : (zh.backWater.toString().indexOf('.')!=-1 ? zh.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                            </td>
+                                            <td width="14%" class="f14">
+                                                {{zh.drawAmount == null ? '--' : (zh.drawAmount.toString().indexOf('.')!=-1 ? zh.drawAmount.toFixed(2).split(".")[0]+'.' : zh.drawAmount)}}<span style="color: #c2c1c1;">{{zh.drawAmount == null ? '' : (zh.drawAmount.toString().indexOf('.')!=-1 ? zh.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                            </td>
+                                            <td width="14%" class="bg3 f14">
+                                                {{zh.ykAmount == null ? '--' : (zh.ykAmount.toString().indexOf('.')!=-1 ? zh.ykAmount.toFixed(2).split(".")[0]+'.' : zh.ykAmount)}}<span style="color: #c2c1c1;">{{zh.ykAmount == null ? '' : (zh.ykAmount.toString().indexOf('.')!=-1 ? zh.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr v-if="zh.ledgerTotalDetailResList != null">
+                                            <td colspan="7" class="no-padding">
+                                                <table class="t-1">
+                                                    <tbody class="fn-hover" >
+                                                    <tr class="bg5" v-for="detail in zh.ledgerTotalDetailResList" >
+                                                        <td width="14%" class="bg6"></td>
+                                                        <td width="14%">{{detail.betRule}}</td>
+                                                        <td width="14%" class="bg3 f14">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                        <td width="14%" class="f14">
+                                                            {{detail.amount == null ? '--' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[0]+'.' : detail.amount)}}<span style="color: #c2c1c1;">{{detail.amount == null ? '' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                                        </td>
+                                                        <td width="14%" class="bg3 f14">
+                                                            {{detail.backWater == null ? '--' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[0]+'.' : detail.backWater)}}<span style="color: #c2c1c1;">{{detail.backWater == null ? '' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                                        </td>
+                                                        <td width="14%" class="f14">
+                                                            {{detail.drawAmount == null ? '--' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[0]+'.' : detail.drawAmount)}}<span style="color: #c2c1c1;">{{detail.drawAmount == null ? '' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                        </td>
+                                                        <td width="14%" class="bg3 f14">
+                                                            {{detail.ykAmount == null ? '--' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[0]+'.' : detail.ykAmount)}}<span style="color: #c2c1c1;">{{detail.ykAmount == null ? '' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="fn-hover" v-if="shList != null">
+                            <td class="bg3" v-if="nickName != ''"> {{userName}}({{nickName}})</td>
+                            <td class="bg3" v-else> {{userName}}</td>
+                            <td class="blue">
+                                <span class="ico-open"></span>
+                                <a href="javascript:void(0)" class="fn-getledger" _target="b" @click="shiHuoTotal()" i18n="ledger.table.totalPhysicalGoods">实货合计</a>
+                            </td>
+                            <td class="bg3 f14">{{shTotal.exchangeCount == null ? '--' : shTotal.exchangeCount}}</td>
+                            <td class=" f14">{{shTotal.amount == null ? '--' : (shTotal.amount.toString().indexOf('.')!=-1 ? shTotal.amount.toFixed(2).split(".")[0]+'.' : shTotal.amount)}}<span style="color: #c2c1c1;">{{shTotal.amount == null ? '' : (shTotal.amount.toString().indexOf('.')!=-1 ? shTotal.amount.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg3 f14">{{shTotal.backWater == null ? '--' : (shTotal.backWater.toString().indexOf('.')!=-1 ? shTotal.backWater.toFixed(2).split(".")[0]+'.' : shTotal.backWater)}}<span style="color: #c2c1c1;">{{shTotal.backWater == null ? '' : (shTotal.backWater.toString().indexOf('.')!=-1 ? shTotal.backWater.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="f14">{{shTotal.drawAmount == null ? '--' : (shTotal.drawAmount.toString().indexOf('.')!=-1 ? shTotal.drawAmount.toFixed(2).split(".")[0]+'.' : shTotal.drawAmount)}}<span style="color: #c2c1c1;">{{shTotal.drawAmount == null ? '' : (shTotal.drawAmount.toString().indexOf('.')!=-1 ? shTotal.drawAmount.toFixed(2).split(".")[1] : '')}}</span></td>
+                            <td class="bg3 f14">{{shTotal.ykAmount == null ? '--' : (shTotal.ykAmount.toString().indexOf('.')!=-1 ? shTotal.ykAmount.toFixed(2).split(".")[0]+'.' : shTotal.ykAmount)}}<span style="color: #c2c1c1;">{{shTotal.ykAmount == null ? '' : (shTotal.ykAmount.toString().indexOf('.')!=-1 ? shTotal.ykAmount.toFixed(2).split(".")[1] : '')}}</span></td>
+                        </tr>
+                        <tr id="shiHuoDetail" v-if="shList != null">
+                            <td colspan="7" class="no-padding" id="b">
+                                <table class="t-1" v-for="sh in shList">
+                                    <tbody class="fn-hover">
+                                        <tr class="">
+                                            <td width="14%" class="bg6" v-if="sh.betRule == '直选' || sh.betRule == 'ตำแหน่งเดียว'">{{$t('maxNegativeValue')}}</td>
+                                            <td width="14%" style="color: red" class="bg6" v-else>{{sh.maxLoss == null ? '' : sh.maxLoss}}</td>
+                                            <td width="14%">{{sh.betRule}}</td>
+                                            <td width="14%" class="bg3 f14">{{sh.exchangeCount == null ? '--' : sh.exchangeCount}}</td>
+                                            <td width="14%" class="f14">{{sh.amount == null ? '--' : (sh.amount.toString().indexOf('.')!=-1 ? sh.amount.toFixed(2).split(".")[0]+'.' : sh.amount)}}<span style="color: #c2c1c1;">{{sh.amount == null ? '' : (sh.amount.toString().indexOf('.')!=-1 ? sh.amount.toFixed(2).split(".")[1] : '')}}</span></td>
+                                            <td width="14%" class="bg3 f14">{{sh.backWater == null ? '--' : (sh.backWater.toString().indexOf('.')!=-1 ? sh.backWater.toFixed(2).split(".")[0]+'.' : sh.backWater)}}<span style="color: #c2c1c1;">{{sh.backWater == null ? '' : (sh.backWater.toString().indexOf('.')!=-1 ? sh.backWater.toFixed(2).split(".")[1] : '')}}</span></td>
+                                            <td width="14%" class="f14">{{sh.drawAmount == null ? '--' : (sh.drawAmount.toString().indexOf('.')!=-1 ? sh.drawAmount.toFixed(2).split(".")[0]+'.' : sh.drawAmount)}}<span style="color: #c2c1c1;">{{sh.drawAmount == null ? '' : (sh.drawAmount.toString().indexOf('.')!=-1 ? sh.drawAmount.toFixed(2).split(".")[1] : '')}}</span></td>
+                                            <td width="14%" class="bg3 f14">{{sh.ykAmount == null ? '--' : (sh.ykAmount.toString().indexOf('.')!=-1 ? sh.ykAmount.toFixed(2).split(".")[0]+'.' : sh.ykAmount)}}<span style="color: #c2c1c1;">{{sh.ykAmount == null ? '' : (sh.ykAmount.toString().indexOf('.')!=-1 ? sh.ykAmount.toFixed(2).split(".")[1] : '')}}</span></td>
+                                        </tr>
+                                        <tr v-if="sh.ledgerTotalDetailResList != null">
+                                            <td colspan="7" class="no-padding">
+                                                <table class="t-1">
+                                                    <tbody class="fn-hover" >
+                                                    <tr class="bg5" v-for="detail in sh.ledgerTotalDetailResList" >
+                                                        <td width="14%" style="color: red" class="bg6">{{detail.maxLoss == null ? '' : detail.maxLoss}}</td>
+                                                        <td width="14%">{{detail.betRule}}</td>
+                                                        <td width="14%" class="bg3 f14">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                        <td width="14%" class="f14">{{detail.amount == null ? '--' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[0]+'.' : detail.amount)}}<span style="color: #c2c1c1;">{{detail.amount == null ? '' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[1] : '')}}</span></td>
+                                                        <td width="14%" class="bg3 f14">{{detail.backWater == null ? '--' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[0]+'.' : detail.backWater)}}<span style="color: #c2c1c1;">{{detail.backWater == null ? '' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[1] : '')}}</span></td>
+                                                        <td width="14%" class="f14">{{detail.drawAmount == null ? '--' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[0]+'.' : detail.drawAmount)}}<span style="color: #c2c1c1;">{{detail.drawAmount == null ? '' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[1] : '')}}</span></td>
+                                                        <td width="14%" class="bg3 f14">{{detail.ykAmount == null ? '--' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[0]+'.' : detail.ykAmount)}}<span style="color: #c2c1c1;">{{detail.ykAmount == null ? '' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[1] : '')}}</span></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+<!--                            <td colspan="7" i18n="ledger.table.noData">暂无数据！</td>-->
+                            <td colspan="7">{{$t('notData')}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    const messages = {
+        zh: {
+            maxNegativeValue:"最大负值",
+            notData:"暂无数据！",
+        },
+        th: {
+            maxNegativeValue:"ค่าติดลบสูงสุด",
+            notData:"ไม่มีข้อมูลในขณะนี้！",
+        }
+    }
+
+    var moduleName = "ledger";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.initDataList();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        vm.initDataList();
+    }
+
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    window.sessionStorage.setItem("yueji_nav","");
+
+    const vm = new Vue({
+        el: '#main1',
+        i18n,
+        data: {
+            zhTotal: {},
+            shTotal: {},
+            zhList: [],
+            shList:[],
+            drawId: "",
+            userName: "",
+            nickName: "",
+            userId: "",
+            roleName: "",
+            userRoleName: "",
+        },
+        methods: {
+            initDataList() {
+                const _this = this;
+                layer.msg(i18np.prop('ledger.load.dataLoading'),{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                _this.drawId = GetQueryString("drawId");
+                $.ajax({
+                    url: HOST + "ledger/getDayLedgerList?drawId=" + _this.drawId
+                    , type: "get"
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            if (_this.drawId == null || _this.drawId == "" || _this.drawId == undefined) {
+                                _this.drawId = res.data.drawId;
+                            }
+                            _this.zhTotal = res.data.zhTotal;
+                            _this.zhList = res.data.zhTotalList;
+                            _this.shTotal = res.data.shTotal;
+                            _this.shList = res.data.shTotalList;
+                            _this.userName = res.data.userName;
+                            _this.nickName = res.data.nickName;
+                            _this.userId = res.data.userId;
+                            _this.roleName = res.data.roleName;
+                            _this.userRoleName = res.data.userRoleName;
+                        } else {
+                            layer.msg(i18np.prop('ledger.ajax.errorMsg'));
+                        }
+                    }
+                });
+            },
+            totalCargo() {
+                if ($("#totalCargoDetail").is(":hidden")) {
+                    $("#totalCargoDetail").show();
+                }else {
+                    $("#totalCargoDetail").hide();
+                }
+            },
+            shiHuoTotal () {
+                if ($("#shiHuoDetail").is(":hidden")) {
+                    $("#shiHuoDetail").show();
+                }else {
+                    $("#shiHuoDetail").hide();
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>出货明细</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!--    <link rel="stylesheet" href="../css/basicSetting.css" media="all">-->
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+
+    <link href="../css/style-Permutation5.css" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css" type="text/css" rel="stylesheet">
+
+</head>
+<body style="overflow-y: auto">
+
+<div id="main">
+    <div class="module">
+        <div name="module" id="out_detail" class="m5 mt10">
+            <template>
+            <div class="mt10">
+                <form novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="18">
+                                <span i18n="shipan.table.batch">批量</span>
+                                <span i18n="shipan.number">号码</span>：{{topData.codes}}
+                                <span i18n="shipan.table.qishu">期数</span>：{{topData.drawId}}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td width="40" i18n="shipan.query.codes">查号码</td>
+                                <td width="80"><input type="text" v-model="search.codes" class="w90" maxlength="4" betno="true">
+                                    <input type="hidden" value="period_no=" id="helper_param"></td>
+                                <td width="30">
+                                    <input type="hidden" id="period_no" name="period_no" value="">
+                                    <input id="serial_no" type="hidden" name="serialNo" value="5706210812890694095">
+                                    <input type="button" value="提交" class="btn" @click="toSearch" i18n="shipan.submit">
+                                </td>
+                                <td><input type="button" value="打印" class="btn fn-print" @click="toPrint" i18n="shipan.table.print"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10 div_print" id="printArea">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td colspan="9"><span i18n="shipan.menu.outDetail">出货明细</span>(<span i18n="shipan.table.red.tuima">红色为退码</span>)</td>
+                        <td class="tc"><input type="button" value="退码" class="btn fn-cancelsell" @click="tuima" i18n="shipan.query.backCode"></td>
+                    </tr>
+                    <tr class="bg2">
+                        <td width="8%" i18n="shipan.table.noteNo">注单编号</td>
+                        <td width="12%" i18n="shipan.table.member">会员</td>
+                        <td width="14%" i18n="shipan.table.orderTime">下单时间</td>
+                        <td width="8%" i18n="shipan.number">号码</td>
+                        <td width="11%" i18n="shipan.table.bet.amount">下注金额</td>
+                        <td width="12%" i18n="shipan.odds">赔率</td>
+                        <td width="12%" i18n="shipan.table.winning">中奖</td>
+                        <td width="8%" i18n="shipan.query.select.type">类型</td>
+                        <td width="8%">IP</td>
+                        <td class="tc" width="8%">
+                            <label> <span i18n="shipan.select.all">全选</span>
+                                <input type="checkbox" class="checkbox" id="selectAll" :checked="isSelectAll" @click="selectAll">
+                            </label>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody v-if="pager.totals<1">
+                        <tr><td colspan="12" align="center" i18n="shipan.table.noData">暂无数据!</td></tr>
+                    </tbody>
+                    <tbody id="tbody" class="fn-hover" v-if="pager.totals>0">
+                        <tr title="成功" v-for="(item,idx) in dataList" :class="[item.backCodeFlag==1?'bg4':'']">
+                            <td>{{item.billNo}}</td>
+                            <td>{{buyer.username}}<span class="green">（{{buyer.username}}）</span></td>
+                            <td>{{item.createTime}}</td>
+                            <td class="fb">{{item.codes}}<span v-if="item.hasOneFlag==1" style="color:orangered" i18n="shipan.query.xian">现</span></td>
+                            <td class="fb">{{item.amount}}</td>
+                            <td>{{item.chOdds}}</td>
+                            <td v-if="item.drawStatus==1">{{item.drawMoney}}</td>
+                            <td v-else>--</td>
+                            <td>{{item.betName}}</td>
+                            <td>{{item.ip}}</td>
+                            <td class="tc red" v-if="item.backCodeFlag==1"> --</td>
+                            <td  class="tc red" v-else>
+                                <label><input type="checkbox" class="checkbox" :checked="item.checked" @click="selectOne(item)"></label>
+                            </td>
+                        </tr>
+                        <tr class="tfoot">
+                            <td colspan="2" class="tc fb" i18n="shipan.table.total">合计</td>
+                            <td class="fb">{{dataList.length}}</td>
+                            <td></td>
+                            <td class="fb">{{heji.totalMoney}}</td>
+                            <td></td>
+                            <td class="fb">{{heji.totalDrawMoney}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div name="module" id="pager" class="pager">
+                <span i18n="shipan.page.no">第</span> <span class="pageindex red">{{pager.currpage}}</span><span i18n="shipan.page.page">页</span>
+                <span i18n="shipan.page.total">共</span> <span class="pagecount red">{{pager.pages}}</span> <span i18n="shipan.page.page">页</span>
+                <span i18n="shipan.page.total">共</span> <span class="recordcount red">{{pager.totals}}</span> <span i18n="shipan.page.count">条</span>
+                <a href="javascript:void(0)" class="fn-first" @click="firstPage" i18n="shipan.page.firstPage">首页</a>
+                <a href="javascript:void(0)" class="fn-prev" @click="prevPage" i18n="shipan.page.prePage">上一页</a>
+                <a href="javascript:void(0)" class="fn-next" @click="nextPage" i18n="shipan.page.nextPage">下一页</a>
+                <a href="javascript:void(0)" class="fn-last" @click="lastPage" i18n="shipan.page.lastPage">尾页</a>
+                <input type="text" class="input w30 fn-index" v-model="pager.toPage">
+                <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="goPage"></div>
+            </template>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> Copyright © 2023 xxx. All Rights Reserved</div>
+    </div>
+
+<!--    <script type="text/html" id="tpl_period">-->
+<!--        {{each Data as item}}-->
+<!--        <option value="{{item.period_no}}" {{if Param.period_no== item.period_no}}-->
+<!--                selected{{/if}}>{{item.period_no}}</option>-->
+<!--        {{/each}}-->
+<!--    </script>-->
+<!--    <script type="text/html" id="tpl_refresh">-->
+<!--        {{if !Data.Data.length}}-->
+<!--        <tr>-->
+<!--            <td colspan="12">暂无数据!</td>-->
+<!--        </tr>-->
+<!--        {{else}}-->
+<!--        {{each Data.Data as item}}-->
+<!--        <tr {{if item.is_cancel== 1}} class="red  bg4" title="已退码" {{else}} title="成功" {{/if}}>-->
+<!--        <td>{{item.serial_no}}</td>-->
+<!--        <td>{{item.account}}{{if item.nick_name}}<span class="green">（{{item.nick_name}}）</span>{{/if}}</td>-->
+<!--        <td>{{item.bet_datetime}}</td>-->
+<!--        <td class="fb">-->
+<!--            {{if !Param.serialNo && item.is_group == 1}}-->
+<!--            <a href="javascript:(0)" class="fn-sell-detail"-->
+<!--               data-hash="#!handicap_reality.sell_detail|sell_detail?groupNo={{item.bet_no}}&serialNo={{item.serial_no}}&pageIndex=1&print=1&period_no={{Param.period_no}}">{{item.bet_no}}{{#item.dict_no_type_id-->
+<!--                | format_isxian}}-->
+<!--            </a>-->
+<!--            {{else}}-->
+<!--            {{item.bet_no}}{{#item.dict_no_type_id | format_isxian}}-->
+<!--            {{/if}}-->
+<!--        </td>-->
+<!--        <td class="fb">{{item.bet_money}}</td>-->
+<!--        <td>{{item.odds}}</td>-->
+<!--        <td>{{item.win_money}}</td>-->
+<!--        <td>{{if !Param.serialNo}}{{if item.is_group == 1}}批量{{else}}散单{{/if}}{{else}}&#45;&#45;{{/if}}</td>-->
+<!--        <td>{{item.ip}}</td>-->
+
+<!--        <td class="tc red">-->
+<!--            {{if Param.iswin!=1}}-->
+<!--            {{if item.is_cancel == 1}}-->
+<!--            已退码-->
+<!--            {{else}}-->
+
+<!--            {{if item.can_cancel == 1 && (!IsSubAccount || IsSubCanSell) }}-->
+<!--            <input type="checkbox" serial_no="{{item.serial_no}}" sell_id="{{item.sell_id}}" bet_no="{{item.bet_no}}"-->
+<!--                   dict_no_type_id="{{item.dict_no_type_id}}" bet_money="{{item.bet_money}}" odds="{{item.odds}}"-->
+<!--                   is_package="{{item.is_package}}"/>-->
+<!--            {{else}}-->
+<!--            &#45;&#45;-->
+<!--            {{/if}}-->
+<!--            {{/if}}-->
+<!--            {{/if}}-->
+<!--        </td>-->
+<!--        </tr>-->
+<!--        {{/each}}-->
+<!--        {{/if}}-->
+<!--        <tr class="tfoot">-->
+<!--            <td colspan="2" class="tc fb">合计</td>-->
+<!--            <td class="fb">{{if Data.Data.length}}{{Data.SellCount}}{{/if}}</td>-->
+<!--            <td></td>-->
+<!--            <td class="fb">{{if Data.Data.length}}{{Data.TotalBetMoney}}{{/if}}</td>-->
+<!--            <td></td>-->
+<!--            <td class="fb">{{if Data.Data.length}}{{Data.TotalWinMoney}}{{/if}}</td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--        </tr>-->
+<!--    </script>-->
+</div>
+
+<!--<div id="main">-->
+<!--    <div name="module" id="operation_out">-->
+<!--        <div>-->
+<!--            <table class="t-1 tc">-->
+<!--                <thead>-->
+<!--                <tr class="bg1">-->
+<!--                    <td colspan="6" align="left">批量出货：{{topData.codes}}</td>-->
+<!--                </tr>-->
+<!--                <tr class="bg2">-->
+<!--                    <td width="10%">彩种</td>-->
+<!--                    <td width="22%">注单编号</td>-->
+<!--                    <td width="18%">号码</td>-->
+<!--                    <td width="10%">赔率</td>-->
+<!--                    <td width="10%">金额</td>-->
+<!--                    <td width="10%">状态</td>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr class="tableborder" v-for="(item,idx) in dataList" :class="[item.backCodeFlag==1?'bg4':'']">-->
+<!--                    <td>彩票1</td>-->
+<!--                    <td>{{item.billNo}}</td>-->
+<!--                    <td class="fb soon_b_B green">{{item.codes}}<span style="color:orangered" v-if="item.hasOneFlag==1">现</span>-->
+<!--                    </td>-->
+<!--                    <td class="fb soon_b_B">{{item.peiRate}}</td>-->
+<!--                    <td class="fb soon_b_B red">{{item.amount}}</td>-->
+<!--                    <td class="tc red" v-if="item.backCodeFlag==1">已退码</td>-->
+<!--                    <td class="tc" v-else>成功</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div name="module" class="footer">-->
+<!--        <div class="bd"> Copyright © 2023 xxx. All Rights Reserved</div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+<script type="text/javascript" language="javascript">
+    var $ = layui.jquery;
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.initData();
+    });
+
+    var $$ = jQuery;
+    const vm = new Vue({
+        el: '#out_detail',
+        data: {
+            isSelectAll:false,
+            dataList: [],
+            backList:[],
+            topData: {},
+            buyer:{},
+            batchId:"",
+            search:{
+                codes:"",
+            },
+            pager:{
+                currpage:1,
+                limit:20,
+                toPage:"",
+                pages:0,
+                totals:0
+            },
+            heji:{}
+        },
+        methods: {
+            initData() {
+                this.batchId = GetQueryString("rid");
+                this.searchData();
+            },
+            searchData(){
+                var qs = "rid="+this.batchId+"&page="+this.pager.currpage+"&limit="+this.pager.limit+"&buyCode="+this.search.codes;
+                var that = this;
+                $.ajax({
+                    url: HOST + "chuHuo/listImportDetail?" + qs,
+                    type: 'get',
+                    success: function (res) {
+                        if (res.code == 200) {
+                            that.dataList = res.data.dataList;
+                            that.topData = res.data.topOne;
+                            that.pager.totals = res.data.totals;
+                            that.heji = res.data.heji;
+                            that.buyer = res.data.buyer;
+                            that.dataList.forEach((item,idx)=>{
+                                item.checked = false;
+                            })
+                            that.initPager();
+                        } else {
+                            that.dataList = [];
+                            layer.msg(res.msg);
+                        }
+                    },
+                    complete: function (res) {
+                        layer.closeAll();
+                    },
+                    error: function (res) {
+                        // layer.msg("请求失败")
+                        layer.msg(i18np.prop("shipan.msg.request.error"));
+                    }
+                })
+            },
+            initPager(){
+                this.pager.pages = this.pager.totals%this.pager.limit==0 ? parseInt(this.pager.totals/this.pager.limit): parseInt(this.pager.totals/this.pager.limit)+1
+            },
+            tuima(){
+                var that = this;
+                if(that.backList.length<1){
+                    // layer.msg("未选择号码");
+                    layer.msg(i18np.prop("shipan.msg.no.selected.number"));
+                    return;
+                }
+                layer.msg(i18np.prop("shipan.msg.processing"), {
+                    icon: 16
+                    ,shade: 0.3
+                    ,time:-1
+                });
+                $.ajax({
+                    url:HOST+"chuHuo/tuima",
+                    type:'post',
+                    contentType:'application/json',
+                    data:JSON.stringify(that.backList),
+                    success:function(res){
+                        layer.closeAll();
+                        if(res.code==200){
+                            that.initData();
+                            // layer.msg("退码成功");
+                            layer.msg(i18np.prop("shipan.msg.tuima.success"));
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error:function(res){
+                        layer.closeAll();
+                        // layer.msg("请求失败")
+                        layer.msg(i18np.prop("shipan.msg.request.error"));
+                    }
+                })
+            },
+            selectAll(){
+                var that = this;
+                this.isSelectAll = !this.isSelectAll;
+                this.dataList.forEach((item,idex)=>{
+                    if(item.backCodeStatus==1 && item.backCodeFlag==0){
+                        that.dataList[idex].checked = that.isSelectAll;
+                        item.checked = that.isSelectAll;
+                        if(item.checked){
+                            if(!that.backList.includes(item.id)){
+                                that.backList.push(item.id);
+                            }
+                        }else{
+                            if(that.backList.includes(item.id)){
+                                that.backList.splice(that.backList.indexOf(item.id),1);
+                            }
+                        }
+                    }
+                })
+            },
+            selectOne(item){
+                var that = this;
+                var checkCount = 0;
+                this.dataList.forEach((dataItem,idex)=>{
+                    if(dataItem.id == item.id && dataItem.backCodeStatus==1 && dataItem.backCodeFlag==0){
+                        dataItem.checked = !dataItem.checked;
+                        if(dataItem.checked){
+                            if(!that.backList.includes(dataItem.id)){
+                                that.backList.push(dataItem.id)
+                            }
+                        }else{
+                            if(that.backList.includes(dataItem.id)){
+                                that.backList.splice(that.backList.indexOf(dataItem.id),1);
+                            }
+                        }
+                    }
+                })
+                this.dataList.forEach((dataItem,idex)=>{
+                    if(dataItem.backCodeStatus==1 && dataItem.backCodeFlag==0){
+                        checkCount++;
+                    }
+                })
+                if(that.backList.length==checkCount){
+                    that.isSelectAll = true;
+                }else{
+                    that.isSelectAll = false;
+                }
+            },
+            firstPage(){
+                if(this.pager.currpage>1){
+                    this.pager.currpage = 1;
+                    this.searchData();
+                }
+            },
+            prevPage(){
+                if(this.pager.currpage>1){
+                    this.pager.currpage--;
+                    this.searchData();
+                }
+            },
+            nextPage(){
+                if(this.pager.currpage<this.pager.pages){
+                    this.pager.currpage++;
+                    this.searchData();
+                }
+            },
+            lastPage(){
+                if(this.pager.currpage<this.pager.pages){
+                    this.pager.currpage=this.pager.pages;
+                    this.searchData();
+                }
+            },
+            goPage(){
+                if(this.pager.toPage!=""){
+                    var topage = parseInt(this.pager.toPage);
+                    if(topage>=1 && topage<=this.pager.pages){
+                        this.pager.currpage = topage;
+                        this.searchData();
+                    }
+                }
+            },
+            toSearch(){
+                this.pager.currpage = 1;
+                this.searchData();
+            },
+            toPrint(){
+                $$("#printArea").jqprint({
+                    //hideContent: ['#clearPart'],
+                    // cancel:function () {
+                    //     $('#clearPart').show();
+                    // }
+                })
+            }
+        }
+    });
+    // vm.initData();
+
+    //刷新出货列表
+    // function reloadData(){
+    //     layer.closeAll();
+    //     vm.initData();
+    // }
+</script>
+</body>
+</html>

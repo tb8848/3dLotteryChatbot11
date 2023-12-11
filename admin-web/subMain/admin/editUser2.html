@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>用户修改</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        td input{
+            width: 147px;
+        }
+
+        .email{
+            display: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+        .mydk {
+            cursor: pointer;
+        }
+
+        .layui-layer-molv .layui-layer-title{
+            background: #159ED4 !important;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif; overflow-y: auto">
+<div id="main">
+    <template>
+    <div class="module">
+        <div name="module" id="memberadmin" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="user.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="user.top.edit">编辑</span>
+<!--                    <a class="blue" href="#!memberadmin?Member_Id=74&amp;m=memberadmin" title="查看up66862">-->
+<!--                    up66862(总监) </a>-->
+                </div>
+                <div class="fr">
+<!--                    <a class="mydk" onclick="xinzeng()">新增下级</a> |-->
+                    <a class="mydk" onclick="liebiao()" style="color: #CC0000" i18n="user.top.accountList">账户列表</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td class="relative" i18n="user.userInfo.title">信息提示<span class="fn-toggle-show icon-open"></span></td>
+                    </tr>
+                    </thead>
+                    <tbody class="fn-toggle-content">
+                    <tr>
+                        <td>
+                            <div style="display: flex;justify-content: start" id="xinyong">
+                                <div style="width: 150px;margin-left: 20px;color: blue;">
+                                    <span id="juesheName" style="color: #0000FF;"></span>
+                                    <span id="superiorName" style="color: #0000FF;"></span>
+                                </div>
+                                <div style="width: 250px">
+                                    <span i18n="user.userInfo.totalCreditLimit">总信用额度：</span>
+                                    <span id="user_quota"></span>
+                                </div>
+                                <div style="width: 250px">
+                                    <span i18n="user.userInfo.surplusCreditLimit">可分配信用额度：</span>
+                                    <span id="user_assigned_quota"></span>
+                                </div>
+                                <div style="width: 250px">
+                                    <span i18n="user.userInfo.useCreditLimit">已分配信用额度：</span>
+                                    <span id="user_distributable_quota"></span>
+                                </div>
+                            </div>
+                            <div style="display: flex;justify-content: start;" id="xianjin">
+                                <div style="width: 150px;margin-left: 20px;color: blue;">
+                                    <span id="juesheName1" style="color: #0000FF;"></span>
+                                    <span id="superiorName1" style="color: #0000FF;"></span>
+                                </div>
+                                <div style="width: 250px">
+                                    <span i18n="user.userInfo.cashBalance">现金余额：</span>
+                                    <span id="user_assigned_quota1"></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form novalidate="novalidate">
+                <input type="hidden" name="id" id="id"/>
+                <input type="hidden" name="is_disable" id="is_disable" value="0">
+                <input type="hidden" name="m" value="memberadmin">
+                <input type="hidden" name="is_cash" id="is_cash" value="-1">
+                <div class="mt10">
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1">
+                                <td colspan="4" id="roleName2" style="font-size: 14px;">
+                                    <span i18n="user.top.edit">编辑</span>
+                                    <span id="roleName1"></span>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="bg3" width="150" i18n="user.query.account">账号</td>
+                                <td><input type="text" name="username" readonly="readonly" value="h01" maxlength="16"></td>
+                                <td class="bg3" width="150" i18n="user.edit.enableAndStop"> 启/停用</td>
+                                <td>
+                                    <label class="mr20">
+                                        <input type="radio" class="radio" name="status" value="1" checked = "checked">
+                                        <span i18n="user.table.enable">启用</span>
+                                    </label>
+                                    <label class="mr20">
+                                        <input type="radio" class="radio" name="status" value="0">
+                                        <span i18n="user.table.top">停用</span>
+                                    </label>
+                                    <label class="mr20">
+                                        <input type="radio" class="radio" name="status" value="2">
+                                        <span i18n="user.table.stopBet">暂停下注</span>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg3" i18n="user.add.password">密码</td>
+                                <td>
+                                    <input type="password" name="password" id="password" maxlength="16" autocomplete="new-password">
+                                    <a name="passwordPrompt" style="width:20px; height:20px" onclick="passwordRules()">
+                                        <img src="../../img/prompt_icon_blue.png" style="width:20px; height:20px;cursor:pointer;">
+                                    </a>
+                                </td>
+                                <td class="bg3 email">Email</td>
+                                <td class="email">
+                                    <input type="text" name="email" id="email">
+                                </td>
+                                <td class="bg3 gongxiandu" i18n="user.edit.gxdZcUpperLimit"> 贡献度占成上限</td>
+                                <td class="gongxiandu">
+                                    <select name="contribution_max_limit" id="contributionUpperLimit">
+    <!--                                    <select name="contribution_max_limit" disabled="disabled">-->
+                                        <option value="0" selected="selected">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg3" i18n="user.query.nickName">代号</td>
+                                <td><input type="text" name="nickName" value="" maxlength="10" coderule="true">
+                                </td>
+                                <td class="bg3" i18n="user.edit.phone"> 联系电话</td>
+                                <td><input type="text" name="phone" value="" maxlength="20" number="true">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg3" i18n="user.edit.lhZcUpperLimit">拦货占成上限</td>
+                                <td colspan="3">
+                                    <span id="superiorRoleName"></span>
+                                    <select id="gudong" name="lanhuo">
+    <!--                                    <option value="2" selected="selected">2</option>-->
+                                    </select>
+                                    <span id="roleName"></span>
+                                    <select id="daili" name="lanhuo">
+    <!--                                <option value="8" selected="selected">8</option>-->
+                                    </select>
+                                    <div>
+                                        （<span i18n="user.edit.lhRemarkOne">设置占成，需要在“设置”中添加</span>
+                                        <span class="red" i18n="user.edit.lhAmount">拦货金额</span><span i18n="user.edit.sx">才生效</span>）。
+                                        <span class="red" i18n="user.edit.tips">提示</span>:
+                                        <span i18n="user.edit.tipsContent">如果庄家先吃满,则不以所设成数来分配,以实际分配到拦货中金额为准。</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg3">
+                                    <div id="xinyong1">
+                                        <span i18n="user.table.head.creditLimit">信用额度</span>
+                                        <span id="tip_credit">
+                                            <span class="red" id="user_quota2"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="xinyong2">
+                                        <input type="number" class="ime-dis" name="creditLimit"  value="" id="creditLimit" onchange="change()" required="true" digits="true" maxlength="12" min="1" max="100"
+                                               aria-required="true">
+                                        <span i18n="user.userInfo.useCreditLimit">已分配信用额度：</span>
+                                        <span id="edu"></span>
+                                    </div>
+                                </td>
+                                <td class="bg3" id="gongsi2" i18n="user.add.ownedCompany"> 所属公司</td>
+                                <td id="gongsi3">
+                                    <select name="company_id" disabled="disabled">
+                                        <option value="1" selected="selected" id="gongsi"><span i18n="user.edit.aPan">A盘</span></option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main" style="width: 100%;margin-left: -15px">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td width="4%"></td>
+                            <td width="6%" i18n="user.edit.table.head.type">类别</td>
+                            <td width="8%" i18n="user.edit.table.head.minBet">最小下注</td>
+                            <td width="24%" i18n="user.edit.table.head.oddsUpperLimit">赔率上限(多个用/分开)</td>
+                            <td width="13%" i18n="user.edit.table.head.singleBetUpperLimit">单注上限</td>
+                            <td width="14%" i18n="user.edit.table.head.singleItemUpperLimit">单项上限</td>
+                            <td width="11%" i18n="user.edit.lhAmount">拦货金额</td>
+                            <td width="12%">
+                                <span i18n="user.edit.table.head.welfare">福利</span>(
+                                <span i18n="user.edit.table.head.with">同</span>
+                                <input type="checkbox" style="width: 30px" @click="setAll()">) </td>
+                            <td width="8%" i18n="user.edit.table.head.odds">赔率</td>
+                        </tr>
+                        </thead>
+                        <tbody v-for="(item,idx) in oddsList">
+                        <tr class="bg3" v-if="item.lotterySettingList.length==1">
+                            <td></td>
+                            <td><span href="javascript:void(0)" class="btn-pointer" status="1" act="erd">{{item.lotterySettingList[0].bettingRule}}</span></td>
+                            <td>{{item.lotterySettingList[0].minBettingPrice}}</td>
+                            <td>{{item.lotterySettingList[0].peiRate}}</td>
+                            <td>{{item.lotterySettingList[0].maxBettingCount}}</td>
+                            <td>{{item.lotterySettingList[0].maxNumberTypeCount}}</td>
+                            <td v-if="xjFlag == 1 && (item.lotterySettingList[0].id == 15 || item.lotterySettingList[0].id == 16 || item.lotterySettingList[0].id == 17 || item.lotterySettingList[0].id == 18)">
+                                <input class="lhAmount" v-model="item.lotterySettingList[0].lanHuoAmount" :disabled="!lhFlag">
+                            </td>
+                            <td v-else>{{item.lotterySettingList[0].lanHuoAmount}}</td>
+                            <td>
+                                <select :id="item.lotterySettingList[0].hsSelector.id" index="0" first="1" selectall="1" class="w90 s_erd" v-model="item.lotterySettingList[0].huiShui"
+                                        @change="changeHSAndPr('hs',item.lotterySettingList[0])">
+                                    <option v-for="(opt,idx1) in item.lotterySettingList[0].hsSelector.options" :value="opt.value">{{opt.text}}</option>
+                                </select>
+                            </td>
+                            <td>{{item.lotterySettingList[0].peiRate}}</td>
+                        </tr>
+                        <tr class="bg3" v-if="item.lotterySettingList.length>1">
+                            <td width="4%"></td>
+                            <td width="6%"><span class="btn-pointer" status="1" act="erd">{{item.bettingMethod}}</span></td>
+                            <td width="8%"></td>
+                            <td width="24%"></td>
+                            <td width="13%"></td>
+                            <td width="14%"></td>
+                            <td width="11%"></td>
+                            <td width="12%"></td>
+                            <td width="8%"></td>
+                        </tr>
+                        <tr v-if="item.lotterySettingList.length>1">
+                            <td colspan="9" style="padding:4px;">
+                                <table class="t-1">
+                                    <tbody>
+                                    <tr class="fn-hover" v-for="(it1,idx1) in item.lotterySettingList">
+                                        <td width="4%"></td>
+                                        <td width="6%">{{it1.bettingRule}}</td>
+                                        <td width="8%">{{it1.minBettingPrice}}</td>
+                                        <td width="24%">{{it1.peiRate}}</td>
+                                        <td width="13%">{{it1.maxBettingCount}}</td>
+                                        <td width="14%">{{it1.maxNumberTypeCount}}</td>
+                                        <td width="11%" v-if="xjFlag == 1">
+                                            <input class="lhAmount" :id="it1.id" v-model="it1.lanHuoAmount" :disabled="!lhFlag">
+                                        </td>
+                                        <td width="11%" v-else>
+                                            {{it1.lanHuoAmount}}
+                                        </td>
+                                        <td width="12%">
+                                            <select :id="it1.hsSelector.id" :index="it1.hsSelector.index" v-model="it1.huiShui"
+                                                    :first="it1.hsSelector.first" :selectall="it1.hsSelector.selectall" class="w70 s_erd"
+                                                    @change="changeHSAndPr('hs',it1)">
+                                                <option v-for="(opt,ii) in it1.hsSelector.options" :value="opt.value" >{{opt.text}}</option>
+                                            </select>
+                                        </td>
+                                        <td width="8%">
+                                            {{it1.peiRate}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt10 tc">
+                    <button class="btn" id="update" type="button" @click="submitData()" i18n="user.add.btn.submit">提交</button>
+                    <!--                    <input type="hidden" name="submitUrlParam" value="memberadmin">-->
+                </div>
+            </form>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+
+    <!--密码规则弹窗-->
+    <div class="layui-form" id="passwordRules" style="display:none;">
+        <div style="margin: 10px 0 10px 10px">
+            <span i18n="user.add.passwordRuleList">密码需符合以下规则: </span><br>
+            <span i18n="user.add.passwordRuleOne">1.必须是8-16位的大小写字母及数字组合 </span><br>
+            <span i18n="user.add.passwordRuleTwo">2.不可相连3位以上连续数字 (如: Asdf1234) </span><br>
+            <span i18n="user.add.passwordRuleThree">3.不可相连3位以上连续字母 (如: Abcd1357) </span><br>
+            <span i18n="user.add.passwordRuleFour">4.不可相连3位以上相同数字 (如: Asdfg111) </span><br>
+            <span i18n="user.add.passwordRuleFive">5.不可相连3位以上相同字母 (如: Aaa01357) </span><br>
+            <span i18n="user.add.passwordRuleSix">6.密码不可包含帐号 </span><br>
+            <span i18n="user.add.passwordRuleSeven">7.密码开头2位不能和帐号相同 (如:帐号ff01、密码ffA3579) </span><br>
+            <span i18n="user.add.passwordRuleEight">8.不能包含键盘常用字串qwe、asd、zxc、qaz、wsx </span><br>
+        </div>
+    </div>
+    </template>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+
+    var moduleName = "user";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties('subMain-'+moduleName);
+            vipInfoVm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties('subMain-'+moduleName);
+        vipInfoVm.init();
+        getProduct(sid);
+    }
+
+    var form = layui.form;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    const vipInfoVm = new Vue({
+        el: '#main',
+        data: {
+            roleName:"",
+            userName:"",
+            userId:"",
+            account:"",
+            leftCredit:"",
+            bsInfo:{
+                autoOrEnter:"",
+                printOrShowLottery:"",
+                realOrTransformOdds:"",
+            },
+            oddsList:[],
+            onLoading:true,
+            lhFlag: false,
+            xjFlag: 0,
+            setAllFlag: false,
+        },
+        methods: {
+            init(){
+                const _this = this;
+                this.userId = GetQueryString("id");
+                this.xjFlag = GetQueryString("xjFlag");
+                $.ajax({
+                    url: HOST + "admin/getUserDetail?userId=" + _this.userId
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            _this.roleName = res.data.roleName;
+                            _this.userName = res.data.userName;
+                            if (_this.xjFlag == 1) {
+                                _this.lhFlag = res.data.lhFlag;
+                            }
+                            _this.prList();
+                        } else {
+                            layer.msg(i18np.prop('user.edit.ajax.error.dataError'));
+                        }
+                    }
+                });
+            },
+            goBack(){
+                history.back();
+            },
+            prList() {
+                layer.msg(i18np.prop('user.edit.load.dataLoading'),{time:-1,shade:0.3,icon:16})
+                var _this = this;
+                $.ajax({
+                    url:HOST+'drawRule/getLotteryNumberList?userId='+_this.userId,
+                    type:'get',
+                    success:function (res) {
+                        layer.closeAll();
+                        if(res.code==0){
+                            _this.oddsList = res.data;
+                            _this.oddsList.forEach((item,idx)=>{
+                                item.lotterySettingList.forEach((item1,idx1)=>{
+                                    var peiRateRangeList = item1.peiRateRangeList;
+                                    item1.hsSelector = _this.buildHuiShuiSelector(item1.id,item.id,peiRateRangeList,item1.huiShui,idx1);
+                                    item1.prSelector = _this.buildPeiRateSelector(item1.id,item.id,peiRateRangeList,item1.vipPeiRate,idx1,item1.peiRate)
+                                })
+                            })
+                            _this.onLoading = false;
+                            _this.xianzhizhuanshui();
+                        }
+                    },
+                    error:function(e){
+                        layer.closeAll();
+                    }
+                })
+            },
+            //是否限制赚水
+            xianzhizhuanshui(){
+                // var userRoleName = localStorage.getItem("userRoleName");
+                var userRoleNameId = localStorage.getItem("userRoleNameId");
+                // if (userRoleName != "总监"){
+                if (userRoleNameId != 1){
+                    $.ajax({
+                        url: HOST + "basicSetting/getBasicSettingOne"
+                        , type: "get"
+                        , success: function (res) {
+                            if (res.code == 200) {
+                                //限制大股东修改赚水：0不限制、1限制
+                                if (res.data.limitBigShareHolderModifyWater == 1){
+                                    if (userRoleNameId == 2){
+                                        $(".s_erd").attr("disabled","disabled");
+                                    }
+                                }
+                                //限制股东及下级修改赚水：0不限制、1限制
+                                if (res.data.shareHolderLowerReturnWaterLimit == 1){
+                                    if (userRoleNameId != 2){
+                                        $(".s_erd").attr("disabled","disabled");
+                                    }
+                                }
+                            } else {
+                                console.log("基本设置数据异常");
+                            }
+                        }
+                    });
+                }
+            },
+            buildHuiShuiSelector(lsId,lmId,dataList,selectValue,idx){ //生成回水选择器
+                var objId ="hs-"+lmId+"-"+lsId+"-"+idx;
+                var hsSelector = {
+                    lmId:lmId,
+                    lsId:lsId,
+                    index:idx,
+                    groupId:'group'+lmId,
+                    id:objId,
+                    first:idx==0?1:0,
+                    selectall:idx==0?1:0,
+                    options:[]
+                }
+                for(var i=0,len=dataList.length;i<len;i++){
+                    var item = dataList[i];
+                    hsSelector.options.push({
+                        value:item.earnWater,
+                        text:item.earnWater,
+                        selected:item.earnWater==selectValue?true:false
+                    })
+                }
+                return hsSelector;
+            },
+            buildPeiRateSelector(lsId,lmId,dataList,selectValue,idx,prLimit){
+                var objId ="pr-"+lmId+"-"+lsId+"-"+idx;
+                var prSelector = {
+                    lmId:lmId,
+                    lsId:lsId,
+                    index:idx,
+                    groupId:'group'+lmId,
+                    id:objId,
+                    first:idx==0?1:0,
+                    selectall:idx==0?1:0,
+                    options:[]
+                }
+                // var wclass = 'w70';
+                // if(lmId=='5' || lmId=='6' || lmId=='7'){
+                //     wclass = 'w90'
+                // }
+                // for(var i=0,len=dataList.length;i<len;i++){
+                //     var item = dataList[i];
+                //     var hs = item.earnWater;
+                //     if(prLimit.indexOf("/")>-1) {
+                //         var prArr = prLimit.split("/");
+                //         for (var j = 0; j < prArr.length; j++) {
+                //             prArr[j] = accSub(parseFloat(prArr[j]), parseFloat(hs));
+                //         }
+                //         dataList[i].peiRate = prArr.join("/");
+                //     }else{
+                //         dataList[i].peiRate = accSub(parseFloat(prLimit), parseFloat(hs));
+                //     }
+                // }
+                for(var i=0,len=dataList.length;i<len;i++){
+                    var item = dataList[i];
+                    prSelector.options.push({
+                        value:item.peiRate,
+                        text:item.peiRate,
+                        selected:item.peiRate==selectValue?true:false
+                    })
+                }
+                return prSelector;
+            },
+            changeHSAndPr(prefix,selectItem){//修改回水和赔率
+                var that = this;
+                var id = "";
+                if(prefix=="hs"){
+                    id = selectItem.hsSelector.id;
+                }else{
+                    id = selectItem.prSelector.id;
+                }
+                var $this = $("#"+id);
+                var idx = $this.get(0).selectedIndex;
+                var hs = $this.val(); //选中的回水值
+                console.log(hs);
+                var first = $this.attr("first");
+                var groupId =  $this.attr("groupId");
+                if(id.indexOf("hs")>-1){
+
+                    //修改了回水
+                   // var prSelectorId = id.replace('hs','pr');
+                    //$("#"+prSelectorId).get(0).selectedIndex=idx;
+                    if(that.setAllFlag || first=="1"){
+                        that.oddsList.forEach((item,loc1)=>{
+                            if(item.id == selectItem.lotteryMethodId){
+                                item.lotterySettingList.forEach((it1,loc2)=>{
+                                    if(it1.id==selectItem.id){
+                                        that.oddsList[loc1].lotterySettingList[loc2].peiRate = selectItem.prSelector.options[idx].value;
+                                    }else{
+                                        var siblingId =  "hs-"+item.id +"-"+it1.id+"-"+loc2;
+                                        it1.hsSelector.options.forEach((prOpt,prIdx)=>{
+                                            //console.log(prOpt.value,hs,prIdx);
+                                            if(prOpt.value==hs){
+                                                it1.huiShui = hs;
+                                                //prOpt.selected=true;
+                                                //console.log(prOpt.value,hs,prIdx,siblingId);
+                                                //$("#"+siblingId).find("option[text='"+hs+"']").prop("selected", true);
+                                                //$("#"+siblingId).val("0.04");//.get(0).selectedIndex = prIdx;
+                                            }
+                                        })
+
+                                        //$("#"+siblingId).get(0).selectedIndex = idx;
+                                        that.oddsList[loc1].lotterySettingList[loc2].peiRate = it1.prSelector.options[idx].value;
+                                    }
+
+
+                                })
+
+                            }
+                        })
+                        // //修改了第1个,同类型都修改
+                        // $this.parents("tr").siblings().each(function(it1){
+                        //     $(this).find("select").each(function(it2){
+                        //         if($(this).attr('groupId')===groupId) {
+                        //             $(this).get(0).selectedIndex = idx
+                        //         }
+                        //     })
+                        // });
+                    }else{
+                        that.oddsList.forEach((item,loc1)=>{
+                            item.lotterySettingList.forEach((it1,loc2)=>{
+                                if(it1.id == selectItem.id){
+                                    that.oddsList[loc1].lotterySettingList[loc2].peiRate = selectItem.prSelector.options[idx].value;
+                                }
+                            })
+                        })
+                        //selectItem.peiRate= selectItem.prSelector.options[idx]
+                    }
+                }else if(id.indexOf('pr')>-1){
+                    //修改了赔率
+                    /*var hsSelectorId = id.replace('pr','hs');
+                    $("#"+hsSelectorId).get(0).selectedIndex=idx;
+                    if(first=="1"){
+                        //修改了第1个,同类型都修改
+                        $this.parents("tr").siblings().each(function(it1){
+                            $(this).find("select").each(function(it2){
+                                if($(this).attr('groupId')===groupId){
+                                    $(this).get(0).selectedIndex=idx
+                                }
+                            })
+                        });
+                    }*/
+                }
+            },
+            submitData () {
+
+                var creditLimit = $("#creditLimit").val();
+
+                var parentCreditLimit = $("#user_assigned_quota").text();
+                // console.log(parentCreditLimit)
+                // if (creditLimit > parentCreditLimit) {
+                //     layer.msg("信用额度不能超过" + parentCreditLimit);
+                //     return false;
+                // }
+                //联系方式
+                var phone = $("input[name='phone']").val();
+                if(isNaN(Number(phone))){
+                    layer.msg(i18np.prop('user.edit.submit.msg.phoneValidator'));
+                    return false;
+                }
+                //代号
+                var nickName = $("input[name='nickName']").val();
+                //用户id
+                var id = $("input[name='id']").val();
+                //获取单选框状态
+                var status = $('input[name="status"]:checked').val();
+                //获取密码
+                var password = $('#password').val();
+                //拦货上限
+                var lanHuoUpperLimit =  $("#daili").find("option:selected").val();
+                var parentLanHuoUpperLimit =  $("#gudong").find("option:selected").val();
+                //贡献度占成上限
+                var contributionUpperLimit = $("#contributionUpperLimit").find("option:selected").val();
+                //邮箱
+                var email = $('input[name="email"]').val();
+
+                var params = [];
+                this.oddsList.forEach((item, index) => {
+                    item.lotterySettingList.forEach((it1,loc2)=>{
+                        params.push({
+                            lotterySettingId:it1.id,
+                            earnWater:it1.huiShui,
+                            peiRate:it1.peiRate,
+                            lanHuoUpperLimit:it1.lanHuoAmount
+                        });
+                    })
+                })
+                var data = {
+                    creditLimit:creditLimit,
+                    surplusCreditLimit:parentCreditLimit,
+                    phone:phone,
+                    nickName:nickName,
+                    id:id,
+                    status:status,
+                    password:password,
+                    lanHuoUpperLimit:lanHuoUpperLimit,
+                    parentLanHuoUpperLimit: parentLanHuoUpperLimit,
+                    contributionUpperLimit:contributionUpperLimit,
+                    email:email,
+                    prSetList: params
+                }
+                layer.msg(i18np.prop('user.add.msg.title.submit'),{time:-1,shade:0.3,icon:16})
+                $.ajax({
+                    url: HOST + "admin/updateUser"
+                    , type: "POST"
+                    , contentType: 'application/json'
+                    , data: JSON.stringify(data)
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 0) {
+                            layer.msg(i18np.prop('user.msg.updateSuccess'));
+                            setTimeout(function () {
+                                layer.close(layer.index);
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            layer.msg(res.msg,{
+                                icon: 2, time: 2000
+                            });
+                        }
+                    }
+                    , error: function () {
+                        layer.closeAll();
+                        console.log("ajax error");
+                    }
+                });
+            },
+            setAll() {
+                this.setAllFlag = !this.setAllFlag;
+            }
+        }
+    })
+    vipInfoVm.init();
+
+    //根据最新一期的状态判断拦货占成上限和贡献度占成上限是否支持修改
+    function gudongDaili() {
+        //获取最新一期的信息
+        $.ajax({
+            url: HOST+"draw/selectLastDrawInfo"
+            , type: "GET"
+            , success:function(res){
+                if(res.code == 200) {
+                    let openStatus = res.data.openStatus;
+                    if (openStatus != 0 && openStatus != 2){//0停盘  2:未开盘  只有停盘和未开盘状态才能修改
+                        $("#contributionUpperLimit").attr("disabled","disabled");
+                        $("#gudong").attr("disabled","disabled");
+                        $("#daili").attr("disabled","disabled");
+                    }
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+    var sid = "";
+    window.onload = function () {
+        sid = GetQueryString("id");
+        if (null != sid && sid != "") {
+            $("input[name='id']").val(sid);
+            getProduct(sid);
+        }
+
+        $("#xianjin").hide();
+        // $.ajax({
+        //     url: HOST+"admin/getParentLimitType?userId=" + id
+        //     , type: "GET"
+        //     , success:function(res){
+        //         if(res.code == 200) {
+        //             if (res.data.creditLimitType == 0 || res.data.creditLimitType == "0") {
+        //                 $("#creditLimitType").val(res.data.creditLimitType)
+        //                 $("#creditLimitType").attr("disabled", "disabled");
+        //                 form.render();
+        //             }
+        //         }
+        //     }
+        //     , error: function () {
+        //         console.log("ajax error");
+        //     }
+        // });
+
+        $.ajax({
+            url: HOST+"admin/getLanHuoRatioList?userId=" + GetQueryString("id")
+            , type: "GET"
+            , success:function(res){
+                if(res.code == 200) {
+                    var list = res.data.lhList;
+                    if (list.length*1 < 1){
+                        $("#gudong").append("<option value='0'>0</option>");
+                        $("#daili").append("<option value='0'>0</option>");
+                        // $("#gudong").attr("disabled","disabled");
+                        // $("#daili").attr("disabled","disabled");
+                    }else{
+                        for(var i in list) {
+                            $("#gudong").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
+                            $("#daili").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
+                        }
+                        if (res.data.parentLimit == null) {
+                            $("#gudong").val(0);
+                        }else {
+                            $("#gudong").val(res.data.parentLimit);
+                        }
+                        if (res.data.limit == null) {
+                            $("#daili").val(0);
+                        }else {
+                            $("#daili").val(res.data.limit);
+                        }
+                    }
+                    form.render()
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+    //监听信用额度
+    $(function(){
+        $("#creditLimit").bind('input change',function(){
+            var data = $("input[name='creditLimit']").val();
+            // console.log("监听输入金额："+data)
+            if (data*1 < 0){
+                $("input[name='creditLimit']").val("0");
+                $("#user_quota2").text("0");
+            }else{
+                var num = tranNumber(data);
+                $("#user_quota2").text(num);
+            }
+        });
+    });
+
+    //金额转换
+    function tranNumber(num)
+    {
+        let numStr = num.toString()
+        if (numStr*1 < 1){
+            return numStr;
+        }
+        // 一万以内直接返回
+        if (numStr.length < 5) {
+            return numStr;
+        }
+        //大于8位数是亿
+        else if (numStr.length > 8) {
+            let decimal = numStr.substring(numStr.length - 8, numStr.length - 8 );
+            return parseFloat(parseInt(num / 100000000) + '.' + decimal) + '亿';
+        }
+        //大于5位数是一万 (以1W分割 1W以下全部显示)
+        else if (numStr.length > 4) {
+            let decimal = numStr.substring(numStr.length - 4, numStr.length - 4 );
+            let wan = parseFloat(parseInt(num / 10000) + '.' + decimal);
+            let owan = num / 10000;
+            if (wan*1 < owan*1){
+                wan = wan + i18np.prop('user.edit.manyMore');
+            }else{
+                wan = wan + i18np.prop('user.edit.tenThousand');
+            }
+            return wan;
+            // return parseFloat(parseInt(num / 10000) + '.' + decimal) + '万';
+        }
+    }
+
+    function getProduct(id) {
+        $.ajax({
+            url: HOST + "admin/getUser?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    //获取单选框状态
+                    $("input:radio[name='status'][value='"+d.admin.status+"']").attr("checked",'checked');
+                    //获取账号
+                    $("input[name='username']").val(d.admin.username);
+                    //获取代号
+                    $("input[name='nickName']").val(d.admin.nickName);
+                    //获取电话
+                    $("input[name='phone']").val(d.admin.phone);
+                    //邮箱
+                    $("input[name='email']").val(d.admin.email);
+                    //信用额度
+                    $("input[name='creditLimit']").val(d.admin.creditLimit);
+                    var data = $("input[name='creditLimit']").val();
+                    var num = tranNumber(data);
+                    $("#user_quota2").text(num);
+                    //下级已分配额度
+                    $("#edu").text(d.admin.useCreditLimit);
+                    //角色名称
+                    $("#juesheName").text(d.roleInfo.superiorRoleName + "：");
+                    $("#juesheName1").text(d.roleInfo.superiorRoleName + "：");
+                    //账号名称
+                    $("#superiorName").text(d.roleInfo.superiorName);
+                    $("#superiorName1").text(d.roleInfo.superiorName);
+                    //获取下级名称
+                    // $("#roleName1").text(i18np.prop('user.top.edit') + d.roleInfo.roleName);
+                    $("#roleName1").text(d.roleInfo.roleName);
+                    //拦货占成
+                    $("#superiorRoleName").text(d.roleInfo.superiorRoleName);
+                    if (d.roleInfo.roleNameId == 6) {
+                        $("#huiyuan").css("display", "none");
+                        $("#daili").css("display", "none");
+                    } else {
+                        $("#roleName").text(d.roleInfo.roleName);
+                    }
+                    if (d.roleInfo.roleNameId != 2){
+                        $(".email").show();
+                        $(".gongxiandu").hide();
+
+                        $("#gongsi2").hide();
+                        $("#gongsi3").hide();
+                    }
+
+                    //贡献度占成上限
+                    $("#contributionUpperLimit").val(d.admin.contributionUpperLimit);
+
+                    //公司名称
+                    if (d.companyName!="" && d.companyName!=null && d.companyName!=undefined){
+                        $("#gongsi").html(d.companyName);
+                    }
+
+                    //下级数量（下级数量为0就可以修改，下级数量不为0就根据最新一期状态判断是否支持修改）
+                    let xiajiCount = d.xiajiCount;
+                    if (xiajiCount*1 > 0){
+                        gudongDaili();
+                    }
+
+                    //信用和现金
+                    let fundMode = d.admin.fundMode;//0现金、1信用
+                    if (fundMode == 0){
+                        $("#xinyong1").hide();
+                        $("#xinyong2").hide();
+                        if (d.roleInfo.roleNameId != 2){
+                            $("#xinyong").hide();
+                            $("#xianjin").show();
+                        }
+                    }
+
+                    //获取信用总额度
+                    if(d.parentAdmin.creditLimit == null){
+                        $("#user_quota").text("0");
+                    }else{
+                        $("#user_quota").text(d.parentAdmin.creditLimit);
+                    }
+
+                    //已分配额度
+                    if (d.parentAdmin.useCreditLimit == null) {
+                        $("#user_distributable_quota").text("0");
+                    } else {
+                        $("#user_distributable_quota").text(d.parentAdmin.useCreditLimit);
+                    }
+                    //可分配额度
+                    if(d.parentAdmin.surplusCreditLimit == null){
+                        $("#user_assigned_quota").text("0");
+                        $("#user_assigned_quota1").text("0");
+                    }else {
+                        $("#user_assigned_quota").text(d.parentAdmin.surplusCreditLimit);
+                        $("#user_assigned_quota1").text(d.parentAdmin.surplusCreditLimit);
+                    }
+                    if (d.singleFlag == true) {
+                        // $("#gudong").attr("disabled", "disabled");
+                        // $("#daili").attr("disabled", "disabled");
+                    }
+                    form.render()
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    /*layui.config({
+        //   base: '/js/'存放treeTable.js的文件夹
+        base: '../js/layui/'
+    }).use(['form' , 'jquery','treeTable', 'util'], function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var util = layui.util;
+        var treeTable = layui.treeTable, form = layui.form;
+        var form = layui.form;
+
+        // 渲染表格
+        var insTb = treeTable.render({
+            id: 'menu',
+            elem: '#menu',
+            url: HOST+'drawRule/getLotteryNumberList',
+            height: 'full-200',
+            method:'get',
+            tree: {
+                iconIndex: 2,
+                isPidData: true,
+                idName: 'lotterySettingId',//父ID
+                pidName: 'parentId',//子ID
+                openName: 'open',// 是否默认展开的字段名
+                //public bool open { get; set; }open字段是bool类型
+            },
+            where: {
+                userId: GetQueryString("id")
+            },
+            //defaultToolbar: ['filter', 'print', 'exports'],
+            cols: [[
+                { field: 'id', title: 'ID', fixed: 'left', unresize: true, sort: true, hide: true }
+                , { field: 'bettingRule', title: '类别' , templet: function (d) {
+                        if (d.parentId == null) {
+                            return "<span style='color:blue'> "+ d.bettingRule +"</span>";
+                        }else {
+                            return d.bettingRule
+                        }
+                    }}
+                , { field: 'minBettingPrice', title: '最小下注'}
+                , { field: 'peiRate', title: '赔率上限(多个用/分开)'}
+                // , { field: 'maxBettingCount', title: '单注上限', edit:'text'}
+                // , { field: 'maxNumberTypeCount', title: '单项上限', edit:'text'}
+                , { field: 'oneBetUpperLimit', title: '单注上限'}
+                , { field: 'oneItemUpperLimit', title: '单项上限'}
+                , { field: 'lanHuoUpperLimit', title: '拦货金额', templet: function (d) {
+                        if (d.lotterySettingId == '19' || d.lotterySettingId == '20' || d.lotterySettingId == '21') {
+                            return null;
+                        }else {
+                            return d.lanHuoUpperLimit;
+                        }
+                    }}
+                , { field: 'earnWaterList', singleLine: false,title: '赚水', templet: function(d) {
+                        d.str = 0;
+                        if (d.lotterySettingId == 19 || d.lotterySettingId == 20 || d.lotterySettingId == 21) {
+                            return "";
+                        }
+                        var zvalueHelp=  selectWz(d.earnWaterList, d.earnWater, d.lotteryMethodId);
+                        var zval = '<select class="type' +d.lotteryMethodId+'" name="peiRate" lay-filter="peiRateSelect" lay-verify="required">';
+                        zval += zvalueHelp;
+                        zval += '</select>'
+                        return zval;
+                    }}
+                , { field: 'peiRate', title: '赔率'}
+            ]],
+            done: function (res, curr, count) {
+                $("span:contains('一定位')").parent().parent().parent().parent().click(function () {
+                    return false;
+                });
+                $("span:contains('二定位')").parent().parent().parent().parent().click(function () {
+                    return false;
+                });
+                $("span:contains('三定位')").parent().parent().parent().parent().click(function () {
+                    return false;
+                });
+                //设置下拉框样式在表格之上 不会遮挡下拉框
+                $(".ew-tree-table").css('overflow','visible');
+                $(".ew-tree-table-box").css('overflow','visible');
+                $(".ew-tree-table-box").css('height','100%');
+                $(".ew-tree-table-view").css('overflow','visible');
+                $(".ew-tree-table-cell").css('overflow','visible');
+                $("tr").css('width', '100%')
+                $(".ew-tree-table-head").css('border-right','none')
+                $(".ew-tree-table-indent").removeClass();
+
+                form.render();//刷新表单
+            },
+            style: 'margin-top:0;'
+        });*/
+
+        /*function selectWz(earnWaterList, earnWater) {
+            var selMaintenanceItem = '';
+            for(var i = 0;i < earnWaterList.length;i++){
+                if (earnWater == earnWaterList[i].earnWater) {
+                    selMaintenanceItem+='<option value="'+earnWaterList[i].earnWater+'" selected>'+earnWaterList[i].earnWater+'</option>';
+                }else {
+                    selMaintenanceItem+='<option value="'+earnWaterList[i].earnWater+'">'+earnWaterList[i].earnWater+'</option>';
+                }
+            }
+            /!*if (earnWater != 0 && earnWater != "0" && earnWater != null && earnWater != "" && earnWater != undefined) {
+                console.log("=============", earnWater + "/" + lotteryMethodId)
+                $(".type" + lotteryMethodId).val(earnWater);
+            }*!/
+            //console.log(selMaintenanceItem);
+            return selMaintenanceItem
+        }*/
+
+    /*treeTable.on('edit(menu)', function(obj){
+            var object1 = {};
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+
+            if (field == "maxBettingCount" || field == "maxNumberTypeCount") {
+                if (!Number.isInteger(value)) {
+                    layer.msg("输入的值必须是正整数");
+                    treeTable.reload('menu');
+                    return
+                }
+            }
+            object1[field] = value;
+            object1["id"] = data.id
+            $.ajax({
+                url: HOST +"drawRule/updateUpperLimit"
+                , type: "POST"
+                ,contentType: 'application/json'
+                ,data:JSON.stringify(object1)
+                , success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg('操作成功');
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                    treeTable.reload('menu');
+                }
+            });
+        });
+    });*/
+
+    /*form.on('select(peiRateSelect)', function (data) {
+        var earnWater = "";
+        var aId = "";
+
+        var elem = $(data.elem);
+        var trElem = elem.parents('tr');
+        $("." + elem.context.className).each(function () {
+            $("." + elem.context.className).val(data.value);
+            var id = $(this).parents('tr').children("td[data-field=id]").find(".ew-tree-table-cell-content").html();
+
+            earnWater = data.value;
+            aId = id;
+
+            $.ajax({
+                url: HOST + "drawRule/getEarnWaterRateById?earnWater=" + data.value + "&userId=" + GetQueryString("id") + "&aId=" + id,
+                type: "get",
+                success: function (res) {
+                    if (res.code == 200) {
+                        $("." + elem.context.className).parents('tr').find("td:last .ew-tree-table-cell-content").html(res.data.userRate);
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+
+        //写日志（越级操作日志or自己操作日志）
+        $.ajax({
+            url: HOST + "drawRule/writeOverrideOperationLog?earnWater=" + earnWater + "&userId=" + GetQueryString("id") + "&aId=" + aId,
+            type: "get",
+            success: function (res) {
+                if (res.code == 200) {
+                    console.log("写日志成功");
+                }
+            },
+            error: function () {
+            }
+        });
+        /!*$.ajax({
+            url: HOST + "drawRule/getEarnWaterRateById?id=" + data.value + "&userId=" + GetQueryString("id"),
+            type: "get",
+            success: function (res) {
+                if (res.code == 200) {
+                    trElem.find("td:last .ew-tree-table-cell-content").html(res.data.userRate);
+                }
+            },
+            error: function () {
+            }
+        });*!/
+        form.render("select");
+    });*/
+
+    $("#shezhi").click(function () {
+        layer.confirm("确定将下级信用额度归零吗？",function (index) {
+            $.ajax({
+                url: HOST+"admin/singleZero?id=" + GetQueryString("id")
+                , type: "GET"
+                , success: function (res) {
+                    if (res.code == 200) {
+                        layer.msg("操作成功");
+                    } else if (res.code == 500) {
+                        layer.msg(res.msg);
+                    }else {
+                        layer.msg("拒绝访问");
+                    }
+                }
+                , error: function () {
+                    console.log("ajax error");
+                }
+            });
+        })
+    })
+
+    //修改
+    /*form.on('submit(update)', function (data) {
+
+        var creditLimit = $("#creditLimit").val();
+        data.field.creditLimit = creditLimit;
+
+        var parentCreditLimit = $("#user_assigned_quota").text();
+        data.field.surplusCreditLimit = parentCreditLimit;
+        // console.log(parentCreditLimit)
+        // if (creditLimit > parentCreditLimit) {
+        //     layer.msg("信用额度不能超过" + parentCreditLimit);
+        //     return false;
+        // }
+        //联系方式
+        data.field.phone = $("input[name='phone']").val();
+        if(isNaN(Number(data.field.phone))){
+            layer.msg('请输入有效的数字！');
+            return false;
+        }
+        //代号
+        data.field.nickName = $("input[name='nickName']").val();
+        //用户id
+        data.field.id = $("input[name='id']").val();
+        //获取单选框状态
+        var status = $('input[name="status"]:checked').val();
+        data.field.status = status;
+        //获取密码
+        var password = $('#password').val();
+        data.field.password = password ;
+        //拦货上限
+        data.field.lanHuoUpperLimit =  $("#daili").find("option:selected").val();
+        data.field.parentLanHuoUpperLimit =  $("#gudong").find("option:selected").val();
+        //贡献度占成上限
+        data.field.contributionUpperLimit = $("#contributionUpperLimit").find("option:selected").val();
+        //邮箱
+        data.field.email = $('input[name="email"]').val();
+
+        var params = [];
+        /!*$("#tbody").find("tr").each(function(e){
+            var ps = null;
+            var hs = null;
+            var lsId = null;
+            $(this).find("select").each(function(e1){
+                var id = this.id;
+                var arr = id.split("-");
+                lsId = arr[2];
+                var pfx = arr[0];
+                if(pfx === 'hs'){
+                    hs = this.value;
+                }else{
+                    ps = this.value;
+                }
+            })
+            if(ps!=null){
+                params.push({
+                    lotterySettingId:lsId,
+                    earnWater:hs,
+                    peiRate:ps
+                });
+            }
+        })*!/
+        console.log("###########",vipInfoVm.data.oddsList)
+        data.field.prSetList = params;
+
+        layer.msg("提交中...",{time:-1,shade:0.3,icon:16})
+        $.ajax({
+            url: HOST + "admin/updateUser"
+            , type: "POST"
+            , contentType: 'application/json'
+            , data: JSON.stringify(data.field)
+            , success: function (res) {
+                layer.closeAll();
+                console.log("=============",res)
+                if (res.code == 0) {
+                    layer.msg('修改成功');
+                    setTimeout(function () {
+                        layer.close(layer.index);
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    layer.msg(res.data,{
+                        icon: 2, time: 2000
+                    });
+                }
+            }
+            , error: function () {
+                layer.closeAll();
+                console.log("ajax error");
+            }
+        });
+        return false;
+    });*/
+    liebiao = function () {
+        window.sessionStorage.setItem("yueji_nav","");
+        window.location.href='userList2.html';
+    }
+
+    //密码规则弹窗
+    function passwordRules() {
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-molv', //样式类名
+            // title: '密码命名规则',
+            title: i18np.prop("user.add.passwordRule"),
+            anim: 2,
+            area: ['600px', '300px'],
+            shadeClose: true, //开启遮罩关闭
+            content:$("#passwordRules"),
+        });
+    }
+
+</script>
+</body>
+</html>

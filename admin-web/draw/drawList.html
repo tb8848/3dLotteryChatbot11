@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>开奖号码</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        .ball1 {
+            background-image: url(../img/bg-ball1.gif);
+        }
+        .bg-ball {
+            width: 30px;
+            height: 37px;
+            background-repeat: no-repeat;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            line-height: 30px;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            padding: 4px;
+            outline: none;
+        }
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        th .layui-table-cell {
+            height: 38px;
+            line-height: 28px !important;
+            padding: 0 15px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .layui-table-cell {
+            height: 38px;
+            line-height: 38px;
+            padding: 0 15px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .layui-table-header {
+            height: 30px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main" >
+    <div class="module">
+        <div name="module" id="memberadmin" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="draw.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="draw.top.drawPrizeCodes">开奖号码</span>
+                </div>
+            </div>
+            <div class="mt10" style="border: solid 1px #000000">
+                <table class="layui-hide" id="t" lay-filter="t"></table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+
+    <div id="showConfirmationMessage" style="display: none;">
+        <div style="margin: 15px 15px;">
+            <span style="font-weight: bold" i18n="draw.settle.settleAccountSuccess">结账成功</span><br><br>
+            <span i18n="draw.settle.winBetCount">中奖注单数:</span><span id="drawCount"></span><br><br>
+            <span i18n="draw.settle.chWinBetCount">出货中奖注单数:</span><span id="chDrawCount"></span><br><br>
+            <span style="font-weight: bold" i18n="draw.settle.settleTakeTime">结账总耗时(秒):</span>
+            <span id="seconds"></span>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="caozuo">
+    {{# if(d.drawStatus == 0){ }}
+    <button class="layui-btn  layui-btn-xs" lay-event="closing"><span i18n="draw.table.btn.clickSettlement" class="yjjz">一键结账</span></button>
+    <button class="layui-btn  layui-btn-xs" lay-event="fast"><span i18n="draw.table.btn.quickInit" class="kscsh">快速初始化</span></button>
+    {{# }else if(d.drawStatus == 2){ }}
+    <button class="layui-btn  layui-btn-xs" lay-event="frontendShow"><span i18n="draw.table.btn.frontShow" class="qtxs">前台显示</span></button>
+    <button class="layui-btn  layui-btn-xs" lay-event="fast"><span i18n="draw.table.btn.quickInit" class="kscsh">快速初始化</span></button>
+    {{# }else if(d.drawStatus == 3){ }}
+    <button class="layui-btn-disabled  layui-btn-xs" lay-event="closing" disabled><span i18n="draw.table.btn.clickSettlement" class="yjjz">一键结账</span></button>
+    <button class="layui-btn  layui-btn-xs" lay-event="fast"><span i18n="draw.table.btn.quickInit" class="kscsh">快速初始化</span></button>
+    {{# }else{ }}
+    <button class="layui-btn  layui-btn-xs" lay-event="closing" style="display: none"><span i18n="draw.table.btn.clickSettlement" class="yjjz">一键结账</span></button>
+    <button class="layui-btn  layui-btn-xs" lay-event="fast" style="display: none"><span i18n="draw.table.btn.quickInit" class="kscsh">快速初始化</span></button>
+    {{#  } }}
+</script>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+
+    var moduleName = "draw";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null;
+
+    var $ = layui.jquery;
+    var table = layui.table;
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        //layui刷新表头
+        table.reload("tt",{
+            cols: [
+                [
+                    {field: 'drawTime',title: i18np.prop('draw.table.head.drawPrizeTime'),align: 'center',width:180},
+                    {field: 'drawId',title: i18np.prop('draw.table.head.drawNo'),align: 'center'},
+                    /*{field: 'drawResult1T',title: i18np.prop('draw.table.head.thousand'),align: 'center', templet: function (d) {
+                            if(d.drawStatus == 0){
+                                return "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult1T\" id=\"drawResult1T\" value=\"\" tabindex=\"1\">"
+                            }else if(d.drawResult1T != null && d.drawResult1T != "" && d.drawResult1T != undefined){
+                                return "<span class='bg-ball ball1'>"+d.drawResult1T+"</span>"
+                            }
+                            return "<span class='bg-ball ball1'></span>"
+                        }},*/
+                    {field: 'drawResult2T',title: i18np.prop('draw.table.head.hundred'),align: 'center', templet: function (d) {
+                            if(d.drawStatus == 0) {
+                                return "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult2T\" id=\"drawResult2T\" value=\"\" tabindex=\"2\">"
+                            }else if( d.drawResult2T != null && d.drawResult2T != "" &&  d.drawResult2T != undefined){
+                                return "<span class='bg-ball ball1'>"+d.drawResult2T+"</span>"
+                            }else {
+                                return "<span class='bg-ball ball1'></span>"
+                            }
+                        }},
+                    {field: 'drawResult3T',title: i18np.prop('draw.table.head.ten'),align: 'center', templet: function (d) {
+                            if(d.drawStatus == 0){
+                                return "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult3T\" id=\"drawResult3T\" value=\"\" tabindex=\"3\">"
+                            }else if(d.drawResult3T != null && d.drawResult3T != "" && d.drawResult3T != undefined){
+                                return "<span class='bg-ball ball1'>"+d.drawResult3T+"</span>"
+                            }
+                            return "<span class='bg-ball ball1'></span>"
+                        }},
+                    {field: 'drawResult4T',title: i18np.prop('draw.table.head.one'),align: 'center', templet: function (d) {
+                            if(d.drawStatus == 0){
+                                return  "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult4T\" id=\"drawResult4T\" value=\"\" tabindex=\"3\">"
+                            }else if(d.drawResult4T != null && d.drawResult4T != "" && d.drawResult4T != undefined){
+                                return "<span class='bg-ball ball1'>"+d.drawResult4T+"</span>"
+                            }
+                            return "<span class='bg-ball ball1'></span>"
+                        }},
+                    {field: 'liRunLv',title: i18np.prop('draw.table.head.profit'),align: 'center',templet: function (d) {
+                            if(d.liRunLv == null || d.liRunLv == "" || d.liRunLv == undefined){
+                                return "<span style='color: red'>-</span>"
+                            }else {
+                                return "<span style='color: red'>" + d.liRunLv + "</span>"
+                            }
+                        }},
+                    {field: 'vipCount',title: i18np.prop('draw.table.head.betVip'),align: 'center'},
+                    {toolbar: "#caozuo",align : 'center',width:300, title: i18np.prop('draw.table.head.operation'),fixed: 'right'}
+                ]
+            ],
+            text:{none: i18np.prop('user.table.noData')},
+        })
+    }
+
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'}).use(['i18np', 'form' , 'jquery','table'], function(){
+        var form = layui.form;
+
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        form.on('submit(search)',function(data){ //查询
+            table.reload('tt', {
+                where: {
+                    "drawId": data.field.drawId
+                }
+                , page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            url: HOST+'draw/selectDrawAll',
+            limit: 40,
+            cols: [
+                [
+                    {field: 'drawTime',title: i18np.prop('draw.table.head.drawPrizeTime'),align: 'center',width:180},
+                    {field: 'drawId',title: i18np.prop('draw.table.head.drawNo'),align: 'center'},
+                    /*{field: 'drawResult1T',title: i18np.prop('draw.table.head.thousand'),align: 'center', templet: function (d) {
+                        if(d.drawStatus == 0){
+                            return "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult1T\" id=\"drawResult1T\" value=\"\" tabindex=\"1\">"
+                        }else if(d.drawResult1T != null && d.drawResult1T != "" && d.drawResult1T != undefined){
+                            return "<span class='bg-ball ball1'>"+d.drawResult1T+"</span>"
+                        }
+                            return "<span class='bg-ball ball1'></span>"
+                        }},*/
+                    {field: 'drawResult2T',title: i18np.prop('draw.table.head.hundred'),align: 'center', templet: function (d) {
+                            if(d.drawStatus == 0) {
+                                return "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult2T\" id=\"drawResult2T\" value=\"\" tabindex=\"2\">"
+                            }else if( d.drawResult2T != null && d.drawResult2T != "" &&  d.drawResult2T != undefined){
+                                return "<span class='bg-ball ball1'>"+d.drawResult2T+"</span>"
+                            }else {
+                                return "<span class='bg-ball ball1'></span>"
+                            }
+                        }},
+                    {field: 'drawResult3T',title: i18np.prop('draw.table.head.ten'),align: 'center', templet: function (d) {
+                            if(d.drawStatus == 0){
+                                return "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult3T\" id=\"drawResult3T\" value=\"\" tabindex=\"3\">"
+                            }else if(d.drawResult3T != null && d.drawResult3T != "" && d.drawResult3T != undefined){
+                                return "<span class='bg-ball ball1'>"+d.drawResult3T+"</span>"
+                            }
+                            return "<span class='bg-ball ball1'></span>"
+                        }},
+                    {field: 'drawResult4T',title: i18np.prop('draw.table.head.one'),align: 'center', templet: function (d) {
+                            if(d.drawStatus == 0){
+                               return  "<input type=\"text\" maxlength='1' class=\"input number\" maxlength=\"1\" name=\"drawResult4T\" id=\"drawResult4T\" value=\"\" tabindex=\"3\">"
+                            }else if(d.drawResult4T != null && d.drawResult4T != "" && d.drawResult4T != undefined){
+                                return "<span class='bg-ball ball1'>"+d.drawResult4T+"</span>"
+                            }
+                            return "<span class='bg-ball ball1'></span>"
+                        }},
+                    {field: 'liRunLv',title: i18np.prop('draw.table.head.profit'),align: 'center',templet: function (d) {
+                            if(d.liRunLv == null || d.liRunLv == "" || d.liRunLv == undefined){
+                                return "<span style='color: red'>-</span>"
+                            }else {
+                                return "<span style='color: red'>" + d.liRunLv + "</span>"
+                            }
+                        }},
+                    {field: 'vipCount',title: i18np.prop('draw.table.head.betVip'),align: 'center'},
+                    {toolbar: "#caozuo",align : 'center',width:300, title: i18np.prop('draw.table.head.operation'),fixed: 'right'}
+                ]
+            ],
+            page: true
+            ,page: {
+                curr: layui.data("t_page").index
+            },
+            text:{none: i18np.prop('user.table.noData')},
+            done: (res, curr, count) => {
+                layui.data("t_page", {
+                    key: 'index',
+                    value: curr
+                });
+                $(".yjjz").html(i18np.prop('draw.table.btn.clickSettlement'));
+                $(".kscsh").html(i18np.prop('draw.table.btn.quickInit'));
+                $(".qtxs").html(i18np.prop('draw.table.btn.frontShow'));
+            }
+        });
+
+        $(function() {
+            //使用jQuery事件代理的事件绑定方式，不需要对每个input进行事件绑定，有利于性能优化
+            $('#main').delegate('input', 'keyup', function() {
+                var _this = $(this),
+                    valLength = _this.val().length,
+                    index = _this.index();
+                if (valLength > 0) {
+                    if ((index + 1) > 1) {
+                        return false; //输入完成时进行操作
+                    }
+                    _this.attr('data-in', 'true').parent().parent().next().children().children().focus();
+                } else if (valLength == 0 && _this.attr('data-in') == 'true') {
+                    if (index == 0) return false; //删除所有时进行操作
+                    _this.attr('data-in', 'false').prev().focus();
+                }
+            });
+        });
+
+        table.on('tool(t)', function (obj) {
+            var data = obj.data
+            var event = obj.event;
+            if (event === 'update') {
+                var uri = encodeURI("editDraw.html?id="+data.id);
+                layer.open({
+                    type:2
+                    ,title:i18np.prop('draw.msg.tile.updateInfo')
+                    ,area: ['500px','300px']
+                    ,content:(uri)  //js获取url参数
+                    ,end:function () {
+                        // layer.closeAll();
+                    }
+                });
+            }else if (event === 'closing') {
+                var drawResult2T = $("#drawResult2T").val();
+                var drawResult3T = $("#drawResult3T").val();
+                var drawResult4T = $("#drawResult4T").val();
+                if (drawResult2T == null || drawResult2T == "" || drawResult2T == undefined ||
+                    drawResult3T == null || drawResult3T == "" || drawResult3T == undefined ||
+                    drawResult4T == null || drawResult4T == "" || drawResult4T == undefined) {
+                    layer.msg(i18np.prop('draw.error.msg.inputPrizeNo'))
+                    return;
+                }
+                var data2 = {"id":data.id,"drawResult2T": drawResult2T, "drawResult3T": drawResult3T, "drawResult4T": drawResult4T};
+                layer.confirm(i18np.prop('draw.error.msg.clickSettlementConfirm'),{
+                    title:i18np.prop('draw.msg.tile.tips'),
+                    btn: [i18np.prop("draw.confirm"),i18np.prop("draw.cancel")] //可以无限个按钮
+                }, function (index) {
+                    layer.msg(i18np.prop('draw.msg.closing'),{time:-1,shade:0.3,icon:16})
+                    $.ajax({
+                        url: HOST+"draw/settleAccounts"
+                        , type: "POST"
+                        ,contentType: 'application/json'
+                        ,data:JSON.stringify(data2)
+                        , success: function (data) {
+                            layer.closeAll();
+                            if (data.code == 200) {
+                                layer.open({
+                                    type : 1
+                                    , area : [ '380px', '180px' ]
+                                    , title:i18np.prop('draw.msg.tile.tips')
+                                    , content : $('#showConfirmationMessage')
+                                    , success : function () {
+                                        $("#drawCount").html(data.data.drawCount)
+                                        $("#chDrawCount").html(data.data.chDrawCount)
+                                        $("#seconds").html(data.data.seconds)
+                                        table.reload("tt");
+                                    }
+                                });
+                            } else if (data.code == 500){
+                                layer.closeAll();
+                                layer.msg(data.msg);
+                            }else {
+                                layer.closeAll();
+                                layer.msg(i18np.prop('draw.ajax.error.operationFail'));
+                            }
+                        }
+                        , error: function () {
+                            layer.closeAll();
+                            console.log("ajax error");
+                        }
+                    });
+                    layer.close(index);
+                })
+
+            }else if (event === 'frontendShow') {
+                layer.msg(i18np.prop('draw.msg.processing'),{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                $.ajax({
+                    url: HOST+"draw/frontendShow?id=" + data.id
+                    , type: "GET"
+                    , dataType: "json"
+                    , success: function (data) {
+                        layer.closeAll();
+                        if (data.code == 200) {
+                            layer.msg(i18np.prop('draw.ajax.error.operationSuccess'));
+                            table.reload("tt");
+                        } else {
+                            layer.msg(i18np.prop('draw.ajax.error.deleteFail'));
+                        }
+                    }
+                    , error: function () {
+                        layer.closeAll();
+                        console.log("ajax error");
+                    }
+                });
+            }else if (event === 'fast') {
+                layer.confirm(i18np.prop('draw.msg.click.quickInit'),{
+                    title:i18np.prop('draw.msg.tile.tips'),
+                    btn: [i18np.prop("draw.confirm"),i18np.prop("draw.cancel")] //可以无限个按钮
+                }, function (index) {
+                    layer.msg(i18np.prop('draw.msg.processing'),{
+                        time:-1,
+                        icon:16,
+                        shade:0.3
+                    })
+                    $.ajax({
+                        url: HOST+"draw/quicklyInit?id=" + data.id
+                        , type: "GET"
+                        , dataType: "json"
+                        , success: function (data) {
+                            layer.closeAll();
+                            if (data.code == 200) {
+                                // layer.msg("操作成功");
+                                layer.msg(i18np.prop('draw.ajax.error.operationSuccess'));
+                                table.reload("tt");
+                            }else {
+                                // layer.msg("操作失败");
+                                layer.msg(i18np.prop('draw.ajax.error.deleteFail'));
+                            }
+                        }
+                        , error: function () {
+                            layer.closeAll();
+                            console.log("ajax error");
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+        });
+    });
+</script>
+</body>
+</html>

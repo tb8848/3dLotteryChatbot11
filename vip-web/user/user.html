@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <!--<link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/adminseccode.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>
+    <script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+    <style>
+        .aaa{
+            border: 1px solid black;
+            color: black;
+        }
+        .table-bordered td {
+            border-left: 1px solid #e0e0e0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .t-1 td{
+            border:1px solid #e2e2e2;
+        }
+    </style>
+</head>
+<body style="overflow: auto">
+
+
+<div class="module">
+    <div name="module" id="info" class="m5 mt5 info">
+        <form novalidate="novalidate">
+            <input type="hidden" name="setting" id="setting">
+            <input type="hidden" name="show_snapshot" id="show_snapshot">
+            <table width="100%">
+                <tbody><tr> <td width="50%">
+                    <div class="mr10 playtype">
+                        <table class="t-1"> <thead> <tr class="title-bar"> <td colspan="2" i18n="user.title">会员资料</td> </tr> </thead>
+                        <tbody>
+                        <tr>
+                            <td width="50%" i18n="user.account">账号：</td> <td id="account"><!--test2111--></td>
+                        </tr>
+                        <tr> <td i18n="user.nickname">代号：</td> <td id="nickname"></td> </tr>
+                        <tr> <td id="fundMode"><!--现金余额：--></td><td id="leftCredit"><!--99184.6825 --></td>   </tr> </tbody> </table> </div>
+                </td>
+                    <td width="50%">
+                        <div class="playtype">
+                            <table class="t-1"> <thead> <tr class="title-bar"> <td colspan="6" i18n="user.subTitle">录码模式</td> </tr> </thead> <tbody>
+                            <tr> <td width="20%" i18n="user.auto">自动：</td> <td width="13%"> <input type="radio" class="radio" name="input_mode" value="0" id="input_mode0"> </td>
+                                <td width="20%" i18n="user.ticketPrint">小票打印：</td> <td width="13%"> <input type="radio" class="radio" name="show_mode" value="1" id="show_mode1"> </td>
+                                <td width="20%" i18n="user.realOdds">实际赔率：</td> <td width="13%"> <input type="radio" class="radio" name="odds_type" value="1" id="odds_type1"> </td>
+                            </tr>
+                            <tr>
+                                <td width="20%" i18n="user.enter">回车：</td><td> <input type="radio" class="radio" name="input_mode" value="1" id="input_mode1"> </td>
+                                <td i18n="user.showLottery">显示彩种：</td> <td> <input type="radio" class="radio" name="show_mode" value="0" id="show_mode0"> </td>
+                                <td i18n="user.transOdds">转换赔率：</td><td> <input type="radio" class="radio" name="odds_type" value="0" id="odds_type0"> </td>
+                            </tr>
+                            <tr> <td i18n="user.ticketCut">小票截图：</td> <td colspan="5">
+                                <input type="checkbox" id="show_snapshot_input" class="checkbox"> </td> </tr> <tr> <td i18n="user.saleName">销售点：</td>
+                                <td colspan="5"><input type="text" id="store_name" name="store_name" value="" maxlength="20" class="text-store-name"></td> </tr> </tbody> </table> </div>
+                    </td> </tr> <tr> <td colspan="2" class="tc pt10">
+                    <input type="button" value="提交" class="btn-common" id="memberbut" i18n="user.submit"> </td> </tr> </tbody></table>
+            <div class="f16 red">
+                <p><span i18n="user.tip1">1、小票打印请使用系统自带浏览器</span><img src="../img/ie7.png" class="vm"><span i18n="user.submit">提交</span></p>
+                <p><span i18n="user.tip2">2、提示:*号和+号都代表x号</span></p>
+                <p><span i18n="user.tip3">3、小票打印处，增加了分页，每页显示500笔。</span></p>
+                <p><span i18n="user.tip4">4、下注明细里，可以直接通过“打印编号”查询用户小票上的所有注单。</span></p>
+                <p><span i18n="user.tip5">5、小票打印处内容超过500笔，再次下单后，系统会自动清空之前小票打印内容，请注意使用。</span></p>
+            </div>
+            <div class="mt10 playtype" style="padding-bottom:30px;">
+
+                <table class="t-1" id="menu" lay-filter="menu">
+                   <thead> <tr class="title-bar">
+                       <td width="6%"></td>
+                       <td width="13%" i18n="user.type">类别</td>
+                       <td width="10%" i18n="user.minBuy">最小下注</td>
+                       <td width="13%" i18n="user.oddsUpper">赔率上限(多个用/分开)</td>
+                       <td width="13%" i18n="user.maxOneItem">单注上限</td>
+                       <td width="13%" i18n="user.maxItem">单项上限</td>
+                       <td width="13%" i18n="user.huishui">交易回水 </td>
+                       <td width="19%" i18n="user.odds">赔率</td>
+                   </tr>
+                   </thead>
+                    <tbody id="tbody">
+                        <tr><td colspan="8" align="center"><img src="../img/load.gif"></td></tr>
+                    </tbody>
+                </table>
+                <div id="show_tip" class="hide"> <span><font color="red">【提示：因上级赚水调整，导致交易回水超限，详见上表中交易回水一栏红色字体提示，请重新设置并提交保存。】</font></span>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+<script src="../js/projects/user.js?7"></script>
+
+<script type="text/javascript">
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    var moduleName = "user";
+    var $i18np = null;
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            getData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        getData();
+    }
+
+</script>
+
+
+</body>
+</html>

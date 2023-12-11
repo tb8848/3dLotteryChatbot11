@@ -1,0 +1,326 @@
+<html><head>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Images/Permutation5/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <title>PL</title>
+    <link href="css/style-SevenStar.css?v=2" type="text/css" rel="stylesheet">
+    <link href="css/login-A.css?v=2" type="text/css" rel="stylesheet">
+    <link href="css/A-P5.css?v=2" type="text/css" rel="stylesheet">
+    <link href="css/login-A.css?v=2" type="text/css" rel="stylesheet">
+    <link href="css/A-P5.css?v=2" type="text/css" rel="stylesheet">
+
+</head>
+<body style="overflow:auto;">
+<div id="login" class="login">
+    <div class="tc logo-con" style="height:76px;"></div>
+
+    <form autocomplete="off">
+        <div class="bd">
+            <div class="hdd"></div>
+            <p class="input-p"><input id="Account" name="Account" type="text" value="" placeholder="请输入账号" class="input account" autocomplete="off" maxlength="16"></p>
+            <p class="input-p"><input id="Password" name="Password" type="password" value="" placeholder="请输入密码" class="input password" onpaste="return false" autocomplete="new-password" maxlength="16"></p>
+            <p class="input-p hide"><input id="CaptchaCode" name="CaptchaCode" type="text" value="" placeholder="请输入验证码" class="input captchacode" maxlength="10"> <img src="" id="imgCaptcha" title="刷新验证码"></p>
+            <p class="input-p"><input type="submit" value="登 录" class="btn-login" id="btn-submit"></p>
+        </div>
+
+<!--        <div id="tip_con" class="mask" style="display:none"></div>-->
+<!--        <div id="login_tip" class="login-tip g-dialog g-alert">-->
+<!--            <div class="dialog-hd">-->
+<!--                <div class="title fl">提示</div>-->
+<!--                <div class="fr"></div>-->
+<!--            </div>-->
+<!--            <div class="dialog-bd">-->
+<!--                <div id="tip_txt"></div>-->
+<!--            </div>-->
+<!--            <div class="dialog-ft">-->
+<!--                <span id="tip_btn" class="btn">确定</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <input type="hidden" id="hd_LoginErrorCount">-->
+    </form>
+
+</div>
+
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script>
+    var $ = layui.$;
+    var layer =layui.layer;
+
+
+    $("body").on("keydown", function(e) {
+        if (e.keyCode === 13) {
+            $("#btn-submit").click();
+        }
+    });
+
+
+    $("#btn-submit").click(function (e) {
+        e.preventDefault();
+        var _this;
+        var username = $("#Account").val();
+        var password = $("#Password").val();
+        if(username==null || username==''){
+            layer.msg("用户名不能为空");
+            $("#Account").focus();
+            return false;
+        }
+        if(password==null || password==''){
+            layer.msg("密码不能为空");
+            $("#Password").focus();
+            return false;
+        }
+        let info = {
+            uname:username,
+            pwd:password
+        };
+        layer.msg("登录中...",{
+            time:-1,
+            icon:16,
+            shade:0.3
+        });
+        $.ajax({
+            url: HOST+'login',
+            type: 'post',
+            data: JSON.stringify(info),
+            success:function (data) {
+                // console.log(data)
+                // console.log(data.data.leftCredit)
+                if(data.code==0){
+                    // if(data.data.needUpdatePwd==0){
+                    //     window.location.href="updatePassword.html";
+                    // }
+                    localStorage.setItem("pwdNeedUpdate",data.data.needUpdatePwd);
+                    localStorage.setItem("id",data.data.uid);
+                    localStorage.setItem("token",data.data.token);
+                    localStorage.setItem("uname",data.data.uname);
+                    localStorage.setItem("leftCredit",data.data.leftCredit);
+                    layui.data('local_store',{key:'token',value:data.data.token});
+                    layer.msg("登录成功",{
+                            time:2000,
+                            end:function () {
+                                // window.location.href="systemPrompt.html";
+                                window.location.href="onlineBettingAgreement.html";
+                            }
+                        }
+                    );
+                }else{
+                    layer.msg(data.msg,{time:2000});
+                }
+            },
+            erorr:function(){
+                layer.msg("网络异常");
+            },
+            complete: function () {
+                layer.closeAll();
+                _this.prop("disabled", false);
+            }
+        });
+        return false;
+    });
+    //
+    // $(function () {
+    //     var error = "";
+    //     if (error.length > 0) {
+    //         $("#tip_con").show();
+    //         $("#login_tip").show();
+    //         $("#tip_txt").html(decodeURI(error));
+    //     }
+    //     $("#tip_btn").on("click",
+    //         function() {
+    //             url = location.href;
+    //             window.location.href = url.split("?")[0];
+    //         });
+    //
+    //     $("#login_tip").on("mousedown", ".dialog-hd", mousedown);
+    //
+    //     function mousedown(e) {
+    //         e = e.originalEvent;
+    //         var loginLeft = $("#login").offset().left;
+    //         var offsetLeft = $("#login_tip").offset().left;
+    //         var offsetTop = $("#login_tip").offset().top;
+    //         var disX = e.clientX - offsetLeft;
+    //         var disY = e.clientY - offsetTop;
+    //
+    //         $(document).on("mousemove", move).on("mouseup", up);
+    //
+    //         function move(e) {
+    //             e = e.originalEvent;
+    //             var left = e.clientX - disX - loginLeft;
+    //             var top = e.clientY - disY;
+    //             if (left < 0) {
+    //                 left = 0;
+    //             } else if (left > document.documentElement.clientWidth - $("#login_tip").width() - 2) {
+    //                 left = document.documentElement.clientWidth - $("#login_tip").width() - 2;
+    //             }
+    //             if (top < 0) {
+    //                 top = 0;
+    //             } else if (top > document.documentElement.clientHeight - $("#login_tip").height()) {
+    //                 top = document.documentElement.clientHeight - $("#login_tip").height();
+    //             }
+    //             $("#login_tip").css({
+    //                 left: left,
+    //                 top: top
+    //             });
+    //             return false;
+    //         }
+    //
+    //         function up() {
+    //             $(document).off("mousemove").off("mouseup");
+    //         }
+    //     }
+    //
+    //
+    //     var Account = $("#Account").on("blur", function () {
+    //         if ($.trim(this.value) != "" && imgCaptcha.parent().hasClass("hide")) {
+    //             GetErrorCount();
+    //         }
+    //     });
+    //     var Password = $("#Password");
+    //     var CaptchaCode = $("#CaptchaCode");
+    //     var imgCaptcha = $("#imgCaptcha").on("click", function () {
+    //         getCaptchaImage();
+    //     });
+    //
+    //     $("body").on("keydown", function(e) {
+    //         if (e.keyCode === 13) {
+    //             $("#btn-submit").click();
+    //         }
+    //     });
+    //     var hd_LoginErrorCount = $("#hd_LoginErrorCount");
+    //     setTimeout(function () {
+    //         Account.focus();
+    //     }, 0);
+    //
+    //     $("#btn-submit").on("click", function (e) {
+    //         e.preventDefault();
+    //         var _this;
+    //         if (!$.trim(Account.val())) {
+    //             alert("请输入用户名");
+    //             Account.focus();
+    //             return false;
+    //         }
+    //         if (!$.trim(Password.val())) {
+    //             alert("请输入密码");
+    //             Password.focus();
+    //             return false;
+    //         }
+    //         if (imgCaptcha[0] && !imgCaptcha.parent().hasClass("hide")) {
+    //             if (!$.trim(CaptchaCode.val())) {
+    //                 alert("请输入验证码");
+    //                 CaptchaCode.focus();
+    //                 return false;
+    //             }
+    //         }
+    //
+    //         var acc = Account.val(), pwd = Password.val();
+    //         acc = JsRsaEncrypt(acc);
+    //         pwd = JsRsaEncrypt(pwd);
+    //
+    //         _this = $(this).prop("disabled", true);
+    //
+    //
+    //
+    //         $.ajax({
+    //             url: SESSIONID + "/Member/DoLogin?_=" + (new Date).getTime(),
+    //             type: "POST",
+    //             cache: false,
+    //             dataType: "json",
+    //             data: {
+    //                 Account: acc,
+    //                 Password: pwd,
+    //                 publickey: $('#_publickeyValue').val(),
+    //                 captchacode: CaptchaCode.val()
+    //             },
+    //             success: function (x) {
+    //                 if (x.Status == 1) {
+    //                     location.href = SESSIONID + "/Member/SysNotice?_=" + (new Date).getTime();
+    //                 }
+    //                 else {
+    //                     alert(x.Data);
+    //                     Password.focus();
+    //                     Password.val("");
+    //                     CaptchaCode.val("");
+    //                     GetErrorCount();
+    //                 }
+    //             },
+    //             complete: function () {
+    //                 _this.prop("disabled", false);
+    //             }
+    //         });
+    //     });
+    //
+    //     //CaptchaCode
+    //     function SetCaptchaCode(value) {
+    //         if (value >= 2) {
+    //             imgCaptcha.parent().removeClass("hide");
+    //             getCaptchaImage();
+    //         } else {
+    //             //imgCaptcha.parent().addClass("vhide");
+    //             if (!imgCaptcha.parent().hasClass("hide")) {
+    //                 getCaptchaImage();
+    //             }
+    //         }
+    //     }
+    //
+    //     function getCaptchaImage() {
+    //         $.ajax({
+    //             url: SESSIONID + "/Member/GetCaptcha",
+    //             dataType: "json",
+    //             cache: false,
+    //             success: function (x) {
+    //                 if (x.Status == 1) {
+    //                     imgCaptcha.attr("src", captchaUrl + "Captcha/GetCaptcha?AppId=" + x.Data.AppId + "&Token=" + x.Data.Token);
+    //                 }
+    //                 else {
+    //                     alert(x.Data);
+    //                 }
+    //             }
+    //         });
+    //     }
+    //
+    //     function GetErrorCount() {
+    //         $.ajax({
+    //             url: SESSIONID + "/Member/GetLoginErrorCount",
+    //             data: { account: Account.val() },
+    //             dataType: "json",
+    //             cache: false,
+    //             success: function (x) {
+    //                 hd_LoginErrorCount.val(x.Data);
+    //                 SetCaptchaCode(x.Data);
+    //             }
+    //         });
+    //     }
+    // });
+    //
+    //
+
+
+</script>
+
+
+<!--<input type="hidden" id="_exponentValue" value="010001">-->
+<!--<input type="hidden" id="_publickeyValue" value="9052A2461968D1B4544C4FF6485774442F51740617A1E2D7957CF6377CD7FC4D03DC823E974330B81E5C2138BE8811481331069D57AF109CCC0CF39A91F476E438AF6EFB7F702EC69050057DA816BE07BF91CE027C4A79FB8C3374A4F91DE72DE01D5F00838E4DACE81A914021DADE9994F62E76CE4622E0D5A26B565564090B">-->
+<!--<script src="/Scripts/RSA/BigInt.js?v=2" type="text/javascript"></script>-->
+<!--<script src="/Scripts/RSA/RSA.js" type="text/javascript"></script>-->
+<!--<script src="/Scripts/RSA/Barrett.js" type="text/javascript"></script>-->
+<!--<script type="text/javascript">-->
+<!--    function JsRsaEncrypt(text) {-->
+<!--        var exponentVal = $('#_exponentValue').val();-->
+<!--        var modulusVal = $('#_publickeyValue').val();-->
+<!--        if (exponentVal === "" || modulusVal === "") return text;-->
+<!--        setMaxDigits(256);-->
+<!--        var rsaKey = new RSAKeyPair(exponentVal, "", modulusVal);-->
+<!--        var result = encryptedString(rsaKey, encodeURI(text));-->
+<!--        return result;-->
+<!--    }-->
+<!--</script>-->
+
+
+
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>玩法设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+</head>
+<body style="overflow-y: auto">
+<div id="main" >
+    <div class="module">
+        <div name="module" id="st_basic" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red">  玩法设置  </span>
+                </div>
+                <div class="fr">
+                    <a href="accountSetting.html" class="" i18n="setting.basic.information">基本资料</a> |
+                    <a href="playSetting.html" class="fb red">玩法设置</a> |
+                    <a href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a>
+                </div>
+            </div>
+            <form autocomplete="off" novalidate="novalidate">
+                <div class="mt10">
+                    <div class="mt10"><input type="hidden" name="select_no_param" id="select_no_param" value="">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1">
+                                <td colspan="6">玩法设置</td>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            <tr>
+                                <td width="16%" class="bg3">直选</td>
+                                <td width="16%"><input type="checkbox" name="zx" ></td>
+                                <td width="16%" class="bg3">直选和值</td>
+                                <td width="16%"><input type="checkbox" name="zxhz" ></td>
+                                <td width="16%" class="bg3">复式</td>
+                                <td width="16%"><input type="checkbox" name="fs" ></td>
+                            </tr>
+                            <tr>
+                                <td width="16%" class="bg3">组三</td>
+                                <td><input type="checkbox" name="z3" ></td>
+                                <td class="bg3">组三和值</td>
+                                <td><input type="checkbox" name="z3hz" ></td>
+                                <td class="bg3">组六</td>
+                                <td><input type="checkbox" name="z6" ></td>
+                            </tr>
+                            <tr>
+                                <td class="bg3">组六和值</td>
+                                <td><input type="checkbox" name="z6hz" ></td>
+                                <td class="bg3">和数</td>
+                                <td><input type="checkbox" name="hs" ></td>
+                                <td class="bg3">跨度</td>
+                                <td><input type="checkbox" name="kd" ></td>
+                            </tr>
+                            <tr>
+                                <td class="bg3">独胆</td>
+                                <td><input type="checkbox" name="dd" ></td>
+                                <td class="bg3">包选</td>
+                                <td><input type="checkbox" name="bx" ></td>
+                                <td class="bg3">1D</td>
+                                <td><input type="checkbox" name="d1" ></td>
+                            </tr>
+                            <tr>
+                                <td class="bg3">2D</td>
+                                <td><input type="checkbox" name="d2" ></td>
+                                <td class="bg3">大小</td>
+                                <td><input type="checkbox" name="dx" ></td>
+                                <td class="bg3">奇偶</td>
+                                <td><input type="checkbox" name="jo" ></td>
+                            </tr>
+                            <tr>
+                                <td class="bg3">拖拉机</td>
+                                <td><input type="checkbox" name="tlj" ></td>
+                                <td class="bg3">猜三同</td>
+                                <td><input type="checkbox" name="c3t" ></td>
+                                <td class="bg3">组三胆拖</td>
+                                <td><input type="checkbox" name="z3dt" ></td>
+                            </tr>
+                            <tr>
+                                <td class="bg3">组六胆拖</td>
+                                <td><input type="checkbox" name="z6dt" ></td>
+                                <td class="bg3">猜1D</td>
+                                <td><input type="checkbox" name="c1d" ></td>
+                                <td class="bg3">猜2D</td>
+                                <td><input type="checkbox" name="c2d" ></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt10 tc">
+                        <button class="btn" id="add" lay-submit lay-filter="add" style="cursor: pointer"><span i18n="setting.submit">提交</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    var form = layui.form;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+    });
+
+    var id = 1;
+
+    window.onload = function () {
+        $.ajax({
+            url: HOST+"admin/playSetting/getPlaySetting"
+            , type: "GET"
+            , success:function(res){
+                if(res.code == 200) {
+                    let data = res.data;
+
+                    id = res.data.id;
+                    /* -------- 玩法设置 --------*/
+                    // 直选
+                    if (data.zx == 1 || data.zx == "1") {
+                        $("input[name='zx']").attr("checked", true);
+                    }
+                    // 直选和值
+                    if (data.zxhz == 1 || data.zxhz == "1") {
+                        $("input[name='zxhz']").attr("checked", true);
+                    }
+                    // 复式
+                    if (data.fs == 1 || data.fs == "1") {
+                        $("input[name='fs']").attr("checked", true);
+                    }
+                    // 组三
+                    if (data.z3 == 1 || data.z3 == "1") {
+                        $("input[name='z3']").attr("checked", true);
+                    }
+                    // 组六
+                    if (data.z6 == 1 || data.z6 == "1") {
+                        $("input[name='z6']").attr("checked", true);
+                    }
+                    // 和数
+                    if (data.hs == 1 || data.hs == "1") {
+                        $("input[name='hs']").attr("checked", true);
+                    }
+                    // 跨度
+                    if (data.kd == 1 || data.kd == "1") {
+                        $("input[name='kd']").attr("checked", true);
+                    }
+                    // 独胆
+                    if (data.dd == 1 || data.dd == "1") {
+                        $("input[name='dd']").attr("checked", true);
+                    }
+                    // 包选
+                    if (data.bx == 1 || data.bx == "1") {
+                        $("input[name='bx']").attr("checked", true);
+                    }
+                    // 1D
+                    if (data.d1 == 1 || data.d1 == "1") {
+                        $("input[name='d1']").attr("checked", true);
+                    }
+                    // 2D
+                    if (data.d2 == 1 || data.d2 == "1") {
+                        $("input[name='d2']").attr("checked", true);
+                    }
+                    // 大小
+                    if (data.dx == 1 || data.dx == "1") {
+                        $("input[name='dx']").attr("checked", true);
+                    }
+                    // 奇偶
+                    if (data.jo == 1 || data.jo == "1") {
+                        $("input[name='jo']").attr("checked", true);
+                    }
+                    // 拖拉机
+                    if (data.tlj == 1 || data.tlj == "1") {
+                        $("input[name='tlj']").attr("checked", true);
+                    }
+                    // 猜三同
+                    if (data.c3t == 1 || data.c3t == "1") {
+                        $("input[name='c3t']").attr("checked", true);
+                    }
+
+                    // 组三和值
+                    if (data.z3hz == 1 || data.z3hz == "1") {
+                        $("input[name='z3hz']").attr("checked", true);
+                    }
+                    // 组六和值
+                    if (data.z6hz == 1 || data.z6hz == "1") {
+                        $("input[name='z6hz']").attr("checked", true);
+                    }
+                    // 组三胆拖
+                    if (data.z3dt == 1 || data.z3dt == "1") {
+                        $("input[name='z3dt']").attr("checked", true);
+                    }
+                    // 组六胆拖
+                    if (data.z6dt == 1 || data.z6dt == "1") {
+                        $("input[name='z6dt']").attr("checked", true);
+                    }
+
+                    // 猜1D
+                    if (data.c1d == 1 || data.c1d == "1") {
+                        $("input[name='c1d']").attr("checked", true);
+                    }
+                    // 猜2D
+                    if (data.c2d == 1 || data.c2d == "1") {
+                        $("input[name='c2d']").attr("checked", true);
+                    }
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+    layui.use(['form' , 'jquery'], function(){
+        form.on('submit(add)',function(data){
+
+            // 直选
+            var zx = $("input[name='zx']").prop("checked");
+            if (zx) {
+                data.field.zx = 1;
+            }else {
+                data.field.zx = 0;
+            }
+            // 直选和值
+            var zxhz = $("input[name='zxhz']").prop("checked");
+            if (zxhz) {
+                data.field.zxhz = 1;
+            }else {
+                data.field.zxhz = 0;
+            }
+            // 复式
+            var fs = $("input[name='fs']").prop("checked");
+            if (fs) {
+                data.field.fs = 1;
+            }else {
+                data.field.fs = 0;
+            }
+            // 组三
+            var z3 = $("input[name='z3']").prop("checked");
+            if (z3) {
+                data.field.z3 = 1;
+            }else {
+                data.field.z3 = 0;
+            }
+            var z6 = $("input[name='z6']").prop("checked");
+            if (z6) {
+                data.field.z6 = 1;
+            }else {
+                data.field.z6 = 0;
+            }
+            var hs = $("input[name='hs']").prop("checked");
+            if (hs) {
+                data.field.hs = 1;
+            }else {
+                data.field.hs = 0;
+            }
+            var kd = $("input[name='kd']").prop("checked");
+            if (kd) {
+                data.field.kd = 1;
+            }else {
+                data.field.kd = 0;
+            }
+            var dd = $("input[name='dd']").prop("checked");
+            if (dd) {
+                data.field.dd = 1;
+            }else {
+                data.field.dd = 0;
+            }
+            var bx = $("input[name='bx']").prop("checked");
+            if (bx) {
+                data.field.bx = 1;
+            }else {
+                data.field.bx = 0;
+            }
+            var d1 = $("input[name='d1']").prop("checked");
+            if (d1) {
+                data.field.d1 = 1;
+            }else {
+                data.field.d1 = 0;
+            }
+            var d2 = $("input[name='d2']").prop("checked");
+            if (d2) {
+                data.field.d2 = 1;
+            }else {
+                data.field.d2 = 0;
+            }
+            var dx = $("input[name='dx']").prop("checked");
+            if (dx) {
+                data.field.dx = 1;
+            }else {
+                data.field.dx = 0;
+            }
+            var jo = $("input[name='jo']").prop("checked");
+            if (jo) {
+                data.field.jo = 1;
+            }else {
+                data.field.jo = 0;
+            }
+            var tlj = $("input[name='tlj']").prop("checked");
+            if (tlj) {
+                data.field.tlj = 1;
+            }else {
+                data.field.tlj = 0;
+            }
+            var c3t = $("input[name='c3t']").prop("checked");
+            if (c3t) {
+                data.field.c3t = 1;
+            }else {
+                data.field.c3t = 0;
+            }
+
+            var z3hz = $("input[name='z3hz']").prop("checked");
+            if (z3hz) {
+                data.field.z3hz = 1;
+            }else {
+                data.field.z3hz = 0;
+            }
+            var z6hz = $("input[name='z6hz']").prop("checked");
+            if (z6hz) {
+                data.field.z6hz = 1;
+            }else {
+                data.field.z6hz = 0;
+            }
+            var z3dt = $("input[name='z3dt']").prop("checked");
+            if (z3dt) {
+                data.field.z3dt = 1;
+            }else {
+                data.field.z3dt = 0;
+            }
+            var z6dt = $("input[name='z6dt']").prop("checked");
+            if (z6dt) {
+                data.field.z6dt = 1;
+            }else {
+                data.field.z6dt = 0;
+            }
+
+            var c1d = $("input[name='c1d']").prop("checked");
+            if (c1d) {
+                data.field.c1d = 1;
+            }else {
+                data.field.c1d = 0;
+            }
+            var c2d = $("input[name='c2d']").prop("checked");
+            if (c2d) {
+                data.field.c2d = 1;
+            }else {
+                data.field.c2d = 0;
+            }
+            data.field.id = id;
+            layer.msg(i18np.prop("setting.one.submitting"),{time:-1,icon:16,shade:0.3})
+            $.ajax({
+                url: HOST+'admin/playSetting/setPlaySetting',
+                type:"post",
+                data:JSON.stringify(data.field),
+                contentType: 'application/json',
+                success:function(res){
+                    layer.closeAll();
+                    if(res.code==200){
+                        layer.msg(i18np.prop("setting.operation.succeeded"));
+                        setTimeout(function () {
+                            layer.close(layer.index);
+                            window.location.reload();
+                        }, 1000);
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function(){
+                    layer.closeAll();
+                    layer.msg(i18np.prop("setting.one.network.exception"));
+                }
+
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

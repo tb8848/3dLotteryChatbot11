@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>开盘设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+    <style>
+        .t-1 {
+            width: 100%;
+            outline: 1px solid #1e9fff;
+            background: #fff;
+            border: 1px solid #525C3D;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="main" class="main" style="top: 0px;">
+    <template>
+    <div class="module">
+        <div name="module" id="st_open" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.opening.setting">  开盘设置  </span>
+                </div>
+                <div class="fr"><a href="basicSetting.html" class="" i18n="setting.basic.settings">基本设置</a> | <a
+                        href="openQuotation.html" class="fb red" i18n="setting.opening.setting">开盘设置</a> | <a
+                        href="oddsChange.html" class="" i18n="setting.loss.rate.change.setting">赔率变动设置</a> |
+                    <!--<a href="packageOddsChange.html" class="" i18n="setting.package.odds.change.setting">包牌赔率变动设置</a> | --><a href="dingPan.html"
+                                                   class="" i18n="setting.fixed.plate">定盘</a> | <a
+                        href="notice.html" class="" i18n="setting.announcement.settings">公告设置</a> |
+                    <!--<a href="package.html" class="" i18n="setting.package.setting">包牌设置</a> | --><a
+                        href="subAccount.html" class="" i18n="setting.sub.account">子账号</a> |
+                    <a href="accountSetting.html" class="" i18n="setting.basic.information">基本资料</a> | <a
+                        href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a></div>
+            </div>
+            <form id="form1" novalidate="novalidate">
+                <div class="mt10" id="bd_serverinfo">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="11">
+                                <span i18n="setting.opening.setting">开盘设置</span>&nbsp;
+                                <span i18n="setting.two.fwqdqsj">服务器当前时间</span>：<span id="nowDateTime"></span>
+                                <span class="yellow fb ml20">
+                                    <span i18n="setting.two.dqq">当前期</span>:<span id="drawId"></span>
+                                    <span i18n="setting.two.status">状态</span>:<span id="openStatus"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="bg3" width="65" i18n="setting.two.kaipanTime">开盘时间</td>
+                            <td>
+                                <input type="hidden" name="id" id="id">
+                                <input type="text" name="open_datetime" required="true" class="ime-dis datetime" target="#open_week_day" id="openDateTime">
+                            </td>
+                            <td class="fb red" width="55" id="open_week_day"><span id="openWeekDay"></span></td>
+                            <td class="bg3" i18n="setting.two.tingpanTime">停盘时间</td>
+                            <td>
+                                <input type="text" autocomplete="off" name="close_datetime" id="closeDateTime" required="true" class="ime-dis datetime" target="#close_week_day">
+                            </td>
+                            <td class="fb red" width="55" id="close_week_day">
+                                <span id="closeWeekDay"></span>
+                            </td>
+                            <td>
+                                <label class="mr20">
+                                    <input type="radio" class="radio" name="is_open" value="1"><span i18n="setting.two.mykaipan">我要开盘</span>
+                                </label>
+                                <label class="mr20">
+                                    <input type="radio" class="radio" name="is_open" value="0" checked="checked"><span i18n="setting.two.myguanpan">我要关盘</span>
+                                </label>
+                            </td>
+                            <td class="bg3" i18n="setting.two.password">密码</td>
+                            <td><input type="password" autocomplete="new-password" class="w60" name="password" id="open_pwd" required="true" maxlength="16"></td>
+
+                            <td><button class="btn" id="add" lay-submit lay-filter="add"><span i18n="setting.submit">提交</span></button></td>
+                            <td><input type="button" value="打包实货白单数据" id="btnBackupHoldList" class="btn"
+                                       disabled="disabled" i18n="setting.two.dbshbdsj"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            <div class="mt10" id="bd_nextperiod">
+                <form id="form2" novalidate="novalidate">
+                    <table class="t-1 mt10">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="6" i18n="setting.two.drawId">期号</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td width="65" class="bg3" i18n="setting.two.drawIdAdd">期号添加</td>
+                            <td width="60"><input type="text" class="red fb period_no" disabled="disabled"
+                                                  id="new_period_no" maxlength="5" name="new_period_no"></td>
+                            <td width="60"><a id="change_period_no" href="javascript:void(0)"
+                                              style="display:none" i18n="setting.two.updateDrawId">修改期号</a> <input type="hidden" name="period_no"
+                                                                                   class="period_no" id="period_no"
+                                                                                   value="22323"></td>
+                            <td width="40" class="bg3" i18n="setting.two.password">密码</td>
+                            <td width="60"><input type="password" id="open_pwd2" name="open_pwd" required="true" maxlength="16"
+                                                  aria-required="true"></td>
+                            <td><button class="btn" id="addDraw" lay-submit lay-filter="addDraw" i18n="setting.submit">提交</button></td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td width="20%" i18n="setting.two.drawId">期号</td>
+                        <td width="20%" i18n="setting.two.kaipanTime">开盘时间</td>
+                        <td width="20%" i18n="setting.two.tingpanTime">停盘时间</td>
+                        <td width="20%" i18n="setting.two.sfsy">是否使用</td>
+                        <td width="20%" i18n="setting.two.caozuo">操作</td>
+                    </tr>
+                    </thead>
+                    <tbody class="fn-hover">
+                        <table class="t-1" v-for="(item,key) in drawList">
+                            <tr><td colspan="5" style="font-weight: bold">{{key}}</td></tr>
+                            <tr v-for="(v,idx) in item" :key="idx">
+                                <td width="20%">{{v.drawId}}</td>
+                                <td width="20%" v-if="v.drawStatus == 0">
+                                    <input type="text" id="openDateTimeInput" v-model=v.openDateTime >
+                                    <button type="submit" value="提交" class="btn" id="btnModifyOpen" name="btnModifyOpen" @click="updateOpenDataTime(v.id)">{{$t('submit')}}</button>
+<!--                                    <input type="submit" value="提交" class="btn" id="btnModifyOpen" name="btnModifyOpen" v-on:click="updateOpenDataTime(v.id)" i18n="setting.submit">-->
+                                </td>
+                                <td width="20%" v-else></td>
+                                <td width="20%" v-if="v.drawStatus == 0">
+                                    <input type="text" id="openDateTimeInput" v-model=v.closeDateTime>
+                                    <button type="submit" value="提交" class="btn" id="btnModifyOpen" name="btnModifyOpen" @click="updateCloseDataTime(v.id)">{{$t('submit')}}</button>
+<!--                                    <input type="submit" value="提交" class="btn" id="btnModifyOpen" name="btnModifyOpen" v-on:click="updateCloseDataTime(v.id)" i18n="setting.submit">-->
+                                </td>
+                                <td width="20%" v-else></td>
+                                <td width="20%" v-if="v.drawStatus == 1"><span>{{$t('no')}}</span></td>
+                                <td width="20%" v-else style="color: red"><span>{{$t('yes')}}</span></td>
+                                <!--<td width="20%" i18n="setting.two.delete"><a style="cursor: pointer" @click="deleteDraw(v.id, v.drawId)">{{$t('delete')}}</a></td>-->
+                                <td width="20%" i18n="setting.two.delete">{{$t('delete')}}</td>
+                            </tr>
+                        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    const messages = {
+        zh: {
+            yes:"是",
+            no:"否",
+            delete:"删除",
+            submit:"提交"
+        },
+        th: {
+            yes:"ใช่",
+            no:"ไม่",
+            delete:"ลบ",
+            submit:"ส่ง"
+        }
+    }
+    var $ = layui.jquery;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+
+        vm.initTableData();
+        getUUID();
+        getDrawNoDataList();
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.initTableData();
+        getUUID();
+        getDrawNoDataList();
+    });
+
+    var openQuota = "";
+    var closeDisk = "";
+    var issueAdd = "";
+    function getUUID() {
+        $.ajax({
+            url:HOST+'uuid/getUUid',
+            headers:{
+                "token":layui.data('local_store').token,
+                "lang":layui.data('langTab').langType
+            },
+            type:'get',
+            success:function(res){
+                if(res.code == 0){
+                    openQuota = res.data.openQuota;
+                    closeDisk = res.data.closeDisk;
+                    issueAdd = res.data.issueAdd;
+                }
+            },
+            error:function (e) {}
+        });
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            drawList: [],
+        },
+        methods : {
+            initTableData() {
+                var _this = this;
+                $.ajax({
+                    url: HOST + "openQuotation/getDrawNoDataListByDrawList"
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 0) {
+                            _this.drawList = res.data
+                        }else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+            },
+            updateOpenDataTime (id) {
+                var openDateTime = $("#openDateTimeInput").val();
+                var data = {openDateTime: openDateTime, id: id}
+                $.ajax({
+                    url: HOST + "openQuotation/updatePanTime"
+                    , type: "POST"
+                    , data:JSON.stringify(data)
+                    , contentType: 'application/json'
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            // layer.msg("操作成功");
+                            layer.msg(i18np.prop("setting.operation.succeeded"));
+                        }else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+            },
+            updateCloseDataTime (id) {
+                var closeDateTime = $("#closeDateTimeInput").val();
+                var data = {closeDateTime: closeDateTime, id: id}
+                $.ajax({
+                    url: HOST + "openQuotation/updatePanTime"
+                    , type: "POST"
+                    , data:JSON.stringify(data)
+                    , contentType: 'application/json'
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            // layer.msg("操作成功");
+                            layer.msg(i18np.prop("setting.operation.succeeded"));
+                        }else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+            },
+            deleteDraw(id, drawId) {
+                layer.confirm(i18np.prop("setting.openQuotation.want.delete") + "  " + drawId + "?",{
+                    title:i18np.prop('setting.five.tips'),
+                    btn: [i18np.prop("setting.determine"),i18np.prop("setting.cancel")] //可以无限个按钮
+                }, function (index) {
+                    layer.msg(i18np.prop('setting.zzclz'),{
+                        time:-1,
+                        icon:16,
+                        shade:0.3
+                    })
+                    $.ajax({
+                        url: HOST + "openQuotation/deleteDraw?id=" + id
+                        , type: "get"
+                        , success: function (res) {
+                            layer.closeAll();
+                            if (res.code == 200) {
+                                layer.msg(res.msg);
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },1000);
+                            }else {
+                                layer.msg(res.msg);
+                            }
+                        }, error:function () {
+                            layer.closeAll();
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+        }
+    })
+
+    /*vm.initTableData();*/
+
+    function getDrawNoDataList(){
+        $.ajax({
+            url: HOST + "openQuotation/getDrawNoDataList"
+            , type: "GET"
+            , success: function (res) {
+                if (res.code == 200) {
+                    $("#nowDateTime").html(res.data.nowTime)
+                    $("#drawId").html(res.data.draw.drawId)
+                    if (res.data.draw.openStatus == 0 || res.data.draw.openStatus == "0") {
+                        $("#openStatus").html(i18np.prop("setting.status.ytp"))
+                        $("input:radio[name='is_open'][value='1']").attr("checked",'checked');
+                    }else if (res.data.draw.openStatus == 2 || res.data.draw.openStatus == "2"){
+                        $("#openStatus").html(i18np.prop("setting.status.wkp"))
+                        $("input:radio[name='is_open'][value='1']").attr("checked",'checked');
+                    }else if (res.data.draw.openStatus == 3 || res.data.draw.openStatus == "3"){
+                        $("#openStatus").html(i18np.prop("setting.status.kpz"))
+                        $("input:radio[name='is_open'][value='1']").attr("checked",'checked');
+                    }else {
+                        $("#openStatus").html(i18np.prop("setting.status.ykp"))
+                        $("input:radio[name='is_open'][value='0']").attr("checked",'checked');
+                    }
+
+                    $("#openDateTime").val(res.data.draw.openDateTime)
+                    $("#closeDateTime").val(res.data.draw.closeDateTime)
+                    $("#openWeekDay").html(res.data.openWeekDay)
+                    $("#closeWeekDay").html(res.data.closeWeekDay)
+                    $("#new_period_no").val(res.data.newDrawId)
+                    $("#id").val(res.data.draw.id)
+                }
+            }
+        });
+    }
+
+    // window.onload = function () {
+    //     $.ajax({
+    //         url: HOST + "openQuotation/getDrawNoDataList"
+    //         , type: "GET"
+    //         , success: function (res) {
+    //             if (res.code == 200) {
+    //                 $("#nowDateTime").html(res.data.nowTime)
+    //                 $("#drawId").html(res.data.draw.drawId)
+    //                 if (res.data.draw.openStatus == 0 || res.data.draw.openStatus == "0") {
+    //                     $("#openStatus").html(i18np.prop("setting.status.ytp"))
+    //                     $("input:radio[name='is_open'][value='1']").attr("checked",'checked');
+    //                 }else if (res.data.draw.openStatus == 2 || res.data.draw.openStatus == "2"){
+    //                     $("#openStatus").html(i18np.prop("setting.status.wkp"))
+    //                     $("input:radio[name='is_open'][value='1']").attr("checked",'checked');
+    //                 }else if (res.data.draw.openStatus == 3 || res.data.draw.openStatus == "3"){
+    //                     $("#openStatus").html(i18np.prop("setting.status.kpz"))
+    //                     $("input:radio[name='is_open'][value='1']").attr("checked",'checked');
+    //                 }else {
+    //                     $("#openStatus").html(i18np.prop("setting.status.ykp"))
+    //                     $("input:radio[name='is_open'][value='0']").attr("checked",'checked');
+    //                 }
+    //
+    //                 $("#openDateTime").val(res.data.draw.openDateTime)
+    //                 $("#closeDateTime").val(res.data.draw.closeDateTime)
+    //                 $("#openWeekDay").html(res.data.openWeekDay)
+    //                 $("#closeWeekDay").html(res.data.closeWeekDay)
+    //                 $("#new_period_no").val(res.data.newDrawId)
+    //                 $("#id").val(res.data.draw.id)
+    //             }
+    //         }
+    //     });
+    // }
+
+    layui.use(['form' , 'jquery'], function(){
+        var form = layui.form;
+        form.on('submit(add)',function(data){
+            var pwd = $("#open_pwd").val()
+            if (null == pwd || "" == pwd || undefined == pwd) {
+                layer.msg(i18np.prop("setting.msg.please.input.password"));
+                return false;
+            }
+            data.field.openDateTime = $("#openDateTime").val()
+            data.field.closeDateTime = $("#closeDateTime").val()
+            var openStatus = $("input[name='is_open']").prop("checked");
+            if (openStatus) {
+                data.field.openStatus = 1;
+                data.field.drawResult5T = openQuota;
+            }else {
+                data.field.openStatus = 0;
+                data.field.drawResult5T = closeDisk;
+            }
+            data.field.password = pwd
+            data.field.id = $("#id").val();
+            $.ajax({
+                url: HOST + "openQuotation/updateDrawInfo"
+                , type: "post"
+                , data:JSON.stringify(data.field)
+                , contentType: 'application/json'
+                , success: function (res) {
+                    if (res.code == 200) {
+                        layer.msg(res.msg);
+                        setTimeout(function(){
+                            window.location.reload();
+                        },1000);
+                    }else if(res.code == -1){
+                        layer.msg(res.msg);
+                    }else {
+                        layer.msg(res.msg);
+                        getUUID();
+                    }
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(addDraw)',function(data){
+            var pwd = $("#open_pwd2").val()
+            if (null == pwd || "" == pwd || undefined == pwd) {
+                layer.msg(i18np.prop("setting.msg.please.input.password"));
+                return false;
+            }
+            data.field.drawResult5T = issueAdd;
+            data.field.drawId = $("#new_period_no").val();
+            data.field.password = pwd;
+            layer.confirm(i18np.prop("setting.msg.qdzxxzqsczm"),{
+                title:i18np.prop('setting.five.tips'),
+                btn: [i18np.prop("setting.determine"),i18np.prop("setting.cancel")] //可以无限个按钮
+            }, function (index) {
+                layer.msg(i18np.prop('setting.one.submitting'),{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                $.ajax({
+                    url: HOST + "openQuotation/addDrawId"
+                    , type: "post"
+                    , data:JSON.stringify(data.field)
+                    , contentType: 'application/json'
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            layer.msg(res.msg);
+                            setTimeout(function(){
+                                window.location.reload();
+                            },1000);
+                        }else if(res.code == -1){
+                            layer.msg(res.msg);
+                        }else {
+                            layer.msg(res.msg);
+                            getUUID();
+                        }
+                    }, error:function () {
+                        layer.closeAll();
+                    }
+                });
+                layer.close(index);
+            })
+            return false
+        })
+    })
+</script>
+</body>
+</html>

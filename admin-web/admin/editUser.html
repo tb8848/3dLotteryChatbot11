@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>修改用户信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <style>
+        .layui-card-body {
+            padding: 0px;
+        }
+
+        .layui-form-label {
+            width: 90px;
+        }
+
+        .layui-table-view
+        .layui-table th {
+            background-color: #009688;
+        }
+
+        /*.layui-form-select .layui-input{*/
+        /*    width: 70px;*/
+        /*    height: 22px;*/
+        /*}*/
+        .tableborder td {
+            border-bottom: 1px solid #c1d9d9;
+            border-right: 1px solid #c1d9d9;
+            line-height: 1.5em;
+            height: 2em;
+            padding: 4px;
+            background: #FFFFFF;
+        }
+
+        .header {
+            border-top: 1px solid #c1d9d9;
+
+        }
+
+        .tableborder {
+            border-left: 1px solid #c1d9d9;
+        }
+
+        .layui-form-checkbox i {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 23px;
+            height: 25px;
+            border: 1px solid #d2d2d2;
+            /* border-left: none; */
+            border-radius: 0 2px 2px 0;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .layui-form-select dl { max-height:200px; }
+
+        .layui-table-body {
+            position: relative;
+            /* overflow: auto; */
+            margin-right: -1px;
+            margin-bottom: -1px;
+            height: 1100px;
+            margin-top: 20px;
+            width: 99%;
+        }
+
+        .ew-tree-table-box {
+            height: 100%;
+        }
+
+        .userInfo {
+            margin-top: 30px;
+        }
+        th{
+            background-color: #009688;
+            color: white;
+        }
+
+    </style>
+</head>
+<body style="height: 100%;background-color: white">
+<div style="width:99%;height:100%;margin:15px auto;overflow:auto;" id="aaa">
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <div id="isAdmin" style="display: block">
+            <div style="display: flex;width: 99%;height:38px;line-height:38px;border-bottom: 1px solid darkgray" >
+                <div style="width: 150px;">
+                    <span id="juesheName" style="color: #1E9FFF;"></span>
+                    <span id="superiorName" style="color: #1E9FFF;"></span>
+                </div>
+                <div style="width: 300px">
+                    总信用额度：<span id="user_quota"></span>
+                </div>
+                <div style="width: 300px">
+                    可分配信用额度：<span id="user_assigned_quota"></span>
+                </div>
+                <div style="width: 300px">
+                    已分配信用额度：<span id="user_distributable_quota"></span>
+                </div>
+            </div>
+        </div>
+        <div style="width: 99%;height: 300px;border: 1px solid #d2d2d2" id="userInfo" class="userInfo">
+            <div style="height: 30px;background-color: #009688;line-height: 30px;color: white;border: 1px solid #d2d2d2"
+                 id="roleName1"></div>
+            <div style="height: 270px;margin-top: 8px">
+                <div style="display: flex;justify-content: start">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="username" required lay-verify="required" placeholder="请填写用户名"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <input type="radio" name="status" value="1" title="启用" checked>
+                        <input type="radio" name="status" value="0" title="停用" >
+                        <input type="radio" name="status" value="2" title="暂停下注">
+                    </div>
+                </div>
+                <div style="display: flex;justify-content: start">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">代号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="nickName" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="phone" required lay-verify="required" placeholder="请输入联系电话"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">额度类型</label>
+                        <div class="layui-input-inline">
+                            <select name="creditLimitType" id="creditLimitType" lay-filter="creditLimitType">
+                                <option value="1">重复使用额度</option>
+                                <option value="0">一次性额度</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex;justify-content: start">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">邮箱</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="email"  placeholder="请输入邮箱号"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="display: flex">
+                        <label class="layui-form-label">信用额度</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="creditLimit" name="creditLimit" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                        <div>
+                            <button type="button" class="layui-btn" id="shezhi" style="height: 38px;line-height: 38px">下级归零</button>
+                            <span>已分配信用额度：<span id="edu"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">拦货占成上限</label>
+                        <div class="layui-inline" id="showUser" style="display: block">
+                            <label class="layui-form-label" id="superiorRoleName"></label>
+                            <div class="layui-input-inline" style="width: 100px">
+                                <select id="gudong" name="lanhuo">
+<!--                                    <option value="0" selected="selected">0</option>-->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline" id="huiyuan">
+                            <label class="layui-form-label" id="roleName"></label>
+                            <div class="layui-input-inline" style="width: 100px">
+                                <select id="daili" name="lanhuo">
+<!--                                    <option value="0" selected="selected">0</option>-->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding-left: 19px">(设置拦货占成，需要在”设置“中添加<span style="color: red">拦货上限</span>才生效)，<span
+                            style="color: red">提示：</span>如果庄家先吃满，则不以所设成数来分配，以实际分配到拦货中金额为准
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body layui-table-body layui-table-main" style="overflow:visible">
+            <table class="layui-hide" id="menu" lay-filter="menu"></table>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="update" lay-submit lay-filter="update" style="margin-left: 43%">提交
+                </button>
+                <!--                <button type="reset" id="reset" class="layui-btn layui-btn-primary">重置</button>-->
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script>
+    var form = layui.form;
+    var $ = layui.jquery;
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var sid = "";
+    window.onload = function () {
+        sid = GetQueryString("id");
+        if (null != sid && sid != "") {
+            $("input[name='id']").val(sid);
+            getProduct(sid);
+        }
+
+        $.ajax({
+            url: HOST+"admin/getLanHuoRatioList?userId=" + GetQueryString("id")
+            , type: "GET"
+            , success:function(res){
+                if(res.code == 200) {
+                    var list = res.data.lhList;
+                    if (null != list && "" != list) {
+                        $("#gudong").html("");
+                        for(var i in list) {
+                            $("#gudong").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
+                            $("#daili").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
+                        }
+                        if (res.data.parentLimit == null) {
+                            $("#gudong").val(1);
+                        }else {
+                            $("#gudong").val(res.data.parentLimit);
+                        }
+                        if (res.data.limit == null) {
+                            $("#daili").val(1);
+                        }else {
+                            $("#daili").val(res.data.limit);
+                        }
+                    }else {
+                        $("#gudong").append("<option value='0'>0</option>");
+                        $("#daili").append("<option value='0'>0</option>");
+                        // $("#gudong").val();
+                        // $("#daili").val();
+                    }
+                    form.render()
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+    function getProduct(id) {
+
+        $.ajax({
+            url: HOST + "admin/getUser?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    console.log(d.admin.creditLimitType)
+                    $("input[name='username']").val(d.admin.username);
+                    $("input[name='nickName']").val(d.admin.nickName);
+                    $("input[name='phone']").val(d.admin.phone);
+                    $("input[name='email']").val(d.admin.email);
+                    $("input[name='creditLimit']").val(d.admin.creditLimit);
+                    $("#creditLimitType").val(d.admin.creditLimitType);
+                    if(d.admin.creditLimitType == 0){
+                        $("#creditLimitType").attr("disabled","true")
+                    }
+                    form.render("select")
+                    $("#edu").text(d.admin.useCreditLimit)
+                    $("#juesheName").text(d.roleInfo.superiorRoleName + "：");
+                    $("#superiorRoleName").text(d.roleInfo.superiorRoleName);
+                    $("#superiorName").text(d.roleInfo.superiorName);
+                    $("#roleName1").text("编辑" + d.roleInfo.roleName);
+                    $("#roleName").text(d.roleInfo.roleName);
+                    if(d.roleInfo.roleName == "大股东"){
+                        $("#showUser").css("display","none");
+                    }
+                    if (d.roleInfo.roleName == "会员") {
+                        $("#huiyuan").css("display", "none");
+                    }
+
+                    $("#user_quota").text(d.parentAdmin.creditLimit);
+                    $("#user_distributable_quota").text(d.parentAdmin.useCreditLimit);
+                    $("#user_assigned_quota").text(d.parentAdmin.surplusCreditLimit);
+
+                    if (d.singleFlag == true) {
+                        $("#gudong").attr("disabled", "disabled");
+                        $("#daili").attr("disabled", "disabled");
+                    }
+                    if(d.isAdmin){
+                        $("#isAdmin").css("display","none")
+                        $("#userInfo").removeClass("userInfo");
+                    }else {
+                        $("#isAdmin").css("display","block")
+                    }
+                    form.render()
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    layui.config({
+        //   base: '/js/'存放treeTable.js的文件夹
+        base: '../js/layui/'
+    }).use(['form' , 'jquery','treeTable', 'util'], function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var util = layui.util;
+        var treeTable = layui.treeTable, form = layui.form;
+        var form = layui.form;
+
+        // 渲染表格
+        var insTb = treeTable.render({
+            id: 'menu',
+            elem: '#menu',
+            url: HOST+'drawRule/getLotteryNumberList',
+            height: 'full-200',
+            method:'get',
+            tree: {
+                iconIndex: 2,
+                isPidData: true,
+                idName: 'lotterySettingId',//父ID
+                pidName: 'parentId',//子ID
+                openName: 'open',// 是否默认展开的字段名
+                //public bool open { get; set; }open字段是bool类型
+            },
+            where: {
+                userId: GetQueryString("id")
+            },
+            //defaultToolbar: ['filter', 'print', 'exports'],
+            cols: [[
+                { field: 'id', title: 'ID', fixed: 'left', unresize: true, sort: true, hide: true }
+                , { field: 'bettingRule', title: '类别' , templet: function (d) {
+                        if (d.parentId == null) {
+                            return "<span style='color:blue'> "+ d.bettingRule +"</span>";;
+                        }else {
+                            return d.bettingRule
+                        }
+                    }}
+                , { field: 'minBettingPrice', title: '最小下注'}
+                , { field: 'peiRate', title: '赔率上限(多个用/分开)'}
+                , { field: 'maxBettingCount', title: '单注上限'}
+                , { field: 'maxNumberTypeCount', title: '单项上限'}
+                , { field: 'earnWaterList', singleLine: false,title: '赚水', templet: function(d) {
+                        d.str = 0;
+                        if (d.lotterySettingId == 19 || d.lotterySettingId == 20 || d.lotterySettingId == 21) {
+                            return "";
+                        }
+                        var zvalueHelp=  selectWz(d.earnWaterList, d.earnWater, d.lotteryMethodId);
+                        var zval = '<select class="type' +d.lotteryMethodId+'" name="peiRate" lay-filter="peiRateSelect" lay-verify="required">';
+                        zval += zvalueHelp;
+                        zval += '</select>'
+                        return zval;
+                    }}
+                , { field: 'peiRate', title: '赔率'}
+            ]],
+            done: function (res, curr, count) {
+                //设置下拉框样式在表格之上 不会遮挡下拉框
+                $(".ew-tree-table").css('overflow','visible');
+                $(".ew-tree-table-box").css('overflow','visible');
+                $(".ew-tree-table-box").css('height','100%');
+                $(".ew-tree-table-view").css('overflow','visible');
+                $(".ew-tree-table-cell").css('overflow','visible');
+                $("tr").css('width', '100%')
+                $(".ew-tree-table-head").css('border-right','none')
+                $(".ew-tree-table-indent").removeClass();
+
+                form.render();//刷新表单
+            },
+            style: 'margin-top:0;'
+        });
+
+        function selectWz(earnWaterList, earnWater) {
+            var selMaintenanceItem = '';
+            for(var i = 0;i < earnWaterList.length;i++){
+                if (earnWater == earnWaterList[i].earnWater) {
+                    selMaintenanceItem+='<option value="'+earnWaterList[i].earnWater+'" selected>'+earnWaterList[i].earnWater+'</option>';
+                }else {
+                    selMaintenanceItem+='<option value="'+earnWaterList[i].earnWater+'">'+earnWaterList[i].earnWater+'</option>';
+                }
+            }
+            /*if (earnWater != 0 && earnWater != "0" && earnWater != null && earnWater != "" && earnWater != undefined) {
+                console.log("=============", earnWater + "/" + lotteryMethodId)
+                $(".type" + lotteryMethodId).val(earnWater);
+            }*/
+            //console.log(selMaintenanceItem);
+            return selMaintenanceItem
+        }
+
+        form.on('select(peiRateSelect)', function (data) {
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            $("." + elem.context.className).each(function () {
+                $("." + elem.context.className).val(data.value);
+                var id = $(this).parents('tr').children("td[data-field=id]").find(".ew-tree-table-cell-content").html();
+                $.ajax({
+                    url: HOST + "drawRule/getEarnWaterRateById?earnWater=" + data.value + "&userId=" + GetQueryString("id") + "&aId=" + id,
+                    type: "get",
+                    success: function (res) {
+                        if (res.code == 200) {
+                            $("." + elem.context.className).parents('tr').find("td:last .ew-tree-table-cell-content").html(res.data.userRate);
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            });
+            /*$.ajax({
+                url: HOST + "drawRule/getEarnWaterRateById?id=" + data.value + "&userId=" + GetQueryString("id"),
+                type: "get",
+                success: function (res) {
+                    if (res.code == 200) {
+                        trElem.find("td:last .ew-tree-table-cell-content").html(res.data.userRate);
+                    }
+                },
+                error: function () {
+                }
+            });*/
+            form.render("select");
+        });
+
+        $("#shezhi").click(function () {
+            layer.confirm("确定将下级信用额度归零吗？",function (index) {
+                $.ajax({
+                    url: HOST+"admin/singleZero?id=" + GetQueryString("id")
+                    , type: "GET"
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            layer.msg("操作成功");
+                        } else if (res.code == 500) {
+                            layer.msg(res.msg);
+                        }else {
+                            layer.msg("拒绝访问");
+                        }
+                    }
+                    , error: function () {
+                        console.log("ajax error");
+                    }
+                });
+            })
+        })
+
+        //修改
+        form.on('submit(update)', function (data) {
+            var creditLimit = $("#creditLimit").val();
+            var parentCreditLimit = $("#user_assigned_quota").text();
+            // if (creditLimit > parentCreditLimit) {
+            //     layer.msg("信用额度不能超过" + parentCreditLimit);
+            //     return false;
+            // }
+            var status = $('input[name="status"]:checked').val();
+            data.field.status = status;
+            data.field.lanHuoUpperLimit =  $("#daili").find("option:selected").val();
+            data.field.parentLanHuoUpperLimit =  $("#gudong").find("option:selected").val();
+            $.ajax({
+                url: HOST + "admin/updateUser"
+                , type: "POST"
+                , contentType: 'application/json'
+                , data: JSON.stringify(data.field)
+                , success: function (data) {
+                    if (data.code == 0) {
+                        layer.close(layer.index);
+                        layer.msg('修改成功');
+                        window.location.reload();
+                    } else {
+                        layer.msg(data.data);
+                    }
+                }
+                , error: function () {
+                    console.log("ajax error");
+                }
+            });
+            return false;
+        });
+    });
+
+</script>
+</body>
+</html>

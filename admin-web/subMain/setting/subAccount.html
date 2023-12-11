@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>子账号</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../setting/css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+
+    <style>
+        th {
+            background: url(../../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .layui-table-header {
+            height: 30px;
+        }
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #1b59f3 !important;
+            background-color: #1b59f3;
+            color: #fff;
+        }
+
+        .layui-table-cell{
+            font-size: 12px;
+        }
+
+        thead tr th{
+            font-weight: bold !important;
+        }
+
+        tbody tr td{
+            color: black;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="main">
+    <div class="module">
+        <div name="module" id="sub" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>
+                    <span class="red">&gt;&gt; <span i18n="setting.sub.account.list">子账号列表</span></span>
+                </div>
+                <div class="fr">
+                    <a href="subAdd.html" class="" i18n="setting.sub.add.account">新增子账号</a>
+                </div>
+            </div>
+            <div class="mt10" >
+                <div class="t-1">
+                    <table class="layui-hide" id="t" lay-filter="t" ></table>
+                </div>
+                <div class="mt10 tc">
+                    <button class="btn fn-batchdelete"  lay-submit lay-filter="delete" i18n="setting.two.delete" style="cursor: pointer">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script type="text/html" id="caozuo">
+    <a  lay-event="see" style="color: #0000FF" i18n="setting.sub.see" class="see">查看</a>
+</script>
+<script>
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null;
+    var table = null;
+
+        initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties("subMain-"+moduleName);
+        table.reload("tt",{
+            cols: [
+                [{type: 'checkbox', fixed: 'left'},
+                    {title: i18np.prop("setting.five.serial.number"),type:'numbers',width:110 ,align: 'center'},
+                    {field: 'sonUsername', title: i18np.prop("setting.account.number"), align: 'center', width: 150},
+                    {field: 'nickName', title: i18np.prop("setting.code"), align: 'center', width: 100},
+                    {field: 'updateTime', title: i18np.prop("setting.sub.update.time"), align: 'center', width: 200},
+                    {field: 'updateUserName', title: i18np.prop("setting.sub.update.people"), align: 'center'},
+                    {field: 'updateUserIp', title: 'IP', align: 'center',},
+                    {field: 'status', title: i18np.prop("setting.sub.status"), align: 'center',templet:function (res) {
+                            if (res.status==0) return "<span style='color:red' i18n='setting.sub.disable'>"+i18np.prop("setting.sub.disable")+"</span>";
+                            else if (res.status==1) return "<span i18n='setting.one.enable'>"+i18np.prop("setting.one.enable")+"</span>";
+                        }},
+                    {toolbar: "#caozuo", title: i18np.prop("setting.five.content"), align: 'center', width: 180},
+                    {field: 'bangDing', title: i18np.prop("setting.sub.unbind"), align: 'center',templet:function (d) {
+                            return "--"
+                        }},
+                ]
+            ],
+            text:{none: i18np.prop('setting.three.zwsj')},
+        })
+    }
+
+    var id = localStorage.getItem("id");
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use(['form', 'jquery', 'table', 'i18np'], function () {
+        var form = layui.form;
+        table = layui.table;
+        var $ = layui.jquery;
+        i18np = layui.i18np;
+        i18np.loadProperties("subMain-"+moduleName);
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            url: HOST + 'sonAdmin/getSonUser?adminId='+id,
+            cols: [
+                [{type: 'checkbox', fixed: 'left'},
+                    {title: i18np.prop("setting.five.serial.number"),type:'numbers',width:110 ,align: 'center'},
+                    {field: 'sonUsername', title: i18np.prop("setting.account.number"), align: 'center', width: 150},
+                    {field: 'nickName', title: i18np.prop("setting.code"), align: 'center', width: 100},
+                    {field: 'updateTime', title: i18np.prop("setting.sub.update.time"), align: 'center', width: 200},
+                    {field: 'updateUserName', title: i18np.prop("setting.sub.update.people"), align: 'center'},
+                    {field: 'updateUserIp', title: 'IP', align: 'center',},
+                    {field: 'status', title: i18np.prop("setting.sub.status"), align: 'center',templet:function (res) {
+                            if (res.status==0) return "<span style='color:red' i18n='setting.sub.disable'>"+i18np.prop("setting.sub.disable")+"</span>";
+                            else if (res.status==1) return "<span i18n='setting.one.enable'>"+i18np.prop("setting.one.enable")+"</span>";
+                        }},
+                    {toolbar: "#caozuo", title: i18np.prop("setting.five.content"), align: 'center', width: 180},
+                    {field: 'bangDing', title: i18np.prop("setting.sub.unbind"), align: 'center',templet:function (d) {
+                            return "--"
+                        }},
+                ]
+            ],
+            text:{none: i18np.prop('setting.three.zwsj')},
+            done:function () {
+                $(".see").html(i18np.prop("setting.sub.see"))
+            }
+        });
+        //查看
+        table.on('tool(t)', function (obj) {
+            var data = obj.data
+           if(obj.event === 'see'){
+                window.location.href = "subUpdate.html?id="+data.id+"&adminId="+id;
+            }
+        });
+        //删除
+        form.on('submit(delete)',function(data) {
+            var check = table.checkStatus('tt');
+            var userIds = "";
+            $(check.data).each(function (i, o) {// o 即为表格中一行的数据
+                if (userIds == ""){
+                    userIds = o.id;
+                }else{
+                    userIds = userIds +","+ o.id;
+                }
+            });
+            if(userIds == ""){
+                layer.msg(i18np.prop("setting.sub.no.item.selected"));
+                return false
+            }
+            layer.confirm(i18np.prop("setting.sub.want.delete"),{
+                icon: 3,
+                title:i18np.prop("setting.five.tips"),
+                btn: [i18np.prop("setting.determine"),i18np.prop("setting.cancel")] //可以无限个按钮
+            },function (index) {
+                $.ajax({
+                    type:"get",
+                    url:HOST+"sonAdmin/deleteSonUser?ids="+userIds,
+                    success:function (res) {
+                        if(res.code == 0){
+                            layer.msg(res.msg,{icon:1,time:1000});
+                            table.reload("tt");
+                        }else{
+                            layer.msg(i18np.prop("setting.operation.failed"));
+                        }
+                    }
+                })
+            })
+        });
+    });
+</script>
+
+</body>
+</html>

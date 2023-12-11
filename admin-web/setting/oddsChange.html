@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>赔率变动</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+
+    <style type="text/css">
+        .lmOption{
+            display: inline-block;
+            margin-right:10px
+        }
+
+        .checkOne{
+
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="main" class="main" style="top: 0px;">
+    <div class="module">
+        <div name="module" id="st_odds" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.loss.rate.change.setting">  赔率变动设置  </span>
+                </div>
+                <div class="fr"><a href="basicSetting.html" class="" i18n="setting.basic.settings">基本设置</a> | <a
+                        href="openQuotation.html" class="" i18n="setting.opening.setting">开盘设置</a> | <a
+                        href="oddsChange.html" class="fb red" i18n="setting.loss.rate.change.setting">赔率变动设置</a> |
+                    <!--<a href="packageOddsChange.html" class="" i18n="setting.package.odds.change.setting">包牌赔率变动设置</a> | --><a href="dingPan.html"
+                                                   class="" i18n="setting.fixed.plate">定盘</a> | <a
+                        href="notice.html" class="" i18n="setting.announcement.settings">公告设置</a> |
+                    <!--<a href="package.html" class="" i18n="setting.package.setting">包牌设置</a> | --><a
+                        href="subAccount.html" class="" i18n="setting.sub.account">子账号</a> |
+                    <a href="accountSetting.html" class="" i18n="setting.basic.information">基本资料</a> | <a
+                        href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a></div>
+            </div>
+            <div class="mt10">
+                <form autocomplete="off" novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="11">
+                                <div id="bar_options"> &nbsp;&nbsp;
+                                    <div class="lmOption" id="optionContainer">
+                                        <!--<div class="lmOption">-->
+                                            <!--<a href="#!setting.st_odds|st_odds?type=odds&amp;fix_num=20" class="white ">二定位</a>-->
+                                            <!--<select class="dict_no_type_id" fix_num="20">-->
+                                                <!--<option value="0">全部</option>-->
+                                                <!--<option value="1">口口XX</option>-->
+                                                <!--<option value="2">口X口X</option>-->
+                                                <!--<option value="3">口XX口</option>-->
+                                                <!--<option value="4">X口X口</option>-->
+                                                <!--<option value="5">X口口X</option>-->
+                                                <!--<option value="6">XX口口</option>-->
+                                            <!--</select>-->
+                                        <!--</div>-->
+                                        <!--<div class="lmOption">-->
+                                            <!--<a-->
+                                                    <!--href="#!setting.st_odds|st_odds?type=odds&amp;fix_num=30"-->
+                                                    <!--class="white ">三定位</a>-->
+                                            <!--<select class="dict_no_type_id" fix_num="30">-->
+                                            <!--<option value="0">全部</option>-->
+                                            <!--<option value="7">口口口X</option>-->
+                                            <!--<option value="8">口口X口</option>-->
+                                            <!--<option value="9">口X口口</option>-->
+                                            <!--<option value="10">X口口口</option>-->
+                                        <!--</select>-->
+                                        <!--</div>-->
+                                        <!--<div class="lmOption"><a-->
+                                                <!--href="#!setting.st_odds|st_odds?type=odds&amp;fix_num=40" fix_num="40"-->
+                                                <!--class="white yellow">四定位</a> </div>-->
+                                        <!--<div class="lmOption"><a-->
+                                                <!--href="#!setting.st_odds|st_odds?type=odds&amp;fix_num=21" fix_num="21"-->
+                                                <!--class="white ">二字现</a></div>-->
+                                        <!--<div class="lmOption"><a-->
+                                                <!--href="#!setting.st_odds|st_odds?type=odds&amp;fix_num=31" fix_num="31"-->
+                                                <!--class="white ">三字现</a></div>-->
+                                        <!--<div class="lmOption">-->
+                                            <!--<a-->
+                                                    <!--href="#!setting.st_odds|st_odds?type=odds&amp;fix_num=41" fix_num="41"-->
+                                                    <!--class="white ">四字现</a>-->
+                                        <!--</div>-->
+                                    <!---->
+                                    </div>
+                                    <div class="lmOption">
+                                        <span i18n="setting.three.package">套餐</span>：
+                                        <select class="setting_no_set_id" id="no_sets" style="max-width:500px; overflow:hidden">
+                                            <option value="0">{{$t('all')}}</option>
+                                        </select>&nbsp;&nbsp;
+                                        <input type="button" value=" 删除套餐 "
+                                                                 class="btn-pointer vm fn-delete-package" id="delPackage" i18n="setting.three.delete.package">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+<!--                            <td class="bg3" width="60" i18n="setting.three.top.number">热门号码</td>-->
+<!--                            <td width="100"><input type="text" name="bet_no" id="bet_no" maxlength="4" class="w60"-->
+<!--                                                   required="true" betno="true" aria-required="true"> <input-->
+<!--                                    type="hidden" id="isxian" name="isxian" value="0"></td>-->
+<!--                            <td class="bg3" width="200"><span i18n="setting.three.fixed.odds">定盘赔率</span>:<span id="fix_odds"></span></td>-->
+<!--                            <td class="bg3" width="80" i18n="setting.three.bdplsx">变动赔率上限</td>-->
+<!--                            <td width="100"><input type="text" class="w60" id="odds_limit" name="odds_limit"-->
+<!--                                                   maxlength="7" positive="true"> <input type="hidden" name="diff_odds"-->
+<!--                                                                                         id="diff_odds"></td>-->
+<!--                            <td class="bg3" width="60" i18n="setting.three.dxsx">单项上限</td>-->
+<!--                            <td width="100"><input type="text" class="w60" name="one_item_limit" id="one_item_limit"-->
+<!--                                                   maxlength="8" positive="true"></td>-->
+<!--                            <td width="60"><input type="button" id="btn_submit" value="提交" class="btn" i18n="setting.submit"></td>-->
+                            <td><a href="quickSelect.html"
+                                   class="btn" i18n="setting.three.batch.add">批量新增</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10 hide" id="bd_sets">
+                <form id="form2" novalidate="novalidate">
+                    <input type="hidden" name="bet_no" id="bet_nos">
+                    <input type="hidden" name="setting_no_set_id" value="">
+                    <table class="t-1">
+                        <tbody>
+                        <tr>
+                            <td><span id="name_fix_num"></span>
+                                <input type="hidden" name="isxian" id="set_isxian" value="0">
+                                <label><span i18n="setting.three.each.drop">各降</span><input type="radio" class="radio" name="rise_drop" value="0" checked="checked"></label>
+                                <label><span i18n="setting.three.each.liter">各升</span><input type="radio" class="radio" name="rise_drop" value="1"></label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="text" class="w60" id="set_odds" maxlength="4" name="set_odds"
+                                       required="true" positive="true" aria-required="true"> <input type="hidden"
+                                                                                                    name="odds"
+                                                                                                    id="set_diff_odds">
+                                &nbsp;&nbsp;&nbsp;&nbsp; <span i18n="setting.three.dxsx">单项上限</span> <input type="text" class="w60" maxlength="7"
+                                                                     name="one_item_limit" id="one_item_limit2"
+                                                                     positive="true"> <input type="submit" value="提交"
+                                                                                             class="btn" id="upDownBtn" i18n="setting.submit"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <form id="form3" novalidate="novalidate">
+                <div class="mt10">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td><label><input type="checkbox" class="checkbox selectSome" id="checkAll"><span i18n="setting.three.shan">删</span>?</label></td>
+                            <td><span i18n="setting.three.top.number">热门号码</span>(<span id="hotcount">0</span>)</td>
+                            <td><span i18n="setting.three.bdpl">变动赔率</span>(<span i18n="setting.three.gfpz">跟分批走</span>)</td>
+                            <td i18n="setting.three.fixed.odds.limit">定盘赔率上限</td>
+                            <td i18n="setting.three.dxsx">单项上限</td>
+                            <td i18n="setting.three.type">类别</td>
+                            <td i18n="setting.three.sfxs">是否显示</td>
+                            <td i18n="setting.three.time">时间</td>
+                            <td i18n="setting.three.bdfs">变动方式</td>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody" class="fn-hover">
+                        <tr>
+                            <td colspan="10" i18n="setting.three.zwsj">暂无数据!</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt10 tc"><input type="button" value="删除" class="btn fn-batchdelete" id="btnDel" i18n="setting.two.delete"> <input
+                            type="submit" value="编辑" class="btn fn-submit2" id="btnEdit" i18n="setting.three.update"> <input type="hidden" name="data"></div>
+                </div>
+            </form>
+            <div name="module" id="pager" class="pager" action="setting.st_odds" pagebody="tbody" template="tpl_refresh"
+                 pagecount="1" param="fix_num=40&amp;dict_no_type_id=&amp;setting_no_set_id=&amp;way_no="> <span i18n="setting.page.no">第</span> <span
+                    class="pageindex red" id="currentItem">1</span> <span i18n="setting.page.page">页</span> <span i18n="setting.page.total">共</span> <span class="pagecount red" id="pagesItem">1</span>
+                <span i18n="setting.page.page">页</span> <span i18n="setting.page.total">共</span> <span
+                    class="recordcount red" id="recordsItem">0</span> <span i18n="setting.page.count">条</span> <a href="javascript:void(0)" class="fn-first" i18n="setting.page.firstPage">首页</a> <a
+                    href="javascript:void(0)" class="fn-prev" i18n="setting.page.prePage">上一页</a> <a href="javascript:void(0)"
+                                                                         class="fn-next" i18n="setting.page.nextPage">下一页</a> <a
+                    href="javascript:void(0)" class="fn-last" i18n="setting.page.lastPage">尾页</a> <input type="text" class="input w30 fn-index" id="toPage">
+                <input type="button" class="btn btn-gray w30 fn-go" value="GO"></div>
+        </div>
+    </div>
+    <script src="../js/jquery/jquery.min.js"></script>
+    <script src="../js/layui/layui.js"></script>
+    <script src="../js/layui/layui.all.js"></script>
+    <script src="../js/token.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/vue/vue.js"></script>
+    <script src="../js/vue/vue-i18n.js"></script>
+    <script src="../js/jquery.i18n.min.js"></script>
+    <script src="../js/multi_lang_config.js"></script>
+    <script type="text/javascript">
+
+        var isXian = 0;
+        var lsId = "";
+        var lmId = "2";
+        var comboId="";
+        var page = 1;
+        var limit = 50;
+        var totalPages = 0;
+        var totalRecords = 0;
+        var dataList = [];
+        var layer = layui.layer;
+        var selectList = [];
+        var editList=[];
+        var upDown = 0;
+        var fix_odds = 0;
+
+        var $ = layui.$;
+
+        const messages = {
+            zh: {
+                all:"全部",
+            },
+            th: {
+                all:"ทั้งหมด",
+            }
+        }
+
+        var moduleName = "setting";
+        var defaultLang = layui.data('langTab').langType;
+        const i18n = new VueI18n({
+            locale: defaultLang, // set locale
+            messages, // set locale messages
+        });
+        initLangConfig({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+            base:"../js/"
+        })
+        var i18np = null;
+        function changeLang(lang) {
+            defaultLang = lang;
+            reloadI18n({
+                defaultLang:lang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            i18n.locale=lang;
+            comboList();
+            initOptions();
+            $("#bd_sets").hide();
+            $("#name_fix_num").html("");
+        }
+
+        const vm = new Vue({
+            el: '#no_sets',
+            i18n,
+            data: {},
+            methods: {
+                init() {
+                    console.log("初始化vue了")
+                }
+            }
+        })
+
+        layui.config({base: '../js/'})
+            // 继承treetable.js插件
+            .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+            i18np = layui.i18np;
+            i18np.loadProperties(moduleName);
+            vm.init();
+            lmId = GetQueryString("lmSelect");
+            console.log("====lmId==",lmId);
+            if(null == lmId){
+                lmId = "2";
+            }
+            comboList();
+            initOptions();
+            $("#bd_sets").hide();
+        });
+
+
+
+        window.parent.navSelect("setting");
+
+        // window.onload=function(){
+        //     comboList();
+        //     initOptions();
+        //     $("#bd_sets").hide();
+        //     //searchData();
+        // }
+
+        $(".fn-first").on("click","",function (e) {
+            if(page>1){
+                page=1
+                searchData();
+            }
+        })
+
+        $(".fn-prev").on("click","",function (e) {
+            if(page>1){
+                page=page-1
+                searchData();
+            }
+        })
+
+        $(".fn-next").on("click","",function (e) {
+            if(page<totalPages){
+                page=page+1
+                searchData();
+            }
+        })
+
+        $(".fn-last").on("click","",function (e) {
+            if(page<totalPages){
+                page=totalPages
+                searchData();
+            }
+        })
+
+        $(".fn-go").on("click","",function (e) {
+            var toPage = $("#toPage").val();
+            if(toPage!=""){
+                toPage = parseInt(toPage);
+                if(toPage>=1 && toPage<=totalPages){
+                    page = toPage;
+                    searchData();
+                }
+            }
+        })
+
+        //删除套餐
+        $("#delPackage").on("click","",function (res) {
+            var comboid = $("#no_sets").val();
+            if(comboid==0){
+                // layer.msg("未选择套餐");
+                layer.msg(i18np.prop("setting.msg.wxztc"));
+                return;
+            }
+            layer.msg(i18np.prop("setting.msg.tcscz"),{
+                time:-1,
+                shade:0.3,
+                icon:16
+            });
+            $.ajax({
+                url:HOST+"peiRateChange/delCombo",
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify({
+                    id:comboid
+                }),
+                success:function (res) {
+                    layer.closeAll()
+                    if(res.code==0){
+                        comboList();
+                        searchData();
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll()
+                }
+            })
+            return false;
+        })
+
+        $("#bet_no").on("keyup","",function(e){
+            if(e.key=='X' || e.key=='x' || (e.key>='0' && e.key<='9')){
+
+            }else{
+                this.value = this.value.substr(0,this.value.length-1);
+            }
+            this.value = this.value.toUpperCase();
+            if(this.value!=""){
+                getDpPeiRate();
+            }
+        });
+
+        function getDpPeiRate(){
+            var code = $("#bet_no").val();
+            if(code==""){
+                return;
+            }
+            if(code=="xxxx" || code=='XXXX'){
+                return;
+            }
+            if(code.indexOf("X")>-1){
+                isXian = 0;
+            }else{
+                if(code.length==4){
+                    if(lmId==4){
+                        isXian = 0;
+                    }else{
+                        isXian = 1;
+                    }
+                }else{
+                    isXian = 1;
+                }
+            }
+            $.ajax({
+                url:HOST+"peiRateChange/getDpOdds",
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify({
+                    isXian:isXian+"",
+                    codes:code
+                }),
+                success:function (res) {
+                    layer.closeAll()
+                    if(res.code==0){
+                        fix_odds = res.data.maxOdds;
+                        lsId = res.data.lsId;
+                        $("#fix_odds").html(fix_odds);
+                    }else{
+                        lsId = "";
+                        fix_odds = "";
+                        $("#fix_odds").html("");
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll()
+                }
+            })
+        }
+
+        $(".radio").on("click","",function (e) {
+            upDown = this.value;
+        })
+
+        //删除
+        $("#btnDel").on("click","",function (e) {
+            if(selectList.length==0){
+                // layer.msg("未选择号码")
+                layer.msg(i18np.prop("setting.msg.no.select.number"));
+                return false;
+            }
+            layer.msg(i18np.prop("setting.one.submitting"),{
+                time:-1,
+                shade:0.3,
+                icon:16
+            });
+            $.ajax({
+                url:HOST+"peiRateChange/del",
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify(selectList),
+                success:function (res) {
+                    layer.closeAll()
+                    if(res.code==0){
+                        selectList= [];
+                        searchData();
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll()
+                }
+            })
+            return false;
+        })
+
+        //编辑
+        //btnEdit
+        $("#btnEdit").on("click","",function (e) {
+            dataList.forEach((item,idx)=>{
+                if(item.newItemLimit!="" || item.newPeiRate!=""){
+                    if (item.newItemLimit!=""){
+                        item.oneItemUpperLimit = item.newItemLimit;
+                    }
+                    if (item.newPeiRate!=""){
+                        item.changePeiRate = item.newPeiRate;
+                    }
+                    // item.changePeiRate = item.newPeiRate;
+                    // item.oneItemUpperLimit = item.newItemLimit;
+                    editList.push(item);
+                }
+            })
+            console.log("============editList,",editList);
+            if(editList.length==0){
+                // layer.msg("没有编辑内容");
+                layer.msg(i18np.prop("setting.msg.no.edit.content"));
+                return false;
+            }
+            layer.msg(i18np.prop("setting.one.submitting"),{
+                time:-1,
+                shade:0.3,
+                icon:16
+            });
+            $.ajax({
+                url:HOST+"peiRateChange/edit",
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify(editList),
+                success:function (res) {
+                    layer.closeAll()
+                    if(res.code==0){
+                        searchData();
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll()
+                }
+            })
+            return false;
+        })
+
+        //批量升降
+        $("#upDownBtn").on("click","",function (e) {
+            var set_odds = $("#set_odds").val();//赔率
+            var one_item_limit2 = $("#one_item_limit2").val();//单项上限
+            if(set_odds=="" && one_item_limit2==""){
+                return false;
+            }
+            if(selectList.length<1){
+                layer.msg(i18np.prop("setting.msg.no.select.number"));
+                return false;
+            }
+
+            layer.msg(i18np.prop("setting.one.submitting"),{time:-1,shade:0.3,icon:16
+            });
+            var params = {
+                "upOrDown":upDown,
+                "odds":set_odds,
+                "itemLimit":one_item_limit2,
+                "idArr":selectList
+            }
+            $.ajax({
+                url:HOST+"peiRateChange/upDownChange",
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify(params),
+                success:function (res) {
+                    layer.closeAll()
+                    if(res.code==0){
+                        $("#set_odds").val("")
+                        $("#one_item_limit2").val("")
+                        searchData();
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll()
+                }
+            })
+            return false;
+        })
+
+        //提交
+        $("#btn_submit").on("click","",function (e) {
+            var codes = $("#bet_no").val();//号码
+            var odds_limit = $("#odds_limit").val();//变动赔率上限
+            var one_item_limit = $("#one_item_limit").val();
+            if(codes=="" || odds_limit==""){
+                layer.msg(i18np.prop("setting.msg.qsrhmbdplsx"));
+                return;
+            }
+            layer.msg(i18np.prop("setting.one.submitting"),{
+                time:-1,
+                shade:0.3,
+                icon:16
+            });
+            $.ajax({
+                url:HOST+"peiRateChange/saveOne",
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify({
+                    "xianFlag":isXian,
+                    "hotNumber":codes,
+                    "changePeiRate":odds_limit,
+                    "oneItemUpperLimit":one_item_limit,
+                    "changeType":0,
+                    "lotterySettingId":lsId,
+                    "lotteryMethodId":lmId,
+                    "dpPeiRateUpperLimit":fix_odds,
+                    "oddsChangeUpper":odds_limit
+                }),
+                success:function (res) {
+                    layer.closeAll()
+                    if(res.code==0){
+                        $("#bet_no").val("")
+                        $("#odds_limit").val("")
+                        $("#one_item_limit").val("")
+                        $("#fix_odds").html("");
+
+                        searchData();
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function (e) {
+                    layer.closeAll();
+                }
+            })
+            return false;
+        })
+
+        $("#no_sets").on("change","",function(e){
+            var v = this.value;
+            $("#name_fix_num").html(this.options[this.selectedIndex].innerHTML)
+            if(v=='0'){
+                comboId = "";
+            }else{
+                comboId = this.value;
+            }
+            searchData();
+        })
+
+        $("#tbody").on('click',".checkOne",function (e) {
+            if(this.checked){
+                if(selectList.length==0){
+                    selectList.push(this.value);
+                }else{
+                    if(!selectList.includes(this.value)){
+                        selectList.push(this.value);
+                    }
+                }
+            }else{
+                if(selectList.includes(this.value)){
+                    selectList.splice(selectList.indexOf(this.value),1);
+                }
+            }
+            var chkNums = $("#tbody :checkbox").length;
+            console.log("chkNums="+chkNums);
+            if(selectList.length == chkNums){
+                $("#checkAll").attr("checked",true);
+            }else{
+                $("#checkAll").attr("checked",false);
+            }
+            console.log("=======selected,",selectList)
+        })
+
+        $("#checkAll").on('click',"",function (e) {
+
+            var checked = this.checked;
+            $(".checkOne").each(function (e) {
+                this.checked = checked;
+                if( checked && !selectList.includes(this.value)){
+                    selectList.push(this.value);
+                }
+            })
+            if(!checked){
+                selectList = [];
+            }
+            console.log("=======selected,",selectList)
+        })
+
+        function comboList() {
+            $("#no_sets").html("");
+            $("#no_sets").append('<option value="0">'+i18np.prop('setting.three.all')+'</option>');
+            $.ajax({
+                url:HOST+"peiRateChange/getPeiRateChangeComboList",
+                type:'get',
+                success:function(res){
+                    if(res.code==200){
+                        if (defaultLang=="zh"){
+                            res.data.forEach((item,idx)=>{
+                                if (item.comboName!=null && item.comboName!="" && item.comboName!=undefined){
+                                    $("#no_sets").append('<option value="'+item.id+'">'+item.comboName+'</option>')
+                                }
+                            })
+                        }else{
+                            res.data.forEach((item,idx)=>{
+                                if (item.comboNameTh!=null && item.comboNameTh!="" && item.comboNameTh!=undefined){
+                                    $("#no_sets").append('<option value="'+item.id+'">'+item.comboNameTh+'</option>')
+                                }
+                            })
+                        }
+                    }
+                }
+            })
+        }
+
+        function searchData(){
+            var qs = "lotteryMethodId="+lmId+"&lotterySettingId="+lsId+"&comboId="+comboId+"&page="+page+"&limit="+limit;
+            $.ajax({
+                url:HOST+"peiRateChange/getPeiRateChangeByPage?"+qs,
+                type:'get',
+                success:function(res){
+                    if(res.code==0){
+                        totalPages = res.data.pages;
+                        totalRecords = res.data.total;
+                        dataList = res.data.records;
+                        $("#recordsItem").html(totalRecords)
+                        $("#pagesItem").html(totalPages);
+                        $("#currentItem").html(page);
+                        if(totalPages>0){
+                            if(comboId!=""){
+                                $("#bd_sets").show();
+                            }
+                            $("#form2").show();
+                            initData();
+                        }else{
+                            $("#bd_sets").hide();
+                            $("#form2").hide();
+                            // $("#tbody").html("<tr><td colspan='9' i18n='setting.three.zwsj'>暂无数据</td></tr>");
+                            $("#tbody").html("<tr><td colspan='9'>"+i18np.prop('setting.three.zwsj')+"</td></tr>");
+                        }
+                    }
+                }
+            })
+        }
+
+        function initData(){
+           if(dataList.length>0){
+               $("#tbody").html("");
+               dataList.forEach((item,idx)=>{
+                   var cell1 = '<input type="checkbox" value="'+item.id+'" name="idGroup" class="checkOne"/>'
+                   // var cell2 = (item.xianFlag==1?item.hotNumber+'<span style="color:orangered" i18n="setting.three.xian">现</span>':item.hotNumber);
+                   var cell2 = (item.xianFlag==1?item.hotNumber+'<span style="color:orangered">'+i18np.prop('setting.three.xian')+'</span>':item.hotNumber);
+                   var cell3 = '<input type="digit" value="'+item.changePeiRate+'" id="pr-'+item.id+'" onblur="editRow(this)">';
+                   var cell4 = item.maxPeiRateLimit;
+                   var itemUppper = item.oneItemUpperLimit==null || item.oneItemUpperLimit=="" ? "" : item.oneItemUpperLimit;
+                   var cell5 = '<input type="digit" value="'+itemUppper+'" id="itemLimit-'+item.id+'" onblur="editRow(this)">';
+                   var cell6 = item.bettingRule;
+                   // if(item.lotteryMethodId==4){
+                   //     cell6 = '<span i18n="setting.one.sidw">'+i18np.prop("setting.one.sidw")+'</span>';
+                   // }else if(item.lotteryMethodId==5){
+                   //     cell6 = '<span i18n="setting.one.ezx">'+i18np.prop("setting.one.ezx")+'</span>';
+                   // }else if(item.lotteryMethodId==6){
+                   //     cell6 = '<span i18n="setting.one.szx">'+i18np.prop("setting.one.szx")+'</span>';
+                   // }else if(item.lotteryMethodId==7){
+                   //     cell6 = '<span i18n="setting.one.szxx">'+i18np.prop("setting.one.szxx")+'</span>';
+                   // }
+                   // var cell7 = item.isShow==1?'<span style="color:orangered" i18n="setting.two.shi">是</span>':'<span i18n="setting.two.fou">否</span>';
+                   var cell7 = item.isShow==1?'<span style="color:orangered">'+i18np.prop('setting.two.shi')+'</span>':'<span>'+i18np.prop('setting.two.fou')+'</span>';
+                   var cell8 = item.createTime;
+                   // var cell9 = item.changeType==1?'批量新增':item.changeType==0?'热门号码':'控盘';
+                   var cell9 = item.changeType==1 ? i18np.prop("setting.three.batch.add") : item.changeType==0 ? i18np.prop("setting.three.top.number") : i18np.prop("setting.three.kongpan");
+                   $("#tbody").append('<tr><td>'+cell1+'</td><td>'+cell2+'</td><td>'+cell3+'</td><td>'+cell4+'</td><td>'+cell5+'</td><td>'+cell6+'</td><td>'+cell7+'</td><td>'+cell8+'</td><td>'+cell9+'</td></tr>')
+                   item.newPeiRate="";
+                   item.newItemLimit="";
+               })
+           }
+        }
+
+        function  editRow(obj) {
+            var objId = obj.id;
+            var params = objId.split("-");
+            var fieldName = params[0];
+            var did = params[1];
+            var oriData = __getDataFrom(did);
+            console.log("editRow oriData =====",oriData);
+            if(null!=oriData){
+                if(fieldName=="pr"){
+                    if(oriData.changePeiRate!=obj.value){
+                        oriData.newPeiRate = obj.value;
+                    }else{
+                        oriData.newPeiRate = "";
+                    }
+                }else if(fieldName=="itemLimit"){
+                    if(oriData.oneItemUpperLimit!=obj.value){
+                        oriData.newItemLimit = obj.value;
+                    }else{
+                        oriData.newItemLimit = "";
+                    }
+                }
+                __updateRow(did,oriData);
+                console.log("editRow dataList =====",dataList);
+            }
+        }
+
+        function __getDataFrom(id){
+            for(var i=0,len=dataList.length;i<len;i++){
+                if(dataList[i].id==id){
+                    return dataList[i];
+                }
+            }
+            return null;
+        }
+
+        function __updateRow(id,obj){
+            for(var i=0,len=dataList.length;i<len;i++){
+                if(dataList[i].id==id){
+                    dataList[i]=obj;
+                    return;
+                }
+            }
+        }
+
+        //更改分类
+        function  changeMethod(obj,id) {
+            $(obj).addClass("yellow");
+            $(".white").not($(obj)).removeClass("yellow");
+            lmId = id;
+            $("#")
+            if(lmId>4){
+                isXian = 1;
+            }else{
+                isXian = 0;
+            }
+            searchData();
+            lsId = "";
+        }
+
+        function changeSetting(id){
+            lsId = $("#lm-"+id).val();
+            searchData()
+        }
+
+        function initOptions(){
+            $.ajax({
+                url:HOST+"lotteryMethod/listAll?lotteryType=1",
+                type:'get',
+                success:function (res) {
+                    if(res.code==0){
+                        var dataList = res.data;
+                        var optionHtml = '';
+                        res.data.forEach((item,idx)=>{
+                            if(idx==1 && lmId==""){
+                                lmId = item.id;
+                            }
+                            var selectedColor=  lmId ==item.id?'yellow':'';
+
+                            var alink = '<a class="white '+selectedColor+'" href="javascript:void(0)" onclick="changeMethod(this,'+item.id+')">'+item.bettingMethod+'</a>'
+                            var sublist = item.lotterySettingList;
+                            var selecthtml = '';
+                            if(sublist.length>1){
+                                var selecthtml = '<select class="dict_no_type_id" id="lm-'+item.id+'" onchange="changeSetting('+item.id+')">'
+                                    +'<option value="">'+i18np.prop('setting.three.all')+'</option>';
+                                sublist.forEach((it1,idx1)=>{
+                                    selecthtml =selecthtml +'<option value="'+it1.id+'">'+it1.bettingRule+'</option>'
+                                })
+                                selecthtml = selecthtml+"</select>";
+                            }
+                            optionHtml = optionHtml + '<div class="lmOption">' + alink + selecthtml + '</div>';
+                        })
+                        $("#optionContainer").html(optionHtml);
+                        searchData();
+                    }
+                }
+            })
+        }
+    </script>
+<!--    <div name="module" id="footer" class="footer">-->
+<!--        <div class="bd"> Copyright © 2017 福彩3D. All Rights Reserved</div>-->
+<!--    </div>-->
+<!--    <script type="text/html" id="tpl_nosets">-->
+<!--        <option value="0">全部</option>-->
+<!--        {{each Data as item}}-->
+<!--        <option value="{{item.setting_no_set_id}}" {{if Param.setting_no_set_id== item.setting_no_set_id}}-->
+<!--                selected="selected"-->
+<!--                {{/if}} fix_num="{{item.fix_num}}" nick_name="{{item.nick_name}}">{{item.no_set_name}}</option>-->
+<!--        {{/each}}-->
+<!--    </script>-->
+<!--    <script type="text/html" id="tpl_refresh">-->
+<!--        {{if !Data.Data.length}}-->
+<!--        <tr>-->
+<!--            <td colspan="10">暂无数据!</td>-->
+<!--        </tr>-->
+<!--        {{else}}-->
+<!--        {{each Data.Data as item i}}-->
+<!--        <tr bet_no="{{item.bet_no}}" dict_no_type_id="{{item.dict_no_type_id}}" odds_limit="{{item.odds_limit}}">-->
+<!--            <td>-->
+<!--                <input type="checkbox" id="{{item.bet_no}}" name="selected" dict_no_type_id="{{item.dict_no_type_id}}">-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                {{item.bet_no}}-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <input type="text" value="{{item.odds}}" original="{{item.odds}}" name="odds{{i}}" maxlength="7"-->
+<!--                       required="true" positive="true">-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                {{item.odds_limit}}-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <input type="text" value="{{item.one_item_limit}}" original="{{item.one_item_limit}}"-->
+<!--                       name="one_item_limit{{i}}" maxlength="8" positive="true">-->
+<!--            </td>-->
+<!--            <td>{{item.dict_no_type_id | rpl_pt}}</td>-->
+<!--            <td>-->
+<!--                {{if item.is_show == 1}}-->
+<!--                <span class="red">是</span>-->
+<!--                {{else}}-->
+<!--                否-->
+<!--                {{/if}}-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                {{item.created_on}}-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                {{item.way_no_desc}}-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        {{/each}}-->
+<!--        {{/if}}-->
+<!--    </script>-->
+
+</div>
+</body>
+</html>

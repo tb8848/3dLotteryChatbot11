@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>历史账单</title>
+    <link rel="stylesheet" href="../../css/common.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../../css/A-P5.css" media="all">
+    <!--    <style type="text/css">-->
+    <!--        .layui-table-cell{height:40px;line-height:40px;}-->
+    <!--    </style>-->
+</head>
+<body style="overflow: auto">
+
+<div id="main">
+    <template>
+    <div class="module">
+        <div name="module" id="sub" class="m5 mt10">
+            <div class="guide-memberadmin" name="module" deps="guide_memberadmin">
+                <div class="hd"><span id="roleName"></span><span id="userName"></span></div>
+                <div class="bd">
+                    <a id="buyDetail" :href="'xiazhuDetail.html?vipId='+userId+'&pid='+pid" i18n="vip.buyDetail">下注明细</a>
+                    <a class="" id="drawDetail" :href="'zhongjiang_detail.html?vipId='+userId+'&pid='+pid" i18n="vip.drawDetail">中奖明细</a>
+                    <a class="" id="stopBuyCodes" :href="'stop_buy_codes.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCode">停押号码</a>
+                    <a class="" id="lackCodes" :href="'stop_buy_codes_keep.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCodeKeep">停押保留区</a>
+                    <a class="" id="monthReport" :href="'month_report.html?vipId='+userId+'&pid='+pid" i18n="vip.monthReport">月报表</a>
+                    <a class="active"   id="bills" :href="'bills.html?vipId='+userId+'&pid='+pid" i18n="vip.bills">历史账单</a>
+                    <a id="userInfo" :href="'user_info.html?vipId='+userId+'&pid='+pid" i18n="vip.info">会员资料</a>
+                    <a href="javascript:void(0)" @click="goBack" i18n="vip.back">返回</a>
+                </div>
+            </div>
+<!--                <div class="bd">-->
+<!--                    <a :href="'xiazhuDetail.html?vipId='+userId">下注明细</a>-->
+<!--                    <a class="" :href="'zhongjiang_detail.html?vipId='+userId">中奖明细</a>-->
+<!--                    <a :href="'stop_buy_codes.html?vipId='+userId">停押号码</a>-->
+<!--                    <a class="" :href="'stop_buy_codes_keep.html?vipId='+userId">停押保留区</a>-->
+<!--                    <a class="" :href="'month_report.html?vipId='+userId">月报表</a>-->
+<!--                    <a class="active"  :href="'bills.html?vipId='+userId">历史账单</a>-->
+<!--                    <a class="" :href="'user_info.html?vipId='+userId">会员资料</a>-->
+<!--                    <a href="../../baobiao/daybaobiao.html?">返回</a>-->
+<!--                </div>-->
+            <div class="mt10">
+                <table class="t-1">
+                    <thead> <tr class="bg1"> <td colspan="7" i18n="vip.bills">历史账单</td> </tr>
+                    <tr class="bg2 tc">
+                        <td width="14%" i18n="bills.date">日期</td>
+                        <td width="14%" i18n="bills.drawNo">期号</td>
+                        <td width="14%" i18n="bills.bishu">笔数</td>
+                        <td width="14%" i18n="bills.buyMoney">金额</td>
+                        <td width="14%" i18n="bills.huishui">回水</td>
+                        <td width="14%" i18n="bills.zhongjiang">中奖</td>
+                        <td width="14%" i18n="bills.yingkui">盈亏</td>
+                    </tr>
+                    </thead>
+                    <tbody class="fn-hover tc">
+                    <tr v-for="(item,idx) in billList">
+                        <td>{{item.createDate}}</td>
+                        <td class="f14 fb">
+                            <a class="" :href="'xiazhuDetail.html?vipId='+userId+'&drawNo='+item.drawId">{{item.drawId}}</a>
+                        </td>
+                        <td>{{item.totalAmount}}</td>
+                        <td>{{item.totalMoney}}</td>
+                        <td>{{item.huishuiMoney}} </td>
+                        <td>{{item.drawMoney}}</td>
+                        <td class="fb">{{item.earnMoney}}</td>
+                    </tr>
+
+                    <tr class="bg2">
+                        <td i18n="bills.heji">合计</td>
+                        <td>{{billList.length}}</td>
+                        <td>{{heji.bishu}}</td>
+                        <td>{{heji.money}}</td>
+                        <td>{{heji.huishui}}</td>
+                        <td>{{heji.zhongjiang}}</td>
+                        <td>{{heji.yingkui}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script>
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var uname = window.sessionStorage.getItem("userName");
+    $("#userName").html(uname);
+    var roleName = window.sessionStorage.getItem("roleName");
+    $("#roleName").html(roleName);
+
+    var moduleName = "admin_vip";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+
+    const vm = new Vue({
+        el: '#main',
+        data: {
+            totalMoney:0,
+            totalHs:0,
+            totalDraws:0,
+            totalEarn:0,
+            totalAmount:0,
+            userName:"",
+            roleName:"",
+            billList:[],
+            heji:{
+                bishu:0,
+                zhongjiang:'',
+                yingkui:'',
+                money:'',
+                huishui:''
+            },
+            userId:'',
+            pid:''
+        },
+        methods: {
+            goBack(){
+                //window.location.href="../../baobiao/daybaobiao.html?userId="+this.userId;
+                //window.location.href="../userList2.html?id="+this.pid;
+                //history.back();
+                window.location.href="../userList2.html?id="+this.pid+"&isBack=1";
+            },
+            init() {
+                //this.userName = window.sessionStorage.getItem("userName");
+                //this.roleName = window.sessionStorage.getItem("roleName");
+                this.userId = GetQueryString("vipId");
+                this.pid = GetQueryString("pid");
+                this.getBillList();
+            },
+            getBillList() {
+                //期号选择
+                var _this = this;
+                $.ajax({
+                    url: HOST + "admin/vip/bill/getByPage"
+                    , type: "post"
+                    ,data:JSON.stringify({
+                        vipId:_this.userId,
+                        page:1,
+                        limit:10
+                    })
+                    ,contentType:'application/json'
+                    , success: function (res) {
+                        if (res.code == 0) {
+                            _this.billList = res.data.dataList;
+                            _this.heji = res.data.heji;
+                            // _this.billList.forEach((item,idx)=>{
+                            //     _this.totalMoney = _this.totalMoney + item.totalMoney;
+                            //     _this.totalHs = _this.totalHs + item.huishuiMoney;
+                            //     _this.totalDraws = _this.totalDraws + item.drawMoney;
+                            //     _this.totalEarn = _this.totalEarn + item.earnMoney;
+                            //     _this.totalAmount = _this.totalAmount + item.totalAmount;
+                            // })
+                        } else{
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+            }
+        }
+    })
+
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+
+
+</script>
+
+</body>
+</html>

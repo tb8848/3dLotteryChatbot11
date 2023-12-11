@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <title id="pageTitle">预下注明细</title>
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+        /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+
+
+<div class="module">
+    <div name="module" id="prebetprint">
+        <div class="m10">
+            <div id="print-area">
+                <div class="bold mt10 tc f16" id="title"> <!--第22347期 预注单明细--> </div>
+                <table class="t-1 table_bg">
+                    <thead>
+                    <tr class="bg2 tc">
+                        <td i18n="huizongbiao.billNO">注单编号</td>
+                        <td i18n="huizongbiao.buyCode">号码</td>
+                        <td i18n="huizongbiao.buyMoney">金额</td>
+                        <td i18n="huizongbiao.peirate">赔率</td>
+                        <td i18n="huizongbiao.codeType">号码类型</td>
+                        <td i18n="huizongbiao.submitTime">提交时间</td>
+                        <td i18n="huizongbiao.status">状态</td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody" class="fn-hover tc">
+                    <tr> <td colspan="11" i18n="huizongbiao.noData">暂无数据!</td> </tr>
+                    </tbody>
+                </table>
+                <div name="module" id="pager" class="pager" action="prebetlist" pagebody="tbody"
+                     pagecount="1" >
+                    <span i18n="huizongbiao.page.cur">第</span> <span class="pageindex red">1</span>
+                    <span i18n="huizongbiao.tiao">页</span>
+                    <span i18n="huizongbiao.gong">共</span>
+                    <span class="pagecount red">1</span>
+                    <span i18n="huizongbiao.tiao">页</span>
+                    <span i18n="huizongbiao.gong">共</span>
+                    <span class="recordcount red">0</span>
+                    <span i18n="huizongbiao.tiao">条</span>
+                    <a href="javascript:void(0)" class="fn-first" i18n="huizongbiao.firstPage">首页</a>
+                    <a href="javascript:void(0)" class="fn-prev" i18n="huizongbiao.prevPage">上一页</a>
+                    <a href="javascript:void(0)" class="fn-next" i18n="huizongbiao.nextPage">下一页</a>
+                    <a href="javascript:void(0)" class="fn-last" i18n="huizongbiao.lastPage">尾页</a>
+                    <input type="text" class="input w30 fn-index" maxlength="10" digits="true">
+                    <input type="button" class="btn btn-gray w30 fn-go" value="GO" id="goTo">
+                </div>
+                <div class="mt10 tc" id="btnRow"> <input type="button" value="打印" id="btn-print" i18n="huizongbiao.print"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+
+<script type="text/javascript">
+    var $$ = jQuery;
+
+</script>
+
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+<script>
+    var moduleName = "huizongbiao";
+    var layer = layui.layer;
+    var $i18np = null;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        init()
+    }
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            init()
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+</script>
+
+
+<script>
+    var pages=1;
+    var totals = 1;
+    var currpage=1;
+    var limit=60;
+    var drawNo = null;
+    var dataList = [];
+
+    function init(){
+        drawNo = GetQueryString("drawNo")
+        var tt = $i18np.prop("huizongbiao.page.cur")+drawNo+$i18np.prop("huizongbiao.qi")+" "+$i18np.prop("huizongbiao.yuzhudan")
+        $("#title").html(tt);
+        $("#pageTitle").html(tt);
+        getTableData();
+    }
+
+
+    function __emptyDataRow(){
+        return '<tr> <td colspan="11" i18n="huizongbiao.noData">'+$i18np.prop("huizongbiao.noData")+'</td> </tr>  ';
+    }
+
+    function getTableData(){
+        var qs = "buyFlag=0&delFlag=0"+"&page="+currpage+"&limit="+limit+"&drawId="+drawNo;
+        $.ajax({
+            url:HOST+'prebuy/search?'+qs,
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    pages = res.data.pages;
+                    totals = res.data.total;
+                    dataList = res.data.dataList;
+                    //var dataList = res.data.dataList;
+                    __buildDataTable();
+                    initPager();
+                }else{
+                    $("#tbody").html(__emptyDataRow())
+                }
+            }
+        })
+    }
+
+    function  initPager() {
+        $(".pageindex").html(currpage);
+        $(".pagecount").html(pages);
+        $(".recordcount").html(totals);
+    }
+
+    function  transType(pid) {
+        switch(pid){
+            case '1':
+                return $i18np.prop("yiding");
+                break;
+            case '2':
+                return $i18np.prop("erding");
+                break;
+            case '3':
+                return $i18np.prop("sanding");
+                break;
+            case '4':
+                return $i18np.prop("siding");
+                break;
+            default:
+                return '--';
+        }
+    }
+
+    function __buildDataTable(){
+        var bodydata = "";
+        if(dataList.length==0){
+            $("#tbody").html(__emptyDataRow());
+            return;
+        }
+        for(var i=0,len=dataList.length;i<len;i++){
+            var item = dataList[i];
+            var codes = '';
+            if(item.buyType==2){
+                codes= '<a href="javascript:void(0)" id="bp-'+item.id+'" style="color:blue;text-decoration: underline" onclick="bpcodesDetail(\''+item.id+'\')">'+item.buyCodes+'</a>'
+            }else{
+                if(item.hasOneFlag==1){
+                    codes= '<span>'+item.buyCodes+'<span style="color: orangered;" i18n="huizongbiao.xian">'+$i18np.prop("huizongbiao.xian")+'</span></span>'
+                }else{
+                    codes= item.buyCodes;
+                }
+            }
+            var buyMoney = item.buyType==2?'<a href="javascript:void(0)" style="color:red;text-decoration: underline" onclick="bpcodesDetail(\''+item.id+'\')">'+item.buyMoney+'</a>'
+                : item.buyMoney
+
+            var peiRate = item.buyType==2?'<a href="javascript:void(0)" style="color:red;text-decoration: underline" onclick="bpcodesDetail(\''+item.id+'\')">'+item.peiRate+'</a>'
+                : "1:"+item.peiRate;
+            var createTime = item.createTime;
+
+            var types = '--';
+            if(item.lotterySetting!=null){
+                types = item.lotterySetting.bettingRule;
+                if(item.lotterySetting.lotteryMethodId=="4"){
+                    types = transType(item.lotterySetting.lotteryMethodId);
+                }
+            }else if(res.lotteryMethod!=null){
+                types = res.lotteryMethod.bettingMethod;
+                types = transType(res.lotteryMethod.lotteryMethodId);
+            }
+
+            var status = "";
+            status = status + (item.printFlag==0?'<span i18n="huizongbiao.unPrint">'+$i18np.prop("huizongbiao.unPrint")+'</span>':'<span style="color:red" i18n="huizongbiao.hasPrint">'+$i18np.prop("huizongbiao.hasPrint")+'</span>')
+            status = status + (item.buyFlag==0?'&nbsp;/&nbsp;<span i18n="huizongbiao.buyStatus.no">'+$i18np.prop("huizongbiao.buyStatus.no")+'</span>':'&nbsp;/&nbsp;<span style="color:red" i18n="huizongbiao.buyStatus.yes">'+$i18np.prop("huizongbiao.buyStatus.yes")+'</span>')
+            status = status + (item.delFlag==0?'&nbsp;/&nbsp;<span i18n="huizongbiao.cancelStatus.no">'+$i18np.prop("huizongbiao.cancelStatus.no")+'</span>':'&nbsp;/&nbsp;<span style="color:red" i18n="huizongbiao.cancelStatus.yes">'+$i18np.prop("huizongbiao.cancelStatus.yes")+'</span>')
+
+            var tr = '<tr><td>'+item.billNo+'</td>' +
+                '<td>'+codes+'</td>' +
+                '<td>'+buyMoney+'</td>' +
+                '<td>'+peiRate+'</td>' +
+                '<td>'+types+'</td>' +
+                '<td>'+createTime+'</td>'+
+                '<td>'+status+'</td></tr>';
+            bodydata = bodydata + tr;
+        }
+        $("#tbody").html(bodydata);
+
+    }
+
+    $("#btnSearch").on("click","",function (e) {
+        currpage = 1;
+        getTableData();
+    })
+
+    $("#pager").on("click",".fn-first",function (e) {
+        if(currpage!=1){
+            currpage = 1;
+            getTableData();
+        }
+    })
+
+    $("#pager").on("click",".fn-next",function (e) {
+        if(currpage<pages){
+            currpage++;
+            getTableData();
+        }
+    })
+
+    $("#pager").on("click",".fn-prev",function (e) {
+        if(currpage>1){
+            currpage--;
+            getTableData();
+        }
+    })
+
+    $("#pager").on("click",".fn-last",function (e) {
+        if(currpage!=pages){
+            currpage=pages
+            getTableData();
+        }
+    })
+    $("#pager").on("click",".fn-go",function(e){
+        var goValue = $("#goTo").val();
+        if(parseInt(goValue)>=1 && parseInt(goValue)<=pages && parseInt(goValue)!=currpage){
+            currpage  = parseInt(goValue);
+            getTableData();
+        }else{
+
+        }
+    })
+
+
+    //打印
+    $$("#btn-print").on("click","",function (e) {
+        if(dataList.length>0){
+            var tt = $i18np.prop("huizongbiao.page.cur")+drawNo+$i18np.prop("huizongbiao.qi")+" "+$i18np.prop("huizongbiao.yuzhudan")
+            var pagerInfo = $i18np.prop("huizongbiao.di")+" "+currpage+"/"+pages+" "+$i18np.prop("huizongbiao.ye")
+            const params = {
+                dataList:dataList,
+                dataTitle:tt,
+                pagerInfo:pagerInfo
+            }
+            sessionStorage.setItem("printParams",JSON.stringify(params));
+            window.open("detail-print.html")
+        }else{
+            layer.alert($i18np.prop("noDataPrint"),
+                {title:$i18np.prop("huizongbiao.alertTitle"),
+                    btn:[$i18np.prop("huizongbiao.queding")]
+                }
+            )
+        }
+        // $$("#print-area").jqprint({
+        //     hideContent: ['#btnRow'],
+        //     cancel:function () {
+        //         $('#btnRow').show();
+        //     }
+        // })
+    })
+
+</script>
+
+</body>
+</html>

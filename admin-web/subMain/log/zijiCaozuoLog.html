@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自己操作日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+        .fn-hover:hover{
+            background: #fffeaa;
+        }
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        .layui-table-header {
+            height: 30px;
+        }
+        .shou{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main" >
+    <template>
+    <div class="module">
+        <div name="module" id="log_self" class="m5 mt10">
+            <div name="module" id="guide_log" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="log.top.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="log.top.oneself.operation">   自己操作日志  </span>
+                </div>
+                <div class="fr">
+                    <a href="yeujiLog.html" class="" i18n="log.top.skip.operation">越级操作日志</a> |
+                    <a href="zijiCaozuoLog.html" class="fb red" i18n="log.top.oneself.operation">自己操作日志</a> |
+                    <a href="lanhuoLog.html" class="" i18n="lanhuo.log">拦货金额日志</a> |
+                    <a href="huiyuanLog.html" class="" i18n="log.top.member.select">会员快选日志</a>
+                </div>
+            </div>
+            <div class="mt10">
+<!--                <form novalidate="novalidate">-->
+                    <input type="hidden" value="1" name="type">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="7" i18n="log.top.oneself.operation">自己操作日志</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tc">
+                            <td class="w70" i18n="log.table.operated.account">被操作账号</td>
+                            <td class="w90"><input type="text" class="w90" name="account" id="account"
+                                                   maxlength="16"></td>
+                            <td class="w70"><label for="start_date" i18n="log.table.start.time">起始日期</label></td>
+                            <td class="w90"><input class="w90" type="text" id="start_date_log" name="start_date"
+                                                   autocomplete="off" value=""></td>
+                            <td class="w70"><label for="end_date" i18n="log.table.end.time">结束日期</label></td>
+                            <td class="w90"><input class="w90" type="text" id="end_date_log" name="end_date"
+                                                   autocomplete="off" value=""></td>
+                            <td class="tl"><input type="submit" class="btn" value="提交" lay-submit lay-filter="search" @click="search(1)" i18n="log.table.submit"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+<!--                </form>-->
+            </div>
+            <div class="mt10" style="border: solid 1px #000000">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td width="8%" i18n="log.table.operation.account">操作账号</td>
+                        <td width="10%" i18n="log.table.operated.account">被操作账号</td>
+                        <td width="60%" i18n="log.table.operation.content">操作内容</td>
+                        <td width="10%" i18n="log.table.operation.time">操作时间</td>
+                        <td width="10%" i18n="log.table.operation.ip">操作IP</td>
+                    </tr>
+                    </thead>
+                    <tbody v-if="count != 0" v-for="zh in logList">
+                    <tr class="fn-hover">
+                        <td>{{zh.userName}}<span>({{lang=="zh"?zh.opUserRoleName:zh.opUserRoleNameTh}})</span></td>
+                        <td>{{zh.operatedUserName}}<span style="color: green">({{lang=="zh"?zh.operatedUserRoleName:zh.operatedUserRoleNameTh}})</span></td>
+                        <td>
+                            <div style="display: flex">
+<!--                                <div v-if="zh.content!=null && zh.content!=''" v-for="contents in zh.contentDetails">-->
+<!--                                    {{contents.detailOne}}改为-->
+<!--                                    <span style="color: red;">{{contents.detailTwo}}</span>，-->
+<!--                                </div>-->
+                                <div v-if="zh.contentDetails!=null && zh.contentDetails!=''" v-for="contents in zh.contentDetails">
+                                    {{contents.detailOne}}<span>{{$t('changed')}}</span>
+                                    <span style="color: red;">{{contents.detailTwo}}</span>，
+                                </div>
+                                <div v-if="zh.contentDetails==null || zh.contentDetails==''">
+                                    {{zh.content}}
+                                </div>
+                                <div v-if="zh.sonContent!=null && zh.sonContent!=''">
+                                    <a @click="totalCargo(zh.id)" style="color: blue" class="shou">{{$t('more')}}</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{zh.opTime}}</td>
+                        <td>{{zh.ip}}</td>
+                    </tr>
+                    <tr class="hide" :id="zh.id" v-if="zh.sonContent!=null && zh.sonContent!=''">
+                        <td colspan="5" style="padding: 5px" class="fn-hover">
+                            <table style="width: 100%;">
+                                <tbody>
+                                <tr>
+                                    <td width="46%">{{$t('type')}}</td>
+                                    <td width="46%">{{$t('earnWater')}}</td>
+                                </tr>
+                                <tr v-for="detail in zh.logDetails">
+                                    <td width="46%">{{detail.typeName}}</td>
+                                    <td width="46%" v-if="detail.detailOne==null || detail.detailOne==''">{{detail.detail}}</td>
+                                    <td width="46%" v-if="detail.detailOne!=null && detail.detailOne!=''">
+                                        <span style="color: red">{{detail.detailOne}}</span>
+                                        <span>{{$t('changed')}}</span>
+                                        <span style="color: red">{{detail.detailTwo}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody v-if="count == 0">
+                    <tr>
+                        <td colspan="7" i18n="log.table.no.data">暂无数据！</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div name="module" id="pager" class="pager" action="log" pagebody="tbody" template="tpl_refresh" pagecount="1" param="pageSize=40">
+                <span i18n="log.page.no">第</span> <span class="pageindex red">{{currentPage}}</span> <span i18n="log.page.page">页</span>&nbsp;
+                <span i18n="log.page.total">共</span> <span class="pagecount red">{{countPage}}</span> <span i18n="log.page.page">页</span>&nbsp;
+                <span i18n="log.page.total">共</span> <span class="recordcount red">{{count}}</span> <span i18n="log.page.count">条</span>
+                <a class="fn-first shou" @click="shouye()" i18n="log.page.firstPage">首页</a>
+                <a class="fn-prev shou" @click="shangyiye()" i18n="log.page.prePage">上一页</a>
+                <a class="fn-next shou" @click="xiayiye()" i18n="log.page.nextPage">下一页</a>
+                <a class="fn-last shou" @click="weiye()" i18n="log.page.lastPage">尾页</a>
+                <input type="number" class="input w50 fn-index" v-model="inputPage">
+                <input type="button" class="btn btn-gray w30 fn-go shou" value="GO" @click="go()">
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+
+    const messages = {
+        zh: {
+            more:"更多",
+            changed:"改为",
+            type:"类别",
+            earnWater:"赚水",
+        },
+        th: {
+            more:"เพิ่มเติม",
+            changed:"แก้ไขเป็น",
+            type:"ประเภท",
+            earnWater:"รายได้จากการลงเดิมพัน",
+        }
+    }
+
+    var moduleName = "log";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties('subMain-'+ moduleName);
+        i18n.locale=lang;
+
+        vm.initDataList(1);
+    }
+
+    layui.config({base: '../../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties('subMain-'+ moduleName);
+
+        vm.initDataList(1);
+    });
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var laydate = layui.laydate;
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            logList:[],     //日志
+            count:0,        //总条数
+            countPage:1,    //总页数
+            currentPage:1,  //当前页数
+            inputPage:'',   //文本框输入页数
+            select:2,       //1：搜索提交  2：直接查询
+            lang:"zh",      //语言
+        },
+        methods: {
+            initDataList(page) {
+                const _this = this;
+                _this.select = 2;
+                _this.lang = defaultLang;
+                $.ajax({
+                    url: HOST + "ownOperationLog/getOwneOperationLog?page="+page
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 0) {
+                            // var data = _this.setData(res.data);
+                            // _this.logList = data;
+                            _this.logList = res.data;
+                            _this.count = res.count;
+                            _this.currentPage = page;
+                            let pageNum = res.count % 40 == 0 ? parseInt(res.count / 40) : Math.ceil(res.count / 40);
+                            _this.countPage = pageNum;
+                        } else {
+                            layer.msg(i18np.prop("log.msg.data.exception"));
+                        }
+                    }
+                });
+            },
+            search(page){
+                const _this = this;
+                _this.select = 1;
+                var startTime = $("#start_date_log").val();
+                var endTime = $("#end_date_log").val();
+                var operatedUserName = $("#account").val();
+                $.ajax({
+                    url: HOST + "ownOperationLog/getOwneOperationLog"
+                    , type: "get"
+                    , data: {
+                        page:page,
+                        startTime:startTime,
+                        endTime:endTime,
+                        operatedUserName:operatedUserName
+                    }
+                    , success: function (res) {
+                        if (res.code == 0) {
+                            // var data = _this.setData(res.data);
+                            // _this.logList = data;
+                            _this.logList = res.data;
+                            _this.count = res.count;
+                            _this.currentPage = page;
+                            let pageNum = res.count % 40 == 0 ? parseInt(res.count / 40) : Math.ceil(res.count / 40);
+                            _this.countPage = pageNum;
+                        } else {
+                            layer.msg(i18np.prop("log.msg.data.exception"));
+                        }
+                    }
+                });
+            },
+            setData(data){
+                for (var i=0;i<data.length;i++){
+                    data[i].ip = data[i].ip.replace(/(?:\.\d+){2}$/, '') + ".*.*"
+                }
+                return data;
+            },
+            totalCargo(id) {
+                if ($("#"+id).is(":hidden")) {
+                    $("#"+id).show();
+                }else {
+                    $("#"+id).hide();
+                }
+            },
+            shouye(){
+                if (this.currentPage != 1){
+                    if (this.select == 2){
+                        this.initDataList(1);
+                    }else{
+                        this.search(1);
+                    }
+                }
+            },
+            shangyiye(){
+                if (this.currentPage != 1){
+                    if (this.select == 2){
+                        this.initDataList(this.currentPage*1 - 1);
+                    }else {
+                        this.search(this.currentPage*1 - 1);
+                    }
+                }
+            },
+            xiayiye(){
+                if (this.currentPage*1 < this.countPage*1){
+                    if (this.select == 2){
+                        this.initDataList(this.currentPage*1 + 1);
+                    }else{
+                        this.search(this.currentPage*1 + 1);
+                    }
+                }
+            },
+            weiye(){
+                if (this.currentPage*1 < this.countPage*1){
+                    if (this.select == 2){
+                        this.initDataList(this.countPage);
+                    }else{
+                        this.search(this.countPage);
+                    }
+                }
+            },
+            go(){
+                if (this.inputPage==null || this.inputPage=="" || this.inputPage==undefined){
+                    layer.msg(i18np.prop("log.msg.please.input.page"))
+                    return false;
+                }
+                if(this.currentPage*1 == this.inputPage*1){
+                    console.log("当前页不查询");
+                }else if (this.inputPage*1 < 1 || this.inputPage*1 > this.countPage*1){
+                    if (this.select == 2){
+                        this.initDataList(1);
+                    }else{
+                        this.search(1);
+                    }
+                }else{
+                    if (this.select == 2){
+                        this.initDataList(this.inputPage);
+                    }else{
+                        this.search(this.inputPage);
+                    }
+                }
+            },
+            companyCut(name){
+                let company=(name || "").split(',')
+                return company
+            },
+        }
+    })
+    vm.initDataList(1);
+
+    //日期范围
+    var endDate = laydate.render({
+        elem: '#end_date_log',//选择器结束时间
+        type: 'date',
+        min: "1970-1-1",//设置min默认最小值
+        done: function (value, date) {
+            startDate.config.max = {
+                year: date.year,
+                month: date.month - 1,//关键
+                date: date.date,
+                hours: 0,
+                minutes: 0,
+                seconds: 0
+            }
+        }
+    });
+    //日期范围
+    var startDate = laydate.render({
+        elem: '#start_date_log',//开始日期
+        type: 'date',
+        max: "2099-12-31",//设置一个默认最大值
+        done: function (value, date) {
+            endDate.config.min = {
+                year: date.year,
+                month: date.month - 1, //关键
+                date: date.date,
+                hours: 0,
+                minutes: 0,
+                seconds: 0
+            };
+        }
+    });
+</script>
+</body>
+</html>

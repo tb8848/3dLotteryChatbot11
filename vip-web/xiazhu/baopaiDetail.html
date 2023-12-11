@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <title id="pageTitle"></title>
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+            /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div class="module">
+
+        <div name="module" id="packageprint">
+            <template>
+        <div class="m10">
+            <div id="print-area">
+                <div class="bold mt10 tc f16" id="title">{{title}}</div>
+                <table class="t-1 table_bg">
+                    <thead>
+                    <tr class="bg2 tc">
+                        <td i18n="xiazhu.billNO">{{$t('message.billNO')}}</td>
+                        <td i18n="xiazhu.buyTime">{{$t('message.billTime')}}</td>
+                        <td i18n="xiazhu.buyCode">{{$t('message.buyCode')}}</td>
+                        <td i18n="xiazhu.buyMoney">{{$t('message.money')}}</td>
+                        <td i18n="xiazhu.peirate">{{$t('message.odds')}}</td>
+                        <td i18n="xiazhu.zhongjiang">{{$t('message.xiazhuMingxi.zhongjiang')}}</td>
+                        <td i18n="xiazhu.huishui">{{$t('message.xiazhuMingxi.huishui')}}</td>
+                        <td i18n="xiazhu.yingkui">{{$t('message.xiazhuMingxi.yingkui')}}</td>
+                        <td i18n="xiazhu.status">{{$t('message.xiazhuMingxi.status')}}</td>
+                    </tr>
+                    </thead>
+                    <tbody class="fn-hover tc" v-if="pager.total<1">
+                        <tr> <td colspan="9" i18n="xiazhu.noData">{{$t('message.xiazhuMingxi.noData')}}!</td> </tr>
+                    </tbody>
+                    <tbody class="fn-hover tc" v-if="pager.total>0">
+                        <tr v-for="(item,idx) in pageData" :class="[item.backCodeFlag==1?'b4':'']">
+                            <td>{{item.printId}}</td>
+                            <td>{{item.createTime}}<span v-if="item.backCodeFlag==1"><br/><span i18n="xiazhu.tui">{{$t('message.tui')}}</span>：{{item.backCodeTime}}</span></td>
+                            <td>{{item.buyCodes}}</td>
+                            <td>{{item.buyMoney}}</td>
+                            <td>{{item.peiRate}}</td>
+                            <td>
+                                <span v-if="item.drawStatus==1">{{item.drawMoney}}</span>
+                                <span v-else>--</span>
+                            </td>
+                            <td>{{item.huishui}}</td>
+                            <td>{{item.shProfitLoss}}</td>
+                            <td><span v-if="item.backCodeFlag==1" i18n="xiazhu.yituima">{{$t('message.codeBack')}}</span>
+                                <span v-else i18n="xiazhu.success">{{ $t("message.success") }}</span></td>
+                        </tr>
+                        <tr v-if="pageData.length>0">
+                            <td colspan="2" i18n="xiazhu.heji">{{$t('message.heji')}}</td>
+                            <td>{{heji.amount}}</td>
+                            <td>{{heji.money}}</td>
+                            <td></td>
+                            <td >{{heji.draw}}</td>
+                            <td>{{heji.huishui}}</td>
+                            <td>{{heji.earn}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div name="module" id="pager" class="pager" >
+                    <span i18n="xiazhu.page.cur">{{$t('message.page_curr')}}</span>
+                    <span class="pageindex red">{{pager.curpage}}</span>
+                    <span i18n="xiazhu.page">{{$t('message.page')}}</span>
+                    <span i18n="xiazhu.gong">{{$t('message.gong')}}</span>
+                    <span class="pagecount red">{{pager.pages}}</span>
+                    <span i18n="xiazhu.page">{{$t('message.page')}}</span>
+                    <span i18n="xiazhu.gong">{{$t('message.gong')}}</span>
+                    <span class="recordcount red">{{pager.total}}</span> <span i18n="xiazhu.tiao">{{$t('message.page_tiao')}}</span>
+                    <a href="javascript:void(0)" class="fn-first" @click="firstPage" i18n="xiazhu.firstPage">{{$t('message.firstPage')}}</a>
+                    <a href="javascript:void(0)" class="fn-prev" @click="prevPage" i18n="xiazhu.prevPage">{{$t('message.prevPage')}}</a>
+                    <a href="javascript:void(0)" class="fn-next" @click="nextPage" i18n="xiazhu.nextPage">{{$t('message.nextPage')}}</a>
+                    <a href="javascript:void(0)" class="fn-last" @click="lastPage" i18n="xiazhu.lastPage">{{$t('message.lastPage')}}</a>
+                    <input type="text" class="input w30 fn-index" maxlength="10" digits="true" v-model="pager.toPage">
+                    <input type="button" class="btn btn-gray w30 fn-go" value="GO" id="goTo" @click="goPage()">
+                </div>
+                <div class="mt10 tc" id="btnRow"> <input type="button" :value="$t('message.print')" id="btn-print" @click="toPrint" i18n="xiazhu.print"></div>
+            </div>
+        </div>
+            </template>
+    </div>
+
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/vue-i18n-messages.js"></script>
+
+<script>
+    var moduleName = "xiazhu";
+    var layer = layui.layer;
+    var $i18np = null;
+    var $$ = jQuery;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    })
+
+    function changeLang(lang){
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        i18n.locale=lang;
+    }
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            vm.init()
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+</script>
+
+<script>
+
+    const vm = new Vue({
+        el:'#packageprint',
+        i18n,
+        data:{
+            title:'',
+            pageData:[],
+            pager:{
+               curpage:1,
+               pages:0,
+               totals:0,
+               limit:50,
+               toPage:""
+            },
+            rid:'', //包牌组ID
+            drawNo:'', //期号
+            heji:{
+                amount:0,
+                money:0,
+                huishui:0,
+                earn:0,
+                draw:0
+            }
+        },
+        methods:{
+            init(){
+                var bptitle = sessionStorage.getItem("bptitle");
+                this.rid = sessionStorage.getItem("bprid");
+                this.drawNo = sessionStorage.getItem("mingxi_drawNo");
+                if(bptitle!="" && this.rid!=""){
+                    bptitle = $i18np.prop("xiazhu.page.cur")+this.drawNo+$i18np.prop("xiazhu.qi")+" "+bptitle+" "+$i18np.prop("xiazhu.title")
+                    this.title = bptitle;
+                    $("#title").html(bptitle)
+                }
+                this.getPageData();
+            },
+            getPageData(){
+                var that = this;
+                $.ajax({
+                    url: HOST+'drawBuyRecordPC/bpcodes?rid='+that.rid+"&page="+that.pager.curpage+"&limit="+that.pager.limit+"&drawNo="+that.drawNo,
+                    type:'get',
+                    success:function(res){
+                        if(res.code==0){
+                            that.pager.total = res.data.total;
+                            that.pager.pages = res.data.pages;
+                            that.pageData = res.data.dataList;
+                            var heji = res.data.heji;
+                            that.heji.money = heji.totalMoney;
+                            that.heji.huishui = heji.totalHuiShui;
+                            that.heji.earn = heji.totalEarn;
+                            that.heji.amount=heji.totalAmount;
+                            that.heji.draw = heji.totalDraw;
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    }
+                })
+            },
+            firstPage() {
+                if (this.pager.curpage != 1) {
+                    this.pager.curpage = 1;
+                    this.getPageData();
+                }
+            },
+            nextPage() {
+                if (this.pager.curpage < this.pager.pages) {
+                    this.pager.curpage++;
+                    this.getPageData();
+                }
+            },
+            prevPage() {
+                if (this.pager.curpage > 1) {
+                    this.pager.curpage--;
+                    this.getPageData();
+                }
+            },
+            lastPage() {
+                if (this.pager.curpage < this.pager.pages) {
+                    this.pager.curpage = this.pager.pages;
+                    this.getPageData();
+                }
+            },
+            goPage() {
+                const toPage = parseInt(this.pager.toPage);
+                if (toPage>=1 && toPage<=this.pager.pages && toPage!=this.pager.curpage) {
+                    this.pager.curpage = toPage;
+                    this.getPageData();
+                }
+            },
+            toPrint(){
+                if(this.pageData.length>0){
+                    const params = {
+                        dataList:this.pageData,
+                        hejiRow:this.heji,
+                        dataTitle:this.title,
+                        isWin:0
+                    }
+                    //数据写入缓存
+                    sessionStorage.setItem("printParams",JSON.stringify(params));
+                    window.open("xiazhu-print.html")
+                    // $$("#print-area").jqprint({
+                    //     cancel:function () {
+                    //
+                    //     }
+                    // })
+                }else{
+                    layer.alert($i18np.prop("xiazhu.noDataPrint"),{title:$i18np.prop("xiazhu.alertTitle"),
+                        btn:[$i18np.prop("xiazhu.confirm")]
+                    })
+                }
+            }
+        }
+    })
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>月分类账</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main">
+    <template>
+    <div class="module">
+        <div name="module" id="reportclass_month" class="m5 mt10 reportclass">
+            <div class="guide">
+                <div class="fl"><a href="#!online_account" i18n="ledger.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="ledger.top.monthLedger">   月分类账   </span>
+                </div>
+                <div class="fr">
+                    <a href="dayfelei.html" class="" i18n="ledger.top.dayLedger">日分类帐</a> |
+                    <a href="yuefelei.html?all=1" class="fb red" i18n="ledger.top.monthLedger">月分类账</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td colspan="5">
+                            <span i18n="ledger.top.monthLedger">月分类账</span>
+                            <input type="hidden" id="member_level" value="6">
+                            <input type="hidden" id="param_month" value="period_month=&amp;start_period_no=&amp;end_period_no=">&nbsp;
+                            <span id="month_list">
+                                <a :href="'yuefelei.html?months='+month" v-for="month in yearMonthList" :class="monthData==month ? 'yellow red' : 'yellow'">【{{month}}】</a>
+                                <a :href="'yuefelei.html?all=1'" :class="all != 1 ? 'yellow' :'yellow red'" i18n="ledger.query.all">【全部】</a>
+                            </span>
+                        </td>
+                        <td colspan="2">
+                            <select class="period_list w110" id="start_period_no" @change="changeSelect()">
+                            </select>
+                            &gt;&gt;
+                            <select class="period_list w110" id="end_period_no" @change="changeSelect()">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="bg2 tc">
+                        <td width="14%" i18n="ledger.table.head.date"> 日期</td>
+                        <td width="14%" i18n="ledger.table.head.type">类别</td>
+                        <td width="14%" i18n="ledger.table.head.count">笔数</td>
+                        <td width="14%" i18n="ledger.table.head.betAmount">下注金额</td>
+                        <td width="14%" i18n="ledger.table.head.backWater">回水</td>
+                        <td width="14%" i18n="ledger.table.head.winLottery">中奖</td>
+                        <td width="14%" i18n="ledger.table.head.profitLoss">盈亏</td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody" v-if="monthTotal.length > 0">
+                        <tr class="fn-hover">
+                            <td class="bg3 fb red"> {{$t('total')}}</td>
+                            <td>
+                                <a class="blue">
+                                    <span class="ico-open"></span>
+                                </a>
+                                <a href="javascript:void(0)" class="fn-getledger getTotal" ledger_level="10" @click="totalCargo()">{{$t('totalGoods')}}</a>
+                            </td>
+                            <td class="bg3 f14">{{zhTotal.exchangeCount == null ? '--' : zhTotal.exchangeCount}}</td>
+                            <td class=" f14">
+                                {{zhTotal.amount == null ? '--' : (zhTotal.amount.toString().indexOf('.')!=-1 ? zhTotal.amount.toFixed(2).split(".")[0]+'.' : zhTotal.amount)}}<span style="color: #c2c1c1;">{{zhTotal.amount == null ? '' : (zhTotal.amount.toString().indexOf('.')!=-1 ? zhTotal.amount.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                            <td class="bg3 f14">
+                                {{zhTotal.backWater == null ? '--' : (zhTotal.backWater.toString().indexOf('.')!=-1 ? zhTotal.backWater.toFixed(2).split(".")[0]+'.' : zhTotal.backWater)}}<span style="color: #c2c1c1;">{{zhTotal.backWater == null ? '' : (zhTotal.backWater.toString().indexOf('.')!=-1 ? zhTotal.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                            <td class=" f14">
+                                {{zhTotal.drawAmount == null ? '--' : (zhTotal.drawAmount.toString().indexOf('.')!=-1 ? zhTotal.drawAmount.toFixed(2).split(".")[0]+'.' : zhTotal.drawAmount)}}<span style="color: #c2c1c1;">{{zhTotal.drawAmount == null ? '' : (zhTotal.drawAmount.toString().indexOf('.')!=-1 ? zhTotal.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                            <td class="bg3 f14">
+                                {{zhTotal.ykAmount == null ? '--' : (zhTotal.ykAmount.toString().indexOf('.')!=-1 ? zhTotal.ykAmount.toFixed(2).split(".")[0]+'.' : zhTotal.ykAmount)}}<span style="color: #c2c1c1;">{{zhTotal.ykAmount == null ? '' : (zhTotal.ykAmount.toString().indexOf('.')!=-1 ? zhTotal.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                            </td>
+                        </tr>
+                        <tr class="hide" id="totalCargoDetail">
+                            <td colspan="7" class="no-padding" id="a">
+                                <table class="t-1" v-for="zh in zhList">
+                                    <tbody class="fn-hover">
+                                    <tr class="">
+                                        <td width="14%" class="bg6"></td>
+                                        <td width="14%">{{zh.betRule}}</td>
+                                        <td width="14%" class="bg3 f14">{{zh.exchangeCount == null ? '--' : zh.exchangeCount}}</td>
+                                        <td width="14%" class="f14">
+                                            {{zh.amount == null ? '--' : (zh.amount.toString().indexOf('.')!=-1 ? zh.amount.toFixed(2).split(".")[0]+'.' : zh.amount)}}<span style="color: #c2c1c1;">{{zh.amount == null ? '' : (zh.amount.toString().indexOf('.')!=-1 ? zh.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                        </td>
+                                        <td width="14%" class="bg3 f14">
+                                            {{zh.backWater == null ? '--' : (zh.backWater.toString().indexOf('.')!=-1 ? zh.backWater.toFixed(2).split(".")[0]+'.' : zh.backWater)}}<span style="color: #c2c1c1;">{{zh.backWater == null ? '' : (zh.backWater.toString().indexOf('.')!=-1 ? zh.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                        </td>
+                                        <td width="14%" class="f14">
+                                            {{zh.drawAmount == null ? '--' : (zh.drawAmount.toString().indexOf('.')!=-1 ? zh.drawAmount.toFixed(2).split(".")[0]+'.' : zh.drawAmount)}}<span style="color: #c2c1c1;">{{zh.drawAmount == null ? '' : (zh.drawAmount.toString().indexOf('.')!=-1 ? zh.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                        </td>
+                                        <td width="14%" class="bg3 f14">
+                                            {{zh.ykAmount == null ? '--' : (zh.ykAmount.toString().indexOf('.')!=-1 ? zh.ykAmount.toFixed(2).split(".")[0]+'.' : zh.ykAmount)}}<span style="color: #c2c1c1;">{{zh.ykAmount == null ? '' : (zh.ykAmount.toString().indexOf('.')!=-1 ? zh.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr v-if="zh.ledgerTotalDetailResList != null">
+                                        <td colspan="7" class="no-padding">
+                                            <table class="t-1">
+                                                <tbody class="fn-hover" >
+                                                <tr class="bg5" v-for="detail in zh.ledgerTotalDetailResList" >
+                                                    <td width="14%" class="bg6"></td>
+                                                    <td width="14%">{{detail.betRule}}</td>
+                                                    <td width="14%" class="bg3 f14">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                    <td width="14%" class="f14">
+                                                        {{detail.amount == null ? '--' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[0]+'.' : detail.amount)}}<span style="color: #c2c1c1;">{{detail.amount == null ? '' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                                    </td>
+                                                    <td width="14%" class="bg3 f14">
+                                                        {{detail.backWater == null ? '--' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[0]+'.' : detail.backWater)}}<span style="color: #c2c1c1;">{{detail.backWater == null ? '' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                                    </td>
+                                                    <td width="14%" class="f14">
+                                                        {{detail.drawAmount == null ? '--' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[0]+'.' : detail.drawAmount)}}<span style="color: #c2c1c1;">{{detail.drawAmount == null ? '' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                    </td>
+                                                    <td width="14%" class="bg3 f14">
+                                                        {{detail.ykAmount == null ? '--' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[0]+'.' : detail.ykAmount)}}<span style="color: #c2c1c1;">{{detail.ykAmount == null ? '' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="fn-hover">
+                        <td class="bg3 fb red"></td>
+                        <td class="blue">
+                            <span class="ico-open"></span>
+                            <a href="javascript:void(0)" class="fn-getledger getTotal" ledger_level="20" @click="shiHuoTotal()">{{$t('totalPhysicalGoods')}}</a>
+                        </td>
+                        <td class="bg3 f14">{{shTotal.exchangeCount == null ? '--' : shTotal.exchangeCount}}</td>
+                        <td class=" f14">
+                            {{shTotal.amount == null ? '--' : (shTotal.amount.toString().indexOf('.')!=-1 ? shTotal.amount.toFixed(2).split(".")[0]+'.' : shTotal.amount)}}<span style="color: #c2c1c1;">{{shTotal.amount == null ? '' : (shTotal.amount.toString().indexOf('.')!=-1 ? shTotal.amount.toFixed(2).split(".")[1] : '')}}</span>
+                        </td>
+                        <td class="bg3 f14">
+                            {{shTotal.backWater == null ? '--' : (shTotal.backWater.toString().indexOf('.')!=-1 ? shTotal.backWater.toFixed(2).split(".")[0]+'.' : shTotal.backWater)}}<span style="color: #c2c1c1;">{{shTotal.backWater == null ? '' : (shTotal.backWater.toString().indexOf('.')!=-1 ? shTotal.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                        </td>
+                        <td class="f14">
+                            {{shTotal.drawAmount == null ? '--' : (shTotal.drawAmount.toString().indexOf('.')!=-1 ? shTotal.drawAmount.toFixed(2).split(".")[0]+'.' : shTotal.drawAmount)}}<span style="color: #c2c1c1;">{{shTotal.drawAmount == null ? '' : (shTotal.drawAmount.toString().indexOf('.')!=-1 ? shTotal.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                        </td>
+                        <td class="bg3 f14">
+                            {{shTotal.ykAmount == null ? '--' : (shTotal.ykAmount.toString().indexOf('.')!=-1 ? shTotal.ykAmount.toFixed(2).split(".")[0]+'.' : shTotal.ykAmount)}}<span style="color: #c2c1c1;">{{shTotal.ykAmount == null ? '' : (shTotal.ykAmount.toString().indexOf('.')!=-1 ? shTotal.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                        </td>
+                    </tr>
+                    <tr class="hide" id="shiHuoDetail" v-if="shList != null">
+                        <td colspan="7" class="no-padding" id="b">
+                            <table class="t-1" v-for="sh in shList">
+                                <tbody class="fn-hover">
+                                <tr class="">
+                                    <td width="14%" class="bg6" ></td>
+                                    <td width="14%">{{sh.betRule}}</td>
+                                    <td width="14%" class="bg3 f14">{{sh.exchangeCount == null ? '--' : sh.exchangeCount}}</td>
+                                    <td width="14%" class="f14">
+                                        {{sh.amount == null ? '--' : (sh.amount.toString().indexOf('.')!=-1 ? sh.amount.toFixed(2).split(".")[0]+'.' : sh.amount)}}<span style="color: #c2c1c1;">{{sh.amount == null ? '' : (sh.amount.toString().indexOf('.')!=-1 ? sh.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">
+                                        {{sh.backWater == null ? '--' : (sh.backWater.toString().indexOf('.')!=-1 ? sh.backWater.toFixed(2).split(".")[0]+'.' : sh.backWater)}}<span style="color: #c2c1c1;">{{sh.backWater == null ? '' : (sh.backWater.toString().indexOf('.')!=-1 ? sh.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class="f14">
+                                        {{sh.drawAmount == null ? '--' : (sh.drawAmount.toString().indexOf('.')!=-1 ? sh.drawAmount.toFixed(2).split(".")[0]+'.' : sh.drawAmount)}}<span style="color: #c2c1c1;">{{sh.drawAmount == null ? '' : (sh.drawAmount.toString().indexOf('.')!=-1 ? sh.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">
+                                        {{sh.ykAmount == null ? '--' : (sh.ykAmount.toString().indexOf('.')!=-1 ? sh.ykAmount.toFixed(2).split(".")[0]+'.' : sh.ykAmount)}}<span style="color: #c2c1c1;">{{sh.ykAmount == null ? '' : (sh.ykAmount.toString().indexOf('.')!=-1 ? sh.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                </tr>
+                                <tr v-if="sh.ledgerTotalDetailResList != null">
+                                    <td colspan="7" class="no-padding">
+                                        <table class="t-1">
+                                            <tbody class="fn-hover" >
+                                            <tr class="bg5" v-for="detail in sh.ledgerTotalDetailResList" >
+                                                <td width="14%" class="bg6"></td>
+                                                <td width="14%">{{detail.betRule}}</td>
+                                                <td width="14%" class="bg3 f14">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                <td width="14%" class="f14">
+                                                    {{detail.amount == null ? '--' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[0]+'.' : detail.amount)}}<span style="color: #c2c1c1;">{{detail.amount == null ? '' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="bg3 f14">
+                                                    {{detail.backWater == null ? '--' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[0]+'.' : detail.backWater)}}<span style="color: #c2c1c1;">{{detail.backWater == null ? '' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="f14">
+                                                    {{detail.drawAmount == null ? '--' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[0]+'.' : detail.drawAmount)}}<span style="color: #c2c1c1;">{{detail.drawAmount == null ? '' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="bg3 f14">
+                                                    {{detail.ykAmount == null ? '--' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[0]+'.' : detail.ykAmount)}}<span style="color: #c2c1c1;">{{detail.ykAmount == null ? '' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr v-for="monthLedger in monthTotal">
+                        <td colspan="7" class="no-padding">
+                            <table class="t-1">
+                                <tr class="fn-hover">
+                                    <td width="14%" class="bg3">
+                                        <a :href="'dayfelei.html?drawId=' + monthLedger.drawId">{{monthLedger.monthDraw}}</a>
+                                    </td>
+                                    <td width="14%">
+                                        <span class="ico-open"></span>
+                                        <a href="javascript:void(0)" class="fn-getledger" period_no="22329" member_id="74" ledger_level="10" @click="totalCargo2(monthLedger.drawId)">{{$t('totalGoods')}}</a>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">{{monthLedger.zhLedger.exchangeCount == null ? '&#45;&#45;' : monthLedger.zhLedger.exchangeCount}}</td>
+                                    <td width="14%" class=" f14">
+                                        {{monthLedger.zhLedger.amount == null ? '&#45;&#45;' : (monthLedger.zhLedger.amount.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.amount.toFixed(2).split(".")[0]+'.' : monthLedger.zhLedger.amount)}}<span style="color: #c2c1c1;">{{monthLedger.zhLedger.amount == null ? '' : (monthLedger.zhLedger.amount.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">
+                                        {{monthLedger.zhLedger.backWater == null ? '&#45;&#45;' : (monthLedger.zhLedger.backWater.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.backWater.toFixed(2).split(".")[0]+'.' : monthLedger.zhLedger.backWater)}}<span style="color: #c2c1c1;">{{monthLedger.zhLedger.backWater == null ? '' : (monthLedger.zhLedger.backWater.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class=" f14">
+                                        {{monthLedger.zhLedger.drawAmount == null ? '&#45;&#45;' : (monthLedger.zhLedger.drawAmount.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.drawAmount.toFixed(2).split(".")[0]+'.' : monthLedger.zhLedger.drawAmount)}}<span style="color: #c2c1c1;">{{monthLedger.zhLedger.drawAmount == null ? '' : (monthLedger.zhLedger.drawAmount.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">
+                                        {{monthLedger.zhLedger.ykAmount == null ? '&#45;&#45;' : (monthLedger.zhLedger.ykAmount.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.ykAmount.toFixed(2).split(".")[0]+'.' : monthLedger.zhLedger.ykAmount)}}<span style="color: #c2c1c1;">{{monthLedger.zhLedger.ykAmount == null ? '' : (monthLedger.zhLedger.ykAmount.toString().indexOf('.')!=-1 ? monthLedger.zhLedger.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                </tr>
+
+                                <tr class="hide" :id="monthLedger.drawId" v-if="monthLedger.zhLedgerTotalList != null">
+                                    <td colspan="7" class="no-padding">
+                                        <table class="t-1" v-for="zh in monthLedger.zhLedgerTotalList">
+                                            <tbody class="fn-hover">
+                                            <tr class="">
+                                                <td width="14%" class="bg6"></td>
+                                                <td width="14%">{{zh.betRule}}</td>
+                                                <td width="14%" class="bg3 f14">{{zh.exchangeCount == null ? '--' : zh.exchangeCount}}</td>
+                                                <td width="14%" class="f14">
+                                                    {{zh.amount == null ? '--' : (zh.amount.toString().indexOf('.')!=-1 ? zh.amount.toFixed(2).split(".")[0]+'.' : zh.amount)}}<span style="color: #c2c1c1;">{{zh.amount == null ? '' : (zh.amount.toString().indexOf('.')!=-1 ? zh.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="bg3 f14">
+                                                    {{zh.backWater == null ? '--' : (zh.backWater.toString().indexOf('.')!=-1 ? zh.backWater.toFixed(2).split(".")[0]+'.' : zh.backWater)}}<span style="color: #c2c1c1;">{{zh.backWater == null ? '' : (zh.backWater.toString().indexOf('.')!=-1 ? zh.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="f14">
+                                                    {{zh.drawAmount == null ? '--' : (zh.drawAmount.toString().indexOf('.')!=-1 ? zh.drawAmount.toFixed(2).split(".")[0]+'.' : zh.drawAmount)}}<span style="color: #c2c1c1;">{{zh.drawAmount == null ? '' : (zh.drawAmount.toString().indexOf('.')!=-1 ? zh.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="bg3 f14">
+                                                    {{zh.ykAmount == null ? '--' : (zh.ykAmount.toString().indexOf('.')!=-1 ? zh.ykAmount.toFixed(2).split(".")[0]+'.' : zh.ykAmount)}}<span style="color: #c2c1c1;">{{zh.ykAmount == null ? '' : (zh.ykAmount.toString().indexOf('.')!=-1 ? zh.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr v-if="zh.ledgerTotalDetailResList != null">
+                                                <td colspan="7" class="no-padding">
+                                                    <table class="t-1">
+                                                        <tbody class="fn-hover" >
+                                                        <tr class="bg5" v-for="detail in zh.ledgerTotalDetailResList" >
+                                                            <td width="14%" class="bg6"></td>
+                                                            <td width="14%">{{detail.betRule}}</td>
+                                                            <td width="14%" class="bg3 f14">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                            <td width="14%" class="f14">
+                                                                {{detail.amount == null ? '--' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[0]+'.' : detail.amount)}}<span style="color: #c2c1c1;">{{detail.amount == null ? '' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                            <td width="14%" class="bg3 f14">
+                                                                {{detail.backWater == null ? '--' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[0]+'.' : detail.backWater)}}<span style="color: #c2c1c1;">{{detail.backWater == null ? '' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                            <td width="14%" class="f14">
+                                                                {{detail.drawAmount == null ? '--' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[0]+'.' : detail.drawAmount)}}<span style="color: #c2c1c1;">{{detail.drawAmount == null ? '' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                            <td width="14%" class="bg3 f14">
+                                                                {{detail.ykAmount == null ? '--' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[0]+'.' : detail.ykAmount)}}<span style="color: #c2c1c1;">{{detail.ykAmount == null ? '' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr class="fn-hover" v-if="monthLedger.shLedger != null">
+                                    <td width="14%" class="bg3">
+                                    </td>
+                                    <td width="14%">
+                                        <span class="ico-open"></span>
+                                        <a href="javascript:void(0)" class="fn-getledger" period_no="22329" member_id="74" ledger_level="10" @click="shiHuoTotal2(monthLedger.drawId)">{{$t('totalPhysicalGoods')}}</a>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">{{monthLedger.shLedger.exchangeCount == null ? '&#45;&#45;' : monthLedger.shLedger.exchangeCount}}</td>
+                                    <td width="14%" class=" f14">
+                                        {{monthLedger.shLedger.amount == null ? '&#45;&#45;' : (monthLedger.shLedger.amount.toString().indexOf('.')!=-1 ? monthLedger.shLedger.amount.toFixed(2).split(".")[0]+'.' : monthLedger.shLedger.amount)}}<span style="color: #c2c1c1;">{{monthLedger.shLedger.amount == null ? '' : (monthLedger.shLedger.amount.toString().indexOf('.')!=-1 ? monthLedger.shLedger.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">
+                                        {{monthLedger.shLedger.backWater == null ? '&#45;&#45;' : (monthLedger.shLedger.backWater.toString().indexOf('.')!=-1 ? monthLedger.shLedger.backWater.toFixed(2).split(".")[0]+'.' : monthLedger.shLedger.backWater)}}<span style="color: #c2c1c1;">{{monthLedger.shLedger.backWater == null ? '' : (monthLedger.shLedger.backWater.toString().indexOf('.')!=-1 ? monthLedger.shLedger.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class=" f14">
+                                        {{monthLedger.shLedger.drawAmount == null ? '&#45;&#45;' : (monthLedger.shLedger.drawAmount.toString().indexOf('.')!=-1 ? monthLedger.shLedger.drawAmount.toFixed(2).split(".")[0]+'.' : monthLedger.shLedger.drawAmount)}}<span style="color: #c2c1c1;">{{monthLedger.shLedger.drawAmount == null ? '' : (monthLedger.shLedger.drawAmount.toString().indexOf('.')!=-1 ? monthLedger.shLedger.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                    <td width="14%" class="bg3 f14">
+                                        {{monthLedger.shLedger.ykAmount == null ? '&#45;&#45;' : (monthLedger.shLedger.ykAmount.toString().indexOf('.')!=-1 ? monthLedger.shLedger.ykAmount.toFixed(2).split(".")[0]+'.' : monthLedger.shLedger.ykAmount)}}<span style="color: #c2c1c1;">{{monthLedger.shLedger.ykAmount == null ? '' : (monthLedger.shLedger.ykAmount.toString().indexOf('.')!=-1 ? monthLedger.shLedger.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                    </td>
+                                </tr>
+
+                                <tr class="hide" :id="'sh' + monthLedger.drawId" v-if="monthLedger.shLedgerTotalList != null">
+                                    <td colspan="7" class="no-padding">
+                                        <table class="t-1" v-for="sh in monthLedger.shLedgerTotalList">
+                                            <tbody class="fn-hover">
+                                            <tr class="">
+                                                <td width="14%" class="bg6"></td>
+                                                <td width="14%">{{sh.betRule}}</td>
+                                                <td width="14%" class="bg3 f14">{{sh.exchangeCount == null ? '--' : sh.exchangeCount}}</td>
+                                                <td width="14%" class="f14">
+                                                    {{sh.amount == null ? '--' : (sh.amount.toString().indexOf('.')!=-1 ? sh.amount.toFixed(2).split(".")[0]+'.' : sh.amount)}}<span style="color: #c2c1c1;">{{sh.amount == null ? '' : (sh.amount.toString().indexOf('.')!=-1 ? sh.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="bg3 f14">
+                                                    {{sh.backWater == null ? '--' : (sh.backWater.toString().indexOf('.')!=-1 ? sh.backWater.toFixed(2).split(".")[0]+'.' : sh.backWater)}}<span style="color: #c2c1c1;">{{sh.backWater == null ? '' : (sh.backWater.toString().indexOf('.')!=-1 ? sh.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="f14">
+                                                    {{sh.drawAmount == null ? '--' : (sh.drawAmount.toString().indexOf('.')!=-1 ? sh.drawAmount.toFixed(2).split(".")[0]+'.' : sh.drawAmount)}}<span style="color: #c2c1c1;">{{sh.drawAmount == null ? '' : (sh.drawAmount.toString().indexOf('.')!=-1 ? sh.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                                <td width="14%" class="bg3 f14">
+                                                    {{sh.ykAmount == null ? '--' : (sh.ykAmount.toString().indexOf('.')!=-1 ? sh.ykAmount.toFixed(2).split(".")[0]+'.' : sh.ykAmount)}}<span style="color: #c2c1c1;">{{sh.ykAmount == null ? '' : (sh.ykAmount.toString().indexOf('.')!=-1 ? sh.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr v-if="sh.ledgerTotalDetailResList != null">
+                                                <td colspan="7" class="no-padding">
+                                                    <table class="t-1">
+                                                        <tbody class="fn-hover" >
+                                                        <tr class="bg5" v-for="detail in sh.ledgerTotalDetailResList" >
+                                                            <td width="14%" class="bg6"></td>
+                                                            <td width="14%">{{detail.betRule}}</td>
+                                                            <td width="14%" class="bg3 f14">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                            <td width="14%" class="f14">
+                                                                {{detail.amount == null ? '--' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[0]+'.' : detail.amount)}}<span style="color: #c2c1c1;">{{detail.amount == null ? '' : (detail.amount.toString().indexOf('.')!=-1 ? detail.amount.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                            <td width="14%" class="bg3 f14">
+                                                                {{detail.backWater == null ? '--' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[0]+'.' : detail.backWater)}}<span style="color: #c2c1c1;">{{detail.backWater == null ? '' : (detail.backWater.toString().indexOf('.')!=-1 ? detail.backWater.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                            <td width="14%" class="f14">
+                                                                {{detail.drawAmount == null ? '--' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[0]+'.' : detail.drawAmount)}}<span style="color: #c2c1c1;">{{detail.drawAmount == null ? '' : (detail.drawAmount.toString().indexOf('.')!=-1 ? detail.drawAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                            <td width="14%" class="bg3 f14">
+                                                                {{detail.ykAmount == null ? '--' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[0]+'.' : detail.ykAmount)}}<span style="color: #c2c1c1;">{{detail.ykAmount == null ? '' : (detail.ykAmount.toString().indexOf('.')!=-1 ? detail.ykAmount.toFixed(2).split(".")[1] : '')}}</span>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody v-else>
+                    <tr><td colspan="7" i18n="ledger.table.noData">暂无数据！</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    const messages = {
+        zh: {
+            total:"总合计",
+            totalGoods:"总货合计",
+            totalPhysicalGoods:"实货合计",
+        },
+        th: {
+            total:"รวมทั้งหมด",
+            totalGoods:"ยอดรวมสินค้า",
+            totalPhysicalGoods:"ยอดรวมสินค้าที่มีอยู่จริง",
+        }
+    }
+
+    var moduleName = "ledger";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.initDataList();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        vm.initDataList();
+    }
+
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            monthTotal: [],
+            roleName: "",
+            yearMonthList: "",
+            monthData: "",
+            month: "",
+            all: "",
+            zhTotal: {},
+            shTotal: {},
+            zhList: [],
+            shList:[],
+        },
+        methods: {
+            initDataList() {
+                const monthQuery = GetQueryString("months");
+                this.all = GetQueryString("all");
+                if (monthQuery != null && monthQuery != "" && monthQuery != undefined) {
+                    this.month = monthQuery;
+                    this.monthData = monthQuery;
+                }
+                const _this = this;
+                $.ajax({
+                    url: HOST + "draw/getDrawList68"
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            $("#start_period_no").html("");
+                            $("#end_period_no").html("");
+                            let c = 1;
+                            let startDraw = GetQueryString("startDraw");
+                            let endDraw = GetQueryString("endDraw");
+                            // 期号select
+                            for(const i in res.data) {
+                                if (startDraw != "" && startDraw != null && startDraw != undefined) {
+                                    if (startDraw == res.data[i].drawId) {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"' selected>"+res.data[i].drawIdStr+"</option>")
+                                    }else {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                    }
+                                }else {
+                                    if (c == res.data.length) {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"' selected>"+res.data[i].drawIdStr+"</option>")
+                                    }else {
+                                        $("#start_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                    }
+                                }
+
+                                c ++;
+                            }
+                            for(const i in res.data) {
+                                if (endDraw != "" && endDraw != null && endDraw != undefined) {
+                                    if (endDraw == res.data[i].drawId) {
+                                        $("#end_period_no").append("<option value='"+res.data[i].drawId+"' selected>"+res.data[i].drawIdStr+"</option>")
+                                    }else {
+                                        $("#end_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                    }
+                                }else {
+                                    $("#end_period_no").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawIdStr+"</option>")
+                                }
+
+                            }
+                            _this.initList();
+                        } else {
+                            layer.msg(i18np.prop('ledger.ajax.errorMsg'));
+                        }
+                    }
+                });
+            },
+            initList() {
+                layer.msg(i18np.prop('ledger.load.dataLoading'),{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                const _this = this;
+                let startDraw = "";
+                let endDraw = "";
+                if (GetQueryString("all") == 1) {
+                    startDraw = $("#start_period_no").val();
+                    endDraw = $("#end_period_no").val();
+                }
+                $.ajax({
+                    url: HOST + "ledger/initMonthLedger?startDraw=" + startDraw + "&endDraw=" + endDraw + "&month=" + _this.month
+                    , type: "get"
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            _this.yearMonthList = res.data.yearMonthList;
+                            _this.zhTotal = res.data.zhTotal;
+                            _this.zhList = res.data.zhTotalList;
+                            _this.shTotal = res.data.shTotal;
+                            _this.shList = res.data.shTotalList;
+                            _this.monthTotal = res.data.monthTotal;
+                        } else {
+                            layer.msg(i18np.prop('ledger.ajax.errorMsg'));
+                        }
+                    }
+                });
+            },
+            totalCargo() {
+                if ($("#totalCargoDetail").is(":hidden")) {
+                    $("#totalCargoDetail").show();
+                }else {
+                    $("#totalCargoDetail").hide();
+                }
+            },
+            totalCargo2(drawId) {
+                if ($("#" + drawId).is(":hidden")) {
+                    $("#" + drawId).show();
+                }else {
+                    $("#" + drawId).hide();
+                }
+            },
+            shiHuoTotal () {
+                if ($("#shiHuoDetail").is(":hidden")) {
+                    $("#shiHuoDetail").show();
+                }else {
+                    $("#shiHuoDetail").hide();
+                }
+            },
+            shiHuoTotal2 (drawId) {
+                if ($("#sh" + drawId).is(":hidden")) {
+                    $("#sh" + drawId).show();
+                }else {
+                    $("#sh" + drawId).hide();
+                }
+            },
+            changeSelect () {
+                const startDraw = $("#start_period_no").val();
+                const endDraw = $("#end_period_no").val();
+                window.location.href = 'yuefelei.html?all=1&startDraw=' + startDraw + "&endDraw=" + endDraw
+            }
+        }
+    })
+    // vm.initDataList();
+</script>
+</body>
+</html>

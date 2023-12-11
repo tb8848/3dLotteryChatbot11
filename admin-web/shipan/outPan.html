@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>出货盘</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="../css/style-Permutation5.css" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css" type="text/css" rel="stylesheet">
+    <style type="text/css">
+        .drawCode{
+            background-color: silver;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="main">
+    <div class="module">
+        <div name="module" id="handicap_sell" class="m5 mt10 handicap">
+            <div name="module" id="guide_handicap" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="shipan.menu.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="shipan.menu.outPan">   出货盘  </span>
+                </div>
+                <div class="fr">
+                    <a href="outPan.html" class="fb red" i18n="shipan.menu.outPan">《出货盘</a> |
+                    <a href="outDetail.html" class="" i18n="shipan.menu.outDetail">出货明细</a> |
+                    <a href="winOutDetail.html" class="" i18n="shipan.menu.winOutDetail">出货中奖明细</a> |
+                    <a href="javascript:void(0)" class="fn-out" onclick="popChild(1)" i18n="shipan.menu.chuhuo">出货</a> |
+                    <a href="outImport.html" class="" i18n="shipan.menu.outImport">出货导入</a> |
+                    <a href="download.html" i18n="shipan.menu.download">下载》</a> |
+                    <a href="shiHuoDetail.html" class="" i18n="shipan.menu.shiHuoDetail">实货明细</a> |
+                    <a href="shiHuoZhongJiang.html" class="" i18n="shipan.menu.shiHuoZhongJiang">中奖明细</a> |
+                    <a href="shiPan-3d.html" class="" i18n="shipan.menu.shiPan">实盘</a>|
+                    <!--                    <a href="baopai_shipan.html" class="" i18n="shipan.menu.baopai.shipan">包牌实盘</a> |-->
+                    <a href="xupan-3d.html" class="" i18n="shipan.menu.xupan">虚盘</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td colspan="20" id="nav_fixnum">
+                            <span i18n="shipan.table.chuhuopan">出货盘</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span id="settingList">
+<!--                                <a href="#!handicap_reality.handicap_sell|handicap_sell?link=out&amp;fix_num=20"-->
+<!--                                class="white ">二定位(300)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                <a href="#!handicap_reality.handicap_sell|handicap_sell?link=out&amp;fix_num=30"-->
+<!--                                class="white ">三定位(0)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                <a href="#!handicap_reality.handicap_sell|handicap_sell?link=out&amp;fix_num=40"-->
+<!--                                class="white yellow">四定位(1)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                <a href="#!handicap_reality.handicap_sell|handicap_sell?link=out&amp;fix_num=21"-->
+<!--                                class="white ">二字现(0)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                <a href="#!handicap_reality.handicap_sell|handicap_sell?link=out&amp;fix_num=31"-->
+<!--                                class="white ">三字现(1)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                <a href="#!handicap_reality.handicap_sell|handicap_sell?link=out&amp;fix_num=41"-->
+<!--                                class="white ">四字现(0)</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            </span>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody id="dataHeader">
+                    <!--                        <tr class="bg3">-->
+                    <!--                            <td class="tc"> 口口XX <div> 负值排行(24) </div> <div> 正值个数(96) </div> </td>-->
+                    <!--                            <td class="tc"> 口X口X <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+                    <!--                            <td class="tc"> 口XX口 <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+                    <!--                            <td class="tc"> X口X口 <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+                    <!--                            <td class="tc"> X口口X <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+                    <!--                            <td class="tc"> XX口口 <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+                    <!--                        </tr>-->
+                    <!--                        <tr class="bg3">-->
+                    <!--                            <td class="tc" colspan="20"> 四定位 负值排行(1) 正值个数(9999)</td>-->
+                    <!--                        </tr>-->
+                    <!--                        <tr>-->
+                    <!--                            <td class="l "><strong class="blue">[1]</strong> 3333</td>-->
+                    <!--                            <td class="r "> 1<br> <span class="red">-9</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                            <td class="l">&#45;&#45;</td>-->
+                    <!--                            <td class="r">0<br><span class="red">0</span></td>-->
+                    <!--                        </tr>-->
+                    </tbody>
+                    <tbody class="list" id="tbody">
+                        <tr><td colspan="20" style="text-align: center"><img src="../img/load.gif"></td></tr>
+<!--                        <tr class="bg3">-->
+<!--                            <td class="tc"> 口口XX <div> 负值排行(24) </div> <div> 正值个数(96) </div> </td>-->
+<!--                            <td class="tc"> 口X口X <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+<!--                            <td class="tc"> 口XX口 <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+<!--                            <td class="tc"> X口X口 <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+<!--                            <td class="tc"> X口口X <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+<!--                            <td class="tc"> XX口口 <div> 负值排行(0) </div> <div> 正值个数(100) </div> </td>-->
+<!--                        </tr>-->
+<!--                        <tr class="bg3">-->
+<!--                            <td class="tc" colspan="20"> 四定位 负值排行(1) 正值个数(9999)</td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="l "><strong class="blue">[1]</strong> 3333</td>-->
+<!--                            <td class="r "> 1<br> <span class="red">-9</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                            <td class="l">&#45;&#45;</td>-->
+<!--                            <td class="r">0<br><span class="red">0</span></td>-->
+<!--                        </tr>-->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div name="module" id="pager" class="pager hide">
+            第 <span class="pageindex red" id="currentPage">1</span> 页&nbsp;
+            共 <span class="pagecount red" id="totalPage">0</span> 页&nbsp;
+            共 <span class="recordcount red" id="totalCount">0</span> 条
+            <a class="fn-first shou" onclick="firstPage()" style="cursor:pointer;">首页</a>
+            <a class="fn-prev shou" onclick="prevPage()" style="cursor:pointer;">上一页</a>
+            <a class="fn-next shou" onclick="nextPage()" style="cursor:pointer;">下一页</a>
+            <a class="fn-last shou" onclick="lastPage()" style="cursor:pointer;">尾页</a>
+            <input type="number" class="input w50 fn-index" id="inputPage">
+            <input type="button" class="btn btn-gray w30 fn-go shou" value="GO" onclick="goPage()">
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+<script  type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+    var zzvalueArr=[1000,1000,90,10000,55,220,715,40,100,1000,10000,55]
+    var layer = layui.layer;
+    var $ = layui.$;
+    var curSetting=null;
+    var lmId = "2";
+    var chuhuoList=[];
+    var settingList = [];
+    var sidingList=[];
+    var pager={
+        curpage:1,
+        pages:0,
+        limit:1000
+    }
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        $.ajax({
+            url:HOST+'lotteryMethod/getAll?lotteryType=1',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    settingList = res.data;
+                    initSetting();
+                }
+            }
+        })
+    }
+
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        $.ajax({
+            url:HOST+'lotteryMethod/getAll?lotteryType=1',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    settingList = res.data;
+                    initSetting();
+                }
+            }
+        })
+    });
+
+    function popChild(tag){
+        layer.open({
+            type:2,
+            // title:'出货',
+            title:i18np.prop("shipan.menu.chuhuo"),
+            content:'kuaida.html',
+            area:['80%','650px']
+        })
+    }
+
+    function  initSetting() {
+        var html = "";
+        var dfnums = 0;
+        var cls = '';
+        for(var i=0,len=settingList.length;i<len;i++){
+            var item = settingList[i];
+            // if(item.id=='1'){
+            //     dfnums = 100;
+            // }else if(item.id=='2'){
+            //     dfnums = 100;
+            // }else if(item.id=='3'){
+            //     dfnums = 1000;
+            // }else if(item.id=='4'){
+            //     lmId = item.id;
+            //     dfnums = 10000;
+            // }
+            if(lmId!=null && item.id==lmId){
+                cls = 'yellow'
+            }else{
+                cls = ''
+            }
+            html = html + '<a href="javascript:void(0)"' +
+                'class="white '+cls+'" onclick="changeSetting(this,'+item.id+')">'+item.bettingMethod+'(<span id="total-'+item.id+'">'+dfnums+'</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;'
+        }
+        $("#settingList").html(html);
+        initBodyData();
+    }
+
+    function changeSetting(obj,_lmId){
+        $("#tbody").html('<tr><td colspan="10" style="text-align: center"><img src="../img/load.gif"></td></tr>');
+        lmId = _lmId;
+        // if(lmId=="2" || lmId=="9" || lmId=="10" || lmId=="11" || lmId=="12"){
+        //     $("#dataHeader").removeClass('hide');
+        // }else{
+        //     $("#dataHeader").addClass('hide');
+        // }
+        $(obj).addClass('yellow');
+        $(obj).siblings().removeClass('yellow');
+        $("#pager").addClass('hide');
+        initBodyData();
+    }
+
+    function initBodyData() {
+        //layer.msg("数据加载中...",{time:-1,shade:0.3,icon:16})
+        $.ajax({
+            url:HOST+'chuHuo/listAll?lmId='+lmId,
+            type:'get',
+            success:function(res){
+                //layer.closeAll();
+                if(res.code==0){
+                    chuhuoList = res.data.dataList;
+                    var lmMoneyMap = res.data.lmMoneyMap;
+                    for(var i=0,len=settingList.length;i<len;i++) {
+                        var item = settingList[i];
+                        var mid = item.id;
+                        var m = lmMoneyMap[mid];
+                        if(m==undefined || m == null){
+                            $("#total-"+item.id).html(0);
+                        }else{
+                            $("#total-"+item.id).html(m);
+                        }
+                    }
+                    __initChuhuoData();
+                }else{
+                    $("#tbody").html("");
+                    layer.msg(res.msg);
+                }
+            }
+        })
+    }
+
+
+    function __getBySettingId(lsId){
+        console.log("===================__getBySettingId",lsId);
+        for(var i=0,len=chuhuoList.length;i<len;i++){
+            if(chuhuoList[i].lotterySettingId==lsId){
+                return chuhuoList[i];
+            }
+        }
+        return null;
+    }
+
+
+    function getTotalZZValue(lmid,lsType){
+        lmid = lmid+"";
+        switch(lmid){
+            case "1":
+            case "2":
+                 return 1000;
+            case "3":
+                return 90;
+            case "4":
+                return 120;
+            case "5":
+                return 2;
+            case "6":
+                if(lsType==1){
+                    return 30
+                }else if(lsType==2){
+                    return 10;
+                }
+            case "7":
+                if(lsType==1){
+                    return 3000
+                }else if(lsType==2){
+                    return 55;
+                }
+            case "8":
+                if(lsType==1){
+                    return 270
+                }else if(lsType==2){
+                    return 810;
+                }
+            case "9":
+            case "10":
+                return 2;
+            case "11":
+            case "12":
+                return 1
+
+        }
+    }
+
+    //出货明细
+    function  __initChuhuoData(){
+        var totalFzAmount = 0;
+        for(var i=0,len=settingList.length;i<len;i++){
+            var item = settingList[i]
+            var mid = item.id;
+            var subList = item.lotterySettingList;
+            if(mid==lmId){
+                if(subList.length>1){
+                    __multiSettingData(subList);
+                }else{
+                    var settingOne = subList[0];
+                    var zzhiAmount = getTotalZZValue(mid,settingOne.typeId)
+                    var chdata = __getBySettingId(settingOne.id);
+                    var typeRow = '';
+                    if(chdata!=null){
+                        var fuzhiAmount = chdata.fuzhiAmount;
+                        totalFzAmount = accAdd(totalFzAmount,fuzhiAmount);
+
+                        zzhiAmount = accSub(zzhiAmount,chdata.zzhiAmount)
+                        typeRow = '<tr class="bg3"><td class="tc" colspan="20"> '+item.bettingMethod+' 负值排行('+fuzhiAmount+') 正值个数('+zzhiAmount+')</td></tr>';
+                        $("#dataHeader").html(typeRow).removeClass("hide");
+                        var dataList = chdata.dataList;
+                        var cells = ''
+                        var rows = '';
+                        var len1 = dataList.length;
+                        for(var j=0;j<len1;j++){
+                            var xuhao = j+1;
+                            var dd = dataList[j];
+                            if(j%10==0 && j>0){
+                                rows = rows + '<tr>'+cells+"</tr>";
+                                cells = '';
+                            }
+                            var isDraw = dd.isDraw?'drawCode':''
+                            cells = cells +'<td class="l '+isDraw+'"><strong class="blue">['+xuhao+']</strong>'+dd.buyCode+'</td>\n' +
+                                '<td class="r '+isDraw+'">'+dd.buyMoney+'<br> <span class="red">'+dd.maxLoss+'</span></td>';
+                        }
+                        var lf = parseInt(len1%10);
+                        if(lf>0 && lf<10){
+                            for(var k=0,ll=10-lf;k<ll;k++){
+                                cells = cells + '<td class="l">--</td><td class="r">0<br/><span class="red">0</span></td>';
+                            }
+                        }
+                        rows = rows + '<tr>'+cells+"</tr>";
+                        //$("#tbody").html(typeRow + rows);
+                        $("#tbody").html(rows);
+                    }else{
+                        typeRow = '<tr class="bg3">' +
+                            '<td class="tc" colspan="20"> '+item.bettingMethod+' ' +
+                            '<span>' +
+                            i18np.prop("shipan.negative.Ranking") +
+                            '</span>(0) <span>' +
+                            i18np.prop("shipan.positive.number") +
+                            '</span>('+zzhiAmount+')' +
+                            '</td>' +
+                            '</tr>';
+                        $("#dataHeader").html(typeRow).removeClass("hide");
+                        $("#tbody").html("");
+
+                    }
+
+                    //$("#total-"+lmId).html(totalFzAmount);
+                }
+            }
+        }
+    }
+
+
+    function  __initChuhuoData4(){
+        var totalFzAmount = 0;
+        for(var i=0,len=settingList.length;i<len;i++) {
+            var item = settingList[i]
+            var mid = item.id;
+            var subList = item.lotterySettingList;
+            if (mid == lmId) {
+                var settingOne = subList[0];
+                var chdata = __getBySettingId(settingOne.id);
+                if (chdata != null) {
+                    var fuzhiAmount = chdata.fuzhiAmount;
+                    totalFzAmount = accAdd(totalFzAmount, fuzhiAmount);
+                    var zzhiAmount = zzvalueArr[parseInt(lmId) - 1] - chdata.zzhiAmount
+                    var typeRow = '<tr class="bg3"><td class="tc" colspan="20"> ' + item.bettingMethod +' '+ i18np.prop('shipan.negative.Ranking') +'(' + fuzhiAmount + ') ' +
+                        i18np.prop('shipan.positive.number') +
+                        '(' + zzhiAmount + ')</td></tr>';
+                    $("#dataHeader").html(typeRow);
+                    sidingList = chdata.dataList;
+                    initPager4(sidingList.length);
+                    pagerData4();
+
+                    //$("#total-"+lmId).html(totalFzAmount)
+                }else{
+                    var zzhiAmount = zzvalueArr[parseInt(lmId)-1]
+                    var typeRow = '<tr class="bg3">' +
+                        '<td class="tc" colspan="20"> '+item.bettingMethod+' ' +
+                        '<span>' +
+                        i18np.prop("shipan.negative.Ranking") +
+                        '</span>(0) <span>' +
+                        i18np.prop("shipan.positive.number") +
+                        '</span>('+zzhiAmount+')' +
+                        '</td>' +
+                        '</tr>';
+                    $("#tbody").html(typeRow);
+                }
+            }
+        }//$("#total-"+lmId).html(totalFzAmount);
+
+    }
+
+    function initPager4(totals){ //针对四定位号码进行分页
+        pager.total = totals;
+        pager.pages = Math.ceil(totals/pager.limit);
+        $("#currentPage").html(pager.curpage);
+        $("#totalPage").html(pager.pages);
+        $("#totalCount").html(totals);
+        if(pager.pages>1){
+            $("#pager").removeClass("hide");
+        }else{
+            $("#pager").addClass("hide");
+        }
+    }
+
+    function pagerData4(){
+        $("#currentPage").html(pager.curpage);
+        var sp = (pager.curpage-1)*pager.limit;
+        var ep = pager.curpage*pager.limit;
+        if(ep>sidingList.length){
+            ep = sidingList.length
+        }
+        var dataList = sidingList.slice(sp,ep);
+        var cells = ''
+        var rows = '';
+        var len = dataList.length;
+        for(var j=0;j<len;j++){
+            var xuhao = sp+j+1;
+            var dd = dataList[j];
+            if(j%10==0 && j>0){
+                rows = rows + '<tr>'+cells+"</tr>";
+                cells = '';
+            }
+            var isDraw = dd.isDraw?'drawCode':''
+            cells = cells +'<td class="l '+isDraw+'"><strong class="blue">['+xuhao+']</strong>'+dd.buyCode+'</td>\n' +
+                '<td class="r '+isDraw+'">'+dd.buyMoney+'<br> <span class="red">'+dd.maxLoss+'</span></td>';
+        }
+        var lf = parseInt(len%10);
+        if(lf>0 && lf<10){
+            for(var i=0,ll=10-lf;i<ll;i++){
+                cells = cells + '<td class="l">--</td><td class="r">0<br/><span class="red">0</span></td>';
+            }
+        }
+        rows = rows + '<tr>'+cells+"</tr>";
+        //$("#tbody").html(typeRow + rows);
+        $("#tbody").html(rows);
+    }
+
+
+    function firstPage(){//第一页
+        console.log(("=======toFirst"))
+        if (pager.curpage > 1) {
+            pager.curpage = 1;
+            pagerData4();
+        }
+    }
+    function prevPage() {
+        if (pager.curpage > 1) {
+            pager.curpage--;
+            pagerData4();
+        }
+    }
+
+    function nextPage() {//下一页
+        console.log(("=======toNext"))
+        if (pager.curpage < pager.pages) {
+            pager.curpage++;
+            pagerData4();
+        }
+    }
+
+    function lastPage() {//尾页
+        console.log(("=======toLast"))
+        if (pager.curpage < pager.pages) {
+            pager.curpage = pager.pages;
+            pagerData4();
+        }
+    }
+
+    function goPage() {//指定页
+        var toPage = $("#inputPage").val();
+        if (toPage) {
+            var topage = parseInt(toPage);
+            if (topage >= 1 && topage <= pager.pages) {
+                pager.curpage = topage;
+                pagerData4();
+            }
+        }
+    }
+
+    function __multiSettingData(subList) {
+        var typeRow = '';
+        var dataRow = '';
+        var totalFzAmount = 0;
+        let tdWidthStyle = "";
+        var len = subList.length;
+        if(len==14){
+            tdWidthStyle = 'style="width: 7%"';
+        }
+
+        for(var i=0;i<len;i++){
+            var item = subList[i];
+            var chdata = __getBySettingId(item.id);
+            var zzhiAmount = getTotalZZValue(lmId,item.typeId)
+            if(null == chdata){
+                typeRow = typeRow + ' <td class="tc" '+tdWidthStyle+'> '+item.bettingRule+' <div> <span i18n="shipan.negative.Ranking">' +
+                    i18np.prop("shipan.negative.Ranking") +
+                    '</span>(0) </div> <div> <span i18n="shipan.positive.number">' +
+                    i18np.prop("shipan.positive.number") +
+                    '</span>('+zzhiAmount+') </div> </td>';
+                dataRow = dataRow + '<td class="vt" '+tdWidthStyle+'>&nbsp;</td>';
+            }else{
+                var fuzhiAmount = chdata.fuzhiAmount;
+                totalFzAmount = accAdd(totalFzAmount,fuzhiAmount);
+                zzhiAmount = accSub(zzhiAmount,chdata.zzhiAmount)
+                typeRow = typeRow + ' <td class="tc" '+tdWidthStyle+'> '+item.bettingRule+' <div> <span i18n="shipan.negative.Ranking">' +
+                    i18np.prop("shipan.negative.Ranking") +
+                    '</span>('+fuzhiAmount+') </div> <div> <span i18n="shipan.positive.number">' +
+                    i18np.prop("shipan.positive.number") +
+                    '</span>('+zzhiAmount+') </div> </td>';
+                var dataList = chdata.dataList;
+
+                var cells = ''
+                var len1 = dataList.length;
+                /**
+                 * <td class="vt" width="16.6%">  <table width="100%"> <tbody><tr> <td class="" width="50%"> <strong class="blue">[1]</strong> 12XX </td> <td class=""> 11<br> <span class="red">-1076</span> </td> </tr> </tbody></table>  <table width="100%"> <tbody><tr> <td class="" width="50%"> <strong class="blue">[2]</strong> 45XX </td> <td class=""> 10<br> <span class="red">-976</span> </td> </tr> </tbody></table>  <table width="100%"> <tbody><tr> <td class="" width="50%"> <strong class="blue">[3]</strong> 34XX </td> <td class=""> 2<br> <span class="red">-176</span> </td> </tr> </tbody></table>  <table width="100%"> <tbody><tr> <td class="" width="50%"> <strong class="blue">[4]</strong> 23XX </td> <td class=""> 1<br> <span class="red">-76</span> </td> </tr> </tbody></table>  </td>
+                 */
+                for(var j=0;j<len1;j++){
+                    var dd = dataList[j];
+                    cells = cells +'<table width="100%"> <tbody><tr>' +
+                        '<td class="" width="50%"><strong class="blue">['+(j+1)+']</strong>'+dd.buyCode+'</td>' +
+                        '<td class="">'+dd.buyMoney+'<br> <span class="red">'+dd.maxLoss+'</span></td>'
+                        +'</tr></tbody></table>';
+                }
+                dataRow = dataRow + '<td class="vt" '+tdWidthStyle+'>'+cells+'</td>';
+            }
+        }
+
+        typeRow = '<tr>'+typeRow+"</tr>";
+        dataRow = '<tr>'+dataRow+'</tr>'
+        $("#tbody").html(typeRow + dataRow);
+        $("#dataHeader").addClass("hide").html("");
+        //$("#total-"+lmId).html(totalFzAmount);
+
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>包牌赔率变动设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+</head>
+<body>
+<div id="main" class="main" 85a80f9c-7997-4dd0-8180-7c30b95e1a3d="2022120282128">
+    <div class="module package-type">
+        <div name="module" id="st_package_odds" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl"><a href="#!online_account">位置 </a><span class="red">&gt;&gt;  包牌赔率变动设置  </span></div>
+                <div class="fr"><a href="basicSetting.html" class="">基本设置</a> | <a
+                        href="openQuotation.html" class="">开盘设置</a> | <a
+                        href="oddsChange.html" class="">赔率变动设置</a> | <a
+                        href="packageOddsChange.html"
+                        class="fb red">包牌赔率变动设置</a> | <a href="dingPan.html"
+                                                   class="">定盘</a> | <a
+                        href="notice.html" class="">公告设置</a> | <a
+                        href="package.html" class="">包牌设置</a> | <a
+                        href="subAccount.html" class="">子账号</a> | <a href="accountSetting.html" class="">基本资料</a> | <a
+                        href="updatePassword.html" class="">修改密码</a></div>
+            </div>
+            <div class="mt10">
+                <form><input type="hidden" id="is_package" name="is_package" value="1">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="11">
+                                <div id="bar_options"><a
+                                        href="#!setting.st_package_odds|st_package_odds?dict_no_type_id=0&amp;fix_num=20&amp;type=package_odds&amp;is_package=1"
+                                        class="white ">二定位</a> <select class="fn-package-odds" fix_num="20">
+                                    <option value="0">全部</option>
+                                    <option value="1">口口XX</option>
+                                    <option value="2">口X口X</option>
+                                    <option value="3">口XX口</option>
+                                    <option value="4">X口X口</option>
+                                    <option value="5">X口口X</option>
+                                    <option value="6">XX口口</option>
+                                </select> &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                        href="#!setting.st_package_odds|st_package_odds?dict_no_type_id=0&amp;fix_num=30&amp;type=package_odds&amp;is_package=1"
+                                        class="white ">三定位</a> <select class="fn-package-odds" fix_num="30">
+                                    <option value="0">全部</option>
+                                    <option value="7">口口口X</option>
+                                    <option value="8">口口X口</option>
+                                    <option value="9">口X口口</option>
+                                    <option value="10">X口口口</option>
+                                </select> &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                        href="#!setting.st_package_odds|st_package_odds?dict_no_type_id=0&amp;fix_num=40&amp;type=package_odds&amp;is_package=1"
+                                        fix_num="40" class="white ">四定位</a> &nbsp;&nbsp;&nbsp;&nbsp; <a
+                                        href="#!setting.st_package_odds|st_package_odds?dict_no_type_id=0&amp;fix_num=0&amp;is_package=1&amp;type=package_odds"
+                                        fix_num="0" class="white yellow">查看全部</a></div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+            <form id="form3" novalidate="novalidate"><input type="hidden" id="is_package" value="1"> <input
+                    type="hidden" id="dict_no_type_id" value="0"> <input type="hidden" id="fix_num" value="0">
+                <div class="mb10 tc sep-btn"><input type="submit" value="保存" class="mt10 btn fn-btnUpdate"> &nbsp;&nbsp;
+                    <a href="javascript:void(0)" onclick="G.util.reload()" class="btn fn-btnUpdate f13">刷新</a></div>
+                <table class="t-1 table-pack tc border-separate">
+                    <tbody>
+                    <tr class="separate">
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">口口XX</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=20&amp;no_type_id=1&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(12000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="0" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="0" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="1" type_name="口口XX"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">口X口X</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=20&amp;no_type_id=2&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(12000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="0" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="0" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="2" type_name="口X口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">口XX口</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=20&amp;no_type_id=3&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(7000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="0" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="0" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="3" type_name="口XX口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="separate">
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">X口X口</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=20&amp;no_type_id=4&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(12000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="0" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="0" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="4" type_name="X口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">X口口X</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=20&amp;no_type_id=5&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(12000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="0" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="0" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="5" type_name="X口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">XX口口</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=20&amp;no_type_id=6&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(12000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="0" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="0" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="6" type_name="XX口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="separate">
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">口口口X</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=30&amp;no_type_id=7&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(1000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 package-list" type_id="7" type_name="口口口X"><input class="sep-input"
+                                                                                                 type="hidden"
+                                                                                                 value="700500"
+                                                                                                 _name="package_id"
+                                                                                                 name="package_id">
+                                    <input class="sep-input" type="hidden" value="0" _name="odds_limit"
+                                           name="odds_limit"> <input class="sep-input" type="hidden" value="0"
+                                                                     _name="hold_money_avg" name="hold_money_avg">
+                                    <input class="sep-input" type="hidden" value="500" _name="bet_no" name="bet_no">
+                                    <input class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35">500</td>
+                                    <td width="15%" class="minw35">1010</td>
+                                    <td width="20%">1000</td>
+                                    <td width="20%" class="minw65"><input class="sep-input w30" type="text" value=""
+                                                                          _name="odds" name="odds700500" maxlength="7">
+                                    </td>
+                                    <td width="15%" class="minw35" style="    "> 0</td>
+                                    <td width="20%" class="blue-text minw55"><input class="sep-input" type="text"
+                                                                                    value="" _name="one_item_limit"
+                                                                                    name="one_item_limit700500" min="0"
+                                                                                    maxlength="7" positive="true"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="7" type_name="口口口X"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">口口X口</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=30&amp;no_type_id=8&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(1000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 package-list" type_id="8" type_name="口口X口"><input class="sep-input"
+                                                                                                 type="hidden"
+                                                                                                 value="800500"
+                                                                                                 _name="package_id"
+                                                                                                 name="package_id">
+                                    <input class="sep-input" type="hidden" value="0" _name="odds_limit"
+                                           name="odds_limit"> <input class="sep-input" type="hidden" value="0"
+                                                                     _name="hold_money_avg" name="hold_money_avg">
+                                    <input class="sep-input" type="hidden" value="500" _name="bet_no" name="bet_no">
+                                    <input class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35">500</td>
+                                    <td width="15%" class="minw35">1010</td>
+                                    <td width="20%">1000</td>
+                                    <td width="20%" class="minw65"><input class="sep-input w30" type="text" value=""
+                                                                          _name="odds" name="odds800500" maxlength="7">
+                                    </td>
+                                    <td width="15%" class="minw35" style="    "> 0</td>
+                                    <td width="20%" class="blue-text minw55"><input class="sep-input" type="text"
+                                                                                    value="" _name="one_item_limit"
+                                                                                    name="one_item_limit800500" min="0"
+                                                                                    maxlength="7" positive="true"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="8" type_name="口口X口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">口X口口</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=30&amp;no_type_id=9&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(1000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 package-list" type_id="9" type_name="口X口口"><input class="sep-input"
+                                                                                                 type="hidden"
+                                                                                                 value="900500"
+                                                                                                 _name="package_id"
+                                                                                                 name="package_id">
+                                    <input class="sep-input" type="hidden" value="0" _name="odds_limit"
+                                           name="odds_limit"> <input class="sep-input" type="hidden" value="0"
+                                                                     _name="hold_money_avg" name="hold_money_avg">
+                                    <input class="sep-input" type="hidden" value="500" _name="bet_no" name="bet_no">
+                                    <input class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35">500</td>
+                                    <td width="15%" class="minw35">1010</td>
+                                    <td width="20%">1000</td>
+                                    <td width="20%" class="minw65"><input class="sep-input w30" type="text" value=""
+                                                                          _name="odds" name="odds900500" maxlength="7">
+                                    </td>
+                                    <td width="15%" class="minw35" style="    "> 0</td>
+                                    <td width="20%" class="blue-text minw55"><input class="sep-input" type="text"
+                                                                                    value="" _name="one_item_limit"
+                                                                                    name="one_item_limit900500" min="0"
+                                                                                    maxlength="7" positive="true"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="9" type_name="口X口口"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="separate">
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">X口口口</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=30&amp;no_type_id=10&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(1000)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 package-list" type_id="10" type_name="X口口口"><input class="sep-input"
+                                                                                                  type="hidden"
+                                                                                                  value="1000500"
+                                                                                                  _name="package_id"
+                                                                                                  name="package_id">
+                                    <input class="sep-input" type="hidden" value="0" _name="odds_limit"
+                                           name="odds_limit"> <input class="sep-input" type="hidden" value="0"
+                                                                     _name="hold_money_avg" name="hold_money_avg">
+                                    <input class="sep-input" type="hidden" value="500" _name="bet_no" name="bet_no">
+                                    <input class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35">500</td>
+                                    <td width="15%" class="minw35">1010</td>
+                                    <td width="20%">1000</td>
+                                    <td width="20%" class="minw65"><input class="sep-input w30" type="text" value=""
+                                                                          _name="odds" name="odds1000500" maxlength="7">
+                                    </td>
+                                    <td width="15%" class="minw35" style="    "> 0</td>
+                                    <td width="20%" class="blue-text minw55"><input class="sep-input" type="text"
+                                                                                    value="" _name="one_item_limit"
+                                                                                    name="one_item_limit1000500" min="0"
+                                                                                    maxlength="7" positive="true"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="10" type_name="X口口口"><input class="sep-input" type="hidden"
+                                                                                      value="" _name="package_id"
+                                                                                      name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="separate">
+                        <td class="border0">
+                            <table class="table-full f13 maxw650 ma">
+                                <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-pack"><span class="fb">四定位</span> <br> <a
+                                            href="#!setting.st_batchodds|st_batchodds?fix_num=40&amp;no_type_id=11&amp;ispackage=1">[包牌分批]</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-pack1">
+                                    <td>组数</td>
+                                    <td>包牌<br>赔率</td>
+                                    <td>当前<br>分批</td>
+                                    <td>变动赔率<br>(跟分批走)</td>
+                                    <td>已拦<br>金额</td>
+                                    <td>单项上限<br>(150)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="f13 package-list" type_id="11" type_name="四定位"><input class="sep-input"
+                                                                                                 type="hidden"
+                                                                                                 value="1105000"
+                                                                                                 _name="package_id"
+                                                                                                 name="package_id">
+                                    <input class="sep-input" type="hidden" value="9900" _name="odds_limit"
+                                           name="odds_limit"> <input class="sep-input" type="hidden" value="0"
+                                                                     _name="hold_money_avg" name="hold_money_avg">
+                                    <input class="sep-input" type="hidden" value="5000" _name="bet_no" name="bet_no">
+                                    <input class="sep-input" type="hidden" value="true" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35">5000</td>
+                                    <td width="15%" class="minw35">10100</td>
+                                    <td width="20%">10000</td>
+                                    <td width="20%" class="minw65"><input class="sep-input w30" type="text" value="9900"
+                                                                          _name="odds" name="odds1105000" maxlength="7">
+                                    </td>
+                                    <td width="15%" class="minw35" style="    "> 1</td>
+                                    <td width="20%" class="blue-text minw55"><input class="sep-input" type="text"
+                                                                                    value="" _name="one_item_limit"
+                                                                                    name="one_item_limit1105000" min="0"
+                                                                                    maxlength="7" positive="true"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                <tr class="f13 " type_id="11" type_name="四定位"><input class="sep-input" type="hidden"
+                                                                                     value="" _name="package_id"
+                                                                                     name="package_id"> <input
+                                        class="sep-input" type="hidden" value="" _name="odds_limit" name="odds_limit">
+                                    <input class="sep-input" type="hidden" value="" _name="hold_money_avg"
+                                           name="hold_money_avg"> <input class="sep-input" type="hidden" value=""
+                                                                         _name="bet_no" name="bet_no"> <input
+                                            class="sep-input" type="hidden" value="false" _name="is_hot" name="is_hot">
+                                    <td width="10%" class="minw35"></td>
+                                    <td width="15%" class="minw35"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%" class="minw65"></td>
+                                    <td width="15%" class="minw35" style="  "></td>
+                                    <td width="20%" class="blue-text minw55"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="mt10 tc sep-btn"><input type="submit" value="保存" class="btn fn-btnUpdate"></div>
+            </form>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+    </div>
+</div>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script>
+    var $ = layui.jquery;
+    const vm = new Vue({
+        el: '#main',
+        data: {
+            dataList: [],
+        },
+        methods: {
+
+        }
+    })
+</script>
+</body>
+</html>

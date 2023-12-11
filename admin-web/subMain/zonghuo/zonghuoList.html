@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>总货明细</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main1">
+    <template>
+    <div class="module">
+        <div name="module" id="awardreadadmin" class="m5 mt10">
+            <input type="hidden" id="param_month" value="period_no=">
+            <div class="guide" id="top">
+                <div class="fl">
+                    <a href="#!online_account" i18n="zh.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="zh.top.zhDetail"> 总货明细   </span>
+                </div>
+                <div class="fr">
+                    <a href="zonghuoList.html" class="fb red" i18n="zh.top.zhDetail">总货明细</a> |
+                    <a href="zhongjiang.html" class="" i18n="zh.top.winLotteryDetail">中奖明细</a> |
+                    <a href="lanHuoList.html" class="" i18n="zh.top.lhDetail">拦货明细</a> |
+                    <!--<a href="" class="" style="font-weight: 200;color: black;pointer-events: none;" i18n="lanhuo.backup">打包拦货白单数据</a>-->
+                </div>
+            </div>
+            <div class="mt10">
+                <form action="" novalidate="novalidate">
+                    <input type="hidden" name="selectedId" value="-1">
+                    <input type="hidden" name="company_id" id="company_id" value="-1">
+                    <input type="hidden" name="period_no" id="period_no" value="">
+                    <input type="hidden" name="is_only_search_win" value="">
+                    <input type="hidden" name="captcha_code" value="">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="18"></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td width="40" i18n="zh.query.account">查账号</td>
+                            <td width="80">
+                                <input type="text" class="w90" name="member_account" id="member_account" value="">
+                            </td>
+                            <td width="40" i18n="zh.query.codes">查号码</td>
+                            <td width="80">
+                                <input type="text" class="w90" name="bet_no" id="bet_no" maxlength="3" betno="true">
+                            </td>
+                            <!--<td width="15" i18n="zh.query.xian">现</td>
+                            <td width="10">
+                                <input type="checkbox" name="show_xian" id="show_xian" value="1">
+                            </td>-->
+                            <td width="30" i18n="zh.query.list">列出</td>
+                            <td width="60">
+                                <select name="range_type" id="range_type">
+                                    <option value="0">{{$t('select.peiRate')}}</option>
+                                    <option value="1">{{$t('select.amount')}}</option>
+                                    <option value="2">{{$t('select.backCode')}}</option>
+                                </select>
+                            </td>
+                            <td width="60">
+                                <input type="text" class="w60" name="range_min" id="range_min" nonnegative="true"
+                                       maxlength="10">
+                            </td>
+                            <td width="15" i18n="zh.query.to">至</td>
+                            <td width="60">
+                                <input type="text" class="w60" name="range_max" id="range_max" positive="true"
+                                       maxlength="10">
+                            </td>
+                            <td width="30" i18n="zh.query.classify">分类</td>
+                            <td width="60">
+                                <select name="category" id="category">
+                                    <option value="">{{$t('select.all')}}</option>
+                                    <option value="a">直选</option>
+                                    <option value="19">&nbsp;&nbsp;普通</option>
+                                    <option value="20">&nbsp;&nbsp;和值</option>
+                                    <option value="b">组三</option>
+                                    <option value="21">&nbsp;&nbsp;普通</option>
+                                    <option value="22">&nbsp;&nbsp;胆拖</option>
+                                    <option value="23">&nbsp;&nbsp;和值</option>
+                                    <option value="c">组六</option>
+                                    <option value="24">&nbsp;&nbsp;普通</option>
+                                    <option value="25">&nbsp;&nbsp;胆拖</option>
+                                    <option value="26">&nbsp;&nbsp;和值</option>
+                                    <option value="d">1D</option>
+                                    <option value="13">&nbsp;&nbsp;1D</option>
+                                    <option value="14">&nbsp;&nbsp;猜1D</option>
+                                    <option value="e">2D</option>
+                                    <option value="15">&nbsp;&nbsp;2D</option>
+                                    <option value="16">&nbsp;&nbsp;猜2D</option>
+                                    <option value="f">包选</option>
+                                    <option value="17">&nbsp;&nbsp;包选三</option>
+                                    <option value="18">&nbsp;&nbsp;包选六</option>
+                                    <option value="g">和数</option>
+                                    <option value="27">&nbsp;&nbsp;0/27</option>
+                                    <option value="28">&nbsp;&nbsp;1/26</option>
+                                    <option value="29">&nbsp;&nbsp;2/25</option>
+                                    <option value="30">&nbsp;&nbsp;3/24</option>
+                                    <option value="31">&nbsp;&nbsp;4/23</option>
+                                    <option value="32">&nbsp;&nbsp;5/22</option>
+                                    <option value="33">&nbsp;&nbsp;6/21</option>
+                                    <option value="34">&nbsp;&nbsp;7/20</option>
+                                    <option value="35">&nbsp;&nbsp;8/19</option>
+                                    <option value="36">&nbsp;&nbsp;9/18</option>
+                                    <option value="37">&nbsp;&nbsp;10/17</option>
+                                    <option value="38">&nbsp;&nbsp;11/16</option>
+                                    <option value="39">&nbsp;&nbsp;12/15</option>
+                                    <option value="40">&nbsp;&nbsp;13/14</option>
+                                    <option value="2">通选</option>
+                                    <option value="9">大小</option>
+                                    <option value="10">奇偶</option>
+                                    <option value="11">猜三同</option>
+                                    <option value="12">拖拉机</option>
+                                </select>
+                            </td>
+                            <!--<td width="30" i18n="zh.query.type">类型</td>
+                            <td width="60">
+                                <select name="package_id" id="package_id">
+                                    <option value="">{{$t('select.all')}}</option>
+                                    <option value="1">{{$t('select.bulkCargo')}}</option>
+                                    <option value="2">{{$t('select.baoPai')}}</option>
+                                </select>
+                            </td>-->
+                            <td width="60">
+                                <input type="hidden" id="iswin" name="iswin" value="">
+                                <button type="button" class="btn" @click="submitQuery(1)" i18n="zh.btn.submit" style="cursor: pointer">提交</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn" id="btnPrint" @click="print()" i18n="zh.btn.print" style="cursor: pointer">打印</button>
+                            </td>
+                            <td width="60">
+                                <!--<a href="#!backups_detail.backups_detail|backups_detail?backup_type=1">下载</a>-->
+                                <a href="download.html" id="downLoad" i18n="zh.btn.download">下载</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td colspan="2" i18n="zh.table.top.totalBetDetail">总货明细(红色为退码)</td>
+                        <td colspan="11">
+                        </td>
+                        <td colspan="2">
+                            <select class="w110" name="draw" id="draw" lay-filter="draw"
+                                    @change="changeDrawId()"></select>
+                        </td>
+                    </tr>
+                    <tr class="bg2">
+                        <td width="10%" i18n="zh.table.head.printId">注单编号</td>
+                        <td width="8%" i18n="zh.table.head.member">会员</td>
+                        <td width="8%" i18n="zh.table.head.orderTime">下单时间</td>
+                        <td width="5%" i18n="zh.table.head.codes">号码</td>
+                        <td width="10%" i18n="zh.table.head.betAmount">下注金额</td>
+                        <td width="5%" i18n="zh.table.head.peiRate">赔率</td>
+                        <td width="8%" i18n="zh.table.head.winLottery">中奖</td>
+                        <td width="6%" i18n="zh.table.head.lowerLineBackWater">下线回水</td>
+                        <td width="6%" i18n="zh.table.head.shLowerLine">实收下线</td>
+                        <td width="6%" i18n="zh.table.head.selfWater">自己回水</td>
+                        <td width="6%" i18n="zh.table.head.sfsx">实付上线</td>
+                        <td width="6%" i18n="zh.table.head.zhuanWater">赚水</td>
+                        <td width="19%">下注说明</td>
+                        <!--<td width="9%" i18n="zh.table.head.baoPai">包牌</td>
+                        <td width="6%" i18n="zh.table.head.path">路径</td>-->
+                        <td width="4%" i18n="zh.table.head.ip">IP</td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody" class="fn-hover" v-if="dataList.length>0">
+                    <tr v-for="data in dataList" :class="[data.backCodeFlag==1?'red bg4':'']">
+                        <td>{{data.printId}}</td>
+                        <td>{{data.vipName}}</td>
+                        <td v-if="data.backCodeFlag == 1">
+                            {{data.createTime}}<br>
+                            {{$t('select.tui')}}<br>
+                            {{data.backCodeTime}}
+                        </td>
+                        <td v-else>{{data.createTime}}</td>
+                        <td class="fb" v-if="data.hasOneFlag == 1"> {{data.buyCodes}}<span>{{$t('select.xian')}}</span></td>
+                        <td v-else>{{data.buyCodes}}</td>
+                        <td class="fb">{{data.buyMoney}}</td>
+                        <td>{{data.param3}}</td>
+                        <td v-if="data.drawMoney == 0 || data.drawMoney == null || data.drawMoney == ''">--</td>
+                        <td v-else>{{data.drawMoney}}</td>
+                        <td>{{data.downLineHuiShui}}</td>
+                        <td>{{data.ssDownLine}}</td>
+                        <td>{{data.selfHuiShui}}</td>
+                        <td>{{data.sfUpLine}}</td>
+                        <td>{{data.zhuanShui}}</td>
+                        <td>{{data.huizongName}}</td>
+                        <!--<td>{{data.bpGroup}}</td>
+                        <td>{{data.codeFormName}}</td>-->
+                        <td v-if="data.backCodeFlag == 1">{{$t('select.tui')}}</td>
+                        <td v-else>{{data.ip}}</td>
+                    </tr>
+                    <tr class="tfoot">
+                        <td colspan="2" class="tc fb">{{$t('select.total')}}</td>
+                        <td class="fb">{{total}}</td>
+                        <td></td>
+                        <td class="fb">{{totalAmount}}</td>
+                        <td></td>
+                        <td class="fb">{{totalDrawAmount}}</td>
+                        <td class="fb">{{totalReturnWater}}</td>
+                        <td class="fb">{{ssXx}}</td>
+                        <td>{{selfTotalReturnWater}}</td>
+                        <td>{{sfSx}}</td>
+                        <td>{{zs}}</td>
+                        <td></td>
+                        <!--<td></td>-->
+                        <td></td>
+                    </tr>
+                    </tbody>
+                    <tbody v-else>
+                    <td colspan="15">
+                        {{$t('select.noData')}}
+                    </td>
+                    </tbody>
+                </table>
+            </div>
+            <div name="module" id="pager" class="pager" action="log" pagebody="tbody" template="tpl_refresh"
+                 pagecount="1" param="pageSize=40">
+                <span i18n="zh.page.no">第</span>
+                <span class="pageindex red">{{currentPage}}</span>
+                <span i18n="zh.page.page">页</span>&nbsp;
+                <span i18n="zh.page.total">共</span>
+                <span class="pagecount red">{{countPage}}</span>
+                <span i18n="zh.page.page">页</span>&nbsp;
+                <span i18n="zh.page.total">共</span>
+                <span class="recordcount red">{{count}}</span>
+                <span i18n="zh.page.count">条</span>
+                <a class="fn-first shou" @click="firstPage()" style="cursor:pointer;" i18n="zh.page.firstPage">首页</a>
+                <a class="fn-prev shou" @click="prePage()" style="cursor:pointer;" i18n="zh.page.prePage">上一页</a>
+                <a class="fn-next shou" @click="nextPage()" style="cursor:pointer;" i18n="zh.page.nextPage">下一页</a>
+                <a class="fn-last shou" @click="lastPage()" style="cursor:pointer;" i18n="zh.page.lastPage">尾页</a>
+                <input type="number" class="input w50 fn-index" v-model="inputPage">
+                <input type="button" class="btn btn-gray w30 fn-go shou" value="GO" @click="go()">
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script src="../../js/subMainZongHuo/zongHuo.js"></script>
+</body>
+</html>

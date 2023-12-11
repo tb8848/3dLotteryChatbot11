@@ -1,0 +1,1199 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="theme-color" content="#920783">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <title>会员</title>
+<!--    <link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/adminseccode.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>
+    <script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <style type="text/css">
+        .success{
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div class="module">
+    <div name="module" id="erd" class="m5 mt5 erd">
+        <table id="hasDataShow" class="t-1 hide">
+            <thead>
+            <tr class="bg1">
+                <td> <input type="button" value="模式2" id="moshi" class="fn-changemt">&nbsp;&nbsp;<span i18n="erding.class">类别</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span id="rdclassname">
+<!--                        <a href="javascript:void(0)" class="fn-changept white" value="1">口口XX</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                        <a href="javascript:void(0)" class="fn-changept white" value="2">口X口X</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                        <a href="javascript:void(0)" class="fn-changept white red" value="3">口XX口</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                        <a href="javascript:void(0)" class="fn-changept white" value="4">X口X口</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                        <a href="javascript:void(0)" class="fn-changept white" value="5">X口口X</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                        <a href="javascript:void(0)" class="fn-changept white" value="6">XX口口</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                    </span>
+
+                    <span class="yellow" id="bet_stat" style="display: inline;">
+                        <span i18n="erding.bishu">笔数</span>：<span id="bet_count">0</span>
+                        <span i18n="erding.totalMoney">总金额：</span><span id="bet_total">0</span>
+                    </span>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td> <form autocomplete="off" novalidate="novalidate">
+                    <input type="hidden" name="bets" id="bets">
+                    <input type="hidden" name="way" value="104">
+                    <div class="bd-module" id="bd_module">
+                        <table class="t-3" cellspacing="0" cellpadding="0">
+                            <thead id="theadRows">
+<!--                                <tr class="nth-1">-->
+<!--                                    <td>&nbsp;</td>-->
+<!--                                    <td class="fn-row" _index="0" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="1" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="2" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="3" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="4" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="5" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="6" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="7" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="8" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                    <td class="fn-row" _index="9" is_select="0"><img src="../img/bhrow.gif" alt=""></td>-->
+<!--                                </tr>-->
+<!--                                <tr class="bg">-->
+<!--                                    <td>&nbsp;</td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                    <td><span class="no">号码</span><span class="red dyname">赔率</span></td>-->
+<!--                                </tr>-->
+                            </thead>
+                            <tbody id="tbody">
+<!--                                <tr>-->
+<!--                                    <td class="fn-col" _index="0" is_select="0"><img src="../img/bhcol.gif"></td>-->
+<!--                                    <td class="options" _i="0" _j="0" bet_no="0XX0"> <span class="no">0XX0</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="1" bet_no="0XX1"> <span class="no">0XX1</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="2" bet_no="0XX2"> <span class="no">0XX2</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="3" bet_no="0XX3"> <span class="no">0XX3</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="4" bet_no="0XX4"> <span class="no">0XX4</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="5" bet_no="0XX5"> <span class="no">0XX5</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="6" bet_no="0XX6"> <span class="no">0XX6</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="7" bet_no="0XX7"> <span class="no">0XX7</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="8" bet_no="0XX8"> <span class="no">0XX8</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                    <td class="options" _i="0" _j="9" bet_no="0XX9"> <span class="no">0XX9</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                </tr>-->
+<!--                                <tr> <td class="fn-col" _index="1" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="1" _j="0" bet_no="1XX0"> <span class="no">1XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="1" bet_no="1XX1"> <span class="no">1XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="2" bet_no="1XX2"> <span class="no">1XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="3" bet_no="1XX3"> <span class="no">1XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="4" bet_no="1XX4"> <span class="no">1XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="5" bet_no="1XX5"> <span class="no">1XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="6" bet_no="1XX6"> <span class="no">1XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="7" bet_no="1XX7"> <span class="no">1XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="8" bet_no="1XX8"> <span class="no">1XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="1" _j="9" bet_no="1XX9"> <span class="no">1XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="2" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="2" _j="0" bet_no="2XX0"> <span class="no">2XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="1" bet_no="2XX1"> <span class="no">2XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="2" bet_no="2XX2"> <span class="no">2XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="3" bet_no="2XX3"> <span class="no">2XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="4" bet_no="2XX4"> <span class="no">2XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="5" bet_no="2XX5"> <span class="no">2XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="6" bet_no="2XX6"> <span class="no">2XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="7" bet_no="2XX7"> <span class="no">2XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="8" bet_no="2XX8"> <span class="no">2XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="2" _j="9" bet_no="2XX9"> <span class="no">2XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="3" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="3" _j="0" bet_no="3XX0"> <span class="no">3XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="1" bet_no="3XX1"> <span class="no">3XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="2" bet_no="3XX2"> <span class="no">3XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="3" bet_no="3XX3"> <span class="no">3XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="4" bet_no="3XX4"> <span class="no">3XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="5" bet_no="3XX5"> <span class="no">3XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="6" bet_no="3XX6"> <span class="no">3XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="7" bet_no="3XX7"> <span class="no">3XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="8" bet_no="3XX8"> <span class="no">3XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="3" _j="9" bet_no="3XX9"> <span class="no">3XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="4" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="4" _j="0" bet_no="4XX0"> <span class="no">4XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="1" bet_no="4XX1"> <span class="no">4XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="2" bet_no="4XX2"> <span class="no">4XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="3" bet_no="4XX3"> <span class="no">4XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="4" bet_no="4XX4"> <span class="no">4XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="5" bet_no="4XX5"> <span class="no">4XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="6" bet_no="4XX6"> <span class="no">4XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="7" bet_no="4XX7"> <span class="no">4XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="8" bet_no="4XX8"> <span class="no">4XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="4" _j="9" bet_no="4XX9"> <span class="no">4XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="5" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="5" _j="0" bet_no="5XX0"> <span class="no">5XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="1" bet_no="5XX1"> <span class="no">5XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="2" bet_no="5XX2"> <span class="no">5XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="3" bet_no="5XX3"> <span class="no">5XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="4" bet_no="5XX4"> <span class="no">5XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="5" bet_no="5XX5"> <span class="no">5XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="6" bet_no="5XX6"> <span class="no">5XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="7" bet_no="5XX7"> <span class="no">5XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="8" bet_no="5XX8"> <span class="no">5XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="5" _j="9" bet_no="5XX9"> <span class="no">5XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="6" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="6" _j="0" bet_no="6XX0"> <span class="no">6XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="1" bet_no="6XX1"> <span class="no">6XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="2" bet_no="6XX2"> <span class="no">6XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="3" bet_no="6XX3"> <span class="no">6XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="4" bet_no="6XX4"> <span class="no">6XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="5" bet_no="6XX5"> <span class="no">6XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="6" bet_no="6XX6"> <span class="no">6XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="7" bet_no="6XX7"> <span class="no">6XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="8" bet_no="6XX8"> <span class="no">6XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="6" _j="9" bet_no="6XX9"> <span class="no">6XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="7" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="7" _j="0" bet_no="7XX0"> <span class="no">7XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="1" bet_no="7XX1"> <span class="no">7XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="2" bet_no="7XX2"> <span class="no">7XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="3" bet_no="7XX3"> <span class="no">7XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="4" bet_no="7XX4"> <span class="no">7XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="5" bet_no="7XX5"> <span class="no">7XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="6" bet_no="7XX6"> <span class="no">7XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="7" bet_no="7XX7"> <span class="no">7XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="8" bet_no="7XX8"> <span class="no">7XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="7" _j="9" bet_no="7XX9"> <span class="no">7XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="8" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="8" _j="0" bet_no="8XX0"> <span class="no">8XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="1" bet_no="8XX1"> <span class="no">8XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="2" bet_no="8XX2"> <span class="no">8XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="3" bet_no="8XX3"> <span class="no">8XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="4" bet_no="8XX4"> <span class="no">8XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="5" bet_no="8XX5"> <span class="no">8XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="6" bet_no="8XX6"> <span class="no">8XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="7" bet_no="8XX7"> <span class="no">8XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="8" bet_no="8XX8"> <span class="no">8XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="8" _j="9" bet_no="8XX9"> <span class="no">8XX9</span> <span class="red f15  fb">95.6</span> </td>   </tr><tr> <td class="fn-col" _index="9" is_select="0"><img src="/Images/bhcol.gif"></td>  <td class="options" _i="9" _j="0" bet_no="9XX0"> <span class="no">9XX0</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="1" bet_no="9XX1"> <span class="no">9XX1</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="2" bet_no="9XX2"> <span class="no">9XX2</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="3" bet_no="9XX3"> <span class="no">9XX3</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="4" bet_no="9XX4"> <span class="no">9XX4</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="5" bet_no="9XX5"> <span class="no">9XX5</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="6" bet_no="9XX6"> <span class="no">9XX6</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="7" bet_no="9XX7"> <span class="no">9XX7</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="8" bet_no="9XX8"> <span class="no">9XX8</span> <span class="red f15  fb">95.6</span> </td>   <td class="options" _i="9" _j="9" bet_no="9XX9"> <span class="no">9XX9</span> <span class="red f15  fb">95.6</span> </td>-->
+<!--                                </tr>-->
+                            </tbody>
+                            <tfoot class="hide">
+                                <tr> <td colspan="10" class="tc">
+                                        <input type="button" id="xiazhu1" value="下注" _name="下注" bet-type="0" class="btn btn-large bet-submit" i18n="erding.toBuy"> &nbsp;&nbsp;
+                                        <input type="button" id="baopai1" value="包牌" _name="包牌" bet-type="1" class="btn btn-large bet-submit" i18n="erding.baopai">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10">
+                                        <div class="package_odds_module">
+                                            <div class="package-list">
+                                                <ul>
+                                                    <li class="package-item package-item-50 ">
+                                                        <span class="package-group-title">50</span>组：<span class="package-odds-title">96</span></li>
+                                                    <li class="package-item-title"><span i18n="erding.bp.odds">包牌赔率：</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <table class="t-3 hide" id="bd_fix">
+                            <tbody>
+                                <tr> <td width="75%">
+                                <table class="t-3">
+                                    <tbody><tr> <td rowspan="2" class="bg fb" width="50" i18n="erding.fixCode">定位置</td>
+                                        <td class="fn-fix" id="fixLoc1">
+                                            <span id="span_loc1">仟</span>
+                                            <input type="button" class="item" value="0" name="0" onclick="ezdJ(this,1,0);" id="dw0" data="0">
+                                            <input type="button" class="item" value="1" name="1" onclick="ezdJ(this,1,0);" id="dw1" data="1">
+                                            <input type="button" class="item" value="2" name="2" onclick="ezdJ(this,1,0);" id="dw2" data="2">
+                                            <input type="button" class="item" value="3" name="3" onclick="ezdJ(this,1,0);" id="dw3" data="3">
+                                            <input type="button" class="item" value="4" name="4" onclick="ezdJ(this,1,0);" id="dw4" data="4">
+                                            <input type="button" class="item" value="5" name="5" onclick="ezdJ(this,1,0);" id="dw5" data="5">
+                                            <input type="button" class="item" value="6" name="6" onclick="ezdJ(this,1,0);" id="dw6" data="6">
+                                            <input type="button" class="item" value="7" name="7" onclick="ezdJ(this,1,0);" id="dw7" data="7">
+                                            <input type="button" class="item" value="8" name="8" onclick="ezdJ(this,1,0);" id="dw8" data="8">
+                                            <input type="button" class="item" value="9" name="9" onclick="ezdJ(this,1,0);" id="dw9" data="9">
+                                            <input type="button" class="item" value="单" name="10" onclick="ezdJ(this,1,0);" id="dw10" data="10" i18n="erding.dan">
+                                            <input type="button" class="item" value="双" name="11" onclick="ezdJ(this,1,0);" id="dw11" data="11" i18n="erding.shuang">
+                                            <input type="button" class="item" value="大" name="12" onclick="ezdJ(this,1,0);" id="dw12" data="12" i18n="erding.da">
+                                            <input type="button" class="item" value="小" name="13" onclick="ezdJ(this,1,0);" id="dw13" data="13" i18n="erding.xiao">
+                                        </td>
+                                        <td rowspan="2" class="bg fb" width="40" i18n="erding.hefen">合分</td>
+                                        <td rowspan="2" class="fn-hf">
+                                            <div id="erziding_hf0">
+                                                <input type="button" class="item" value="0" name="0" onclick="ezdJ(this,2,3);" data="0">
+                                                <input type="button" class="item" value="1" name="1" onclick="ezdJ(this,2,3);" data="1">
+                                                <input type="button" class="item" value="2" name="2" onclick="ezdJ(this,2,3);" data="2">
+                                                <input type="button" class="item" value="3" name="3" onclick="ezdJ(this,2,3);" data="3">
+                                                <input type="button" class="item" value="4" name="4" onclick="ezdJ(this,2,3);" data="4">
+                                                <input type="button" class="item" value="单" name="10" onclick="ezdJ(this,2,44);" id="ct44" i18n="erding.dan">
+                                            </div>
+                                            <div id="erziding_hf1">
+                                                <input type="button" class="item" value="5" name="5" onclick="ezdJ(this,2,3);" data="5">
+                                                <input type="button" class="item" value="6" name="6" onclick="ezdJ(this,2,3);" data="6">
+                                                <input type="button" class="item" value="7" name="7" onclick="ezdJ(this,2,3);" data="7">
+                                                <input type="button" class="item" value="8" name="8" onclick="ezdJ(this,2,3);" data="8">
+                                                <input type="button" class="item" value="9" name="9" onclick="ezdJ(this,2,3);" data="9">
+                                                <input type="button" class="item" value="双" name="11" onclick="ezdJ(this,2,55)" id="ct55" i18n="erding.shuang">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fn-fix" id="fixLoc2">
+                                            <span id="span_loc2">个</span>
+                                            <input type="button" class="item" value="0" name="0" onclick="ezdJ(this,1,1);" data="0">
+                                            <input type="button" class="item" value="1" name="1" onclick="ezdJ(this,1,1);" data="1">
+                                            <input type="button" class="item" value="2" name="2" onclick="ezdJ(this,1,1);" data="2">
+                                            <input type="button" class="item" value="3" name="3" onclick="ezdJ(this,1,1);" data="3">
+                                            <input type="button" class="item" value="4" name="4" onclick="ezdJ(this,1,1);" data="4">
+                                            <input type="button" class="item" value="5" name="5" onclick="ezdJ(this,1,1);" data="5">
+                                            <input type="button" class="item" value="6" name="6" onclick="ezdJ(this,1,1);" data="6">
+                                            <input type="button" class="item" value="7" name="7" onclick="ezdJ(this,1,1);" data="7">
+                                            <input type="button" class="item" value="8" name="8" onclick="ezdJ(this,1,1);" data="8">
+                                            <input type="button" class="item" value="9" name="9" onclick="ezdJ(this,1,1);" data="9">
+                                            <input type="button" class="item" value="单" name="10" onclick="ezdJ(this,1,1);" data="10" i18n="erding.dan">
+                                            <input type="button" class="item" value="双" name="11" onclick="ezdJ(this,1,1);" data="11" i18n="erding.shuang">
+                                            <input type="button" class="item" value="大" name="12" onclick="ezdJ(this,1,1);" data="12" i18n="erding.da">
+                                            <input type="button" class="item" value="小" name="13" onclick="ezdJ(this,1,1);" data="13" i18n="erding.xiao">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </td>
+                                <td>
+                                    <span class="txt-money" i18n="erding.buyMoney">金额</span>: <input type="text" name="bet_money" id="bet_money" maxlength="7" required="true" number="true" class="text-large ime-dis w90 box-radius">
+                                    <input type="button" id="xiazhu2" value="下注" _name="下注" bet-type="0" class="btn-large bet-submit btn" i18n="erding.toBuy">&nbsp;
+                                    <input type="button" id="baopai2" value="包牌" _name="包牌" bet-type="1" class="btn-large bet-submit btn" i18n="erding.baopai">&nbsp;
+                                    <input type="reset" value="取消" class="btn-large fn-cancel btn" i18n="erding.cancel">
+                                </td>
+                        </tr>
+                        <tr> <td colspan="2">
+                            <div class="package_odds_module">
+                                <div class="package-list">
+                                    <ul>
+                                        <li class="package-item package-item-50 "><span class="package-group-title">50</span>组：<span class="package-odds-title">96</span></li>
+                                        <li class="package-item-title"><span i18n="erding.bp.odds">包牌赔率：</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                    </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    </div>
+                </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <table id="noDataShow" class="t-1 hide">
+            <thead>
+            <tr class="bg1"> <td></td> </tr> </thead>
+            <tbody> <tr>
+                <td style="height:300px">
+                    <div class="f16 tc fb" id="openStatusDesc"> <!--已封盘-->  </div> </td> </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="../js/socket/sockjs.min.js"></script>
+<script src="../js/socket/stomp.js"></script>
+<script src="../js/jquery/jquery.min.js"></script>
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/projects/validate.js"></script>
+
+
+
+<script type="text/javascript">
+
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var drawNo = "";
+    var childid=0;
+    var settingList=[];
+    var currSetting=null;
+    var codeList=[];
+    var totalAmount=0;
+    var totalMoney=1;
+    var selectList=[];
+    var buyCodesList=[];
+    var moneyErr = false;
+
+    var moshiType = 1;
+
+    var firstLocIndex = 0;
+    var lastLocIndex = 0;
+    var ss=[];
+    var ss1=[];
+    var bpSettingList = [];
+    var _soonset = {};
+    var xzuuid = "";
+
+    function upOpenStatus(msg) {
+        var drawOpenStatus = msg.openStatus;
+        if(drawOpenStatus==1){
+            if(msg.erzidingCloseFlag==0){//二字定栏目禁止下注标识
+                $("#openStatusDesc").html('<span i18n="erding.stopBuy">'+$i18np.prop("erding.stopBuy")+'</span>');
+                $("#hasDataShow").addClass('hide');
+                $("#noDataShow").removeClass('hide');
+            }else{
+                $("#hasDataShow").removeClass('hide');
+                $("#noDataShow").addClass('hide');
+                if(msg.drawNo!=drawNo){
+                    drawNo = msg.drawNo;
+                    getData();
+                }
+            }
+        }else{
+            if(drawOpenStatus==3){
+                $("#openStatusDesc").html('<span i18n="erding.drawOpening">'+$i18np.prop("erding.drawOpening")+'</span>');
+            }else if(drawOpenStatus==2){
+                $("#openStatusDesc").html('<span i18n="erding.unOpen">'+$i18np.prop("erding.unOpen")+'</span>');
+            }else if(drawOpenStatus==0){
+                $("#openStatusDesc").html('<span i18n="erding.drawClose">'+$i18np.prop("erding.drawClose")+'</span>');
+            }
+            $("#hasDataShow").addClass('hide');
+            $("#noDataShow").removeClass('hide');
+        }
+    }
+
+    window.onload=function () {
+        getuuid();
+    }
+    //
+    // $(window).load(function(){
+    //     getDrawInfo();
+    // });
+
+    function getuuid(){
+        $.ajax({
+            url:HOST+'getUUid',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    xzuuid = res.data.saveXZ;
+                }
+            },
+            error:function (e) {
+
+            }
+        });
+    }
+
+    function getData(){
+        $.ajax({
+            url:HOST+'draw/erziding/settings?lotteryMethodId=2',
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    settingList = res.data;
+                    initSettings(res.data);
+                    moshiChange(2);
+                }
+            }
+        })
+        $("#bd_fix").hide();
+    }
+
+    function getDrawInfo(){
+        $.ajax({
+            url:HOST+'code/drawInfo',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    drawNo = res.data.drawNo;
+                    upOpenStatus(res.data);
+                    if(res.data.openStatus==1){
+                        getData();
+                    }
+                }
+            }
+        });
+    }
+
+    //纵向多选
+    $("#theadRows").on("click",".fn-row",function (e) {
+        $(this).is(".active") ? $(this).removeClass("active") : $(this).addClass("active");
+
+        var idx = $(this).attr("_index");
+        $("td.options").each(function (it1) {
+            var j = $(this).attr("_j");
+            var i = $(this).attr("_i");
+            var no = i+""+j;
+            if(j == idx){
+                var betNo = $(this).attr("bet_no");
+
+                if($(this).is(".active")){
+                    if(ss.includes(no)){
+                        ss.splice(ss.indexOf(no), 1)
+                        if(!ss1.includes(no)) {
+                            totalAmount < 0 ? totalAmount = 0 : totalAmount--;
+                            $(this).removeClass("active")
+                        }
+                    }
+                }else{
+                    if (!ss.includes(no)) {
+                        ss.push(no);
+                        totalAmount++;
+                        $(this).addClass("active")
+                    }
+                }
+
+            }
+        })
+        $("#bet_count").html(totalAmount);
+        var m = $("#bet_money").val();
+        $("#bet_total").html(totalAmount * m)
+    })
+
+    //横向多选
+    $("#tbody").on("click",".fn-col",function (e) {
+        $(this).is(".active") ? $(this).removeClass("active") : $(this).addClass("active");
+        var idx = $(this).attr("_index");
+        console.log("=========idx="+idx);
+        $("td.options").each(function (it1) {
+            var j = $(this).attr("_j");
+            var i = $(this).attr("_i");
+            console.log("=========i="+i);
+            var no = i+""+j;
+            if(i == idx){
+                var betNo = $(this).attr("bet_no");
+                if($(this).is(".active")){
+                    if(ss1.includes(no)){
+                        ss1.splice(ss1.indexOf(no), 1)
+                        if(!ss.includes(no)){
+                            totalAmount < 0 ? totalAmount = 0 : totalAmount--;
+                            $(this).removeClass("active")
+                        }
+                    }
+                }else{
+                    if (!ss1.includes(no)) {
+                        ss1.push(no);
+                        totalAmount++;
+                        $(this).addClass("active")
+                    }
+                }
+            }
+        })
+        $("#bet_count").html(totalAmount);
+        var m = $("#bet_money").val();
+        $("#bet_total").html(totalAmount * m)
+    })
+
+    //金额输入框
+    $("#tbody").on("keyup",".bet_money",function(e){
+        if((e.key>='0' && e.key<='9') || e.key=="."){
+            if(this.value.startsWith(".")){
+                this.value = this.value.substr(0,this.value.length-1);
+            }
+        }else{
+            this.value = this.value.substr(0,this.value.length-1);
+        }
+        addCodes(this);
+        return false;
+    })
+
+
+    function dingweiHtml(type){
+        var dingwei = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "单", "双", "大", "小"),
+            html = "";
+        for (i = 0; i < dingwei.length; i++)
+            html += '<button class="btn b" id="dw' + i + '" data="' + i + '" type="button" onclick="ezdJ(this,1,'+type+');">' + dingwei[i] + "</button>";
+        return html
+    }
+
+    function hefenHtml(id) {
+        var hefen = 44 == id ? new Array("0", "1", "2", "3", "4") : new Array("5", "6", "7", "8", "9");
+        html = "";
+        for (i = 0; i < hefen.length; i++) html += '<button class="btn b" id="hf' + hefen[i] + '" data="' + hefen[i] + '" type="button" onclick="ezdJ(this,2,3);">' + hefen[i] + "</button>";
+        return html += 44 == id ? '<button class="btn b" id="ct' + id + '" type="button" onclick="ezdJ(this,2,44);">单</button>' : '<button class="btn b" id="ct' + id + '" type="button" onclick="ezdJ(this,2,55);">双</button>'
+    }
+
+     function ezdJ(t,typeId,subId) {
+        $(t).is(".active") ? $(t).removeClass("active") : $(t).addClass("active");
+        var ct = [44, 55];
+        var findArr = [];
+        for(i=0;i<=9;i++) {
+            for (j = 0; j <= 9; j++) {
+                var chCodeA = 0;
+                var no = i + "" + j;
+                var ctt = $("#ct" + subId);
+                $(ctt).is(".active") && (44 == subId && eval(i + j) % 2 == 1 ? chCodeA = 1 : 55 == subId && eval(i + j) % 2 != 1 && (chCodeA = 1))
+                var qCarChkA = 0,
+                    qCarChkB = 0;
+                if (0 == chCodeA) {
+                    $("#fixLoc1").find("input").each(function () {
+                        if ($(this).is(".active")) {
+                            var n = $(this).attr("data");
+                            n <= 9 && i == n ? qCarChkA = 1 : 10 == n && i % 2 == 1 ? qCarChkA = 1 : 11 == n && i % 2 == 0 ?
+                                qCarChkA = 1 : 12 == n && 5 <= i ? qCarChkA = 1 : 13 == n && i <= 4 && (qCarChkA = 1)
+                        }
+                    })
+                    $("#fixLoc2").find("input").each(function () {
+                        if ($(this).is(".active")) {
+                            var n = $(this).attr("data");
+                            n <= 9 && j == n ? qCarChkB = 1 : 10 == n && j % 2 == 1 ? qCarChkB = 1 : 11 == n && j % 2 == 0 ? qCarChkB = 1 : 12 == n && 5 <= j ? qCarChkB = 1 : 13 == n && j <= 4 && (qCarChkB = 1)
+                        }
+                    })
+                }
+
+                if (1 == qCarChkA && 1 == qCarChkB) {
+                    chCodeA = 1
+                }
+                if (0 == chCodeA) {
+                    $("#erziding_hf0").find("input").each(function () {
+                        if ($(this).is(".active")) {
+                            var n = $(this).attr("data");
+                            eval(i + j) % 10 == n && (chCodeA = 1)
+                        }
+                    });
+                    $("#erziding_hf1").find("input").each(function () {
+                        if ($(this).is(".active")) {
+                            var n = $(this).attr("data");
+                            eval(i + j) % 10 == n && (chCodeA = 1)
+                        }
+                    })
+                }
+                var obj = $("#e" + no);
+
+                if (1 == chCodeA) {
+                    console.log("======================1:"+no);
+                    if (!ss.includes(no)) {
+                        ss.push(no);
+                        obj.addClass("active")
+                    }
+                } else {
+                    console.log("======================2:"+no);
+                    //console.log("==========================no="+no);
+                    if (ss.includes(no)) {
+                        totalAmount < 0 ? totalAmount = 0 : totalAmount--;
+                        obj.removeClass("active")
+                        ss.splice(ss.indexOf(no), 1)
+                    }
+                }
+            }
+        }
+        totalAmount = ss.length;
+        $("#bet_count").html(totalAmount);
+        var m = $("#bet_money").val();
+        $("#bet_total").html(totalAmount * m)
+    }
+
+    $("#moshi").on("click","",function (e) {//模式切换
+        if(moshiType==1){
+            moshiType=2
+            moshiChange(2)
+        }else{
+            moshiType=1
+            moshiChange(1)
+        }
+    })
+
+    function reI18nContent(){
+        if(moshiType==1){
+            $("#moshi").val($i18np.prop("erding.moshi1"));
+            $("#bd_fix").hide();
+            $("tfoot").show();
+        }else{
+            $("#moshi").val($i18np.prop("erding.moshi2"));
+            $("#bd_fix").show();
+            $("tfoot").hide();
+            initCanshu();
+        }
+    }
+
+    $("#serziding_quxiao").on("click","",function (e) { //取消按钮
+        quxiaoClick();
+    })
+
+    function moshiChange(type){
+        moshiType = type;
+        ss=[];
+        ss1=[];
+        buyCodesList=[];
+        $("#bet_total").html('0');
+        $("#bet_count").html('0');
+        if(moshiType==1){
+            $("#moshi").val($i18np.prop("erding.moshi1"));
+            $("#bd_fix").hide();
+            $("tfoot").show();
+        }else{
+            $("#moshi").val($i18np.prop("erding.moshi2"));
+            $("#bd_fix").show();
+            $("tfoot").hide();
+            initCanshu();
+        }
+        $("#tbody").find(".bet-money").val("");
+        rebuildCodesHtml();
+    }
+
+    function initCanshu(){
+        var locArr = [$i18np.prop("erding.qian"),$i18np.prop("erding.bai"),$i18np.prop("erding.shi"),$i18np.prop("erding.ge")];
+        firstLocIndex = currSetting.bettingRule.indexOf("口");
+        lastLocIndex = currSetting.bettingRule.lastIndexOf("口");
+        $("#span_loc1").html(locArr[firstLocIndex]);
+        $("#span_loc2").html(locArr[lastLocIndex]);
+    }
+
+    function quxiaoClick(){
+        //cgErZiDing.mBiShu = 0,
+            $("#erzidingList").find("td").each(function() {
+                $(this).is(".success") && $(this).removeClass("success")
+            });
+            $("#erziding_qian").find("button").each(function() {
+                $(this).removeClass("active")
+            });
+            $("#erziding_shi").find("button").each(function() {
+                $(this).removeClass("active")
+            });
+            $("#erziding_hf0").find("button").each(function() {
+                $(this).removeClass("active")
+            });
+            $("#erziding_hf1").find("button").each(function() {
+                $(this).removeClass("active")
+            });
+            $("#rdcount").text(0);
+            $("#rdmoney").text(0);
+            $("#erzidingmoney").val("");
+    }
+
+    function initSettings(dataList){
+        var html = '';
+        var css = '';
+        dataList.forEach((item,idx)=>{
+            if(childid==0){
+                childid=item.id;
+                css = 'class="fn-changept white red"';
+            }else if(childid==item.id){
+                css = 'class="fn-changept white red"';
+            }else{
+                css = 'class="fn-changept white"';
+            }
+            html += '<a href="javaScript:void(0)" ' + css + 'onclick="childclick(this,' + item.id + ')">' + item.bettingRule + '</a>&nbsp;&nbsp;';
+        });
+        currSetting = dataList[0];
+        $("#rdclassname").html(html);
+        $("#bet_total").html('0');
+        $("#bet_count").html('0');
+        createCodes();
+        getBpSetting();
+
+    }
+
+
+    function childclick(obj,gid){
+        childid=gid;
+        $(obj).addClass("red");
+        $(obj).siblings().removeClass('red');
+        settingList.forEach((item,idx)=>{
+            if(item.id==gid){
+                currSetting = item;
+            }
+        })
+        $("#erzidingList").html("");
+        createCodes();
+        $("#bet_total").html('0');
+        $("#bet_count").html('0');
+        ss=[];
+        ss1=[];
+        totalAmount=0;
+        totalMoney=0;
+        buyCodesList=[];
+        $("#tbody").find(".bet-money").val("");
+        $("#bet_money").val("");
+        if(moshiType==2){
+            initCanshu();
+        }
+    }
+
+
+
+    function rebuildCodesHtml(){
+        if(codeList.length>0){
+            var html = '';
+            var tdStr = '';
+            if (moshiType == 1) {
+                var theadRow = '<tr class="bg">' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.buyMoney">'+$i18np.prop("erding.buyMoney")+'</span></td>\n' +
+                    '</tr>';
+                $("#theadRows").html(theadRow);
+                codeList.forEach((item, idx) => {
+                    if (parseInt(idx % 10) == 0 && idx > 0) {
+                        var a = '<tr>' + tdStr + "</tr>";
+                        html = html + a;
+                        tdStr = '';
+                    }
+                    tdStr = tdStr + '<td class="options" id="e' + item.oriCode + '">' +
+                        '<span class="no"> <strong class="red f15 " id="pr-'+item.replaceCode+'">'+item.peiRate+'</strong><br> '+item.replaceCode+' </span>' +
+                        '<input type="text" id="ezdm-' + item.replaceCode + '" maxlength=7 ' +
+                        'class="w40 h20 bet_money ime-dis" data="'+item.replaceCode+'" bet-max="'+item.maxBettingCount+'"/>' +
+                        '</td>'
+                })
+                var a = '<tr>' + tdStr + "</tr>";
+                html = html + a;
+                tdStr = '';
+                $("#tbody").html(html);
+            } else {
+                var tr1 = '<tr class="nth-1">' +
+                '<td>&nbsp;</td>' +
+                '<td class="fn-row" _index="0" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="1" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="2" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="3" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="4" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="5" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="6" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="7" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="8" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '<td class="fn-row" _index="9" is_select="0" style="text-align: center"><img src="../img/bhrow.gif" alt=""></td>\n' +
+                '</tr>';
+                var tr2='<tr class="bg">\n' +
+                '<td>&nbsp;</td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '<td style="text-align: left"><span class="no" i18n="erding.buyCode">'+$i18np.prop("erding.buyCode")+'</span><span class="red dyname" i18n="erding.peiRate">'+$i18np.prop("erding.peiRate")+'</span></td>\n' +
+                '</tr>';
+                var theadRow = tr1 + tr2;
+                $("#theadRows").html(theadRow);
+
+                var __idx = 0;
+                codeList.forEach((item, idx) => {
+                    if (parseInt(idx % 10) == 0 && idx > 0) {
+                        var arrowCell = '<td class="fn-col" _index="'+__idx+'" is_select="0"><img src="../img/bhcol.gif"></td>'
+                        var a = '<tr>'+arrowCell+ tdStr + "</tr>";
+                        html = html + a;
+                        tdStr = '';
+                    }
+                    tdStr = tdStr + '<td id="e' + item.oriCode + '" class="options" _i="'+item.i+'" _j="'+item.j+'" bet_no="'+item.replaceCode+'" onclick="selectOne(this)"> ' +
+                        '<span class="no">'+item.replaceCode+'</span> <span class="red f15  fb" id="pr-'+item.replaceCode+'">'+item.peiRate+'</span> </td>'
+                    __idx = item.i;
+                })
+                var arrowCell = '<td class="fn-col" _index="9" is_select="0"><img src="../img/bhcol.gif"></td>'
+                var a = '<tr>'+arrowCell+ tdStr + "</tr>";
+                html = html + a;
+                tdStr = '';
+                $("#tbody").html(html);
+            }
+            __getPeiRate();
+        }
+    }
+
+    function getBpSetting(){
+        if (currSetting != null) {
+            $.ajax({
+                url: HOST + "baopai/getBpSetting?lotterySettingId=" + currSetting.id,
+                success: function (res) {
+                    if (res.code == 0) {
+                        bpSettingList = res.data
+                        if(null!=bpSettingList && bpSettingList.length>0){
+                            var html = "<ul>";
+                            var len = bpSettingList.length;
+                            for(var i=len-1;i>=0;i--){
+                                html = html+'<li class="package-item package-item-50"><span class="package-group-title">'+bpSettingList[i].groupCount+'</span><span i18n="erding.zu">'+$i18np.prop("erding.zu")+'</span>:<span class="package-odds-title">'+bpSettingList[i].vipBpPeiRate+'</span></li>'
+                            }
+                            html = html +'<li class="package-item-title"><span i18n="erding.bp.odds">'+$i18np.prop("erding.bp.odds")+'</span></li>'+'</ul>';
+                            $('.package-list').html(html)
+                        }else{
+                            $('.package-list').html("")
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    function __getPeiRate() {
+        if (childid != 0) {
+            if (currSetting != null) {
+                $.ajax({
+                    url: HOST + "code/erziding?lotterySettingId=" + currSetting.id,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            if (res.data != null) {
+                                var dlist = res.data;
+                                dlist.forEach((item,idx)=>{
+                                    $("#pr-"+item.hotNumber).html(item.changePeiRate);
+                                    $("#pr-"+item.hotNumber).attr('bet-max',item.oneItemUpperLimit);
+                                })
+                            }
+                        }
+                    },
+                    error:function(){
+                        //layer.closeAll();
+                    }
+
+                })
+            }
+        }
+    }
+
+
+    function createCodes() {
+        if (currSetting != null) {
+            codeList = [];
+            var ruleName =  currSetting.bettingRule;
+            for(var i=0;i<10;i++){
+                for(var j=0;j<10;j++){
+                    var rn = ruleName;
+                    var loc1 = rn.indexOf("口");
+                    var loc2 = rn.lastIndexOf("口");
+                    var arr = rn.split("");
+                    arr[loc1]=i;
+                    arr[loc2]=j;
+                    var replaceCode = arr.join("");
+                    var money = "";
+                    codeList.push({
+                        'oriCode':i+""+j,
+                        "replaceCode":replaceCode,
+                        "money":money,
+                        "peiRate":currSetting.vipPeiRate,
+                        "i":i,
+                        "j":j
+                    });
+                }
+            }
+            rebuildCodesHtml();
+            // getRecords();
+            // getHistorys();
+            // getBpComb();
+        }
+
+
+    }
+
+
+    $("#bet_money").on("keyup","",function (e) {
+        if((e.key>='0' && e.key<='9') || e.key=="."){
+            if(this.value.startsWith(".")){
+                this.value = this.value.substr(0,this.value.length-1);
+            }
+        }else{
+            this.value = this.value.substr(0,this.value.length-1);
+        }
+        var val = this.value;
+        if(val!=''){
+            var mv = parseFloat(this.value);
+            // if(mv>currSetting.maxBettingCount){
+            //     layer.msg("填写的金额不能超出单注上限:"+currSetting.maxBettingCount);
+            //     moneyErr = true;
+            //     return;
+            // }
+            // if(mv<currSetting.minBettingPrice){
+            //     layer.msg("填写金额不能小于"+currSetting.minBettingPrice);
+            //     moneyErr = true;
+            //     return;
+            // }
+            moneyErr = false;
+            $("#bet_total").html(totalAmount * val)
+        }else{
+            $("#bet_total").html('')
+        }
+    })
+
+    $("#xiazhu1").on("click","",function (e) {
+        toBuy();
+    })
+
+    $("#xiazhu2").on("click","",function (e) {
+        var buyMoney = $("#bet_money").val();
+        if(buyMoney==''){
+            layer.msg($i18np.prop("erding.noMoneyInput"));
+            return;
+        }
+        var mv = parseFloat(buyMoney);
+        if(mv>currSetting.maxBettingCount){
+            layer.msg($i18np.propByPlaceholder("erding.tip1",[{"name":"XXX","value":currSetting.maxBettingCount}]));
+            moneyErr = true;
+            return;
+        }
+        if(mv<currSetting.minBettingPrice){
+            layer.msg($i18np.propByPlaceholder("erding.tip2",[{"name":"XXX","value":currSetting.minBettingPrice}]));
+            moneyErr = true;
+            return;
+        }
+        buyCodesList = [];
+        codeList.forEach((it0,idx0)=>{
+            ss.forEach((it1,idx1)=>{
+                if(it0.oriCode==it1){
+                    buyCodesList.push({
+                        buyCode:it0.replaceCode,
+                        buyMoney:buyMoney,
+                        lotterySettingId:currSetting.id,
+                        isXian:0
+                    })
+                }
+            })
+
+            ss1.forEach((it1,idx1)=>{
+                if(it0.oriCode==it1){
+                    buyCodesList.push({
+                        buyCode:it0.replaceCode,
+                        buyMoney:buyMoney,
+                        lotterySettingId:currSetting.id,
+                        isXian:0
+                    })
+                }
+            })
+        });
+
+        toBuy();
+
+    })
+
+
+
+    $("#baopai1").on("click","",function (e) {
+        toBaoPai();
+    })
+
+
+    $("#baopai2").on("click","",function (e) {
+        var buyMoney = $("#bet_money").val();
+        if(buyMoney==''){
+            layer.msg($i18np.prop("erding.noMoneyInput"));
+            return;
+        }
+        var mv = parseFloat(buyMoney);
+        if(mv>currSetting.maxBettingCount){
+            layer.msg($i18np.propByPlaceholder("erding.tip1",[{"name":"XXX","value":currSetting.maxBettingCount}]));
+            moneyErr = true;
+            return;
+        }
+        if(mv<currSetting.minBettingPrice){
+            layer.msg($i18np.propByPlaceholder("erding.tip2",[{"name":"XXX","value":currSetting.minBettingPrice}]));
+            moneyErr = true;
+            return;
+        }
+        buyCodesList = [];
+        codeList.forEach((it0,idx0)=>{
+            ss.forEach((it1,idx1)=>{
+                if(it0.oriCode==it1){
+                    buyCodesList.push({
+                        buyCode:it0.replaceCode,
+                        buyMoney:buyMoney,
+                        lotterySettingId:currSetting.id,
+                        isXian:0
+                    })
+                }
+            })
+
+            ss1.forEach((it1,idx1)=>{
+                if(it0.oriCode==it1){
+                    buyCodesList.push({
+                        buyCode:it0.replaceCode,
+                        buyMoney:buyMoney,
+                        lotterySettingId:currSetting.id,
+                        isXian:0
+                    })
+                }
+            })
+        });
+
+        toBaoPai();
+
+    })
+
+    function selectOne(obj){
+        $this = $(obj);
+        var needRemove = false;
+        if($this.is(".active")){
+            needRemove = true;
+            $this.removeClass("active");
+        }else{
+            $this.addClass("active");
+        }
+        var iloc = $this.attr("_i");
+        var jloc = $this.attr("_j");
+        var oriCode = iloc+jloc;
+        if(needRemove){
+            if(ss.includes(oriCode)){
+                ss.splice(ss.indexOf(oriCode),1);
+                totalAmount--;
+            }
+        }else{
+            if(!ss.includes(oriCode)){
+                ss.push(oriCode);
+                totalAmount++;
+            }
+        }
+        $("#bet_count").html(totalAmount);
+        var m = $("#bet_money").val();
+        $("#bet_total").html(totalAmount * m)
+
+    }
+
+    function addCodes(obj){
+        var idStr = obj.id;
+        var buyCode = idStr.split("-")[1];
+        var betMax = $(obj).attr("bet-max");
+        var pass = validateValue(obj.value,'money');
+        if(!pass){
+            this.value = "";
+        }
+        if(obj.value!=''){
+            var mv = parseFloat(obj.value);
+            // if(mv>parseInt(betMax)){
+            //     layer.alert("号码="+buyCode+",填写的金额不能超出单注上限:"+currSetting.maxBettingCount);
+            //     moneyErr = true;
+            //     return;
+            // }
+            // if(mv<currSetting.minBettingPrice){
+            //     layer.alert("号码="+buyCode+",填写金额不能小于最小下注："+currSetting.minBettingPrice);
+            //     moneyErr = true;
+            //     return;
+            // }
+
+            if(buyCodesList.length<1){
+                buyCodesList.push({
+                    buyCode:buyCode,
+                    buyMoney:obj.value,
+                    lotterySettingId:currSetting.id,
+                    isXian:0
+                })
+            }else{
+                var exist = false;
+                buyCodesList.forEach((item,idx)=>{
+                    if(item.buyCode == buyCode){
+                        item.buyMoney = obj.value;
+                        exist = true;
+                    }
+                })
+                if(!exist){
+                    buyCodesList.push({
+                        buyCode:buyCode,
+                        buyMoney:obj.value,
+                        lotterySettingId:currSetting.id,
+                        isXian:0
+                    })
+                }
+            }
+        }else{
+            var newArr = [];
+            if(buyCodesList.length>0){
+                buyCodesList.forEach((item,idx)=>{
+                    if(item.buyCode != buyCode){
+                       newArr.push(item);
+                    }
+                })
+                buyCodesList = newArr;
+            }
+        }
+        moneyErr = false;
+        var money = 0;
+        buyCodesList.forEach((item,idx)=>{
+            money = money + parseFloat(item.buyMoney);
+        })
+        $("#bet_total").html(money);
+        $("#bet_count").html(buyCodesList.length)
+    }
+
+
+    function toBuy(){
+       if(buyCodesList.length<1){
+           layer.msg($i18np.prop("erding.noCodeSelect"));
+           return;
+       }
+       if(moneyErr){
+           layer.msg($i18np.prop("erding.moneyError"));
+           return;
+       }
+       layer.msg($i18np.prop("erding.chulizhong"), {
+            icon: 16
+            ,shade: 0.3
+            ,time:-1
+       });
+
+       $.ajax({
+           url:HOST+"v1/draw/erziding/buy?xzuuid="+xzuuid,
+           type:'post',
+           data:JSON.stringify(buyCodesList),
+           success:function (res) {
+               layer.closeAll();
+               if(res.code==0){
+                   if(res.data!=null && res.data.length>0){
+                       var msg = $i18np.prop("erding.tip6");
+                       res.data.forEach((item,idx)=>{
+                           msg = msg +"["+item+"] ";
+                       })
+                       layer.alert(msg,{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+                   }
+                   window.parent.toPage("kuaida");
+                   window.parent.getCredit();
+                   window.parent.reloadPrintTable();
+               }else{
+                   getuuid();
+                   layer.msg(res.msg);
+               }
+           }
+       })
+
+    }
+
+
+    function toBaoPai(){
+        if(buyCodesList.length<1){
+            layer.msg($i18np.prop("erding.noCodeSelect"));
+            return;
+        }
+        if(moneyErr){
+            layer.msg($i18np.prop("erding.moneyError"));
+            return;
+        }
+        if(bpSettingList!=null && bpSettingList.length>0){
+            var minGroup = bpSettingList[0].groupCount;
+            var canBaoPai =  false;
+            for(var i=0;i<bpSettingList.length;i++){
+                if(bpSettingList[i].groupCount<=buyCodesList.length){
+                    canBaoPai = true;
+                }
+            }
+            if(!canBaoPai){
+                layer.confirm($i18np.propByPlaceholder("erding.tip5",[{"name":"XXX","value":minGroup}]),{
+                    title:'<span i18n="erding.confirm">'+$i18np.prop("erding.confirm")+'</span>'
+                },function(index){
+                    layer.close(index);
+                    __doBaoPai()
+                });
+            }else{
+                __doBaoPai()
+            }
+        }else {
+            __doBaoPai()
+        }
+
+    }
+
+
+    function  __doBaoPai() {
+        layer.msg($i18np.prop("erding.chulizhong"), { icon: 16,shade: 0.3 ,time:-1});
+
+        $.ajax({
+            url:HOST+"baopai/erziding/buy?xzuuid="+xzuuid,
+            type:'post',
+            data:JSON.stringify(buyCodesList),
+            success:function (res) {
+                layer.closeAll();
+                if(res.code==0){
+                    if(res.data!=null && res.data.length>0){
+                        var msg = $i18np.prop("erding.tip6");
+                        res.data.forEach((item,idx)=>{
+                            msg = msg +"["+item+"] ";
+                        })
+                        layer.alert(msg,{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+                    }
+                    window.parent.toPage("kuaida");
+                    window.parent.getCredit();
+                    window.parent.reloadPrintTable();
+                }else{
+                    buyCodesList = [];
+                    $("#bet_total").html("0");
+                    $("#bet_count").html(0)
+                    getuuid();
+                    layer.msg(res.msg);
+                }
+            }
+        })
+    }
+
+
+
+
+</script>
+
+<script>
+    var moduleName = "erziding";
+    var layer = layui.layer;
+    var $i18np = null;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        //getData();
+        reI18nContent();
+    }
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            getDrawInfo()
+            //getData();
+            window.parent.frameLoad();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+</script>
+
+</body>
+</html>

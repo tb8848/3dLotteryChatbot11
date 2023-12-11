@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>开奖号码</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+</head>
+<style>
+    body{
+        background-color: white;
+    }
+
+    .t-1 td{
+        border:1px solid #e2e2e2;
+    }
+</style>
+<link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+<body style="overflow-y: auto">
+
+<div class="module">
+    <div name="module" id="drawnumber" class="m5 mt5">
+        <div>
+<!--            <table id="t" lay-filter="t" class="t-1"></table>-->
+            <table class="t-1">
+            <thead>
+                <tr class="title-bar"><td colspan="9" i18n="lottery.title">开奖号码</td></tr>
+                <tr class="bg2 tc" >
+                    <td i18n="lottery.time">开奖时间</td>
+                    <td i18n="lottery.drawNo">期号</td>
+                    <td i18n="lottery.bai">佰</td>
+                    <td i18n="lottery.shi">拾</td>
+                    <td i18n="lottery.ge">个</td>
+                </tr>
+            </thead>
+            <tbody class="fn-hover" id="databody">
+<!--                <tr> -->
+<!--                    <td width="220" align="center">&#45;&#45;</td> -->
+<!--                    <td align="center">22343</td> -->
+<!--                    <td> <span class="bg-ball ball2"></span> </td>-->
+<!--                    <td> <span class="bg-ball ball2"></span> </td>-->
+<!--                    <td> <span class="bg-ball ball2"></span> </td>-->
+<!--                    <td> <span class="bg-ball ball2"></span> </td>-->
+<!--                    <td> <span class="bg-ball ball0"></span> </td>    \-->
+<!--                </tr>-->
+<!--                <tr> -->
+<!--                    <td width="220" align="center">2022-12-23 00:23:25</td>-->
+<!--                    <td align="center">22342</td>-->
+<!--                    <td> <span class="bg-ball ball1">3</span> </td>-->
+<!--                    <td> <span class="bg-ball ball1">8</span> </td>-->
+<!--                    <td> <span class="bg-ball ball1">3</span> </td>-->
+<!--                    <td> <span class="bg-ball ball1">1</span> </td>-->
+<!--                    <td> <span class="bg-ball ball0">4</span> </td>    -->
+<!--                </tr>-->
+
+            </tbody> </table>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+
+<script type="text/javascript">
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    var moduleName = "lotterynumber";
+    var $i18np = null;
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            getData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        //getData();
+    }
+
+</script>
+
+
+<script>
+    var $ = layui.$;
+    var form = layui.form;
+    var table = layui.table;
+    var laydate = layui.laydate
+
+    form.render('select');
+
+    function getData(){
+        $.ajax({
+            url:HOST+'lotteryNumberPC/getDrawPage?page=1&limit=200',
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    var dlist = res.data;
+                    var rows = ''
+                    for(var i=0,len=dlist.length;i<len;i++){
+                        var item = dlist[i];
+                        var drawResult = item.drawResult;
+                        if(drawResult != null && drawResult!= undefined && drawResult!= "" && drawResult!= "null"){
+                            rows = rows +' <tr><td width="220" align="center">'+item.drawTime+'</td> <td align="center">'+item.drawId+'</td> ' +
+                                '<td> <span class="bg-ball ball1">'+drawResult.substring(0,1)+'</span> </td>' +
+                                '<td> <span class="bg-ball ball1">'+drawResult.substring(1,2)+'</span> </td>' +
+                                '<td> <span class="bg-ball ball1">'+drawResult.substring(2,3)+'</span> </td>' +
+                                '</tr>';
+                        }else{
+                            rows = rows +' <tr><td width="220" align="center">--</td> <td align="center">'+item.drawId+'</td> ' +
+                                '<td> <span class="bg-ball ball2"></span> </td>' +
+                                '<td> <span class="bg-ball ball2"></span> </td>' +
+                                '<td> <span class="bg-ball ball2"></span> </td>' +
+                                '</tr>';
+                        }
+                    }
+                    $("#databody").html(rows);
+                }
+            }
+        })
+    }
+
+    //判断是否为空
+    function isNull(str){
+        if(str == "" || str == null || str == undefined || str == "null" || str == "undefined") {
+            return true
+        }
+        return false
+    }
+</script>

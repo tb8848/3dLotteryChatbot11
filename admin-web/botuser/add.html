@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>用户列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+        .btn{
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;">
+<div id="main" class="main" style="top: 0px;">
+    <div class="module">
+        <div name="module" id="memberadmin" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="user.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="user.top.add">新增</span>
+<!--                    &gt;&gt;<a class="blue" href="#!memberadmin?Member_Id=74&amp;m=memberadmin" title="查看up66862">up66862(总监) </a>-->
+                </div>
+                <div class="fr">
+<!--                    <a href="addUser2.html">新增下级</a> |-->
+<!--                    <a href="userList2.html" class="red fb" style="color: #CC0000" i18n="user.top.accountList">账户列表</a>-->
+                    <a class="red fb" style="color: #CC0000;cursor: pointer;" onclick="liebiao()" i18n="user.top.accountList">账户列表</a>
+                </div>
+            </div>
+            <form  novalidate="novalidate" style="margin-top: 15px" >
+                <table class="t-1">
+                    <tbody>
+                        <!--<tr id="lotteryTypeId">
+                            <td class="bg3">彩种</td>
+                            <td>
+                                <input id="3d" type="checkbox" value="1" name="lotteryType" checked="checked">
+                                <label>福彩3D</label> &nbsp;
+                                <input id="p3" type="checkbox" value="0" name="lotteryType">
+                                <label>排列三</label> &nbsp;
+                            </td>
+                        </tr>-->
+                        <tr>
+                            <td class="bg3" width="100" i18n="user.query.account">账号</td>
+                                <td>
+                                    <input type="text" name="username" id="Account" required="true" autocomplete="off" minlength="3" maxlength="16" aria-required="true">
+                                </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3" i18n="user.add.password">密码</td>
+                            <td>
+                                <input type="password" name="password" id="password" required="true"  minlength="8" maxlength="16" autocomplete="new-password" value="" aria-required="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3">时长类型</td>
+                            <td id="timeTypeTd">
+                                <input id="months" type="radio" value="1" name="timeType" checked="checked" onclick="clickType(this)">
+                                <label>按月</label> &nbsp;
+                                <input id="days" type="radio" value="0" name="timeType" onclick="clickType(this)">
+                                <label>按天</label> &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3">使用时长</td>
+                            <td>
+                                <input type="text" name="useMonth" id="useMonth" required="true" maxlength="2" autocomplete="off" value="" aria-required="true">
+                                <span id="useTime"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg3" i18n="user.add.passwordRule">密码规则</td>
+                            <td>
+                                <strong class="f14 blue">
+                                    <span i18n="user.add.passwordRuleList">密码需符合以下规则: </span><br>
+                                    <span i18n="user.add.passwordRuleOne">1.必须是8-16位的大小写字母及数字组合 </span><br>
+                                    <span i18n="user.add.passwordRuleTwo">2.不可相连3位以上连续数字 (如: Asdf1234) </span><br>
+                                    <span i18n="user.add.passwordRuleThree">3.不可相连3位以上连续字母 (如: Abcd1357) </span><br>
+                                    <span i18n="user.add.passwordRuleFour">4.不可相连3位以上相同数字 (如: Asdfg111) </span><br>
+                                    <span i18n="user.add.passwordRuleFive">5.不可相连3位以上相同字母 (如: Aaa01357) </span><br>
+                                    <span i18n="user.add.passwordRuleSix">6.密码不可包含帐号 </span><br>
+                                    <span i18n="user.add.passwordRuleSeven">7.密码开头2位不能和帐号相同 (如:帐号ff01、密码ffA3579) </span><br>
+                                    <span i18n="user.add.passwordRuleEight">8.不能包含键盘常用字串qwe、asd、zxc、qaz、wsx </span><br>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt10 tc">
+                    <button class="btn" id="add" lay-submit lay-filter="add" i18n="user.add.btn.submit" style="cursor: pointer">提交</button>
+                    <!--<button class="btn" id="add">提交</button>-->
+<!--                    <input type="hidden" name="submitUrlParam" value="memberadmin">-->
+                </div>
+            </form>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    const messages = {
+        zh: {
+            selectCompany:"选择公司",
+            selectFundMode:"选择资金模式",
+            credit:"信用",
+            cash:"现金",
+        },
+        th: {
+            selectCompany:"เลือกบริษัท",
+            selectFundMode:"โปรดเลือกโหมดเงินทุน",
+            credit:"เครดิต",
+            cash:"เงินสด",
+        }
+    }
+
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    var moduleName = "user";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var timeType;
+    var i18np=null
+    var form = layui.form;
+    var $ = layui.jquery;
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+
+            timeType = $('input[name="timeType"]:checked').val();
+            if (timeType == 1) {
+                $("#useTime").html("个月")
+            }else {
+                $("#useTime").html("天")
+            }
+
+            $.ajax({
+                url: HOST + "admin/getLotteryTypeByAdmin"
+                , type: "get"
+                , success: function (res) {
+                    if (res.code == 200) {
+                        if (res.data == 3) {
+                            $("#lotteryTypeId").show();
+                        }else {
+                            $("#lotteryTypeId").hide();
+                        }
+                    } else {
+                        layer.msg(i18np.prop('user.edit.ajax.error.dataError'));
+                    }
+                }
+            });
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+    }
+
+    function clickType (radio) {
+        timeType = radio.value;
+        if (timeType == 1) {
+            $("#useTime").html("个月")
+        }else {
+            $("#useTime").html("天")
+        }
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+    })
+
+    var roleName = "";
+    var roleNameId = "";
+
+    //添加操作
+    form.on('submit(add)', function (data) {
+        let password = $("#password").val();
+        //账号
+        var Account = $("#Account").val();
+
+        var useMonth = $("#useMonth").val();
+        data.field.loginName = Account;
+        //密码
+        data.field.loginPwd = password;
+
+        data.field.useMonth = useMonth;
+
+
+        if(Account ==null || Account == ""){
+            layer.msg(i18np.prop('user.add.msg.accountNotNull'))
+            return false
+        }
+        if(password == null || password == ""){
+            layer.msg(i18np.prop('user.add.msg.pwdNotNull'))
+            return false
+        }
+        if(Account.length > 8){
+            layer.msg("账号不能超过8位")
+            return false
+        }
+
+        data.field.useType = timeType;
+
+        /*var d3 = $("#3d").prop("checked");
+        var p3 = $("#p3").prop("checked");
+        if (!d3 && !p3) {
+            layer.msg("请至少选择一个彩种")
+            return false
+        }else if (d3 && p3) {
+            data.field.lotteryType = 3
+        }else if (d3 && !p3) {
+            data.field.lotteryType = 1
+        }else if (!d3 && p3) {
+            data.field.lotteryType = 2
+        }*/
+
+        let msg = checkpwd(password);
+        if (msg != null){
+            layer.msg(msg);
+            return false;
+        }
+        // console.log(JSON.stringify(data.field))
+        layer.msg(i18np.prop('user.add.msg.title.submit'),{time:-1,shade:0.3,icon:16})
+        $.ajax({
+            url: HOST + 'admin/botuser/add',
+            type: "POST",
+            data: JSON.stringify(data.field),
+            success: function (res) {
+                layer.closeAll();
+                if (res.code == 0) {
+                    layer.confirm(i18np.prop('user.add.msg.saveSuccess'), {
+                        title:i18np.prop('user.edit.tips'),
+                        btn: [i18np.prop('user.add.msg.btn.ok')] //可以无限个按钮
+                    }, function(index, layero){
+                        //按钮【按钮一】的回调
+                        window.location.href='list.html';
+                    });
+                } else {
+                    layer.msg(res.msg);
+                }
+            },
+            error: function () {
+                layer.msg(i18np.prop('user.add.ajax.error.networkError'));
+            }
+        });
+        return false;
+    });
+
+    function liebiao() {
+        window.sessionStorage.setItem("yueji_nav","");
+        window.location.href='list.html';
+    }
+</script>
+</body>
+</html>

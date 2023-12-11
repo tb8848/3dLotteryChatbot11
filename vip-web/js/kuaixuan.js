@@ -1,0 +1,157 @@
+var rules = {
+    "isXian":0,
+        "count":1,
+        "lotteryMethodId":'',
+        "fixCode":{
+        "name":'定位置',
+            "included":1,
+            "excluded":0,
+            "loc1":"",
+            "loc2":"",
+            "loc3":"",
+            "loc4":"",
+            "isShow":true
+    },
+    "matchCodes":{
+        "name":'配数',
+            "included":0,
+            "excluded":0,
+            "loc1":"",
+            "loc2":"",
+            "loc3":"",
+            "loc4":"",
+            "isXian":0,
+            "isShow":false
+    },
+    "repeat":{
+        "double1":{
+            "name":"双重",
+                "included":0,
+                "excluded":0,
+                "nums":2,
+        },
+        "triple":{
+            "name":"三重",
+                "included":0,
+                "excluded":0,
+                "nums":3,
+        },
+        "double2":{
+            "name":"四重",
+                "included":0,
+                "excluded":0,
+                "nums":4,
+        },
+        "doubledouble":{
+            "name":"双双重",
+                "included":0,
+                "excluded":0,
+                "nums":22,
+        }
+    },
+    "brothers":{
+        "br2":{
+            "name":"两兄弟",
+                "included":0,
+                "excluded":0,
+                "nums":2,
+        },
+        "br3":{
+            "name":"三兄弟",
+                "included":0,
+                "excluded":0,
+                "nums":3,
+        },
+        "br4":{
+            "name":"四兄弟",
+                "included":0,
+                "excluded":0,
+                "nums":4,
+        }
+    },
+    "pairs":{
+        "name":"对数",
+            "included":0,
+            "excluded":0,
+            "pair1":"",
+            "pair2":"",
+            "pair3":"",
+            "pair4":"",
+            "pair5":""
+    },
+    "singleNum":{
+        "name":"单数",
+            "included":0,
+            "excluded":0,
+            "locArr":[0,0,0,0],
+    },
+    "doubleNum":{
+        "name":"双数",
+            "included":0,
+            "excluded":0,
+            "locArr":[0,0,0,0],
+    },
+    "bigNum":{
+        "name":"大数",
+            "included":0,
+            "excluded":0,
+            "locArr":[0,0,0,0],
+    },
+    "smallNum":{
+        "name":"小数",
+            "included":0, //1:取
+            "excluded":0, //1：除
+            "locArr":[0,0,0,0],//位置,
+
+    },
+    "sum2":{
+        "name":"两(或三)数合",
+            "included":0, //1:取
+            "excluded":0, //1：除
+            "sum":"",
+            "sumType":0, //2：两数和；3：三数和
+    },
+    "others":{
+        "name":'其他规则',
+            "fullChange":'', //全转
+            "shangJiang":'', //上奖
+            'excludes':'', //排除
+            'locArr':[0,0,0,0],//乘号规则
+            "valueRange":["",""] //值范围
+    },
+    "fushi":{
+        "name":'复式规则',
+            "included":1,
+            "excluded":0,
+            "contains":'', //含
+            "combines":'' //复式
+    },
+    "hefen":{
+        "name":'合分',
+            "included":1,
+            "excluded":0,
+            "binds":[
+            {
+                "name":'',
+                "value":'',
+                "locArr":[0,0,0,0]
+            },
+            {
+                "name":'',
+                "value":'',
+                "locArr":[0,0,0,0]
+            },
+            {
+                "name":'',
+                "value":'',
+                "locArr":[0,0,0,0]
+            },
+            {
+                "name":'',
+                "value":'',
+                "locArr":[0,0,0,0]
+            }
+        ]
+    }
+};
+

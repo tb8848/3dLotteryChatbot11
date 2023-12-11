@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>基本资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../setting/css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+
+    <style>
+        th {
+            background: url(../../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        td input{
+            width: 147px;
+        }
+
+        .email{
+            display: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+        .mydk {
+            cursor: pointer;
+        }
+
+        .layui-layer-molv .layui-layer-title{
+            background: #159ED4 !important;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif; overflow-y: auto">
+<div id="main">
+    <div class="module">
+        <div name="module" id="setting" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.basic.information">  基本资料  </span>
+                </div>
+                <div class="fr">
+                    <a href="accountSetting.html" class="fb red" i18n="setting.basic.information">基本资料</a> |
+                    <a href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a>
+                </div>
+            </div>
+            <form id="form" novalidate="novalidate">
+                <div class="mt10">
+                    <table class="t-1">
+                        <input type="hidden" name="id" id="id"/>
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="4" i18n="setting.basic.information">基本资料</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="2" i18n="setting.account.number">&nbsp;账号</td>
+                            <td rowspan="2">
+                                <input type="text" disabled="disabled" id="username">
+                            </td>
+                            <td rowspan="2" i18n="setting.contact.number">联系电话</td>
+                            <td rowspan="2"><input type="text" disabled="disabled" id="phone"></td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td rowspan="2" i18n="setting.code">&nbsp;代号</td>
+                            <td rowspan="2">
+                                <input type="text" id="nickName" name="pr_id" maxlength="16" autocomplete="off" colspan="3" disabled="disabled">
+                            </td>
+<!--                            <td i18n="setting.sms.verification">短信验证</td>-->
+<!--                            <td>-->
+<!--                                <input type="button" value="未启用" style="width: 60px;" class="btn" id="sms_edit" i18n="setting.not.enabled">-->
+<!--                            </td>-->
+                        </tr>
+                        <tr>
+                            <td i18n="setting.google.authenticator">谷歌验证</td>
+                            <td>
+                                <div id="wqy" style="display: none"><input type="button" value="未启用" class="btn" style="width: 120px" id="ga_edit" i18n="setting.not.enabled"></div>
+                                <div id="qy" style="display: none"><span id="gaQy" i18n="setting.enabled">已启用</span></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+            <div id="dialog" class="g-dialog" style="width: 600px; left: 30%; top: 1%;display: none">
+                <div class="dialog-hd" id="title">
+                    <div class="title fl" i18n="setting.google.authenticator">谷歌验证</div>
+                    <div class="fr"><a href="javascript:void(0)" class="btn-close fn-close">×</a></div>
+                </div>
+                <div class="dialog-bd">
+                    <div class="module">
+                        <div id="ga_dialog" name="module" class="m5 mt10">
+                            <form>
+                                <div id="qrCode1" class="qrCodeSet">
+                                    <div class="qrText" i18n="setting.scan.code.to.download">扫码下载</div>
+                                    <img id="android_QR" class="qrImage" src="/Images/android_QR.png?v=1">
+                                    <div style="text-align: center;">
+                                        <text i18n="setting.weChat.users.please.select.menu.use">微信用户请选择右上角菜单使用</text>
+                                        <br>
+                                        <text style="color: red;" i18n="setting.browser.open">「浏览器打开」</text>
+                                        <text i18n="setting.download.and.install.normally">正常下载再安装</text>
+                                    </div>
+                                </div>
+                                <div id="qrCode2" class="qrCodeSet">
+                                    <div class="qrText" i18n="setting.scan.code.to.download">扫码下载</div>
+                                    <img id="iOS_qrcode" class="qrImage" src="/Images/iOS_QR.jpeg"></div>
+                                <table class="t-1" style="width: 100%;">
+                                    <thead>
+                                    <tr class="bg1">
+                                        <td colspan="2" style="text-align:center" i18n="setting.google.authenticator">谷歌验证</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="otp_ga">
+                                        <td class="bg tr" colspan="2" style="text-align: left;font-size: 17px;"><strong
+                                                class="blue" i18n="setting.account.security.google.authentication.enabled"> 为了提升帐号安全，我们建议开启谷歌验证。 </strong></td>
+                                    </tr>
+                                    <tr class="otp_ga">
+                                        <td class="bg tr" style="width: 60px; text-align: center;" i18n="setting.purpose">用途</td>
+                                        <td><strong class="red" i18n="setting.secondary.authentication.add.additional.security"> 通过二次验证(也称为双重身分验证)，您可以为自己的帐号添加额外的安全保障。</strong><br>
+                                            <strong class="red" i18n="setting.after.setting.up.account.two.steps">在完成设置后，您将使用以下对象通过两个步骤登入帐号</strong> <br>
+                                            <strong class="red" i18n="setting.your.password">您的密码</strong><br>
+                                            <strong class="red" i18n="setting.secondary.verification.code.generated">您设备上安装的谷哥认证器为您生成的二次验证码</strong><br>
+                                            <strong class="red" i18n="setting.please.complete.it.within.time">(验证码时效性为3分钟，请于时间内完成) </strong></td>
+                                    </tr>
+                                    <tr class="otp_ga">
+                                        <td class="bg tr" style="width: 60px; text-align: center;" i18n="setting.step">步骤</td>
+                                        <td>
+                                            <strong class="red" i18n="setting.download.google.authenticator"> 1. 请先下载谷哥认证器(或其他兼容一次性验证码软件)</strong><br>
+                                            <a id="qr_android" href="https://app.aqqeca.com/GoogleAuthenticator_v5_10_apkpure_com.apk"
+                                               target="_blank" style="cursor: pointer; margin-left: 13px;" i18n="setting.android">安卓</a>
+                                            <span style="color:blue">|</span>
+                                            <a id="qr_ios" href="https://apps.apple.com/tw/app/google-authenticator/id388497605"
+                                               target="_blank" style="cursor: pointer;" i18n="setting.apple">苹果</a> <br>
+                                            <strong class="red" i18n="setting.select.scan.barcode">2. 然后选择”扫描条形码”<br> </strong></td>
+                                    </tr>
+                                    <tr class="otp_ga">
+                                        <td class="bg tr" style="width: 60px; text-align: center;" i18n="setting.scan.qr.code">扫描二维码</td>
+                                        <td>
+                                            <div id="qrCode" style=""></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="otp_ga">
+                                        <td class="bg tr" style="width: 60px; text-align: center;" i18n="setting.verification.code">验证码</td>
+                                        <td><img id="cover2" class="" style="width: 20px; height: 20px; display: none;"
+                                                 src="/Images/loading.gif">
+                                            <text name="ga_pwd" id="ga_pwd" style="" autocomplete="off">
+
+                                            </text>
+                                            <text style="margin-left: 30px;" i18n="setting.key.will">(密钥将在</text>
+                                            <text name="ga_hint" id="ga_hint" value="180"></text>
+                                            <text i18n="setting.fail.after.seconds">秒后失效)</text>
+                                        </td>
+                                    </tr>
+                                    <tr class="otp_ga">
+                                        <td class="bg tr" i18n="setting.enter.verification.code">输入验证码</td>
+                                        <td><input type="text" name="ga_code" id="ga_code" class="input"
+                                                   autocomplete="off"></td>
+                                    </tr>
+                                    <tr class="otp_ga">
+                                        <td class=""></td>
+                                        <td><input type="button" id="btn-ga-submit" class="btn" value="确定" i18n="setting.determine"> <input
+                                                type="button" id="skip_ga" class="btn btn-gray" value="取消"
+                                                style="margin-left: 5px;" i18n="setting.cancel"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="dialog-ft"></div>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/qrCode.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    var moduleName = "subAccount_setting";//setting
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties("subAccount-"+moduleName);
+
+        // init();
+    }
+
+    layui.config({base: '../../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        i18np.loadProperties("subAccount-"+moduleName);
+
+        init();
+    });
+
+    var form = layui.form;
+    var $ = layui.jquery;
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var id = "";
+
+    function init(){
+        id = GetQueryString("id");
+        if (id == null || id == "" || id == undefined) {
+            id = localStorage.getItem("id");
+            $("input[name='id']").val(id);
+        }
+        getUser(id);
+        $("#ga_hint").html(180)
+    }
+    // window.onload = function () {
+    //     id = GetQueryString("id");
+    //     if (id == null || id == "" || id == undefined) {
+    //         id = localStorage.getItem("id");
+    //         $("input[name='id']").val(id);
+    //     }
+    //     getUser(id);
+    //     $("#ga_hint").html(180)
+    // }
+
+    //根据id查询子账号信息
+    function getUser(id) {
+        $.ajax({
+            url: HOST + "sonAdmin/getSonById?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    //获取账号
+                    $("#username").val(d.sonUsername);
+                    //获取代号
+                    $("#nickName").val(d.nickName);
+                    //获取电话
+                    $("#phone").val(d.phone);
+                    if (d.gaFlag == 0 || d.gaFlag == "" || d.gaFlag == null) {
+                        $("#wqy").show();
+                        $("#qy").hide();
+                    }else {
+                        $("#qy").show();
+                        $("#wqy").hide();
+                    }
+                    form.render()
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    let dialog = document.querySelector('#dialog')
+    var title = document.querySelector('#title');
+    // 拖动模态框
+    title.addEventListener('mousedown',function(e){
+        var x=e.pageX-dialog.offsetLeft;
+        var y=e.pageY-dialog.offsetTop;
+        //(2) 鼠标移动的时候，把鼠标在页面中的坐标，减去 鼠标在盒子内的坐标就是模态框的left和top值
+        document.addEventListener('mousemove',move)
+        function move(e){
+            dialog.style.left=e.pageX-x+'px';
+            dialog.style.top=e.pageY-y+'px';
+        }
+        //(3) 鼠标弹起，就让鼠标移动时间解除
+        document.addEventListener('mouseup',function(){
+            document.removeEventListener('mousemove',move)
+        })
+    })
+
+    $("#ga_edit").on('click', function () {
+        gaInit();
+    })
+
+    $("#skip_ga").on('click', function () {
+        $("#dialog").hide();
+    })
+
+    $(".btn-close").on('click', function () {
+        $("#dialog").hide();
+    })
+
+    $("#btn-ga-submit").on('click', function () {
+        var ga_code = $("#ga_code").val();
+        if (ga_code == null || ga_code == "" || ga_code == undefined) {
+            layer.msg(i18np.prop("setting.please.enter.the.verification.code"));
+            return false;
+        }
+        $.ajax({
+            url: HOST + "admin/verifyGa?code=" + ga_code
+            , type: "get"
+            , success: function (data) {
+                if (data.code == 200) {
+                    layer.msg(i18np.prop("setting.operation.succeeded"));
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    })
+
+    function gaInit () {
+        $("#qrCode").html('');
+        $.ajax({
+            url: HOST + "admin/gaInit"
+            , type: "get"
+            , success: function (data) {
+                if (data.code == 200) {
+                    $("#qrCode").qrcode({
+                        render: "canvas" , // 渲染方式有table方式（IE兼容）和canvas方式
+                        width: 100, //宽度
+                        height: 100, //高度
+                        text: data.data.qrCodeContent , //内容
+                        typeNumber: -1, //计算模式
+                        correctLevel: 2, //二维码纠错级别
+                        background: "#ffffff" , //背景颜色
+                        foreground: data.data.color //二维码颜色
+                    });
+                    $("#ga_pwd").html(data.data.secret);
+                    $("#dialog").show();
+                    var left_time = $("#ga_hint").html();
+                    var tt = window.setInterval(function(){
+                        left_time = left_time - 1;
+                        if (left_time <= 0) {
+                            window.clearInterval(tt);
+                            $("#ga_hint").html(180);
+                            gaInit();
+                        }
+                        else {
+                            $("#ga_hint").html(left_time);
+                        }
+                    }, 1000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+    //修改
+    form.on('submit(update)', function (data) {
+        //用户id
+        data.field.id = $("input[name='id']").val();
+        //信用额度
+        data.field.creditLimit = $("input[name='creditLimit']").val();
+        //联系方式
+        data.field.phone = $("input[name='phone']").val();
+        //代号
+        data.field.nickName = $("input[name='nickName']").val();
+        //邮箱
+        data.field.email = $("input[name='email']").val();
+        $.ajax({
+            url: HOST + "admin/updateBasicUser"
+            , type: "POST"
+            , contentType: 'application/json'
+            , data: JSON.stringify(data.field)
+            , success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        layer.close(layer.index);
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+        return false;
+    });
+</script>
+</body>
+</html>

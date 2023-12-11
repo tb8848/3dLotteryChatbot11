@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>APK管理</title>
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+<!--    <script src="../js/layui/layui.all.js"></script>-->
+</head>
+<body>
+    <div class="layui-card-body">
+        <table class="layui-hide" id="t" lay-filter="t"></table>
+    </div>
+</body>
+
+<script type="text/html" id="tb">
+    <div class="layui-container" style="margin-left:0px;">
+        <a class="layui-btn layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-addition"></i>上传应用</a>
+    </div>
+</script>
+<script type="text/html" id="apk-toolbar">
+    <a class="layui-btn  layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    <a class="layui-btn  layui-btn-xs" lay-event="download" style="width: 60px;">下载</a>
+</script>
+<script type="text/html" id="checkboxTpl">
+    <input type="checkbox" name="status" value="{{d.id}}" title="启用" lay-filter="lockDemo" {{ d.status == 1 ? 'checked' : '' }} />
+</script>
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script>
+    layui.use(['table'], function() {
+        var $ = layui.$;
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            toolbar: '#tb',
+            url: HOST+'apkPC/getApkList',
+            cols: [[
+                {field: 'id',title: '序号',type:'numbers',align: 'center'},
+                {field: 'apkName',title: '应用名称',width: '10%',align: 'center'},
+                {field: 'apkPackage',title: '应用包名',width: 160,align: 'center'},
+                {field:'file',align : 'center', title:'文件名',width:160},
+                // {field: 'picture',title: '应用图片',width: 125,align: 'center',templet: '<div><img src="'+HOST.substring(0,HOST.length-4)+'image/{{ d.picture }}" style="width: 70px;height: 50px;" onclick="previewImgs(this)"></div>'},
+                {field: 'picture',title: '应用图片',width: 125,align: 'center',templet: function (d) {
+                    return '<div><img src="'+HOST.substring(0,HOST.length-4)+'image/'+d.picture+'" onclick="previewImgs(this)"></div>'
+                    }},
+                {field:'status',align : 'center', title:'状态',width:120, templet: '#checkboxTpl'},
+                {field: 'versions',title: '应用版本',width: 100,align: 'center'},
+                {field: 'publicity',title: '是否公开',width: 100,align: 'center',templet: function (d) {
+                        if (d.publicity==0) return "未公开";
+                        else if (d.publicity==1) return "已公开";
+                    }},
+                {field: 'createTime',title: '创建时间',width: 170,align: 'center'},
+                {toolbar: '#apk-toolbar',title: '操作',width: 180,align: 'center'}
+            ]
+            ], page: true
+            ,page: {
+                curr: layui.data("apk_page").index
+            },
+            done: (res, curr, count) => {
+                layui.data("apk_page", {
+                    key: 'index',
+                    value: curr
+                });
+            }
+        });
+
+        //监听启用操作
+        form.on('checkbox(lockDemo)', function(obj){
+            var id = this.value;
+            var status = obj.elem.checked;
+            var zhuangtai;
+            if(status){
+                zhuangtai=1;
+            }else{
+                zhuangtai=0;
+            }
+            $.ajax({
+                url:HOST+"apkPC/updApkStatus"
+                ,type:"get"
+                ,data:{id:id,status:zhuangtai}
+                ,contentType: 'application/json'
+                ,success:function (data) {
+                    if(data.code==0){
+                        layer.close(layer.index);
+                        layer.msg('操作成功');
+                    }else if(data.code==1){
+                        layer.msg('操作失败');
+                    }else{
+                        layer.msg('没有权限');
+                    }
+                }
+                ,error:function () {
+                    console.log("ajax error");
+                }
+            });
+        });
+
+        //搜索
+        form.on('submit(search-apk-submit)', function (data) {
+            var text = $('#apkName').val();
+            table.reload('tt',{
+                url:HOST+'apkPC/getApkList',
+                where:{
+                    apkName:text
+                },
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+        table.on('toolbar(t)', function (obj) {
+            if (obj.event === 'upload') {
+                layer.open({
+                    type:2
+                    ,title:"上传应用"
+                    ,skin:'layui-layer-molv'
+                    ,area: ['95%', '95%']
+                    ,content: (encodeURI('upload_app.html?apkName=NFC')), //这里content是一个普通的String
+                    end: function(){
+                        location.reload();
+                    }
+                });
+            }
+        });
+        table.on('tool(t)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                layer.open({
+                    type: 2
+                    ,title: "修改应用信息"
+                    ,skin: 'layui-layer-molv'
+                    ,area: ['95%', '95%']
+                    ,content: (encodeURI("upd_app.html?fileName=" + data.file + "&apkName=" + data.apkName + "&apkPackage=" + data.apkPackage + "&id=" + data.id + "&picture=" + data.picture
+                        + "&status=" + data.status + "&versions=" + data.versions + "&publicity=" + data.publicity + "&createTime=" + data.createTime)), //这里content是一个普通的String
+                    end: function () {
+                        location.reload();
+                    }
+                });
+            }else if (obj.event === 'download') {
+                window.open(HOST+"apkPC/download?id=" + data.id);
+                layer.close(layer.index);
+            }
+        });
+    })
+</script>
+<script>
+    function previewImgs(obj) {
+        var img = new Image();
+        img.src = obj.src;
+        //var height = img.height + 50; // 原图片大小
+        //var width = img.width; //原图片大小
+        var imgHtml = "<img src='" + obj.src + "' width='800px' height='500px'/>";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: 'auto',
+            area: [800 + 'px', 550 + 'px'],// area: [width + 'px',height+'px'],  //原图显示
+            // area: ['47.2%','64.3%'],
+            // area: ['95%','95%'],
+            shadeClose: true,
+            scrollbar: false,
+            title: "图片预览", //不显示标题
+            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function () {
+                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+            }
+        });
+    }
+</script>
+</html>

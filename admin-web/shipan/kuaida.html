@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>出货盘</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!--    <link rel="stylesheet" href="../css/basicSetting.css" media="all">-->
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+
+    <link href="../css/style-Permutation5.css" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css" type="text/css" rel="stylesheet">
+
+</head>
+<body style="overflow-y: auto">
+
+<div id="main">
+    <div name="module" id="operation_out">
+        <template>
+        <div>
+            <table class="t-1 tc">
+                <thead>
+                    <tr class="bg1">
+                        <td colspan="6" i18n="shipan.table.chuhuokuang">出货框</td>
+                        <td> <input type="button" :disabled="openStatus!=1" value="快选" class="btn fn-kuaixuan" @click="toKuaiXuan" i18n="shipan.table.quick.selecct"> </td>
+                        <td> <input type="button" :disabled="openStatus!=1" value="退码" class="btn fn-cancelsell" @click="tuima" i18n="shipan.query.backCode"> </td>
+                    </tr>
+                    <tr class="bg2">
+                        <td width="10%" i18n="shipan.table.caizhong">彩种</td>
+                        <td width="22%" i18n="shipan.table.noteNo">注单编号</td>
+                        <td width="18%" i18n="shipan.number">号码</td>
+                        <td width="10%" i18n="shipan.odds">赔率</td>
+                        <td width="10%" i18n="shipan.query.amount">金额</td>
+                        <td width="10%">类型</td>
+                        <td width="10%" i18n="shipan.table.status">状态</td>
+                        <td width="10%">
+                            <label>
+                                <span i18n="shipan.select.all">全选</span>
+                                <input type="checkbox" class="checkbox selectAll" bd="tbody2" @click="selectAll()" :checked="selectAllCheck">
+                            </label>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="tbody2" class="fn-hover" v-if="openStatus!=1">
+                    <tr class="tableborder" > <td colspan="8" class="tc fb">{{openStatusDesc}}!</td> </tr>
+                </tbody>
+                <tbody v-if="openStatus==1">
+                    <tr class="tableborder" v-if="dataList.length>0" v-for="(item,idx) in dataList" :class="[item.backCodeFlag==1?'bg4':'']">
+                        <td><span>福彩3D</span></td>
+                        <td>{{item.billNo}}</td>
+                        <td class="fb soon_b_B green" v-if="item.chType==1">
+                            {{item.codes}}
+                            <span style="color:orangered" v-if="item.hasOneFlag==1" i18n="shipan.query.xian">{{$t('xShow')}}</span>
+                        </td>
+                        <td class="fb soon_b_B blue" v-if="item.chType==0">
+                            <a :href="'outImportDetail.html?rid='+item.id" style="color:blue" target="_blank">{{item.codes}}</a>
+                        </td>
+                        <td class="fb soon_b_B">{{item.chOdds}}</td>
+                        <td class="fb soon_b_B red">{{item.amount}}</td>
+                        <td>{{item.betName}}</td>
+                        <td class="tc red" v-if="item.backCodeFlag==1" i18n="shipan.table.yituima">{{$t('ytm')}}</td>
+                        <td class="tc" v-else i18n="shipan.msg.success">{{$t('success')}}</td>
+                        <td>
+                            <label v-if="item.backCodeStatus==1 && item.backCodeFlag==0">
+                                <input type="checkbox" class="checkbox" bd="tbody2" :checked="item.selected" @click="selectOne(item)">
+                            </label>
+                            <label v-else>--</label>
+                        </td>
+                    </tr>
+                    <tr v-if="emptyRows>0" v-for="(line,idx) in emptyRows">
+                        <td>--</td>
+                        <td>--</td>
+                        <td class="fb soon_b_B green">--</td>
+                        <td class="fb soon_b_B">--</td>
+                        <td class="fb soon_b_B red">--</td>
+                        <td class="tc red">--</td>
+                        <td>--</td>
+                        <td>--</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+<!--        <div class="mt5">-->
+<!--            <form novalidate="novalidate">-->
+<!--                <table class="t-1">-->
+<!--                    <thead>-->
+<!--                        <tr class="bg1">-->
+<!--                            <td colspan="8">-->
+<!--                                <label>-->
+<!--                                    <span i18n="shipan.fourShow">四字现</span>-->
+<!--                                    <input type="checkbox" v-model="siXian" id="isxian" value="1" :checked="siXian==1" @click="changeSiXian">-->
+<!--                                </label>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                        <tr class="f16">-->
+<!--                            <td class="f20" i18n="shipan.number">号码</td>-->
+<!--                            <td width="100">-->
+<!--                                <input type="text" class="text-large w90" v-model="buyCode" maxlength="4"-->
+<!--                                                    required="true" betno="true" autocomplete="off" aria-required="true" @keyup="inputCode">-->
+<!--                            </td>-->
+<!--                            <td width="30">-->
+<!--                                <div class="red f20 fb" id="xian" v-if="isXian==1" i18n="shipan.query.xian">现</div>-->
+<!--                            </td>-->
+<!--                            <td class="f20" i18n="shipan.odds">赔率</td>-->
+<!--                            <td width="100">-->
+<!--                                <input type="text" class="text-large w90" v-model="peiRate" maxlength="8" max="10000" positive="true"-->
+<!--                                                    required="true" autocomplete="off" aria-required="true" @keyup="inputOdds">-->
+<!--                            </td>-->
+<!--                            <td class="f20" i18n="shipan.query.amount"> 金额 </td>-->
+<!--                            <td width="100">-->
+<!--                                <input type="text" class="text-large w90" v-model="buyMoney" id="bet_money" required="true"-->
+<!--                                                    digits="true" positive="true" maxlength="7" autocomplete="off" aria-required="true" @keyup="inputMoney">-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <input type="button" value="确认出货" :disabled="openStatus!=1" class="btn-large" @click="toBuy" i18n="shipan.table.confirm.shipment">-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </form>-->
+<!--        </div>-->
+        </template>
+    </div>
+    <div name="module" class="footer">
+        <div class="bd"> Copyright © 2023 xxx. All Rights Reserved </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    var $ = layui.jquery;
+
+    const messages = {
+        zh: {
+            ytm:"已退码",
+            xShow: "现",
+            success: "成功",
+            noData: "暂无数据!",
+        },
+        th: {
+            ytm: "รหัสที่ถูกคืนเงินแล้ว",
+            xShow: "เดี๋ยวนี้",
+            success: "สำเร็จ",
+            noData: "ไม่มีข้อมูล!",
+        }
+    }
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.initData();
+    });
+
+    const vm = new Vue({
+        el: '#operation_out',
+        i18n,
+        data: {
+            siXian:0,
+            isXian:0,
+            dataList:[],
+            backList:[],
+            defalutDataList:[],
+            openStatus:1,
+            openStatusDesc:'',
+            selectAllCheck:false,
+            buyCode:'',
+            peiRate:'',
+            buyMoney:'',
+            emptyRows:10
+        },
+        methods:{
+            changeSiXian(){
+                if(this.buyCode.length==4 && this.buyCode.indexOf("X")<0){
+                    if(this.siXian==0){
+                        this.siXian = 1;
+                        this.isXian = 1;
+                    }else{
+                        this.siXian = 0;
+                        this.isXian = 0;
+                    }
+                }else{
+                    this.siXian = 0;
+                    this.isXian = 0;
+                }
+            },
+            inputCode(e){
+                var that = this;
+                if(e.key=='X' || e.key=='x' || (e.key>='0' && e.key<='9')){
+
+                }else{
+                    that.buyCode = that.buyCode.substr(0,that.buyCode.length-1);
+                }
+                that.buyCode = that.buyCode.toUpperCase();
+                console.log("==========this.buyCode",this.buyCode);
+                if(that.buyCode.indexOf("X")<0 && that.buyCode.length>1){
+                    if(that.buyCode.length==4){
+                        that.isXian = 0;
+                    }else{
+                        that.isXian = 1;
+                    }
+                }else{
+                    that.isXian = 0;
+                }
+            },
+            inputMoney(e){
+                if((e.key>='0' && e.key<='9') || e.key=="."){
+                    if(this.buyMoney.indexOf(".")==0){
+                        this.buyMoney = this.buyMoney.substr(1,this.buyMoney.length);
+                    }
+                }else{
+                    this.buyMoney = this.buyMoney.substr(0,this.buyMoney.length-1);
+                }
+            },
+            inputOdds(e){
+                if((e.key>='0' && e.key<='9') || e.key=="."){
+                    if(this.peiRate.indexOf(".")==0){
+                        this.peiRate = this.peiRate.substr(1,this.peiRate.length);
+                    }
+                }else{
+                    this.peiRate = this.peiRate.substr(0,this.peiRate.length-1);
+                }
+            },
+            initData(){
+                var that = this;
+                $.ajax({
+                    url:HOST+"chuHuo/list",
+                    type:'get',
+                    success:function(res){
+                        if(res.code==200){
+                            that.dataList = res.data.dataList;
+                            that.emptyRows = 10 - that.dataList.length;
+                            that.openStatus = res.data.drawOpenStatus;
+                            switch(that.openStatus){
+                                case 0:
+                                    that.openStatusDesc = i18np.prop("shipan.status.yifengpan");
+                                    break;
+                                case 2:
+                                    that.openStatusDesc = i18np.prop("shipan.status.weikaipan");
+                                    break;
+                                case 3:
+                                    that.openStatusDesc = i18np.prop("shipan.status.kaipanzhong");
+                                    break;
+                                case 1:
+                                    that.openStatusDesc = "";
+                                    break;
+                                default:
+                                    that.openStatusDesc = "";
+                                    break;
+                            }
+                            that.dataList.forEach((item,idx)=>{
+                                item.selected = false;
+                            })
+                        }else{
+                            that.dataList = [];
+                            layer.msg(res.msg);
+                        }
+                    },
+                    complete:function(res){
+                        layer.closeAll();
+                    },
+                    error:function(res){
+                        // layer.msg("请求失败")
+                        layer.msg(i18np.prop("shipan.msg.request.error"));
+                    }
+                })
+            },
+            selectAll(){
+                var that = this;
+                this.selectAllCheck = !this.selectAllCheck;
+                this.dataList.forEach((item,idex)=>{
+                    if(item.backCodeStatus==1 && item.backCodeFlag==0){
+                        that.dataList[idex].selected = that.selectAllCheck;
+                        item.selected = that.selectAllCheck;
+                        if(item.selected){
+                            if(!that.backList.includes(item.id)){
+                               that.backList.push(item.id);
+                            }
+                        }else{
+                            if(that.backList.includes(item.id)){
+                                that.backList.splice(that.backList.indexOf(item.id),1);
+                            }
+                        }
+                    }
+                })
+            },
+            selectOne(item){
+                var that = this;
+                var checkCount = 0;
+                this.dataList.forEach((dataItem,idex)=>{
+                    if(dataItem.id == item.id && dataItem.backCodeStatus==1 && dataItem.backCodeFlag==0){
+                        dataItem.selected = !dataItem.selected;
+                        if(dataItem.selected){
+                            if(!that.backList.includes(dataItem.id)){
+                                that.backList.push(dataItem.id)
+                            }
+                        }else{
+                            if(that.backList.includes(dataItem.id)){
+                                that.backList.splice(that.backList.indexOf(dataItem.id),1);
+                            }
+                        }
+                    }
+                })
+                this.dataList.forEach((dataItem,idex)=>{
+                    if(dataItem.backCodeStatus==1 && dataItem.backCodeFlag==0){
+                        checkCount++;
+                    }
+                })
+                if(that.backList.length==checkCount){
+                    that.selectAllCheck = true;
+                }else{
+                    that.selectAllCheck = false;
+                }
+            },
+            toBuy(){
+                var that = this;
+                if(this.buyCode=='' || this.buyMoney=='' || this.peiRate==''){
+                    // layer.msg("号码,赔率,金额都不能为空");
+                    layer.msg(i18np.prop("shipan.msg.number.odds.amount.cannot.null"));
+                    return;
+                }
+                var isXianFlag = that.getCodesType(this.buyCode);
+                if(null == isXianFlag){
+                    // layer.msg("没有这样的号码");
+                    layer.msg(i18np.prop("shipan.msg.no.number"));
+                    return;
+                }
+
+                layer.msg(i18np.prop("shipan.msg.processing"), {
+                    icon: 16
+                    ,shade: 0.3
+                    ,time:-1
+                });
+                $.ajax({
+                    url:HOST+"chuHuo/buy",
+                    type:'post',
+                    contentType:'application/json',
+                    data:JSON.stringify({
+                        codes:that.buyCode.toUpperCase(),
+                        amount:that.buyMoney,
+                        peiRate:that.peiRate,
+                        hasOneFlag:isXianFlag
+                    }),
+                    success:function(res){
+                        layer.closeAll();
+                        if(res.code==200){
+                            layer.msg(i18np.prop("shipan.msg.chuhuo.success"));
+                            that.buyCode='';
+                            that.buyMoney = '';
+                            that.peiRate = '';
+                            that.isXian = 0;
+                            that.siXian = 0;
+                            that.initData();
+                        }else{
+                            layer.msg(res.msg)
+                        }
+                    },
+                    error:function(res){
+                        layer.closeAll();
+                        layer.msg(i18np.prop("shipan.msg.request.error"));
+                    }
+                })
+            },
+            tuima(){
+                var that = this;
+                if(that.backList.length<1){
+                    // layer.msg("未选择号码");
+                    layer.msg(i18np.prop("shipan.msg.no.selected.number"));
+                    return;
+                }
+                layer.msg(i18np.prop("shipan.msg.processing"), {
+                    icon: 16
+                    ,shade: 0.3
+                    ,time:-1
+                });
+                $.ajax({
+                    url:HOST+"chuHuo/tuima",
+                    type:'post',
+                    contentType:'application/json',
+                    data:JSON.stringify(that.backList),
+                    success:function(res){
+                        layer.closeAll();
+                        if(res.code==200){
+                            that.initData();
+                            layer.msg(i18np.prop("shipan.msg.tuima.success"));
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error:function(res){
+                        layer.closeAll();
+                        layer.msg(i18np.prop("shipan.msg.request.error"));
+                    }
+
+                })
+            },
+            getCodesType(code){
+                var buyCodes = code.toUpperCase();
+                if(buyCodes.length<1){
+                    return null;
+                }
+                if(buyCodes.indexOf("X")<0){//不包含定位
+                    if(buyCodes.length<2){
+                        return null;
+                    }
+                    if(buyCodes.length==4){
+                        if(this.isXian==1){
+                            return 1;
+                        }else{
+                            return 0;
+                        }
+                    }else{
+                        return 1;
+                    }
+                }else{
+                    if(buyCodes=='XXXX'){
+                        return null;
+                    }
+                    if(buyCodes.length<4){
+                        return null;
+                    }
+                    return 0;
+                }
+            },
+            toKuaiXuan(){
+                var index = parent.layer.getFrameIndex(window.name);
+                //parent.layer.close(index);
+                parent.layer.close(index);
+                var that = this;
+                parent.layer.open({
+                    type:2,
+                    // title:'我要出货',
+                    title:i18np.prop("shipan.msg.iwant.ship"),
+                    content:'quickSelect-3d.html',
+                    area:['80%','650px']
+                })
+            }
+        }
+    });
+    // vm.initData();
+
+    //刷新出货列表
+    // function reloadData(){
+    //     layer.closeAll();
+    //     vm.initData();
+    // }
+</script>
+</body>
+</html>

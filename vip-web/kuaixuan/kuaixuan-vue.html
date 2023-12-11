@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title i18n="kuaixuan.title">快选</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--    <link rel="stylesheet" href="../css/common.css" media="all">-->
+<!--    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">-->
+<!--    <link rel="stylesheet" type="text/css" href="../css/mystyle.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../css/jquery.alerts.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/adminseccode.css">
+    <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/adminseccode.js?v=0.1"></script>
+    <script type="text/javascript" src="../js/appcg.min.js?v=0.1"></script>
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <style>
+        #showselectnumber tr td{
+            border: 1px solid #e0e0e0;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        .pc-max-height{
+            min-height: 240px;
+            /*max-height: 500px;*/
+            max-height: calc(100vh - 200px);
+        }
+
+        .wap-max-height{
+            min-height: 240px;
+            max-height: 300px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="module">
+    <div name="module" id="kuaixuan" class="kuaixuan">
+        <template>
+            <input type="hidden" id="template_type" value="erd">
+            <div class="left">
+                <div class="bd m5">
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1">
+                                <td i18n="kuaixuan.createcode.area">{{$t('message.kuaixuan.createcodeArea')}}</td>
+                            </tr>
+                        </thead>
+                        <tbody id="showselectnumber">
+                            <tr id="noDataRow" v-show="openStatus!=1 || (openStatus==1 && isStopBuy==1)">
+                                <td class="tc" style="height:400px">
+                                    <div class="f16 fb " id="openStatusDesc">{{openStatusDesc}}</div>
+                                </td>
+                            </tr>
+                            <tr id="showDataRow" v-show="openStatus==1 && isStopBuy==0">
+                                <td class="no-padding">
+                                    <div style="overflow-y: auto; " id="bd_betno" :class="[isPhone?'wap-max-height':'pc-max-height']" @scroll="loadTableData">
+                                         <!--号码展示区 -->
+                                        <table class="t-2 tc" cellspacing="0" cellpadding="0" v-show="codesList.length>0" >
+                                            <tbody ref="tableDataBox" v-html="tableDataHtml">
+<!--                                                <tr v-for="(lineNo,ii) in showLines">-->
+<!--                                                    <td style="width:12.5%" v-for="(loc,cc) in 8">-->
+<!--                                                        <span v-if="(lineNo-1)*8+loc-1<tableData.dataList.length">{{tableData.dataList[(lineNo-1)*8+loc-1].buyCode}}</span>-->
+<!--                                                    </td>-->
+<!--&lt;!&ndash;                                                    <td width="12.5%">12XX</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <td width="12.5%">15XX</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <td width="12.5%">21XX</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <td width="12.5%">22XX</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <td width="12.5%">25XX</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <td width="12.5%">31XX</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <td width="12.5%">32XX</td>&ndash;&gt;-->
+<!--                                                </tr>-->
+                                            </tbody>
+                                        </table>
+                                        <table class="t-2 tc" cellspacing="0" cellpadding="0" v-show="codesList.length==0 && created">
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="8" i18n="kuaixuan.codesNoFound">未找到符合条件的号码</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="betStatus" id="betStatus1">
+                                            <img src="/Images/loading.gif"> <br><span>0</span>个注单正在投注，已完成<i id="multi_count"></i>个
+                                        </div>
+                                        <div class="betStatus" id="betStatus2"> <img src="/Images/loading.gif"> <br><span>0</span>个注单正在处理... </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <form id="sendForm" autocomplete="off" novalidate="novalidate" v-show="openStatus==1">
+                        <div class="mt10">
+                            <table class="t-1">
+                                <thead>
+                                <tr class="bg1"> <td colspan="2" i18n="kuaixuan.sendArea">{{$t('message.kuaixuan.sendArea')}}</td> </tr> </thead>
+                                <tbody>
+                                <tr>
+                                    <td rowspan="2">
+                                        <span class="f16" i18n="kuaixuan.buyMoney">{{$t('message.money')}}</span>
+                                        <input id="bet_money" type="text" maxlength="8" v-model="buyMoney" @keyup="moneyInput"
+                                               required="true" positive="true" class="text-large w70 14 bet-money" aria-required="true">
+                                        &nbsp; <input id="btn_bet" type="button" @click="toBuy" i18n="kuaixuan.toBuy" :value="$t('message.toBuy')" style="width:50px" bet-type="0" class="btn btn-large bet-submit">&nbsp;
+                                        <input id="btn_bet_package" type="button" @click="toBaoPai" i18n="kuaixuan.baopai" :value="$t('message.baopai')" style="width:50px" bet-type="1" class="btn btn-large bet-submit" v-show="lotteryMethodId>1 && lotteryMethodId<5">&nbsp;
+                                        <input id="btn_bet_will" type="button" @click="toPreBuy" i18n="kuaixuan.toPreBuy" :value="$t('message.toPreBuy')" style="width:100px" bet-type="2" class="btn btn-large bet-submit" v-show="lotteryMethodId>1 && lotteryMethodId<5">
+                                        <input type="hidden" name="operation_condition" id="operation_condition">
+                                    </td>
+                                    <td><span i18n="kuaixuan.bishu">{{$t('message.bishu')}}</span>：<span id="numberCount">{{codesNum}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <span i18n="kuaixuan.buyMoney">{{$t('message.money')}}</span>：
+                                    <span id="numberAmount">{{totalMoney}}</span>
+                                    <span i18n="kuaixuan.money.unit">{{$t('message.kuaixuan.moneyUnit')}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="right">
+                <div class="bd m5">
+                    <table class="tb-kuaixuan" width="100%" cellspacing="0" cellpadding="0">
+                    <tbody id="dapingmu">
+                        <tr class="tc" id="lotteryMethodsContainer">
+                            <td v-for="(item,idx) in lotteryMethodList"
+                                :class="item.id==lotteryMethodId?'on':''"  style="width:14%" v-show="(item.id==4 && quickSelectSetting.siZiDing==1 || item.id!=4)">
+                                <input type="button" :value="item.bettingMethod" class="fn-module btn-large erd-btn" module="erd" @click="changeLotteryMethod(item)">
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody id="xiaopingmu">
+                    <tr class="tc" id="lotteryMethodsContainer">
+                        <td v-for="(item,idx) in lotteryMethodList.slice(0,4)"
+                            :class="item.id==lotteryMethodId?'on':''"  style="width:14%" v-show="(item.id==4 && quickSelectSetting.siZiDing==1 || item.id!=4)">
+                            <input type="button" :value="item.bettingMethod" class="fn-module btn-large erd-btn" module="erd" @click="changeLotteryMethod(item)">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td v-for="(item,idx) in lotteryMethodList.slice(4,lotteryMethodList.length)"
+                            :class="item.id==lotteryMethodId?'on':''"  style="width:14%" v-show="(item.id==4 && quickSelectSetting.siZiDing==1 || item.id!=4)">
+                            <input type="button" :value="item.bettingMethod" class="fn-module btn-large erd-btn" module="erd" @click="changeLotteryMethod(item)">
+                        </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    <form id="createForm">
+                        <div id="bd_template" style="ime-mode: disabled;">
+                    <table class="t-1">
+                        <tbody>
+                            <tr class="bg2" id="dingweiHeader" v-show="lotteryMethodId<5 && quickSelectSetting.dingWeiZhi==1">
+                                <td colspan="2" class="tc">
+                                    <strong class="red2" i18n="kuaixuan.rules.fixCode">{{$t('message.kuaixuan.rules_fixcode')}}</strong>
+                                    <label><input type="checkbox" class="position-filter checkbox" positiontype="0" positionfilter="1"
+                                                  :checked="rules.fixCode.excluded==1" id="dingwei_chu" @click="showdis(this,'dingwei_qu','fixLoc','',0);">
+                                        <span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span>
+                                    </label>
+                                    <label><input type="checkbox" class="position-filter checkbox" positiontype="0" positionfilter="0"
+                                                  id="dingwei_qu" :checked="rules.fixCode.included==1" @click="showdis(this,'dingwei_chu','fixLoc','',1);"
+                                                  checked="checked">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span>
+                                    </label>
+                                </td>
+                                <td colspan="2" class="tc" id="matchRotate" v-show="ruleItemIndex>1">
+                                    <strong class="red2" i18n="kuaixuan.rules.peishuZhuan">{{$t('message.kuaixuan.peishuZhuan')}}</strong>
+                                    <label><input type="checkbox" class="position-filter checkbox" positiontype="1" positionfilter="1"
+                                                 :checked="rules.matchCodes.excluded==1" id="peishu_chu" @click="showdis(this,'peishu_qu','match1','',0);">
+                                        <span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span>
+                                    </label>
+                                    <label><input type="checkbox" class="position-filter checkbox" positiontype="1" positionfilter="0"
+                                                  :checked="rules.matchCodes.included==1" id="peishu_qu" @click="showdis(this,'peishu_chu','match1','',1);">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr id="peishuContainer" class="bg2" v-show="lotteryMethodId>=5 && quickSelectSetting.dingWeiZhi==1">
+                                <td  colspan="4" class="tc">
+                                    <strong class="red2" i18n="kuaixuan.rules.peishu">{{$t('message.kuaixuan.peishu')}}</strong>
+                                    <label><INPUT TYPE="checkbox" class="position-filter checkbox" :checked="rules.matchCodes.excluded==1" NAME="__peishu_chu2" id="__peishu_chu2"
+                                                  @click="showdis(this,'__peishu_qu2','match2','',0);">
+                                        <span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span>
+                                    </label>
+                                    <label><INPUT TYPE="checkbox" class="position-filter checkbox" :checked="rules.matchCodes.included==1" NAME="__peishu_qu2" id="__peishu_qu2"
+                                                  @click="showdis(this,'__peishu_chu2','match2','',1);" checked>
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="fixed-input tc" id="dingweiContainer"  v-show="rules.isXian==0 && (rules.fixCode.included==1 ||  rules.fixCode.excluded==1) && quickSelectSetting.dingWeiZhi==1">
+                                <td width="25%" i18n="kuaixuan.rules.qian">{{$t('message.kuaixuan.rules_qian')}}</td>
+                                <td width="25%" i18n="kuaixuan.rules.bai">{{$t('message.kuaixuan.rules_bai')}}</td>
+                                <td width="25%" i18n="kuaixuan.rules.shi">{{$t('message.kuaixuan.rules_shi')}}</td>
+                                <td width="25%" i18n="kuaixuan.rules.ge">{{$t('message.kuaixuan.rules_ge')}}</td>
+                            </tr>
+                            <tr class="fixed-input tc" id="dingweiContainer-1" v-show="rules.isXian==0 && (rules.fixCode.included==1 ||  rules.fixCode.excluded==1) && quickSelectSetting.dingWeiZhi==1">
+                                <td><input type="text" class="w90" boxnumber="1" v-model="rules.fixCode.loc1" digits="true" maxlength="10"
+                                           ID="__dingwei_1" @keyup="limitRepeatNums(this,'fixCode',0)"></td>
+                                <td><input type="text" class="w90" boxnumber="2" v-model="rules.fixCode.loc2" digits="true" maxlength="10"
+                                           ID="__dingwei_2" @keyup="limitRepeatNums(this,'fixCode',1)"></td>
+                                <td><input type="text" class="w90" boxnumber="3" v-model="rules.fixCode.loc3" digits="true" maxlength="10"
+                                           disabledID="__dingwei_3" @keyup="limitRepeatNums(this,'fixCode',2)"></td>
+                                <td><input type="text" class="w90" boxnumber="4" v-model="rules.fixCode.loc4" digits="true" maxlength="10"
+                                           ID="__dingwei_4" @keyup="limitRepeatNums(this,'fixCode',3)"></td>
+                            </tr>
+
+                            <tr id="peishuContainer-1" class="match-input" v-show="ruleItemIndex>1 && (rules.matchCodes.excluded==1 || rules.matchCodes.included==1)">
+                                <td colspan="4" class="tc">
+                                    <span id="ps1" v-show="ruleItemIndex>1"><INPUT TYPE="text" v-model="rules.matchCodes.loc1" ID="peishu_1" class="w90" digits="true"  maxlength=10  @keyup="limitRepeatNums(this,'peishu',0)"></span>
+                                    <span id="ps2" v-show="ruleItemIndex>1"> <span i18n="kuaixuan.rules.match">{{$t('message.kuaixuan.rules_match')}}</span>,<INPUT TYPE="text"  v-model="rules.matchCodes.loc2" ID="peishu_2" class="w90"  maxlength=10  @keyup="limitRepeatNums(this,'peishu',1)" ></span>
+                                    <span id="ps3" v-show="ruleItemIndex>2"> <span i18n="kuaixuan.rules.match">{{$t('message.kuaixuan.rules_match')}}</span>,<INPUT TYPE="text" v-model="rules.matchCodes.loc3" ID="peishu_3" class="w90"  maxlength=10   @keyup="limitRepeatNums(this,'peishu',2)"></span>
+                                    <span id="ps4" v-show="ruleItemIndex>3"> <span i18n="kuaixuan.rules.match">{{$t('message.kuaixuan.rules_match')}}</span>,<INPUT TYPE="text"  v-model="rules.matchCodes.loc4" ID="peishu_4" class="w90"  maxlength=10   @keyup="limitRepeatNums(this,'peishu',3)"></span>
+
+                                </td>
+                            </tr>
+
+                            <tr class="bg2" id="hefenContainer" v-show="ruleItemIndex>1 && lotteryMethodId<5 && quickSelectSetting.heFen==1">
+                                <td colspan="4" class="tc">
+                                    <strong class="red2" i18n="kuaixuan.rules.he">{{$t('message.kuaixuan.rules_he')}}</strong>&nbsp;&nbsp;
+                                    <strong class="red2" i18n="kuaixuan.rules.fen">{{$t('message.kuaixuan.rules_fen')}}</strong>
+                                    <label><input type="checkbox" class="remain-fixed-filter checkbox" remainfixedfilter="1" :checked="rules.hefen.excluded==1"
+                                                  NAME="__hefen_chu" id="__hefen_chu" @click="showdis(this,'__hefen_qu','hefen','',0);"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                    <label><input type="checkbox" class="remain-fixed-filter checkbox" remainfixedfilter="0" :checked="rules.hefen.included==1"
+                                                  NAME="__hefen_qu" id="__hefen_qu" @click="showdis(this,'__hefen_chu','hefen','',1);"><span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label> </td>
+                            </tr>
+                            <tr class="tc" id="hefenContainer1" v-show="ruleItemIndex>1 && lotteryMethodId<5 && quickSelectSetting.heFen==1">
+                                <td class="remain-fixed-filter-item">
+                                    1. <input type="checkbox" @click="showChkResult(this,'hefenItem1',0)" :checked="rules.hefen.binds[0].locArr[0]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem1',1)" :checked="rules.hefen.binds[0].locArr[1]==1">
+                                    <input type="checkbox"  @click="showChkResult(this,'hefenItem1',2)" :checked="rules.hefen.binds[0].locArr[2]==1">
+                                    <input type="checkbox"  @click="showChkResult(this,'hefenItem1',3)" :checked="rules.hefen.binds[0].locArr[3]==1">
+                                    <br> <input type="text" class="w90" v-model="rules.hefen.binds[0].value" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'hefenItem1',0)"> </td>
+                                <td class="remain-fixed-filter-item">
+                                    2. <input type="checkbox" @click="showChkResult(this,'hefenItem2',0)" :checked="rules.hefen.binds[1].locArr[0]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem2',1)" :checked="rules.hefen.binds[1].locArr[1]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem2',2)" :checked="rules.hefen.binds[1].locArr[2]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem2',3)" :checked="rules.hefen.binds[1].locArr[3]==1">
+                                    <br> <input type="text" class="w90" v-model="rules.hefen.binds[1].value" digits="true" maxlength="10"  @keyup="limitRepeatNums(this,'hefenItem2',0)"> </td>
+                                <td class="remain-fixed-filter-item">
+                                    3. <input type="checkbox" @click="showChkResult(this,'hefenItem3',0)" :checked="rules.hefen.binds[2].locArr[0]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem3',1)" :checked="rules.hefen.binds[2].locArr[1]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem3',2)" :checked="rules.hefen.binds[2].locArr[2]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem3',3)" :checked="rules.hefen.binds[2].locArr[3]==1">
+                                    <br> <input type="text" class="w90" v-model="rules.hefen.binds[2].value" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'hefenItem3',0)"> </td>
+                                <td class="remain-fixed-filter-item">
+                                    4. <input type="checkbox" @click="showChkResult(this,'hefenItem4',0)" :checked="rules.hefen.binds[3].locArr[0]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem4',1)" :checked="rules.hefen.binds[3].locArr[1]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem4',2)" :checked="rules.hefen.binds[3].locArr[2]==1">
+                                    <input type="checkbox" @click="showChkResult(this,'hefenItem4',3)" :checked="rules.hefen.binds[3].locArr[3]==1">
+                                    <br> <input type="text" class="w90" v-model="rules.hefen.binds[3].value" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'hefenItem4',0)"> </td>
+                            </tr>
+                        <tr id="bdweihefenContainer" v-show="ruleItemIndex>1 && quickSelectSetting.buDingWeiHeFen==1">
+                            <td colspan="4" class="remain-match-filter-item"> <strong class="red2" i18n="kuaixuan.rules.budingweiHeFen">{{$t('message.kuaixuan.rules_budingweiHeFen')}}</strong>
+                                <label id="bd1" v-show="ruleItemIndex>1">
+                                    <input type="checkbox" remainmatchfilter="2" class="remain-match-filter checkbox" :checked="rules.sum2.sumType==2"
+                                                   id="__bdwhefen_1" name="__bdwhefen_1" @click="showdis(this,'__bdwhefen_2','bdwhefen','sum2',0);">
+                                    <span i18n="kuaixuan.rules.sum2">{{$t('message.kuaixuan.rules_sum2')}}</span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <label id="bd2" v-show="ruleItemIndex>2">
+                                    <input type="checkbox" remainmatchfilter="2" class="remain-match-filter checkbox" :checked="rules.sum2.sumType==3"
+                                                       id="__bdwhefen_2" name="__bdwhefen_2" @click="showdis(this,'__bdwhefen_1','bdwhefen','sum3',0);">
+                                    <span i18n="kuaixuan.rules.sum3">{{$t('message.kuaixuan.rules_sum3')}}</span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="text" class="w90" v-model="rules.sum2.sum" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'sum2',0)" >
+                            </td>
+                        </tr>
+                        <tr id="otherRuleContainer"
+                            v-show="ruleItemIndex>1 && rules.isXian==0 && (quickSelectSetting.quanZhuan==1 || quickSelectSetting.shangJiang==1 || quickSelectSetting.paiChu==1 || quickSelectSetting.zhiFanWei==1 || quickSelectSetting.chengHaoWeiZhi==1)">
+                            <td colspan="4">
+                                <span id="quandao" v-show="quickSelectSetting.quanZhuan==1 && rules.isXian==0">
+                                    <strong class="red2" i18n="kuaixuan.rules.quanzhuan">{{$t('message.kuaixuan.rules_quanzhuan')}}</strong>
+                                    <input type="text" class="transform-filter-item w50" name="quanzhuan" v-model="rules.others.fullChange"
+                                                                                           digits="true" maxlength="10" @keyup="limitRepeatNums(e,'quanzhuan',0)" ID="__quandao">
+                                </span>
+                                <span id="shangjiang" v-show="quickSelectSetting.shangJiang==1 && rules.isXian==0">
+                                    <strong class="red2" i18n="kuaixuan.rules.shangjiang">{{$t('message.kuaixuan.rules_shangjiang')}}</strong>
+                                    <input type="text" class="upper-filter-item w50" name="shangjiang" digits="true" maxlength="10" v-model="rules.others.shangJiang"
+                                                                                              @keyup="limitRepeatNums(this,'shangjiang',0)" ID="__shangjiang" >
+                                </span>
+                                <span id="paichu" v-show="quickSelectSetting.paiChu==1 && rules.isXian==0">
+                                    <strong class="red2" i18n="kuaixuan.rules.paichu">{{$t('message.kuaixuan.rules_paichu')}}</strong>
+                                    <input type="text" class="except-filter-item w50" name="paichu" digits="true" v-model="rules.others.excludes"
+                                                                                          maxlength="10" @keyup="limitRepeatNums(this,'paichu',0)" ID="__paichu">
+                                </span>
+
+                                <span id="zfw1" v-show="quickSelectSetting.zhiFanWei==1 && lotteryMethodId==4">
+                                    <strong class="red2" i18n="kuaixuan.rules.valueRange">{{$t('message.kuaixuan.rules_valueRange')}}</strong>
+                                        {{$t('message.kuaixuan.rules_valueFrom')}}<input type="text" class="except-filter-item w50" NAME="__zhifanwei_start" ID="__zhifanwei_start"  v-model="rules.others.valueRange[0]"
+                                               @keyup="limitRepeatNums(this,'valueRange',0)">
+                                    <span i18n="kuaixuan.rules.value">{{$t('message.kuaixuan.rules_value')}}</span>&nbsp;<span i18n="kuaixuan.rules.valueTo">{{$t('message.kuaixuan.rules_valueTo')}}</span>&nbsp;
+                                        <input TYPE="text" class="except-filter-item w50" NAME="__zhifanwei_end" ID="__zhifanwei_end"   v-model="rules.others.valueRange[1]"
+                                               @keyup="limitRepeatNums(this,'valueRange',1)" maxlength=8  ><span i18n="kuaixuan.rules.value">{{$t('message.kuaixuan.rules_value')}}</span>
+
+                                </span>
+                                <span id="ch2" v-show="quickSelectSetting.chengHaoWeiZhi==1 && rules.isXian==0 && lotteryMethodId!=4">
+                                    <strong class="red2" i18n="kuaixuan.rules.xloc">{{$t('message.kuaixuan.rules_xloc')}}</strong>
+                                    <input type="checkbox" :checked="rules.others.locArr[0]==1" class="symbol-filter-item" NAME="__chenghao_1" id="__chenghao_1" @click="showChkResult(this,'xlocArr',0)">
+                                    <input type="checkbox" :checked="rules.others.locArr[1]==1" class="symbol-filter-item" NAME="__chenghao_2" id="__chenghao_2" @click="showChkResult(this,'xlocArr',1)">
+                                    <input type="checkbox" :checked="rules.others.locArr[2]==1" class="symbol-filter-item" NAME="__chenghao_3" id="__chenghao_3" @click="showChkResult(this,'xlocArr',2)">
+                                    <input type="checkbox" :checked="rules.others.locArr[3]==1" class="symbol-filter-item" NAME="__chenghao_4" id="__chenghao_4" @click="showChkResult(this,'xlocArr',3)">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr id="fushiContainer" v-show="ruleItemIndex>1 && quickSelectSetting.fuShi==1">
+                            <td colspan="4">
+                                <label><input type="checkbox" class="contain-filter checkbox" containfilter="1" NAME="__chu_1" ID="__chu_1" :checked="rules.fushi.excluded==1"
+                                              @click="showdis(this,'__qu_1','fushi','',0);"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                <label><input type="checkbox" class="contain-filter checkbox" containfilter="0" NAME="__qu_1" ID="__qu_1" :checked="rules.fushi.included==1"
+                                              checked="checked" @click="showdis(this,'__chu_1','fushi','',1);">{{$t('message.kuaixuan.rules_qu')}}</label>
+                                <span id="ruleName1">{{ruleName}}</span>&nbsp;
+                                <span i18n="kuaixuan.rules.han">{{$t('message.kuaixuan.rules_han')}}</span>
+                                <input type="text" class="contain-filter-item w80" v-model="rules.fushi.contains" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'includes',0)">
+                                <span id="ruleName2">{{ruleName}}</span>&nbsp;
+                                <span i18n="kuaixuan.rules.fushi">{{$t('message.kuaixuan.rules_fushi')}}</span>
+                                <input type="text" class="multiple-filter-item" v-model="rules.fushi.combines" name="fushi" digits="true" maxlength="10" @keyup="limitRepeatNums(this,'fushi',0)">
+                            </td>
+                        </tr>
+                        <tr id="repeatTypeContainer" v-show="ruleItemIndex>1 && (quickSelectSetting.shuangChong==1 || quickSelectSetting.shuangShuangChong==1 || quickSelectSetting.sanChong==1 || quickSelectSetting.siChong==1)">
+                            <td colspan="4">
+                                 <span id="repeat1" style="margin-right: 5px;" v-show="quickSelectSetting.shuangChong==1 && lotteryMethodId>1">
+                                     <label><input TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_1" ID="__chu_chong_1"
+                                                   @click="showdis(this,'__qu_chong_1','repeat','repeat1',0);" :checked="rules.repeat.double1.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                     <label><input TYPE="checkbox" NAME="__qu_chong_1" ID="__qu_chong_1"
+                                                   @click="showdis(this,'__chu_chong_1','repeat','repeat1',1);" :checked="rules.repeat.double1.included==1">
+                                         <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.repeat2">{{$t('message.kuaixuan.rules_repeat2')}}</strong>)&nbsp;
+                                </span>
+                                <span id="repeat22" style="margin-right: 5px;" v-show="quickSelectSetting.shuangShuangChong==1 && (lotteryMethodId==4) ">
+                                    <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_2" ID="__chu_chong_2"
+                                                  @click="showdis(this,'__qu_chong_2','repeat','repeat22',0);" :checked="rules.repeat.doubledouble.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                    <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__qu_chong_2" ID="__qu_chong_2"
+                                                  @click="showdis(this,'__chu_chong_2','repeat','repeat22',1);" :checked="rules.repeat.doubledouble.included==1">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.repeat22">{{$t('message.kuaixuan.rules_repeat22')}}</strong>)&nbsp;
+                                </span>
+                                <span id="repeat3" style="margin-right: 5px;" v-show="quickSelectSetting.sanChong==1 && lotteryMethodId>2 && lotteryMethodId!=5">
+                                    <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_3" ID="__chu_chong_3"
+                                                  @click="showdis(this,'__qu_chong_3','repeat','repeat3',0);" :checked="rules.repeat.triple.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                    <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__qu_chong_3" ID="__qu_chong_3"
+                                                  @click="showdis(this,'__chu_chong_3','repeat','repeat3',1);" :checked="rules.repeat.triple.included==1">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.repeat3">{{$t('message.kuaixuan.rules_repeat3')}}</strong>)&nbsp;
+                                </span>
+                                <span id="repeat4" style="margin-right: 5px;" v-show="quickSelectSetting.siChong==1 && (lotteryMethodId==4 || lotteryMethodId==7)">
+                                    <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__chu_chong_4" ID="__chu_chong_4"
+                                                  @click="showdis(this,'__qu_chong_4','repeat','repeat4',0);" :checked="rules.repeat.double2.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                    <label><INPUT TYPE="checkbox" class="repeat-two-words-filter checkbox" NAME="__qu_chong_4" ID="__qu_chong_4"
+                                                  @click="showdis(this,'__chu_chong_4','repeat','repeat4',1);" :checked="rules.repeat.double2.included==1">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.repeat4">{{$t('message.kuaixuan.rules_repeat4')}}</strong>)
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr v-show="ruleItemIndex>1 && (quickSelectSetting.erXiongDi==1 || quickSelectSetting.sanXiongDi==1 || quickSelectSetting.siXiongDi==1)">
+                            <td colspan="4">
+                                <span id="xiongdi2" v-show="quickSelectSetting.erXiongDi==1 && lotteryMethodId>1">
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_1" ID="__chu_xiongdi_1"
+                                                  @click="showdis(this,'__qu_xiongdi_1','xiongdi','xiongdi1',0);" :checked="rules.brothers.br2.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_1" ID="__qu_xiongdi_1"
+                                                  @click="showdis(this,'__chu_xiongdi_1','xiongdi','xiongdi1',1);" :checked="rules.brothers.br2.included==1">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.xiongdi2">{{$t('message.kuaixuan.rules_xiongdi2')}}</strong>)&nbsp;
+                                </span>
+                                    <span id="xiongdi3" v-show="quickSelectSetting.sanXiongDi==1 && lotteryMethodId>2 && lotteryMethodId!=5">
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_2" ID="__chu_xiongdi_2"
+                                                  @click="showdis(this,'__qu_xiongdi_2','xiongdi','xiongdi2',0);" :checked="rules.brothers.br3.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_2" ID="__qu_xiongdi_2"
+                                                  @click="showdis(this,'__chu_xiongdi_2','xiongdi','xiongdi2',1);" :checked="rules.brothers.br3.included==1">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.xiongdi3">{{$t('message.kuaixuan.rules_xiongdi3')}}</strong>)&nbsp;
+                                </span>
+                                    <span id="xiongdi4" v-show="quickSelectSetting.siXiongDi==1 && (lotteryMethodId==4 || lotteryMethodId==7)">
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__chu_xiongdi_3" ID="__chu_xiongdi_3"
+                                                  @click="showdis(this,'__qu_xiongdi_3','xiongdi','xiongdi3',0);" :checked="rules.brothers.br4.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                    <label><INPUT TYPE="checkbox" class="two-brother-filter checkbox" NAME="__qu_xiongdi_3" ID="__qu_xiongdi_3"
+                                                  @click="showdis(this,'__chu_xiongdi_3','xiongdi','xiongdi3',1);" :checked="rules.brothers.br4.included==1">
+                                        <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.xiongdi4">{{$t('message.kuaixuan.rules_xiongdi4')}}</strong>)
+                                </span>
+                            </td>
+                        </tr>
+
+
+                        <tr id="duishuContainer"  v-show="ruleItemIndex>1 && quickSelectSetting.duiShu==1 && lotteryMethodId>1">
+                            <td colspan="4"  class="logarithm-number-item">
+                                <label><INPUT TYPE="checkbox" NAME="__chu_duishu" ID="__chu_duishu" @click="showdis(this,'__qu_duishu','duishu','',0);"
+                                              class="logarithm-number-filter checkbox" :checked="rules.pairs.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                <label><INPUT TYPE="checkbox" NAME="__qu_duishu" ID="__qu_duishu" @click="showdis(this,'__chu_duishu','duishu','',1);"
+                                              class="logarithm-number-filter checkbox" :checked="rules.pairs.included==1">
+                                    <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>(<strong class="red2" i18n="kuaixuan.rules.duishu">{{$t('message.kuaixuan.rules_duishu')}}</strong>)
+                                <INPUT TYPE="text" v-model="rules.pairs.pair1" ID="__duishu_1" class="w60"  maxlength=2  @keyup="limitRepeatNums(this,'duishu',0)" >&nbsp;
+                                <INPUT TYPE="text" v-model="rules.pairs.pair2" ID="__duishu_2" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',1)" >&nbsp;
+                                <INPUT TYPE="text" v-model="rules.pairs.pair3" ID="__duishu_3" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',2)" >&nbsp;
+<!--                                <INPUT TYPE="text" v-model="rules.pairs.pair4" ID="__duishu_4" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',3)" >&nbsp;-->
+<!--                                <INPUT TYPE="text" v-model="rules.pairs.pair5" ID="__duishu_5" class="w60"  maxlength=2   @keyup="limitRepeatNums(this,'duishu',4)" >&nbsp;-->
+                            </td>
+                        </tr>
+
+                        <tr  v-show="quickSelectSetting.dan==1 || quickSelectSetting.shuang==1">
+                            <td colspan="2" id="dangshuContainer" v-show="quickSelectSetting.dan==1">
+                                <label><input type="checkbox" class="odd-number-filter checkbox" oddnumberfilter="1" NAME="__dan_chu" ID="__dan_chu"
+                                              @click="showdis(this,'__dan_qu','singleNum','',0);" :checked="rules.singleNum.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                <label><input type="checkbox" class="odd-number-filter checkbox" oddnumberfilter="0" NAME="__dan_qu" ID="__dan_qu"
+                                              @click="showdis(this,'__dan_chu','singleNum','',1);" :checked="rules.singleNum.included==1">
+                                    <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label>
+                                (<strong class="red2" i18n="kuaixuan.rules.dan">{{$t('message.kuaixuan.rules_dan')}}</strong>)
+                                <input type="checkbox" class="odd-number-item checkbox" :checked="rules.singleNum.locArr[0]==1" id="__dan_1" value="1" @click="showChkResult(this,'singleNum',0)">
+                                <input type="checkbox" class="odd-number-item checkbox" :checked="rules.singleNum.locArr[1]==1" id="__dan_2" value="1" @click="showChkResult(this,'singleNum',1)">
+                                <input type="checkbox" class="odd-number-item checkbox" :checked="rules.singleNum.locArr[2]==1" id="__dan_3" value="1" @click="showChkResult(this,'singleNum',2)">
+                                <input type="checkbox" class="odd-number-item checkbox" :checked="rules.singleNum.locArr[3]==1" id="__dan_4" value="1" @click="showChkResult(this,'singleNum',3)">
+                                <span class="green fb f14">
+                                    <span id="selectWord_odd"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_odd"></span>
+                                </span>
+                            </td>
+                            <td colspan="2" v-show="quickSelectSetting.shuang==1">
+                                <label><input type="checkbox" class="even-number-filter checkbox" evennumberfilter="1" NAME="__shuang_chu" ID="__shuang_chu"
+                                              @click="showdis(this,'__shuang_qu','doubleNum','',0);" :checked="rules.doubleNum.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                <label><input type="checkbox" class="even-number-filter checkbox" evennumberfilter="0" NAME="__shuang_qu" ID="__shuang_qu"
+                                              @click="showdis(this,'__shuang_chu','doubleNum','',1);" :checked="rules.doubleNum.included==1">
+                                    <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label> (<strong class="red2" i18n="kuaixuan.rules.shuang">{{$t('message.kuaixuan.rules_shuang')}}</strong>)
+                                <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[0]==1" id="__shuang_1" value="1" @click="showChkResult(this,'doubleNum',0)">
+                                <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[1]==1" id="__shuang_2" value="1" @click="showChkResult(this,'doubleNum',1)">
+                                <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[2]==1" id="__shuang_3" value="1" @click="showChkResult(this,'doubleNum',2)">
+                                <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[3]==1" id="__shuang_4" value="1" @click="showChkResult(this,'doubleNum',3)">
+                                <span class="green fb f14">
+                                    <span id="selectWord_even"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_even"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr v-show="quickSelectSetting.da==1 || quickSelectSetting.xiao==1">
+                            <td colspan="2" v-show="quickSelectSetting.da==1">
+                                <label><input type="checkbox" class="big-number-filter checkbox" bignumberfilter="1" NAME="__max_chu" ID="__max_chu"
+                                              @click="showdis(this,'__max_qu','bigNum','',0);" :checked="rules.bigNum.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                <label><input type="checkbox" class="big-number-filter checkbox" bignumberfilter="0" NAME="__max_qu" ID="__max_qu"
+                                              @click="showdis(this,'__max_chu','bigNum','',1);" :checked="rules.bigNum.included==1">
+                                    <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label> (<strong class="red2" i18n="kuaixuan.rules.da">{{$t('message.kuaixuan.rules_da')}}</strong>)
+                                <input type="checkbox" class="big-number-item checkbox" :checked="rules.bigNum.locArr[0]==1" id="__max_1" value="1" @click="showChkResult(this,'bigNum',0)">
+                                <input type="checkbox" class="big-number-item checkbox" :checked="rules.bigNum.locArr[1]==1" id="__max_2" value="1" @click="showChkResult(this,'bigNum',1)">
+                                <input type="checkbox" class="big-number-item checkbox" :checked="rules.bigNum.locArr[2]==1" id="__max_3" value="1" @click="showChkResult(this,'bigNum',2)">
+                                <input type="checkbox" class="big-number-item checkbox" :checked="rules.bigNum.locArr[3]==1" id="__max_4" value="1" @click="showChkResult(this,'bigNum',3)">
+                                <span class="green fb f14">
+                                    <span id="selectWord_big"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_big"></span>
+                                </span>
+                            </td>
+                            <td colspan="2" v-show="quickSelectSetting.xiao==1">
+                                <label><input type="checkbox" class="small-number-filter checkbox" smallnumberfilter="1" NAME="__min_chu" ID="__min_chu"
+                                              @click="showdis(this,'__min_qu','smallNum','',0);" :checked="rules.smallNum.excluded==1"><span i18n="kuaixuan.rules.chu">{{$t('message.kuaixuan.rules_chu')}}</span></label>
+                                <label><input type="checkbox" class="small-number-filter checkbox" smallnumberfilter="0" NAME="__min_qu" ID="__min_qu"
+                                              @click="showdis(this,'__min_chu','smallNum','',1);" :checked="rules.smallNum.included==1">
+                                    <span i18n="kuaixuan.rules.qu">{{$t('message.kuaixuan.rules_qu')}}</span></label> (<strong class="red2" i18n="kuaixuan.rules.xiao">{{$t('message.kuaixuan.rules_xiao')}}</strong>)
+                                <input type="checkbox" class="small-number-item checkbox" :checked="rules.smallNum.locArr[0]==1" id="__min_1"  @click="showChkResult(this,'smallNum',0)">
+                                <input type="checkbox" class="small-number-item checkbox" :checked="rules.smallNum.locArr[1]==1" id="__min_2"  @click="showChkResult(this,'smallNum',1)">
+                                <input type="checkbox" class="small-number-item checkbox" :checked="rules.smallNum.locArr[2]==1" id="__min_3"  @click="showChkResult(this,'smallNum',2)">
+                                <input type="checkbox" class="small-number-item checkbox" :checked="rules.smallNum.locArr[3]==1" id="__min_4"  @click="showChkResult(this,'smallNum',3)">
+                                <span class="green fb f14">
+                                    <span id="selectWord_small"></span>&nbsp;&nbsp;
+                                    <span id="selectCondition_small"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </form>
+                </div>
+                <div class="tc padding6" id="btnGroup" v-show="openStatus==1 && isStopBuy==0">
+                    <input id="btn_create" type="button" :value="$t('message.kuaixuan.create')" i18n="kuaixuan.create" style="width:50px" class="btn btn-large" @click="createCodes()">
+                    <input id="btn_reset" type="button" :value="$t('message.kuaixuan.reset')" i18n="kuaixuan.reset"  style="width:50px" class="btn btn-large" @click="resetXuan()">
+                </div>
+            </div>
+            <div id="print-odds-dialog" class="g-dialog g-confirm" style="width: 450px;display: none">
+                <div class="dialog-bd">
+                    <div name="module" id="kuaixuan_odds" class="pd10">
+                        <form id="form" novalidate="novalidate">
+                            <input type="hidden" value="" id="data">
+                            <input type="hidden" value="2" id="collect_way">
+                            <input type="hidden" value="" id="bet_log">
+                            <input type="hidden" value="1" id="bet_last_type">
+                            <input type="hidden" value="4" id="number_length">
+                            <p class="m10 pb10">
+                                <label class="f16" i18n="kuaixuan.printOdds">{{$t('message.kuaixuan.printOdds')}}</label>
+                                <input type="text" id="set_odds" v-model="printOdds" class="w60 h20 f16 mr10" min="1" max="100" maxlength="6">
+                                <span class="red" i18n="kuaixuan.printOdds.tips">{{$t('message.kuaixuan.printOdds_tips')}}</span> </p>
+                            <p class="mt10 pt10 tc">
+                                <input type="button" :value="$t('message.confirm')" class="btn mr20" @click="doPreBuy" i18n="kuaixuan.printOdds.confirm">
+                                <input type="button" :value="$t('message.cancel')" id="cloes" class="btn btn-gray" @click="cancelPreBuy" i18n="kuaixuan.printOdds.cancel">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>
+
+<!--<div id="confirm-dialog" class="g-dialog g-confirm" style="width: 350px;display: none">-->
+<!--    <div class="dialog-bd">-->
+<!--        <div> 现金现在已用是“0”，下注后已用应是“4”。<br>-->
+<!--            <br>下注完成后请在会员信息里再次核对已用现金！<br>-->
+<!--            <br>如果（已用）现金不相符。<br>-->
+<!--            <br> 请先进入（快选）检查是否有发送中断号码。 <br>-->
+<!--            <br> 如果有，请选择金额继续下注。 <br>-->
+<!--            <br>如果没有，请检查是否有（目前停压号码）<br>-->
+<!--            <br> 请认真检查-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="dialog-ft">-->
+<!--        <input type="button" value="确定" class="btn">-->
+<!--        <input type="button" value="取消" class="btn btn-gray">-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/vue-i18n-messages.js?v1"></script>
+
+
+<script type="text/javascript">
+
+    window.parent.navSelected(2,"kuaixuan");
+
+    var moduleName = "kuaixuan";
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    var $i18np = null;
+
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    })
+
+    var $ = layui.$;
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use(['i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            vm.init();
+            window.parent.frameLoad();
+
+            var width_screen = sessionStorage.getItem("width_screen");
+            // var height_screen = sessionStorage.getItem("height_screen");
+            $("#xiaopingmu").hide();
+            if (width_screen*1 < 1445 && defaultLang=="th"){
+                $("#dapingmu").hide();
+                $("#xiaopingmu").show();
+            }else{
+                $("#dapingmu").show();
+                $("#xiaopingmu").hide();
+            }
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+    function upOpenStatus(msg) {
+        vm.setOpenStatus(msg);
+    }
+    function changeLang(lang){
+        console.log("================lang="+lang);
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        i18n.locale=lang;
+        vm.initLotteryMethodI18nName();
+
+        var width_screen = sessionStorage.getItem("width_screen");
+        if (width_screen*1 < 1445 && lang=="th"){
+            $("#dapingmu").hide();
+            $("#xiaopingmu").show();
+        }else{
+            $("#dapingmu").show();
+            $("#xiaopingmu").hide();
+        }
+    }
+</script>
+
+<script src="../js/projects/kuaixuan-vue.js?v17"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>添加赔率</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!--<link rel="stylesheet" href="./css/basicSetting.css" media="all">-->
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link href="../css/style-Permutation5.css" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            /*padding: 4px;*/
+            padding: 0px !important;
+            outline: none;
+            font-size: 12px;
+        }
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .layui-table th {
+            padding: 0px !important;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .layui-table td {
+            font-size: 12px !important;
+            color: black;
+        }
+
+        tr:hover td{
+            background:#fffeaa;
+            color: red;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="main">
+    <div class="module">
+        <div name="module" id="st_handicap_add" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.addPeiRate"> 新增赔率</span>
+                </div>
+                <div class="fr">
+                    <a href="dingPan.html" i18n="setting.fixed.plate">定盘</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <form id="wateroddsswaplist" novalidate="novalidate">
+                    <table class="layui-hide" id="test" lay-filter="addPeiRate"></table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    var $ = layui.jquery;
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        // layui刷新表头
+        table.reload("tt",{
+            cols: [[
+            {type: 'checkbox'}
+            , {field: 'earnWater', title: i18np.prop('setting.qths'), width: "30%"}
+            , {field: 'peiRate', title: i18np.prop('setting.qtpl'), width: "60%"}
+            , {field: 'isShow',title: i18np.prop('setting.three.sfxs'),templet: function (d) {
+                    if (d.isShow==0) return i18np.prop('setting.two.fou');
+                    else if (d.isShow==1) return "<span style='color:red'>"+i18np.prop('setting.two.shi')+"</span>";
+                }
+            }
+            ]],
+            text:{none: i18np.prop('user.table.noData')},
+        })
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','table'], function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+
+        table.render({
+            elem: '#test'
+            , id: 'peiRate-table-id'//重载需要
+            , url: HOST + 'dingPan/getPeiRateListByLotterySettingId'
+            , where: {lotterySettingId: GetQueryString("id")}
+            , cols: [[
+                  {type: 'checkbox'}
+                , {field: 'earnWater', title: i18np.prop('setting.qths'), width: "30%"}
+                , {field: 'peiRate', title: i18np.prop('setting.qtpl'), width: "60%"}
+                , {field: 'isShow',title: i18np.prop('setting.three.sfxs'),templet: function (d) {
+                        if (d.isShow==0) return i18np.prop('setting.two.fou');
+                        else if (d.isShow==1) return "<span style='color:red'>"+i18np.prop('setting.two.shi')+"</span>";
+                    }
+                }
+            ]],
+            text:{none: i18np.prop('user.table.noData')},
+            // , page: true
+            // ,page: {
+            //     curr: layui.data("t_page").index
+            // },
+            // done: (res, curr, count) => {
+            //     layui.data("t_page", {
+            //         key: 'index',
+            //         value: curr
+            //     });
+            // }
+        });
+    });
+</script>
+</body>
+</html>

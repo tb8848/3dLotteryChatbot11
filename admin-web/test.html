@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <title></title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    </head>
+
+    <body>
+        <div id="main">
+            <template>
+                <div i18n="footer.test">test</div>
+                <table class="t-1">
+                    <tr class="tc">
+                        <td  class="bg2" width="150" i18n="footer.date"> 日期</td>
+                        <td  class="bg-yellow" i18n="footer.vip">会员</td>
+                        <td  class="bg-pink" i18n="footer.childRole">{{childRole}} </td>
+                        <td  class="bg-orange" i18n="footer.selfRole">{{selfRole}}</td>
+                        <td  class="bg-pink" i18n="footer.parentRole">{{parentRole}}</td>
+                    </tr>
+                </table>
+                <table class="layui-hide" id="t" lay-filter="t" ></table>
+                <input inputPlaceholder="footer.vip" placeholder="">
+                <button type="button" class="chinese">切换为中文</button>
+                <button type="button" class="english">switch to english</button>
+                <button type="button" class="showTips">弹出框</button>
+                <button type="button" class="showTips2">弹出框2</button>
+            </template>
+        </div>
+    </body>
+    <script src="js/layui/layui.all.js"></script>
+    <script src="js/jquery/jquery.min.js"></script>
+    <script src="js/jquery.i18n.min.js"></script>
+    <script src="js/vue/vue.js"></script>
+    <script>
+        $(document).ready(function() {
+            /*默认语言*/
+            var defaultLang = "en";
+            $("[i18n]").i18n({
+                defaultLang: defaultLang,
+                filePath: "js/i18n/",
+                filePrefix: "i18n_",
+                fileSuffix: "",
+                forever: true,
+                callback: function() {
+                    console.log("i18n is ready.");
+                }
+            });
+
+        });
+
+
+        const vm = new Vue({
+            el: '#main',
+            data: {
+                childRole: "",
+                selfRole: "",
+                parentRole: "",
+            },
+            methods: {
+                init() {
+                    this.childRole = "代理";
+                    this.selfRole = "总代理";
+                    this.parentRole = "股东";
+                }
+            }
+        });
+        vm.init();
+
+
+        layui.config({base: 'js/'})
+            // 继承treetable.js插件
+            .extend({i18np: 'i18n'}).use([ 'i18np','jquery','table'], function () {
+            var table = layui.table;
+            var i18np = layui.i18np;
+            i18np.loadProperties();
+            console.log(i18np.prop("footer.vip"));
+            table.render({
+                elem: '#t',
+                id: 'tt',
+                limit: 40,
+                cols: [
+                    [
+                        {title: i18np.prop('footer.vip'),align: 'center', width: 150},
+                        {title: i18np.prop('footer.date'),align: 'center',width: 200}
+                    ]
+                ],
+                done: (res, curr, count) => {
+                }
+            });
+
+            /*切换为中文 - 按钮*/
+            $(".chinese").click(function() {
+                layui.sessionData("langTab", { key: "langType", value: "zh" });
+                i18np.loadProperties("");
+                isLang = true;
+                // vue切换
+                $("[i18n]").i18n({
+                    defaultLang: "zh",
+                    filePath: "js/i18n/"
+                });
+                // layui刷新表头
+                table.reload("tt",{
+                    cols: [
+                        [{title: i18np.prop('footer.vip'),align: 'center', width: 150},
+                            {title: i18np.prop('footer.date'),align: 'center',width: 200}]
+                    ]
+                })
+            });
+            /*切换为英文 - 按钮*/
+            $(".english").click(function() {
+                layui.sessionData("langTab", { key: "langType", value: "en" });
+                i18np.loadProperties();
+                isLang = true;
+                // vue切换
+                $("[i18n]").i18n({
+                    defaultLang: "en",
+                    filePath: "js/i18n/"
+                });
+                // layui刷新表头
+                table.reload("tt",{
+                    cols: [
+                        [{title: i18np.prop('footer.vip'),align: 'center', width: 150},
+                            {title: i18np.prop('footer.date'),align: 'center',width: 200}]
+                    ]
+                })
+            });
+
+            $(".showTips").click(function() {
+                layer.msg(i18np.prop("footer.vip"))
+            });
+
+            $(".showTips2").click(function() {
+                layer.confirm(i18np.prop("footer.vip"),function (index) {
+
+                })
+            });
+        })
+    </script>
+
+</html>

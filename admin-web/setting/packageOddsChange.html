@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>包牌赔率变动设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+    <style type="text/css">
+        .lmOption{
+            display: inline-block;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+<div id="main" class="main" style="top: 0px;">
+    <template>
+    <div class="module package-type">
+        <div name="module" id="st_package" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.package.odds.change.setting">  包牌赔率变动设置  </span>
+                </div>
+                <div class="fr"><a href="basicSetting.html" class="" i18n="setting.basic.settings">基本设置</a> | <a
+                        href="openQuotation.html" class="" i18n="setting.opening.setting">开盘设置</a> | <a
+                        href="oddsChange.html" class="" i18n="setting.loss.rate.change.setting">赔率变动设置</a> | <a
+                        href="packageOddsChange.html"
+                        class="fb red" i18n="setting.package.odds.change.setting">包牌赔率变动设置</a> | <a href="dingPan.html"
+                                                   class="" i18n="setting.fixed.plate">定盘</a> | <a
+                        href="notice.html" class="" i18n="setting.announcement.settings">公告设置</a> | <a
+                        href="package.html" class="" i18n="setting.package.setting">包牌设置</a> | <a
+                        href="subAccount.html" class="" i18n="setting.sub.account">子账号</a> |
+                    <a href="accountSetting.html" class="" i18n="setting.basic.information">基本资料</a> | <a
+                        href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a></div>
+            </div>
+
+            <div class="mt10">
+                <form><input type="hidden" name="is_package" value="1">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="11">
+                                <div id="optionContainer" class="lmOption">
+                                    <!-- 分类数据-->
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="separate-main">
+                <form id="form3" novalidate="novalidate">
+                    <div class="mb10 mt10 tc sep-btn">
+                        <input type="button" value="保存" class="btn fn-btnUpdate" @click="savePackage()" i18n="setting.four.save"> &nbsp;&nbsp;
+                        <a href="javascript:void(0)" onclick="G.util.reload()" class="btn fn-btnUpdate f13" i18n="setting.four.refresh">刷新</a>
+                    </div>
+                    <table class="t-1 table-pack tc border-separate">
+                        <tbody v-for="(v, idx) in dataList">
+                        <tr class="separate" v-if="v.rows==1">
+                            <td class="border0" v-for="(lsValue, lsIdx) in v.lotterySettingResList" width="25%" >
+                                <table class="table-full f14">
+                                    <thead>
+                                    <tr>
+                                        <td colspan="6" class="bg-pack"><span class="fb">{{lang=='zh'?lsValue.bettingRule:lsValue.bettingRuleTh}}</span>
+                                            <a :href="'baopaiSetting.html?id='+lsValue.id+'&lmId='+v.lotteryMethodId">
+                                                [<span i18n="setting.four.bpfp">{{$t('packageBatches')}}</span>]
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-pack1">
+                                        <td i18n="setting.four.number.groups">{{$t('group')}}</td>
+                                        <td><span i18n="setting.four.package">{{$t('package')}}</span><br><span i18n="setting.four.odds">{{$t('odds')}}</span></td>
+                                        <td><span i18n="setting.four.current">{{$t('current')}}</span><br><span i18n="setting.four.batches">{{$t('batches')}}</span></td>
+                                        <td><span i18n="setting.three.bdpl">{{$t('variableOdds')}}</span><br>(<span i18n="setting.three.gfpz">{{$t('followBatches')}}</span>)</td>
+                                        <td><span i18n="setting.four.yilan">{{$t('blocked')}}</span><br><span i18n="setting.four.money">{{$t('money')}}</span></td>
+                                        <td><span i18n="setting.three.dxsx">{{$t('upperLimit')}}</span><br>({{lsValue.oneItemLimit}})</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="package-list" id="1" type_name="口口XX" v-for="(bsValue, bsIdx) in lsValue.bpSettingList">
+                                        <input class="sep-input" type="hidden" :value=bsValue.lotterySettingId _name="package_id" name="package_id">
+                                        <td width="10%" class="minw35">{{bsValue.groupCount}}</td>
+                                        <td class="blue-text minw35" width="15%">
+                                            {{bsValue.groupCount!=null ? bsValue.peiRate:''}}
+                                        </td>
+                                        <td class="blue-text" width="20%">
+                                            {{bsValue.groupCount!=null ? lsValue.peiRateUpperLimit:''}}
+                                        </td>
+                                        <td width="20%" class="minw65">
+                                            <input v-if="bsValue.groupCount!=null" class="sep-input" type="text" v-model=bsValue.peiRateChange _name="odds" name="odds_010" min="50" max="101" maxlength="7" positive="true"
+                                                   @blur="groupKeyUp(bsValue,idx, lsIdx, bsIdx)">
+                                        </td>
+                                        <td width="15%" class="minw35" style="  ">
+                                            <span v-if="bsValue.groupCount!=null && bsValue.lanMoney!=null">{{bsValue.lanMoney}}</span>
+                                            <span v-else-if="bsValue.groupCount!=null">0</span>
+                                        </td>
+                                        <td width="20%" class="blue-text minw55">
+                                            <input v-if="bsValue.groupCount!=null" class="sep-input" type="text" v-model=bsValue.oneItemLimit _name="odds" name="odds_010" min="50" max="101" maxlength="7" positive="true" @blur="groupKeyUp(bsValue,idx, lsIdx, bsIdx)">
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="separate" v-if="v.rows>1"
+                             v-for="(lineNo,idx1) in (v.rows)">
+                            <td class="border0" v-for="(loc,ii) in 4" v-if="(lineNo-1)*4+loc-1<v.lotterySettingResList.length" width="25%"> <!-- v-for="(lsValue, lsIdx) in v.lotterySettingResList" v-if="(lineNo-1)"-->
+                                <table class="table-full f14">
+                                    <thead>
+                                    <tr>
+                                        <td colspan="6" class="bg-pack"><span class="fb">{{lang=='zh'?v.lotterySettingResList[(lineNo-1)*4+loc-1].bettingRule:v.lotterySettingResList[(lineNo-1)*4+loc-1].bettingRuleTh}}</span>
+                                            <a :href="'baopaiSetting.html?id='+v.lotterySettingResList[(lineNo-1)*4+loc-1].id+'&lmId='+v.lotteryMethodId">
+                                                [<span i18n="setting.four.bpfp">{{$t('packageBatches')}}</span>]</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-pack1">
+                                        <td i18n="setting.four.number.groups">{{$t('group')}}</td>
+                                        <td><span i18n="setting.four.package">{{$t('package')}}</span><br><span i18n="setting.four.odds">{{$t('odds')}}</span></td>
+                                        <td><span i18n="setting.four.current">{{$t('current')}}</span><br><span i18n="setting.four.batches">{{$t('batches')}}</span></td>
+                                        <td><span i18n="setting.three.bdpl">{{$t('variableOdds')}}</span><br>(<span i18n="setting.three.gfpz">{{$t('followBatches')}}</span>)</td>
+                                        <td><span i18n="setting.four.yilan">{{$t('blocked')}}</span><br><span i18n="setting.four.money">{{$t('money')}}</span></td>
+                                        <td><span i18n="setting.three.dxsx">{{$t('upperLimit')}}</span><br>({{v.lotterySettingResList[(lineNo-1)*4+loc-1].oneItemLimit}})</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="package-list" type_name="口口XX" v-for="(bsValue, bsIdx) in v.lotterySettingResList[(lineNo-1)*4+loc-1].bpSettingList">
+                                        <input class="sep-input" type="hidden" :value=bsValue.lotterySettingId _name="package_id" name="package_id">
+                                        <td width="10%" class="minw35">{{bsValue.groupCount}}</td>
+                                        <td class="blue-text minw35" width="15%">
+                                            {{bsValue.groupCount!=null ? bsValue.peiRate:''}}
+                                        </td>
+                                        <td class="blue-text" width="20%">
+                                            {{bsValue.groupCount!=null ? v.lotterySettingResList[(lineNo-1)*4+loc-1].peiRateUpperLimit:''}}
+                                        </td>
+                                        <td width="20%" class="minw65">
+                                            <input v-if="bsValue.groupCount!=null" class="sep-input" type="text" v-model=bsValue.peiRateChange _name="odds" name="odds_010" min="50" max="101" maxlength="7" positive="true"
+                                                   @blur="groupKeyUp(bsValue,idx, (lineNo-1)*4+loc-1, bsIdx)">
+                                        </td>
+
+                                        <td width="15%" class="minw35" style="  ">
+                                            <span v-if="bsValue.groupCount!=null && bsValue.lanMoney!=null">{{bsValue.lanMoney}}</span>
+                                            <span v-else-if="bsValue.groupCount!=null">0</span>
+                                        </td>
+
+                                        <td width="20%" class="blue-text minw55">
+                                            <input v-if="bsValue.groupCount!=null" class="sep-input" type="text" v-model=bsValue.oneItemLimit _name="odds" name="odds_010" min="50" max="101" maxlength="7" positive="true"
+                                                   @blur="groupKeyUp(bsValue,idx, (lineNo-1)*4+loc-1, bsIdx)">
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    <div class="mt10 tc sep-btn">
+                        <input type="button" value="保存" class="btn fn-btnUpdate" @click="savePackage()" i18n="setting.four.save">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js?v1"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    const messages = {
+        zh: {
+            packageBatches:"包牌分批",
+            group:"组数",
+            package:"包牌",
+            odds:"赔率",
+            current:"当前",
+            batches:"分批",
+            variableOdds:"变动赔率",
+            followBatches:"跟分批走",
+            blocked:"已拦",
+            money:"金额",
+            upperLimit:"单项上限",
+            seeAll:"查看全部"
+        },
+        th: {
+            packageBatches:"การซื้อเดิมพันทั้งหมดในช่วงวันที่ต่างกัน",
+            group:"จำนวนกลุ่ม",
+            package:"ซื้อได้ทั้งหมด",
+            odds:"อัตราการจ่ายเดิมพัน",
+            current:"ปัจจุบัน",
+            batches:"การแบ่งเป็นชุด",
+            variableOdds:"อัตราต่อรองที่เปลี่ยนแปลง",
+            followBatches:"การทำแบบเดียวกันในช่วงเวลาที่แตกต่างกัน",
+            blocked:"ถูกปิดกั้น",
+            money:"จำนวนเงิน",
+            upperLimit:"ขีดจำกัดบนของรายการเดียว",
+            seeAll:"ดูทั้งหมด"
+        }
+    }
+
+    window.parent.navSelect("setting");
+    var $ = layui.jquery;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        vm.loadData();
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.loadData();
+    });
+
+    var layer = layui.layer;
+    var lmId = null;
+    var lsId = null;
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            dataList: [],
+            settingCheckStatus: new Map(),
+            bsList: [],
+            lang:'zh',  //语言
+        },
+        methods: {
+            loadData(){
+                lsId = GetQueryString("lsId");
+                lmId = GetQueryString("lmId");
+                this.initOptions();
+                this.initDataList();
+                this.lang = defaultLang;
+            },
+            changeLotterySetting(methodId,newId){
+                this.$set(this.settingCheckStatus, methodId, newId);
+                this.$forceUpdate()
+            },
+            initOptions(){
+                var _this = this;
+                $.ajax({
+                    url:HOST+"lotteryMethod/getAll?lotteryType=1",
+                    type:'get',
+                    success:function (res) {
+                        if(res.code==0){
+                            var dataList = res.data;
+                            var optionHtml = '';
+                            res.data.forEach((item,idx)=>{
+                                if(item.id<5){
+                                    //过滤定字
+                                    var selectedColor=  lmId ==item.id?'yellow':'';
+
+                                    var alink = '<a class="white '+selectedColor+'" href="javascript:void(0)" onclick="changeMethod(this,'+item.id+')">'+item.bettingMethod+'</a>'
+                                    var sublist = item.lotterySettingList;
+                                    var selecthtml = '';
+                                    if(sublist.length>1){
+                                        var selecthtml = '<select class="dict_no_type_id" id="lm-'+item.id+'" onchange="changeSetting('+item.id+')">'
+                                            +'<option value="">'+i18np.prop('setting.three.all')+'</option>';
+                                        sublist.forEach((it1,idx1)=>{
+                                            var selected = "";
+                                            if(it1.id==lsId){
+                                                selected = "selected"
+                                            }else{
+                                                selected = ""
+                                            }
+                                            selecthtml =selecthtml +'<option value="'+it1.id+'" '+selected+'>'+it1.bettingRule+'</option>'
+                                        })
+                                        selecthtml = selecthtml+"</select>";
+                                    }
+                                    optionHtml = optionHtml + '<div class="lmOption">' + alink + selecthtml + '</div>';
+                                }
+                                // if(idx==1){
+                                //     lmId = item.id;
+                                // }
+                            })
+                            var selectedColor=lmId==null?'yellow':'';
+                            optionHtml = optionHtml + '<div class="lmOption"><a href="javascript:void(0)" id="btnAll" fix_num="0" class="white '+selectedColor+'" onclick="getAll(this)" i18n="setting.four.see.all">'+_this.$t('seeAll')+'</a></div>';//查看全部
+                            $("#optionContainer").html(optionHtml);
+                            //searchData();
+                        }
+                    }
+                })
+            },
+            initDataList() {
+                layer.msg(i18np.prop("setting.msg.data.loading"),{
+                    time:-1,
+                    icon:16,
+                    shade:0.3
+                })
+                var _this = this;
+                $.ajax({
+                    url: HOST + "bpSetting/change/getList?lmId="+lmId+"&lsId="+lsId
+                    , type: "get"
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            _this.dataList = res.data
+                            res.data.forEach((item,idx)=>{
+                                _this.$set(_this.settingCheckStatus, item.lotteryMethodId, "");
+                                if(item.lotterySettingResList!=null){
+                                    var resLen = item.lotterySettingResList.length;
+                                    if(resLen<5){
+                                        item.rows = 1;
+                                    }else{
+                                        item.rows = resLen%4==0?parseInt(resLen/4):parseInt(resLen/4)+1
+                                    }
+                                }
+                            })
+                        }else {
+                            layer.msg(i18np.prop("setting.msg.data.exception"));
+                        }
+                    }
+                });
+            },
+
+            groupKeyUp(bsValue, idx, lsIdx, bsIdx) {
+                this.dataList[idx].lotterySettingResList[lsIdx].bpSettingList[bsIdx].peiRateChange = bsValue.peiRateChange;
+                this.dataList[idx].lotterySettingResList[lsIdx].bpSettingList[bsIdx].oneItemLimit = bsValue.oneItemLimit;
+            },
+            savePackage () {
+                layer.msg(i18np.prop("setting.msg.saving"),{
+                    time:-1,
+                    shade:0.3,
+                    icon:16
+                })
+                var _this = this;
+                // console.log(_this.dataList);
+                $.ajax({
+                    url: HOST + "bpSetting/change/savePackage"
+                    , type: "post"
+                    , data:JSON.stringify(_this.dataList)
+                    , contentType: 'application/json'
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 0 || res.code == 200) {
+                            layer.msg(res.msg);
+                            _this.initDataList();
+                        }
+                    }
+                    ,error:function (e) {
+                        layer.closeAll();
+                    }
+                });
+            }
+        }
+    })
+    // vm.loadData();
+
+    function changeMethod(obj,_lmId){
+        $(obj).addClass('yellow');
+        $(".white").not($(obj)).removeClass('yellow');
+        lmId = _lmId;
+        lsId = "";
+        vm.initDataList();
+    }
+
+    function changeSetting(_lmId){
+        lsId = $("#lm-"+_lmId).val();
+        vm.initDataList();
+    }
+
+    function getAll(obj) {
+        $(obj).addClass('yellow');
+        $(".white").not($(obj)).removeClass('yellow');
+        lsId = '';
+        lmId = '';
+        vm.initDataList();
+    }
+</script>
+</body>
+</html>

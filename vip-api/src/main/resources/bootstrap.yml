@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: 3d_chatbot_vip_api
+  messages:
+    basename: i18n/messages
+
+lang:
+  open: true

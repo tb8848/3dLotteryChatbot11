@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" [
+
+]>
+<mapper namespace="com.dao.DrawBuyRecordDAO">
+
+<!--    <update id="copyTable" parameterType="String">-->
+<!--        CREATE TABLE IF NOT EXISTS draw_buy_record_${no} like draw_sell_record;-->
+<!--    </update>-->
+
+<!--    <update id="dropTable" parameterType="String">-->
+<!--        DROP TABLE draw_buy_record_${no}-->
+<!--    </update>-->
+
+    <insert id="batchAddBuyCode">
+        insert into xxx(id,buyCodes,vipId,drawId,buyMoney,peiRate,createTime,buyType,buyAmount,
+        printId,backCodeFlag,hasOneFlag,backCodeStatus,codesFrom,printCacheId,huishui,
+        baopaiId,ip,bpSettingId,bpGroup,prizeTakeFlag,lotterSettingId,param1,param2,param3,lotteryMethodId,huizongFlag,huizongName,bai,shi,ge) values
+            <foreach item="item" separator="," collection="list">
+                (#{item.id},#{item.buyCodes},#{item.vipId},#{item.drawId},#{item.buyMoney},#{item.peiRate},#{item.createTime},#{item.buyType},#{item.buyAmount},
+                #{item.printId},#{item.backCodeFlag},#{item.hasOneFlag},#{item.backCodeStatus},#{item.codesFrom},#{item.printCacheId},#{item.huishui},
+                #{item.baopaiId},#{item.ip},#{item.bpSettingId},#{item.bpGroup},#{item.prizeTakeFlag},#{item.lotterSettingId},#{item.param1},#{item.param2},#{item.param3},
+                #{item.lotteryMethodId},#{item.huizongFlag},#{item.huizongName},#{item.bai},#{item.shi},#{item.ge}
+                )
+            </foreach>
+
+    </insert>
+
+</mapper>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自己操作日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        .layui-table-header {
+            height: 30px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main" >
+        <div class="module">
+            <div name="module" id="log_self" class="m5 mt10">
+                <div name="module" id="guide_log" class="guide">
+                    <div class="fl">
+                        <a href="#!online_account">位置 </a>
+                        <span class="red"> &gt;&gt;  自己操作日志  </span>
+                    </div>
+                    <div class="fr">
+                        <a href="qishuLog.html?link=lottery_activity" class="">期数操作日志</a>|
+                        <a href="yeujiLog.html" class="">越级操作日志</a> |
+                        <a href="zijiCaozuoLog.html" class="fb red">自己操作日志</a> |
+                        <a href="dingpanLog.html">赔率日志</a> |
+                        <a href="huiyuanLog.html" class="">会员快选日志</a> |
+                        <a href="huiyuanUpdateLog.html" class="">会员资料修改日志</a>
+                    </div>
+                </div>
+                <div class="mt10">
+                    <form novalidate="novalidate"><input type="hidden" value="1" name="type">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1">
+                                <td colspan="7">自己操作日志</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="tc">
+                                <td class="w70">被操作账号</td>
+                                <td class="w90"><input type="text" class="w90" name="account" id="account"
+                                                       maxlength="16"></td>
+                                <td class="w70"><label for="start_date">起始日期</label></td>
+                                <td class="w90"><input class="w90" type="text" id="start_date_log" name="start_date"
+                                                       autocomplete="off" value=""></td>
+                                <td class="w70"><label for="end_date">结束日期</label></td>
+                                <td class="w90"><input class="w90" type="text" id="end_date_log" name="end_date"
+                                                       autocomplete="off" value=""></td>
+                                <td class="tl"><input type="submit" class="btn" value="提交" lay-submit lay-filter="search"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="mt10" style="border: solid 1px #000000">
+                    <table class="layui-hide" id="t" lay-filter="t" ></table>
+                </div>
+            </div>
+        </div>
+</div>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script  type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+    layui.use(['form', 'jquery', 'table', 'laydate'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+
+        var startTime = ""
+        var endTime = ""
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            url: HOST + 'ownOperationLog/selectOwneOperationLog',
+            limit: 40,
+            cols: [
+                [
+                    {field: 'userName', title: '操作账号', align: 'center', width: "12%",templet:function (d) {
+                                var userName = d.userName
+                            return userName+"<span style='color: #000000'>"+"("+d.opUserRoleName+")"+"</span>"
+                        }},
+                    {field: 'operatedUserName', title: '被操作账号', align: 'center', width: "12%",templet:function (d) {
+                                var operatedUserName = d.operatedUserName
+                            return operatedUserName+"<span style='color: #008000'>"+"("+d.operatedUserRoleName+")"+"</span>"
+                        }},
+                    {field: 'content', title: '操作内容', align: 'center'},
+                    {field: 'opTime', title: '操作时间', align: 'center', width: "12%"},
+                    {field: 'ip', title: '操作IP', align: 'center', width: "12%"},
+
+                ]
+            ],
+            page: true
+            , page: {
+                curr: layui.data("t_page").index
+            },
+            done: (res, curr, count) => {
+                form.render();
+                layui.data("t_page", {
+                    key: 'index',
+                    value: curr
+                });
+            }
+        });
+
+        // 搜索查询
+        form.on('submit(search)', function (data) {
+            startTime = $("#start_date_log").val();
+            endTime = $("#end_date_log").val();
+            operatedUserName = $("#account").val();
+            // console.log(startTime)
+            // console.log(endTime)
+            // console.log(operatedUserName)
+            table.reload('tt', {
+                where: {"operatedUserName": operatedUserName, "startTime": startTime, "endTime": endTime}
+                , page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+        //日期范围
+        var endDate = laydate.render({
+            elem: '#end_date_log',//选择器结束时间
+            type: 'date',
+            min: "1970-1-1",//设置min默认最小值
+            done: function (value, date) {
+                startDate.config.max = {
+                    year: date.year,
+                    month: date.month - 1,//关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0
+                }
+            }
+        });
+        //日期范围
+        var startDate = laydate.render({
+            elem: '#start_date_log',//开始日期
+            type: 'date',
+            max: "2099-12-31",//设置一个默认最大值
+            done: function (value, date) {
+                endDate.config.min = {
+                    year: date.year,
+                    month: date.month - 1, //关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0
+                };
+            }
+        });
+    });
+</script>
+</body>
+</html>

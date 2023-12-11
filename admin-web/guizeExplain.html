@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>规则说明</title>
+    <link rel="stylesheet" href="js/layui/css/layui.css">
+    <style></style>
+</head>
+<body>
+<div class="layui-form" style="margin-top: 20px">
+    <div class="layui-card">
+        <div class="layui-card-header">
+            <span i18n="rule.edit.explain">编辑规则说明</span>
+            <a style="margin-left:15px" class="layui-btn" lay-submit lay-filter="save" href="javascript:void(0)" i18n="rule.save">保存</a>
+        </div>
+        <div class="layui-card-body">
+            <div>
+                <textarea class="layui-textarea" id="ruleDesc" name="content" style="display: none" placeholder="还没有设置内容哦"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<!--本站彩票实行自愿购买,量力而行；凡下注者即被视为同意并遵守本规则。-->
+
+<!--    <div class="main_center main_center_erziding">-->
+<!--        <table class="table table-bordered table-condensed table-rule1">-->
+<!--            <tbody >-->
+<!--                <tr>-->
+<!--                    <td>-->
+<!--                        <br><br>-->
+<!--                        <H3 align=center>本站销售<span class="rule1" id="rule_name"></span>彩票游戏规则</H3>-->
+<!--                        <P><B>第一章　总　则</B><BR><BR>-->
+<!--                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>第一条</B>　根据福彩3D相关法律法规，制定本游戏规则。<BR><BR>  　　-->
+<!--                            <B>第二条</B>　本站彩票实行自愿购买,量力而行；凡下注者即被视为同意并遵守本规则。          <B></B><BR>-->
+<!--                            <B><BR>第二章　游戏方法</B><BR><BR>    　　-->
+<!--                            <B>第三条</B>　-->
+<!--                            <span id="rule_name_0"></span>-->
+<!--                            <span class="rule1">-->
+<!--                                <strong>本站从右往左取4位做为游戏规则！</strong>-->
+<!--                            </span><BR>-->
+<!--                            <span class="text-03"></span><BR><BR>-->
+<!--                            <B><span class="rule1">假设下列为开奖结果</span></B><font color="#FF0000">:</font>-->
+<!--                        </P>-->
+<!--                        <table class="table table-bordered table-condensed table-rule1" style="width:50%">-->
+<!--                            <thead>-->
+<!--                                <tr class="xiazhukuang2">-->
+<!--                                    <th id="rule_w1">球1</th>-->
+<!--                                    <th id="rule_w2">球2</th>-->
+<!--                                    <th id="rule_w3">球3</th>-->
+<!--                                    <th id="rule_w4">球4</th>-->
+<!--                                    <th id="rule_w5">球5</th>-->
+<!--                                    <th id="rule_w6">球6</th>-->
+<!--                                </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody>-->
+<!--                                <tr>-->
+<!--                                    <td><B><FONT color=#cc0000>6</FONT></B></td>-->
+<!--                                    <td><B><FONT color=#cc0000>5</FONT></B></td>-->
+<!--                                    <td><B><FONT color=#cc0000>4</FONT></B></td>-->
+<!--                                    <td><B><FONT color=#cc0000>3</FONT></B></td>-->
+<!--                                    <td><B><FONT color=#cc0000>2</FONT></B></td>-->
+<!--                                    <td id="rule_6"><B><FONT color=#cc0000>1</FONT></B></td>-->
+<!--                                </tr>-->
+<!--                            </tbody>-->
+<!--                        </table><BR>-->
+<!--                        <P><strong>依照开奖结果，中奖范例如下：</strong></P><BR>-->
+<!--                        <P><strong>四字定中奖：</strong></P><BR>-->
+<!--                        <P class="rule1">4321</P><BR>-->
+<!--                        <P><strong>二字定中奖：</strong></P><BR>-->
+<!--                        <P><span class="rule1">43xx； 4x2x； 4xx1； x32x； x3x1； xx21 </span></P><BR>-->
+<!--                        <P><strong>三字定中奖：</strong></P><BR>-->
+<!--                        <P><span class="rule1">432x； 43x1； 4x21； x321 </span></P><BR>-->
+<!--                        <P><strong>一字定中奖：</strong></P><BR>-->
+<!--                        <P><span class="rule1">4xxx； x3xx； xx2x；xxx1；</span></P><BR>-->
+<!--                        <P><strong>二字现中奖：</strong></P><BR>-->
+<!--                        <P><span class="rule1"><strong>12；13；14；23；24；34</strong></span></P><BR>-->
+<!--                        <P><strong>三字现中奖：</strong></P><BR>-->
+<!--                        <P><span class="rule1"><strong>123；124；134；234</strong></span></P><BR>-->
+<!--                        <P><strong>四字现中奖：</strong></P><BR>-->
+<!--                        <P><span class="rule1"><strong>1234 现；</strong></span></P><BR>-->
+<!--                        <B>第三章　开奖及公告</B><BR><BR>      　　-->
+<!--                        <B>第四条</B>　-->
+<!--                        <span id="rule_name1">-->
+<!--                            <span class="rule1" id="rule_name2"></span>-->
+<!--                              ，摇奖过程在公证人员监督下进行，通过电视台播出。<BR><BR>      　　-->
+<!--                              <B>第五条</B>　每期开奖后，以国家体育总局体育彩票管理中心公布的开奖号码为准。<BR><BR><BR>-->
+<!--                              <B>第四章　附　则</B><BR><BR>      　　-->
+<!--                              <B>第六条</B>　本游戏规则最终解释权归本公司。<BR>-->
+<!--                        </span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--        <div class="clear"></div>-->
+<!--    </div>-->
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script>
+
+    var $ = layui.$;
+    var layer = layui.layer;
+
+    var moduleName = "index";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    var contents = '';
+    layui.config({base: 'js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use(['i18np','layedit','form','layer'],function () {
+
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+
+        var layedit = layui.layedit;
+        var form = layui.form;
+        var layer = layui.layer;
+        var editor = layedit.build('ruleDesc',{
+            height:500
+        });
+        layedit.set({
+            uploadImage:{
+                url:"",
+                type:'post'
+            }
+        })
+        layedit.sync(editor);
+
+        getText();
+
+        function getText(){
+            $.ajax({
+                url:HOST+"admin/statictext/getOne",
+                type:'get',
+                success:function(res){
+                    if(res.code==0){
+                        if(res.count==1){
+                            contents = res.data.ruleDescrib;
+                            layedit.setContent(editor,contents);
+                        }else{
+                            layedit.setContent(editor,"");
+                        }
+                    }
+                }
+            })
+        }
+
+        form.on('submit(save)',function (data) {
+            layedit.sync(editor);
+            var mytext = $("#ruleDesc").val();
+            if(mytext=='' || mytext==null || mytext==undefined || mytext=="<br>"){
+                // layer.msg("请输入内容再提交");
+                layer.msg(i18np.prop('rule.content.noNull'));
+                return false;
+            }
+            layer.msg(i18np.prop('rule.msg.chulizhong'), {
+                icon: 16
+                ,shade: 0.3
+                ,time:-1
+            });
+            $.ajax({
+                url:HOST+"admin/statictext/updateRule",
+                type:'post',
+                contentType:'application/json',
+                data:JSON.stringify({
+                    ruleDescrib:mytext
+                }),
+                success:function(res){
+                    layer.closeAll();
+                    if(res.code==0){
+                        layer.msg(i18np.prop('rule.save.success'));
+                    }else{
+                        layer.msg(res.msg)
+                    }
+                },
+                fail:function (res) {
+                    layer.closeAll();
+                    layer.msg(i18np.prop('req.error'))
+                }
+            })
+        });
+    })
+</script>
+</body>
+</html>

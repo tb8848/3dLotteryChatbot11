@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+    <!--    <style type="text/css">-->
+    <!--        .layui-table-cell{height:40px;line-height:40px;}-->
+    <!--    </style>-->
+</head>
+<body>
+
+<div class="module">
+    <div name="module" id="sub" class="m5 mt10">
+        <div class="mt10">
+            <table class="t-1">
+                <thead> <tr class="title-bar"> <td colspan="7" i18n="bills.title">历史账单</td> </tr>
+                <tr class="bg2 tc">
+                    <td width="14%" i18n="bills.date">日期</td>
+                    <td width="14%" i18n="bills.drawNo">期号</td>
+                    <td width="14%" i18n="bills.bishu">笔数</td>
+                    <td width="14%" i18n="bills.buyMoney">金额</td>
+                    <td width="14%" i18n="bills.huishui">回水</td>
+                    <td width="14%" i18n="bills.zhongjiang">中奖</td>
+                    <td width="14%" i18n="bills.yingkui">盈亏</td>
+                </tr> </thead>
+                <tbody class="fn-hover tc" id="billList">
+                <!--<tr> <td>2022-12-25</td>-->
+                    <!--<td class="f14 fb"><a class="" href="#!lastbill.betlist|betlist?last=1&amp;period_number=22345">22345</a></td>-->
+                    <!--<td>1</td> <td>1</td> <td>  0  </td> <td>  0  </td> <td class="fb">   -1   </td> </tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    var moduleName = "bills";
+    var layer = layui.layer;
+    var $i18np = null;
+    var $ = layui.$;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+    }
+
+</script>
+<script>
+
+    function getData(){
+        $.ajax({
+            url:HOST+'pc/bills/list',
+            type:'post',
+            success:function (res) {
+                if(res.code==0){
+                    var dlist = res.data.dataList;
+                    var heji = res.data.heji;
+                    var bodydata = "";
+                    var totalM = heji.totalMoney;
+                    var totalC = heji.totalCount;
+                    var totalHS = heji.totalHs;
+                    var totalDM = heji.drawMoney==null?'':heji.drawMoney;
+                    var totalEM = heji.totalEarn==null?'':heji.totalEarn;
+                    dlist.forEach((item,idx)=>{
+                        var tr = __dataRow(item);
+                        bodydata = bodydata + tr;
+                    })
+                    bodydata = bodydata
+                        +'<tr class="bg2"> ' +
+                        '<td i18n="bills.heji">'+$i18np.prop("bills.heji")+'</td> ' +
+                        '<td>'+dlist.length+'</td> ' +
+                        '<td>'+totalC+'</td> ' +
+                        '<td>'+totalM+'</td> ' +
+                        '<td>'+totalHS+'</td> ' +
+                        '<td>'+totalDM+'</td> ' +
+                        '<td>'+totalEM+'</td> ' +
+                        '</tr>';
+                    $("#billList").html(bodydata)
+                }else{
+                    $("#billList").html(__emptyRow())
+                }
+            }
+        });
+    }
+
+
+
+    function __emptyRow() {
+        return '<tr> <td colspan="7" i18n="bills.noData">'+$i18np.prop("bills.noData")+'</td></tr>';
+    }
+
+    function __dataRow(item){
+        var drawMoney = item.drawMoney;
+        if(null==drawMoney || ""==drawMoney){
+            drawMoney = "--";
+        }
+        var earn = item.yingkui;
+        if(null==earn || ""==earn){
+            earn = "--";
+        }
+     return ' <tr> <td>'+item.drawDate+'</td>' +
+            '<td class="f14 fb"><a class="" href="../xiazhu/xiazhuDetail.html?period_number='+item.drawId+'">'+item.drawId+'</a></td>' +
+            '<td>'+item.bishu+'</td> <td>'+(item.totalMoney)+'</td> <td>  '+(item.huishui==""?"--":item.huishui)+'  </td> ' +
+         '<td>  '+drawMoney+'  </td> <td class="fb">  '+earn+'  </td> </tr>';
+    }
+
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            getData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+</script>
+
+</body>
+</html>

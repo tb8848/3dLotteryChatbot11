@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>查看子账号</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../setting/css/basicSetting.css" media="all">
+<!--    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">-->
+    <style>
+        .layui-layer-molv .layui-layer-title{
+            background: #159ED4 !important;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<div id="main" >
+    <div class="module">
+        <div name="module" id="sub_edit" class="m5 mt10">
+            <div class="guide">
+                <div class="fl"><a href="#!online_account" i18n="setting.position">位置 </a>
+                    <span class="red">&gt;&gt; <span i18n="setting.sub.update.account">编辑子账号</span></span>
+                </div>
+                <div class="fr">
+                    <a href="subAccount.html" class="" i18n="setting.sub.account.list">子账号列表</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                        <tr class="bg1">
+                            <td i18n="setting.information.prompt">信息提示</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="bd_credit">
+                                <div class="ml20">
+<!--                                    总信用额度：30000000000；&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                    可分配信用额度：29998400000；&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                    已分配信用额度：1600000；-->
+                                    <span i18n="setting.total.credit.limit">总信用额度：</span><span id="user_quota"></span>;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span i18n="setting.allocable.credit.limit">可分配信用额度：</span><span id="user_assigned_quota"></span>；&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span i18n="setting.allocated.credit.limit">已分配信用额度：</span><span id="user_distributable_quota"></span>；
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt10">
+                <form autocomplete="off" novalidate="novalidate"><input type="hidden" name="member_id" value="80">
+                    <input type="hidden" name="id" id="id"/>
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1">
+                                <td colspan="4" i18n="setting.sub.update.account">编辑子账号</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="bg1" i18n="setting.account.number">账号</td>
+                                <td>
+                                    <input type="text" name="account" id="account" value="test" readonly="readonly">&nbsp;&nbsp;
+                                </td>
+                                <td class="bg1" i18n="setting.sub.status">启/停用</td>
+                                <td>
+                                    <label class="mr20">
+                                        <input type="radio" class="radio" name="status" value="1" checked="checked">
+                                        <span i18n="setting.two.shi">是</span>
+                                    </label>
+                                    <label class="mr20">
+                                        <input type="radio" class="radio" name="status" value="0"><span i18n="setting.two.fou">否</span>
+                                    </label>
+                                </td>
+                            </tr>
+                        <tr>
+                            <td class="bg1" i18n="setting.two.password"> 密码</td>
+                            <td>
+                                <input type="password" name="password" id="password" maxlength="16" autocomplete="new-password">
+                                <a name="passwordPrompt" style="width:20px; height:20px" onclick="passwordRules()">
+                                    <img src="../../img/prompt_icon_blue.png" style="width:20px; height:20px;cursor:pointer;">
+                                </a>
+                            </td>
+                            <td class="bg1">Email</td>
+                            <td><input type="text" name="email" id="email" value="" maxlength="50"></td>
+                        </tr>
+                        <tr>
+                            <td class="bg1" i18n="setting.code">代号</td>
+                            <td><input type="text" name="nick_name" id="nick_name" value="" maxlength="10"></td>
+                            <td class="bg1" i18n="setting.contact.number">联系电话</td>
+                            <td><input type="text" name="contact_phone" id="contact_phone" value="" maxlength="20"></td>
+                        </tr>
+                        <tr>
+                            <td class="bg1" i18n="setting.sub.permission.list">权限列表</td>
+                            <td>
+                                <input type="hidden" name="permission" id="permission">
+                                <label class="mr20">
+                                    <input type="checkbox" class="checkbox permission" checked="checked" id="1">
+                                    <span i18n="setting.sub.download">下载</span>
+                                </label>
+                                <label class="mr20">
+                                    <input type="checkbox" class="checkbox permission" checked="checked" id="5">
+                                    <span i18n="setting.sub.accountList">帐号列表</span>
+                                </label>
+                            </td>
+                            <td class="bg1" i18n="setting.sub.report.period.limit">报表期数限制</td>
+                            <td> <span i18n="setting.sub.start.issue">开始期号</span>
+                                <select class="periods" name="start_period_number" value="" id="start_period_number">
+                                    <option value="" i18n="setting.sub.not.set">不设置</option>
+                                </select>
+                                <span i18n="setting.sub.expiration.date">截止期号</span>
+                                <select class="periods" name="end_period_number" id="end_period_number">
+                                    <option value="" i18n="setting.sub.not.set">不设置</option>
+                                </select>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt10 tc">
+                        <button class="btn" id="update" lay-submit lay-filter="update" value="提交" i18n="setting.submit" style="cursor: pointer" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--密码规则弹窗-->
+    <div class="layui-form" id="passwordRules" style="display:none;">
+        <div style="margin: 10px 0 10px 10px">
+            <div>1、<span  i18n="setting.sub.password.two">必须是8-16位的大小写字母及数字组合</span></div>
+            <div >2、<span  i18n="setting.sub.password.three">不可相连3位以上连续数字（如：Asdf1234）</span></div>
+            <div >3、<span  i18n="setting.sub.password.four">不可相连3位以上连续字母（如：Abcd1357）</span></div>
+            <div >4、<span  i18n="setting.sub.password.five">不可相连3位以上相同数字（如：Asdfg111）</span></div>
+            <div >5、<span  i18n="setting.sub.password.six">不可相连3位以上相同字母（如：Aaa01357）</span></div>
+            <div >6、<span  i18n="setting.sub.password.seven">密码不可包含账号</span></div>
+            <div >7、<span  i18n="setting.sub.password.eight">密码开头2位不能和账号相同（如：账号ff01、密码ffA3579）</span></div>
+            <div >8、<span  i18n="setting.sub.password.nine">不能包含键盘常用字串qwe、asd、zxc、qaz、wsx</span></div>
+        </div>
+    </div>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/qrCode.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    var form = layui.form;
+    var $ = layui.jquery;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties("subMain-"+moduleName);
+        getData();
+    }
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            i18np.loadProperties("subMain-"+moduleName);
+            getData();
+            //vm.init();
+        })
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var id = "";
+    function  getData() {
+        id = GetQueryString("id");
+        if (id == null || id == "" || id == undefined) {
+            id = localStorage.getItem("id");
+            $("input[name='id']").val(id);
+        }
+        getProduct();
+        getUser(id);
+    }
+
+
+
+    //根据用户ID获取用户角色和信用额度
+    function getProduct() {
+        $.ajax({
+            url: HOST + "admin/getUserById?id=" + GetQueryString("adminId"),
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    $("#user_quota").text(d.totalCreditLimit);
+                    $("#user_assigned_quota").text(d.surplusCreditLimit);
+                    $("#user_distributable_quota").text(d.useCreditLimit);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    //获取期数
+    $.ajax({
+        url:HOST+"draw/getDrawList68" ,
+        success:function(res){
+            if(res.code == 200) {
+                for(var i in res.data) {
+                    $("#start_period_number").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawId+"</option>")
+                    $("#end_period_number").append("<option value='"+res.data[i].drawId+"'>"+res.data[i].drawId+"</option>")
+                }
+                form.render()
+            }
+        }
+    });
+
+    let oldPassword = "";
+
+    //根据id查询用户信息
+    function getUser(id) {
+        $.ajax({
+            url: HOST + "sonAdmin/getSonById?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    //获取账号
+                    $("input[name='account']").val(d.sonUsername);
+                    //获取代号
+                    $("input[name='nick_name']").val(d.nickName);
+                    //获取电话
+                    $("input[name='contact_phone']").val(d.phone);
+                    //邮箱
+                    $("input[name='email']").val(d.email);
+                    //密码
+                    // $("input[name='password']").val(d.password);
+                    oldPassword = d.password;
+                    //获取单选框状态
+                    $("input:radio[name='status'][value='"+d.status+"']").attr("checked",'checked');
+                    //开始期数
+                    $("#start_period_number").val(d.startPeriod);
+                    //结束期数
+                    $("#end_period_number").val(d.endPeriod);
+
+                    form.render()
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    //修改
+    form.on('submit(update)', function (data) {
+        let password = $("input[name='password']").val();
+        if(password!=null && password!="" && password!=undefined){
+            let msg = checkpwd(password);
+            if (msg != null){
+                layer.msg(msg);
+                return false;
+            }
+            data.field.password = password;
+        }else{
+            data.field.password = oldPassword;
+        }
+        //用户id
+        data.field.id =  GetQueryString("id");
+        //号码
+        data.field.phone =  $("input[name='contact_phone']").val();
+        //代号
+        data.field.nickName =  $("input[name='nick_name']").val();
+        //邮箱
+        data.field.email = $("input[name='email']").val();
+        //获取单选框状态
+        var status = $('input[name="status"]:checked').val();
+        data.field.status = status;
+        //开始期数
+        var startPeriod = $("#start_period_number").val();
+        data.field.startPeriod = startPeriod;
+        //结束期数
+        var endPeriod = $("#end_period_number").val();
+        data.field.endPeriod = endPeriod ;
+        if(startPeriod > endPeriod){
+            layer.msg(i18np.prop('setting.sub.issue.verification'))
+            return false ;
+        }
+        $.ajax({
+            url: HOST + "sonAdmin/updateSonUser"
+            , type: "POST"
+            , contentType: 'application/json'
+            , data: JSON.stringify(data.field)
+            , success: function (data) {
+                if (data.code == 0) {
+                    layer.confirm(i18np.prop('setting.five.save.success'), {
+                        title:i18np.prop('setting.five.tips'),
+                        btn: [i18np.prop('setting.determine')] //可以无限个按钮
+                    }, function(index, layero){
+                        //按钮【按钮一】的回调
+                        window.location.href='subAccount.html'
+                    });
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+        return false;
+    });
+
+    //密码规则弹窗
+    function passwordRules() {
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-molv', //样式类名
+            title: i18np.prop('setting.sub.password.name.rules'),
+            anim: 2,
+            area: ['600px', '260px'],
+            shadeClose: true, //开启遮罩关闭
+            content:$("#passwordRules"),
+        });
+    }
+</script>
+</body>
+</html>

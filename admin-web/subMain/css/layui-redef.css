@@ -1,0 +1,7 @@
+.layui-table td,
+.layui-table th{
+  border:1px solid #a4d4f9
+}
+.layui-table, .layui-table-view{
+  margin:0
+}

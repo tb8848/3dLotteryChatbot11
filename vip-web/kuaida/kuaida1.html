@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>快打</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--    <link rel="stylesheet" href="../css/common.css" media="all">-->
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+    <style>
+        .layui-table{
+            width: 100% !important;
+        }
+        .rows1{
+            display: flex;
+            justify-content: space-between;
+            height: 580px;
+            margin-top: 10px;
+        }
+        .rows2{
+            display: flex;
+            justify-content: space-between;
+        }
+        .xuan{
+            padding-right: 5px;
+            padding-left: 15px;
+        }
+        .anniu{
+            width: 70px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: #b92929;
+            color: white;
+        }
+        #numberNo,#money{
+            width: 100px;
+        }
+        .layui-form-label{
+            width: 60px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-input-block{
+            margin-left: 80px;
+        }
+        .layui-form-item{
+            margin: 10px 0 10px 0;
+        }
+        .cuzi{
+            font-size: 20px;
+            font-width: bold;
+            color: black;
+        }
+        .layui-table-view{
+            margin: 0;
+        }
+
+        .buyList{
+
+        }
+        .btnDel{
+            width:40px;
+            height:25px;
+            border-radius:5px;
+            border:none;
+            background-color: orangered;
+            color: white
+        }
+    </style>
+</head>
+<body>
+
+<div class="module" style="height:100%;">
+    <div name="module" id="kuaida" class="kuaida">
+        <div class="right content-right-kd" id="betlack">
+            <div class="bd">
+                <div class="div_print " id="betlackPrint">
+                    <table class="t-1 tc">
+                        <thead>
+                        <tr class="bg1"> <td colspan="2" class="print_action" i18n="kuaida.current.stopBuyCodes">目前停押号码</td>
+                            <td> <select id="period" style="height:auto; line-height:normal; padding:0;">
+                                <!--                                        <option value="22343" selected="selected">22343</option>-->
+                                <!--                                        <option value="22342">22342</option>-->
+                                <!--                                        <option value="22341">22341</option>-->
+                            </select>
+                            </td>
+                        </tr>
+                        <tr class="bg2">
+                            <td width="57%" i18n="kuaida.buyCode">号码</td> <td width="33%" i18n="kuaida.buyMoney">金额</td> <td width="10%">
+                            <label>
+                                <span i18n="kuaida.selectAll">全选</span>
+                                <input type="checkbox" id="selectAll_lack" class="checkbox"></label> </td> </tr>
+                        </thead>
+                        <tbody id="tbody_lack" class="tc">
+                        <!--                                    <tr><td colspan="3" class="blank_area"></td></tr>-->
+                        <!--                                    <tr> <td colspan="3" class="fb tfoot"> 笔数:0&nbsp;&nbsp;总金额:0 </td></tr>-->
+                        </tbody>
+                        <tfoot>
+                        <tr> <td colspan="3" class="fb tfoot">
+                            <span i18n="kuaida.bishu">笔数:</span><span  id="stopBuy-bishu">0</span>&nbsp;&nbsp;
+                            <span i18n="kuaida.totalMoney">总金额:</span><span  id="stopBuy-totalMoney">0</span></td></tr>
+                        <tr class="hide" id="stopBuy-pageRow">
+                            <td colspan="3" class="fb tfoot" style="text-align: center">
+                                <a href="javascript:void(0)" class="btn" id="stopBuy-prevPage" i18n="kuaida.prevPage">上一页</a>
+                                &nbsp;&nbsp;
+                                <span id="stopBuy-currpage">0</span>&nbsp;/&nbsp;<span id="stopBuy-pages">0</span>
+                                &nbsp;&nbsp;
+                                <a href="javascript:void(0)" class="btn" id="stopBuy-nextPage" i18n="kuaida.nextPage">下一页</a>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="mt5 tc">
+                    <input type="button" value="打印" class="btn fn-print margin-right10" id="btnPrint" i18n="kuaida.print">
+                    <input type="button" value="删除" class="btn fn-delbetlack" id="delbetlack" i18n="kuaida.delete">
+                </div>
+                <div class="mt5">
+                    <table class="t-1 tc">
+                        <thead> <tr class="bg1"> <td colspan="2" class="tc" i18n="kuaida.delete.keepStopBuyCodes">删除停押号码保留区</td> </tr>
+                        <tr class="bg2"> <td i18n="kuaida.buyCode">号码</td> <td i18n="kuaida.buyMoney">金额</td> </tr>
+                        </thead>
+                        <tbody id="betlackKeep">
+                        <!--                                    <tr><td colspan="3" class="blank_area"></td></tr>-->
+                        <!--                                    <tr class="fb"> <td colspan="2"> 笔数:0&nbsp;&nbsp;总金额:0 </td>-->
+                        <!--                                    </tr>-->
+                        </tbody>
+                        <tfoot>
+                        <tr> <td colspan="3" class="fb tfoot">
+                            <span i18n="kuaida.bishu">笔数:</span><span id="delStop-bishu">0</span>&nbsp;&nbsp;
+                            <span i18n="kuaida.totalMoney">总金额:</span><span id="delStop-totalMoney">0</span></td></tr>
+                        <tr class="hide" id="delStop-pageRow">
+                            <td colspan="3" class="fb tfoot" style="text-align: center">
+                                <a href="javascript:void(0)" class="btn" id="delStop-prevPage" i18n="kuaida.prevPage">上一页</a>
+                                &nbsp;&nbsp;
+                                <span id="delStop-currpage">0</span>&nbsp;/&nbsp;<span id="delStop-pages">0</span>
+                                &nbsp;&nbsp;
+                                <a href="javascript:void(0)" class="btn" id="delStop-nextPage" i18n="kuaida.nextPage">下一页</a>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="left" id="hasDataShow">
+            <div class="bd m5 module">
+                <table class="t-1 tc table_bg">
+                    <thead> <tr class="bg1"> <td colspan="7" class="tc" i18n="kuaida.buyArea">下注框</td> </tr>
+                    <tr class="bg3">
+                        <td width="8%" i18n="kuaida.lotteryType">彩种</td>
+                        <td width="20%" i18n="kuaida.billNo">注单编号</td>
+                        <td width="10%" i18n="kuaida.buyCode">号码</td>
+                        <td width="9%" i18n="kuaida.odds">赔率</td>
+                        <td width="9%" i18n="kuaida.buyMoney">金额</td>
+                        <td width="9%" i18n="kuaida.status">状态</td>
+                        <td class="align-checkbox-wrap print_area" width="15%">
+                            <label class="align-checkbox">
+                                <span i18n="kuaida.selectAll">全选</span><input type="checkbox" id="selectAll" class="checkbox">
+                            </label>
+                            <input type="button" value="退码" class="btn fn-cancelbet" id="cancelbet" i18n="kuaida.backCode">
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    <tr><td>--</td><td>--</td><td class="fb green">--</td>
+                        <td class="fb">--</td><td class="fb red">--</td><td>--</td><td>--</td></tr>
+                    </tbody>
+                </table>
+                <form novalidate="novalidate">
+                    <table class="t-1 mt10">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="5">
+                                <label>
+                                    <span i18n="kuaida.sizixian">四字现</span><input type="checkbox" name="" id="toxian" class="checkbox"></label>
+                                <label>
+                                    <span i18n="kuaida.quanzhuan">全转</span><input type="checkbox" name="" id="allconvert" class="checkbox"></label>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody class="noBD">
+                        <tr class="f21">
+                            <td class="padding6 f20" width="150">
+                                <span i18n="kuaida.buyCode">号码</span>
+                                <input type="text" class="text-large w90 ime-dis fb box-radius" name="betno"
+                                       id="betno" autofocus="" required="true" maxlength="4" autocomplete="off" betno="true" aria-required="true">
+                                <strong class="red hide" id="xian" i18n="kuaida.xian">现</strong>
+                                <input type="hidden" name="isxian" id="isxian" value="0">
+                                <input type="hidden" name="way" value="101">
+                                <input type="hidden" name="isfulltransform" id="isfulltransform" value="0">
+                                <input type="hidden" name="guid" id="guid" value=""> </td>
+                            <td class="padding6 f20" width="100">
+                                <span i18n="kuaida.buyMoney">金额</span>
+                                <input type="text" class="text-large w90 fb box-radius" name="betmoney" id="betmoney"
+                                       autocomplete="off" required="true" positive="true"
+                                       aria-required="true" style="width: 150px"> </td>
+                            <td class="padding6" style="width:150px; *width:150px;" style="text-align: left">
+                                <input type="button" value="确认下注" class="btn btn-large" id="xiazhu" i18n="kuaida.toBuy">
+                                <input type="button" value="极速快打" class="btn btn-large" id="fn-quickbet" i18n="kuaida.fast">
+                            </td>
+                            <td class="padding6 f20" width="180" style="text-align: left">
+                                <strong class="hide" id="betno_odds"><span i18n="kuaida.odds">赔率</span>: <i id="limit_odds" class="blue"></i><br> </strong>
+                                <strong class="hide" id="betno_odds_money"> <span i18n="kuaida.canBuy">可下</span>:<i id="limit_betmoney" class="red"></i> </strong>
+                            </td>
+<!--                            <td> <strong class="hide" id="betno_odds_money"> <span i18n="kuaida.canBuy">可下</span>:<i id="limit_betmoney" class="red"></i> </strong>-->
+<!--                            </td>-->
+                        </tr>
+                        </tbody> </table>
+                </form>
+            </div>
+        </div>
+
+        <div class="left hide" id="noDataShow">
+            <div class="bd m5 module">
+                <table class="t-1 tc"> <thead> <tr class="bg1"> <td colspan="7" class="tc" i18n="kuaida.buyArea">下注框</td> </tr> </thead>
+                    <tbody id="databody">
+                    <tr> <td class="tc" style="height:400px">
+                        <div class="f16 fb " id="openStatusDesc"> <!--已封盘 --> </div> </td> </tr> </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/socket/sockjs.min.js"></script>
+<script src="../js/socket/stomp.js"></script>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+<script src="../js/token.js?v1"></script>
+<script src="../js/config.js"></script>
+
+<script src="../js/projects/kuaida.js?v18"></script>
+
+
+<script type="text/javascript">
+    var $$ = jQuery;
+    $$("#btnPrint").on("click","",function(){
+        if(stopCodesList.length>0){
+            var title = $i18np.prop("kuaida.di")+drawNo+$i18np.prop("kuaida.qi")+" "+$i18np.prop('kuaida.stopBuyCode');
+            const params = {
+                dataList:stopCodesList,
+                dataTitle:title,
+            }
+            sessionStorage.setItem("printParams",JSON.stringify(params));
+            window.open("stopbuy-print.html")
+        }else{
+            layer.alert($i18np.prop("kuaida.noDataPrint"),
+                {title:$i18np.prop("kuaida.alertTitle"),
+                    btn:[$i18np.prop("kuaida.confirm")]
+                }
+            )
+        }
+        return false;
+    })
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    var moduleName = "kuaida";
+    var $i18np = null;
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            parent.window.frameLoad();
+            getData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+    function changeLang(lang){
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        layer.closeAll();
+    }
+
+</script>
+
+</body>
+</html>

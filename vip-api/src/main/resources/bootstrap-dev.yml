@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacos.service-address}:${nacos.port}
+      config:
+        enable: true
+        server-addr: ${nacos.service-address}:${nacos.port}
+        group: DEFAULT_GROUP
+        namespace: 90b4887a-a488-4978-ae84-ce3770cb4d0a
+        auto-refresh: true # 是否启用动态刷新配置
+        bootstrap:
+          enable: true
+        file-extension: properties
+
+nacos:
+  service-address: 47.119.152.82
+  port: 9099
+
+dubbo:
+  protocol:
+    port: -1
+    name: dubbo
+  registry:
+    address: nacos://${nacos.service-address}:${nacos.port}
+  application:
+    name: ${spring.application.name}

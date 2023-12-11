@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>二维码下载</title>
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <script src="../js/jquery/jquery.min.js"></script>
+    <script src="../js/jquery/jquery.qrcode.min.js"></script>
+    <script src="../js/config.js"></script>
+    <style>
+        html,body{
+            height: 100%;
+            width: 100% ;
+        }
+    </style>
+</head>
+<body style="background-color: white;">
+    <div class="layui-row" style="display: flex;justify-content: center;">
+        <!--            <div id="child-row1">-->
+        <!--                <img class="layui-upload-img" name="picture" id="picture1" src="../img/app_qrcode.png" style="width: 200px;height: 200px">-->
+        <!--            </div>-->
+        <div id="qrcode" style="margin-top: 20px;"></div>
+    </div>
+</body>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        //生成二维码
+        $.ajax({
+            url:HOST+"apk/getNewestApk"
+            ,type:"get"
+            ,success:function (data) {
+                if (data.code == 200){
+                    $("#qrcode").empty();
+                    var url = HOST+"apk/download?id="+data.data.id;
+                    $("#qrcode").qrcode({
+                        render: "canvas", //table方式
+                        width: 200, //宽度
+                        height:200, //高度
+                        text: url //任意内容
+                    });
+                }
+            }
+            ,error:function () {
+                console.log("ajax error");
+            }
+        });
+    })
+</script>
+</html>

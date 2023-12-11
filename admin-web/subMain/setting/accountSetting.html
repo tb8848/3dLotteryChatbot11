@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>基本资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../setting/css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+
+    <style>
+        th {
+            background: url(../../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        /*td input{*/
+        /*    width: 147px;*/
+        /*}*/
+        .tdinput {
+            width: 147px;
+        }
+
+        .email {
+            display: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+        .mydk {
+            cursor: pointer;
+        }
+
+        .layui-layer-molv .layui-layer-title {
+            background: #159ED4 !important;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif; overflow-y: auto">
+<div id="main">
+    <template>
+        <div class="module">
+            <div name="module" id="setting" class="m5 mt10">
+                <div name="module" id="guide_setting" class="guide">
+                    <div class="fl">
+                        <a href="#!online_account" i18n="user.top.location">位置 </a>
+                        <span class="red">&gt;&gt;  <span i18n="user.top.basicinfo">基本资料</span>  </span>
+                    </div>
+                    <div class="fr">
+                        <a href="subAccount.html" class="" i18n="user.top.subAccount">子账号</a> |
+                        <a href="accountSetting.html" class="fb red" i18n="user.top.basicinfo">基本资料</a> |
+                        <a href="updatePassword.html" class="" i18n="user.top.changePwd">修改密码</a>
+                    </div>
+                </div>
+                <form id="form" novalidate="novalidate">
+                    <div class="mt10">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1">
+                                <td class="relative"><span i18n="user.userInfo.title">信息提示</span>
+                                    <span class="fn-toggle-show icon-open"></span>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody class="fn-toggle-content">
+                            <tr>
+                                <td>
+                                    <span i18n="user.userInfo.totalCreditLimit">总信用额度</span><span id="user_quota"></span>;
+                                    <span i18n="user.userInfo.surplusCreditLimit">可分配信用额度</span><span id="user_assigned_quota"></span>；
+                                    <span i18n="user.userInfo.useCreditLimit">已分配信用额度</span><span id="user_distributable_quota"></span>；
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt10">
+                        <table class="t-1">
+                            <input type="hidden" name="id" id="id"/>
+                            <thead>
+                                <tr class="bg1">
+                                    <td colspan="4" i18n="user.top.basicinfo">基本资料</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td i18n="user.query.account">账号</td>
+                                    <td><input type="text" class="tdinput" value="" name="username" disabled="disabled">
+                                    </td>
+                                    <td class="bg3 email">Email</td>
+                                    <td class="email">
+                                        <input type="text" class="tdinput" name="email" id="email" disabled="disabled">
+                                    </td>
+                                    <td class="bg3 gongxiandu" i18n="user.edit.gxdZcUpperLimit"> 贡献度占成上限</td>
+                                    <td class="gongxiandu">
+                                        <select name="contribution_max_limit" id="contributionUpperLimit">
+                                            <option value="0" selected="selected">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2" i18n="user.query.nickName">代号</td>
+                                    <td rowspan="2">
+                                        <input type="text" class="tdinput" value="" name="nickName">
+                                    </td>
+                                    <td rowspan="2" i18n="user.edit.phone">联系电话</td>
+                                    <td rowspan="2"><input type="text" class="tdinput" value=""
+                                                           name="phone"></td>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                    <td i18n="user.edit.zcUpperLimit">占成上限</td>
+                                    <td>
+                                        <input type="text" class="tdinput" value="10" name="lanHuoUpperLimit"
+                                               disabled="disabled">
+                                    </td>
+                                    <td i18n="user.table.head.creditLimit">信用额度</td>
+                                    <td>
+                                        <input type="text" class="tdinput" value="30000000000" name="creditLimit"
+                                               disabled="disabled" required="true" maxlength="20"
+                                               nonnegative="true" aria-required="true">
+                                        <input type="button" value="下级归零" class="btn"
+                                               disabled="disabled" i18n="user.btn.tozero">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2">&nbsp;</td>
+                                    <td rowspan="2">
+                                        <input type="text" class="tdinput" value="" name="pr_id" maxlength="16"
+                                               autocomplete="off" colspan="3">
+                                    </td>
+<!--                                    <td>短信验证</td>-->
+<!--                                    <td>-->
+<!--                                        <input type="button" value="未启用" style="width: 60px;" class="btn" id="sms_edit">-->
+<!--                                    </td>-->
+                                </tr>
+                                <tr>
+                                    <td i18n="user.google.authenticator">谷歌验证</td>
+                                    <td>
+                                        <div id="wqy" style="display: none"><input type="button" value="未启用" class="btn"
+                                                                                   id="ga_edit" i18n="user.google.not.enabled"></div>
+                                        <div id="qy" style="display: none"><span id="gaQy" i18n="user.google.enabled">已启用</span></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="mt10 tc">
+                            <button type="button" class="btn" id="update" lay-submit @click="tips()" style="cursor: pointer;" i18n="user.add.btn.submit">提交</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="layui-card-body layui-table-body layui-table-main" style="width: 100%;margin-left: -15px">
+                    <table class="t-1">
+                        <thead>
+                            <tr class="bg1">
+                                <td width="4%"></td>
+                                <td width="12%" i18n="user.edit.table.head.type">类别</td>
+                                <td width="12%" i18n="user.edit.table.head.minBet">最小下注</td>
+                                <td width="12%" i18n="user.edit.lhAmount">拦货金额</td>
+                                <td width="12%" i18n="user.edit.table.head.oddsUpperLimit1">赔率上限</td>
+                                <td width="12%" i18n="user.edit.table.head.singleBetUpperLimit">单注上限</td>
+                                <td width="12%" i18n="user.edit.table.head.singleItemUpperLimit">单项上限</td>
+                            </tr>
+                        </thead>
+                        <tbody v-for="(item,idx) in oddsList">
+                            <tr class="bg3" v-if="item.lotterySettingList.length==1">
+                                <td></td>
+                                <td><span href="javascript:void(0)" class="btn-pointer" status="1" act="erd">{{item.lotterySettingList[0].bettingRule}}</span>
+                                </td>
+                                <td>{{item.lotterySettingList[0].minBettingPrice}}</td>
+                                <td><input class="tdinput" v-model="item.lotterySettingList[0].lanHuoAmount"></td>
+                                <td>{{item.lotterySettingList[0].peiRate}}</td>
+                                <td>{{item.lotterySettingList[0].maxBettingCount}}</td>
+                                <td>{{item.lotterySettingList[0].maxNumberTypeCount}}</td>
+                            </tr>
+                            <tr class="bg3" v-if="item.lotterySettingList.length>1">
+                                <td></td>
+                                <td><span class="btn-pointer" status="1" act="erd">{{item.bettingMethod}}</span></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr v-if="item.lotterySettingList.length>1">
+                                <td colspan="9" style="padding:4px;">
+                                    <table class="t-1">
+                                        <tbody>
+                                            <tr class="fn-hover" v-for="(it1,idx1) in item.lotterySettingList">
+                                                <td width="4%"></td>
+                                                <td width="12%">{{it1.bettingRule}}</td>
+                                                <td width="12%">{{it1.minBettingPrice}}</td>
+                                                <td width="12%">
+                                                    <input class="tdinput" :id="it1.id" v-model="it1.lanHuoAmount">
+                                                </td>
+                                                <td width="12%">{{it1.peiRate}}</td>
+                                                <td width="12%">{{it1.maxBettingCount}}</td>
+                                                <td width="12%">{{it1.maxNumberTypeCount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="dialog-tips" class="g-dialog g-confirm" style="width: 350px; left: 785px; top: 200px;display: none">
+                    <div class="dialog-hd">
+                        <div class="title fl" i18n="user.access.btn.ok">确认</div>
+                        <div class="fr"></div>
+                    </div>
+                    <div class="dialog-bd">
+                        <div ><span i18n="user.edit.tipsContent">如果庄家先吃满，则不以所设成数来分配，以实际分配到拦货中金额为准</span>，<span i18n="user.isAgree">你同意吗？</span></div>
+                    </div>
+                    <div class="dialog-ft">
+                        <input type="button" @click="queding()" value="确定" class="btn" i18n="user.add.msg.btn.ok">
+                        <input type="button" @click="quxiao()" value="取消" class="btn btn-gray" i18n="user.add.msg.btn.cancel">
+                    </div>
+                </div>
+                <!-- 谷歌验证 -->
+                <div id="dialog" class="g-dialog" style="width: 600px; left: 30%; top: 1%;display: none">
+                    <div class="dialog-hd" id="title">
+                        <div class="title fl" i18n="user.google.authenticator">谷歌验证</div>
+                        <div class="fr"><a href="javascript:void(0)" class="btn-close fn-close">×</a></div>
+                    </div>
+                    <div class="dialog-bd">
+                        <div class="module">
+                            <div id="ga_dialog" name="module" class="m5 mt10">
+                                <form>
+                                    <div id="qrCode1" class="qrCodeSet">
+                                        <div class="qrText" i18n="user.scan.code.to.download">扫码下载</div>
+                                        <img id="android_QR" class="qrImage" src="/Images/android_QR.png?v=1">
+                                        <div style="text-align: center;">
+                                            <text i18n="user.scan.code.to.download">微信用户请选择右上角菜单使用</text>
+                                            <br>
+                                            <text style="color: red;" i18n="user.scan.code.to.download">「浏览器打开」</text>
+                                            <text i18n="user.scan.code.to.download">正常下载再安装</text>
+                                        </div>
+                                    </div>
+                                    <div id="qrCode2" class="qrCodeSet">
+                                        <div class="qrText" i18n="user.scan.code.to.download">扫码下载</div>
+                                        <img id="iOS_qrcode" class="qrImage" src="/Images/iOS_QR.jpeg"></div>
+                                    <table class="t-1" style="width: 100%;">
+                                        <thead>
+                                        <tr class="bg1">
+                                            <td colspan="2" style="text-align:center" i18n="user.google.authenticator">谷歌验证</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="otp_ga">
+                                            <td class="bg tr" colspan="2" style="text-align: left;font-size: 17px;">
+                                                <strong class="blue" i18n="user.account.security.google.authentication.enabled"> 为了提升帐号安全，我们建议开启谷歌验证。 </strong></td>
+                                        </tr>
+                                        <tr class="otp_ga">
+                                            <td class="bg tr" style="width: 60px; text-align: center;" i18n="user.purpose">用途</td>
+                                            <td><strong class="red">
+                                                <span i18n="user.secondary.authentication.add.additional.security">通过二次验证(也称为双重身分验证)，您可以为自己的帐号添加额外的安全保障。</span><br>
+                                                <span i18n="user.after.setting.up.account.two.steps">在完成设置后，您将使用以下对象通过两个步骤登入帐号</span>
+                                                <br> <span i18n="user.your.password">您的密码</span><br>
+                                                <span i18n="user.secondary.verification.code.generated">您设备上安装的谷哥认证器为您生成的二次验证码</span><br>
+                                                <span i18n="user.please.complete.it.within.time">(验证码时效性为3分钟，请于时间内完成)</span> </strong></td>
+                                        </tr>
+                                        <tr class="otp_ga">
+                                            <td class="bg tr" style="width: 60px; text-align: center;" i18n="user.step">步骤</td>
+                                            <td><strong class="red"> <span i18n="user.download.google.authenticator">1. 请先下载谷哥认证器(或其他兼容一次性验证码软件)</span><br>
+                                                <a id="qr_android"
+                                                                                                        href="https://app.aqqeca.com/GoogleAuthenticator_v5_10_apkpure_com.apk"
+                                                                                                        target="_blank"
+                                                                                                        style="cursor: pointer; margin-left: 13px;" i18n="user.android">安卓</a>
+                                                <span style="color:blue">|</span> <a id="qr_ios"
+                                                                                     href="https://apps.apple.com/tw/app/google-authenticator/id388497605"
+                                                                                     target="_blank"
+                                                                                     style="cursor: pointer;" i18n="user.apple">苹果</a>
+                                                <br> <span i18n="user.select.scan.barcode">2. 然后选择”扫描条形码”</span><br> </strong></td>
+                                        </tr>
+                                        <tr class="otp_ga">
+                                            <td class="bg tr" style="width: 60px; text-align: center;" i18n="user.scan.qr.code">扫描二维码</td>
+                                            <td>
+                                                <div id="qrCode" style=""></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="otp_ga">
+                                            <td class="bg tr" style="width: 60px; text-align: center;" i18n="user.verification.code">验证码</td>
+                                            <td><img id="cover2" class=""
+                                                     style="width: 20px; height: 20px; display: none;"
+                                                     src="/Images/loading.gif">
+                                                <span name="ga_pwd" id="ga_pwd" style="" autocomplete="off">
+
+                                            </span>
+                                                <span style="margin-left: 30px;" i18n="user.key.will">(密钥将在</span>
+                                                <span name="ga_hint" id="ga_hint" value="180"></span>
+                                                <span i18n="user.fail.after.seconds">秒后失效)</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="otp_ga">
+                                            <td class="bg tr" i18n="user.enter.verification.code">输入验证码</td>
+                                            <td><input type="text" name="ga_code" id="ga_code" class="input"
+                                                       autocomplete="off"></td>
+                                        </tr>
+                                        <tr class="otp_ga">
+                                            <td class=""></td>
+                                            <td><input type="button" id="btn-ga-submit" class="btn" value="确定" i18n="user.add.msg.btn.ok"> <input
+                                                    type="button" id="skip_ga" class="btn btn-gray" value="取消"
+                                                    style="margin-left: 5px;" i18n="user.add.msg.btn.cancel"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dialog-ft"></div>
+                </div>
+            </div>
+        </div>
+        <div name="module" id="footer" class="footer">
+            <div class="bd"></div>
+        </div>
+    </template>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/qrCode.js"></script>
+<script src="../../js/vue/vue.js"></script>
+
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    var form = layui.form;
+    var $ = layui.jquery;
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    const vipInfoVm = new Vue({
+        el: '#main',
+        data: {
+            roleName: "",
+            userName: "",
+            userId: "",
+            account: "",
+            leftCredit: "",
+            bsInfo: {
+                autoOrEnter: "",
+                printOrShowLottery: "",
+                realOrTransformOdds: "",
+            },
+            oddsList: [],
+            onLoading: true
+        },
+        methods: {
+            init() {
+                const _this = this;
+                const id = GetQueryString("id");
+                if (id == null || id == "" || id == undefined) {
+                    this.userId = localStorage.getItem("id");
+                } else {
+                    this.userId = id;
+                }
+                $.ajax({
+                    url: HOST + "admin/getUserDetail?userId=" + _this.userId
+                    , type: "get"
+                    , success: function (res) {
+                        if (res.code == 200) {
+                            _this.roleName = res.data.roleName;
+                            _this.userName = res.data.userName;
+                            _this.prList();
+                        } else {
+                            layer.msg(i18np.prop("user.edit.ajax.error.dataError"));
+                        }
+                    }
+                });
+            },
+            goBack() {
+                history.back();
+            },
+            prList() {
+                layer.msg(i18np.prop("user.edit.load.dataLoading"), {time: -1, shade: 0.3, icon: 16})
+                var _this = this;
+                $.ajax({
+                    url: HOST + 'drawRule/getLotteryNumberList?userId=' + _this.userId,
+                    type: 'get',
+                    success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 0) {
+                            _this.oddsList = res.data;
+                            _this.onLoading = false
+                        }
+                    },
+                    error: function (e) {
+                        layer.closeAll();
+                    }
+                })
+            },
+            tips(){
+                $("#dialog-tips").css("display","block");
+            },
+            queding(){
+                $("#dialog-tips").css("display","none");
+                this.submitData();
+            },
+            quxiao(){
+                $("#dialog-tips").css("display","none");
+            },
+            submitData() {
+                //信用额度
+                var creditLimit = $("input[name='creditLimit']").val();
+                //可分配信用额度
+                var parentCreditLimit = $("#user_assigned_quota").text();
+                //联系方式
+                var phone = $("input[name='phone']").val();
+                //代号
+                var nickName = $("input[name='nickName']").val();
+                //用户id
+                var id = $("input[name='id']").val();
+                //贡献度占成上限
+                var contributionUpperLimit = $("#contributionUpperLimit").find("option:selected").val();
+                //邮箱
+                var email = $('input[name="email"]').val();
+
+                var params = [];
+                this.oddsList.forEach((item, index) => {
+                    item.lotterySettingList.forEach((it1, loc2) => {
+                        params.push({
+                            lotterySettingId: it1.id,
+                            lanHuoUpperLimit: it1.lanHuoAmount,
+                        });
+                    })
+                })
+                var data = {
+                    creditLimit: creditLimit,
+                    surplusCreditLimit: parentCreditLimit,
+                    phone: phone,
+                    nickName: nickName,
+                    id: id,
+                    contributionUpperLimit: contributionUpperLimit,
+                    email: email,
+                    prSetList: params
+                }
+                layer.msg(i18np.prop("user.add.msg.title.submit"), {time: -1, shade: 0.3, icon: 16})
+                $.ajax({
+                    url: HOST + "admin/updateAgentUser"
+                    , type: "POST"
+                    , contentType: 'application/json'
+                    , data: JSON.stringify(data)
+                    , success: function (res) {
+                        layer.closeAll();
+                        console.log("=============", res)
+                        if (res.code == 0) {
+                            layer.msg(i18np.prop("user.msg.updateSuccess"));
+                            setTimeout(function () {
+                                layer.close(layer.index);
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            layer.msg(res.data, {
+                                icon: 2, time: 2000
+                            });
+                        }
+                    }
+                    , error: function () {
+                        layer.closeAll();
+                        console.log("ajax error");
+                    }
+                });
+            }
+        }
+    })
+    //vipInfoVm.init();
+
+    var id = "";
+    function getUserData() {
+        id = GetQueryString("id");
+        if (id == null || id == "" || id == undefined) {
+            id = localStorage.getItem("id");
+            $("input[name='id']").val(id);
+        }
+        getProduct();
+        getUser(id);
+        $("#ga_hint").html(180)
+    }
+
+    //根据用户ID获取用户角色和信用额度
+    function getProduct() {
+        $.ajax({
+            url: HOST + "admin/getUserById?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    $("#user_quota").text(d.totalCreditLimit);
+                    $("#user_assigned_quota").text(d.surplusCreditLimit);
+                    $("#user_distributable_quota").text(d.useCreditLimit);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    //根据id查询用户信息
+    function getUser(id) {
+        $.ajax({
+            url: HOST + "admin/getUser?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    //获取账号
+                    $("input[name='username']").val(d.admin.username);
+                    //获取代号
+                    $("input[name='nickName']").val(d.admin.nickName);
+                    //获取电话
+                    $("input[name='phone']").val(d.admin.phone);
+                    //邮箱
+                    $("input[name='email']").val(d.admin.email);
+                    //拦货占成
+                    $("input[name='lanHuoUpperLimit']").text(d.roleInfo.superiorRoleName);
+                    //贡献度占成上限
+                    $("#contributionUpperLimit").val(d.admin.contributionUpperLimit);
+                    form.render("select");
+                    //信用额度
+                    $("input[name='creditLimit']").val(d.admin.creditLimit);
+
+                    if (d.admin.gaFlag == 0 || d.admin.gaFlag == "" || d.admin.gaFlag == null) {
+                        $("#wqy").show();
+                        $("#qy").hide();
+                    } else {
+                        $("#qy").show();
+                        $("#wqy").hide();
+                    }
+
+                    //下级数量（下级数量为0就可以修改，下级数量不为0就根据最新一期状态判断是否支持修改）
+                    let xiajiCount = d.xiajiCount;
+                    if (xiajiCount*1 > 0){
+                        gudongDaili();
+                    }
+                    if (d.roleInfo.roleNameId != 2){
+                        $(".email").show();
+                        $(".gongxiandu").hide();
+                    }
+                    form.render()
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    //根据最新一期的状态判断拦货占成上限和贡献度占成上限是否支持修改
+    function gudongDaili() {
+        //获取最新一期的信息
+        $.ajax({
+            url: HOST+"draw/selectLastDrawInfo"
+            , type: "GET"
+            , success:function(res){
+                if(res.code == 200) {
+                    let openStatus = res.data.openStatus;
+                    if (openStatus != 0 && openStatus != 2){//0停盘  2:未开盘  只有停盘和未开盘状态才能修改
+                        $("#contributionUpperLimit").attr("disabled","disabled");
+                    }
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+    let dialog = document.querySelector('#dialog')
+    var title = document.querySelector('#title');
+    // 拖动模态框
+    title.addEventListener('mousedown', function (e) {
+        var x = e.pageX - dialog.offsetLeft;
+        var y = e.pageY - dialog.offsetTop;
+        //(2) 鼠标移动的时候，把鼠标在页面中的坐标，减去 鼠标在盒子内的坐标就是模态框的left和top值
+        document.addEventListener('mousemove', move)
+
+        function move(e) {
+            dialog.style.left = e.pageX - x + 'px';
+            dialog.style.top = e.pageY - y + 'px';
+        }
+
+        //(3) 鼠标弹起，就让鼠标移动时间解除
+        document.addEventListener('mouseup', function () {
+            document.removeEventListener('mousemove', move)
+        })
+    })
+
+    $("#ga_edit").on('click', function () {
+        gaInit();
+    })
+
+    $(".btn-close").on('click', function () {
+        $("#dialog").hide();
+    })
+
+    $("#btn-ga-submit").on('click', function () {
+        var ga_code = $("#ga_code").val();
+        if (ga_code == null || ga_code == "" || ga_code == undefined) {
+            layer.msg(i18np.prop("user.enter.verification.code"));
+            return;
+        }
+        $.ajax({
+            url: HOST + "admin/verifyGa?code=" + ga_code
+            , type: "get"
+            , success: function (data) {
+                if (data.code == 200) {
+                    layer.msg(i18np.prop("user.operation.succeeded"));
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    })
+
+    //取消
+    $("#skip_ga").on('click', function () {
+        $("#dialog").hide();
+    })
+
+    function gaInit() {
+        $("#qrCode").html('');
+        $.ajax({
+            url: HOST + "admin/gaInit"
+            , type: "get"
+            , success: function (data) {
+                if (data.code == 200) {
+                    $("#qrCode").qrcode({
+                        render: "canvas", // 渲染方式有table方式（IE兼容）和canvas方式
+                        width: 100, //宽度
+                        height: 100, //高度
+                        text: data.data.qrCodeContent, //内容
+                        typeNumber: -1, //计算模式
+                        correctLevel: 2, //二维码纠错级别
+                        background: "#ffffff", //背景颜色
+                        foreground: data.data.color //二维码颜色
+                    });
+                    $("#ga_pwd").html(data.data.secret);
+                    $("#dialog").show();
+                    var left_time = $("#ga_hint").html();
+                    var tt = window.setInterval(function () {
+                        left_time = left_time - 1;
+                        if (left_time <= 0) {
+                            window.clearInterval(tt);
+                            $("#ga_hint").html(180);
+                            gaInit();
+                        } else {
+                            $("#ga_hint").html(left_time);
+                        }
+                    }, 1000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+
+    var moduleName = "user";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties("subMain-"+moduleName);
+            vipInfoVm.init();
+            getUserData();
+            //vm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties("subMain-"+moduleName);
+        vipInfoVm.init();
+        getUserData();
+    }
+    //vm.init();
+    //vm.init(0);
+</script>
+
+</body>
+</html>

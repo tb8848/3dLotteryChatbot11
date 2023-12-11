@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <title id="pageTitle"></title>
+    <style type="text/css">
+        td{
+            vertical-align: center;
+        }
+    </style>
+    <style media="print"> .no-print { display: none; } </style>
+</head>
+<body style="overflow-y: auto">
+
+<div id="main">
+    <div class="module">
+        <div name="module" id="handicap_print" class="m5 mt10">
+            <template>
+            <div>
+            <div id="real_bet_print_area" style="padding-left:1px;padding-right:1px;">
+                <div class="bold f16 mt10 tc" id="title">{{title}}</div>
+                <table class="t-1" style="outline:1px solid #a4d4f9;">
+                    <tbody id="tbody2">
+<!--                        <tr v-if="dataList.length==0">-->
+<!--                            <td style="text-align: center" i18n="shipan.table.noData">暂无数据!</td>-->
+<!--                        </tr>-->
+                        <tr v-if="dataList.length>0" v-for="(lineNo,idx) in lines">
+                            <td v-for="(loc,ii) in 15" v-if="(lineNo-1)*15+loc-1<pageData.length && ((lineNo-1)*15+loc)%15==loc%15"> {{pageData[(lineNo-1)*15+loc-1].buyCode}}={{pageData[(lineNo-1)*15+loc-1].shihuoMoney}} </td>
+                            <td v-if="lines*15>pageData.length" :colspan="lines*15-pageData.length" ></td>
+                        </tr>
+                        <tr>
+                            <td colspan="9">
+                                <span i18n="shipan.table.total">合计</span>：{{totalMoney}} &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span i18n="shipan.page.no">第</span>{{pager.currpage}}<span i18n="shipan.page.page">页</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span i18n="shipan.page.total">共</span>{{pager.pages}}<span i18n="shipan.page.page">页</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+            <div class="pt10 pb10 tc">
+                <input type="button" id="btnPrint" value="打印" class="btn btn-gray" i18n="shipan.table.print" @click="toPrint">
+            </div>
+            <div name="module" id="pager2" class="pager" pagebody="tbody2"
+                 pagecount="1" param="fix_num=20&amp;pageSize=320">
+                <span i18n="shipan.page.no">第</span> <span class="pageindex red">{{pager.currpage}}</span> <span i18n="shipan.page.page">页</span>
+                <span i18n="shipan.page.total">共</span> <span class="pagecount red">{{pager.pages}}</span> <span i18n="shipan.page.page">页</span>
+                <span i18n="shipan.page.total">共</span> <span class="recordcount red">{{pager.total}}</span> <span i18n="shipan.page.count">条</span>
+                <a href="javascript:void(0)" class="fn-first" @click="toFirst()" i18n="shipan.page.firstPage">首页</a>
+                <a href="javascript:void(0)" class="fn-prev" @click="toPrev()" i18n="shipan.page.prePage">上一页</a>
+                <a href="javascript:void(0)" class="fn-next" @click="toNext()" i18n="shipan.page.nextPage">下一页</a>
+                <a href="javascript:void(0)" class="fn-last" @click="toLast()" i18n="shipan.page.lastPage">尾页</a>
+                <input type="text" class="input w30 fn-index" v-model="pager.toPage">
+                <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="goPage()">
+            </div>
+            </template>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        vm.init();
+    });
+
+    const vm = new Vue({
+        el: '#handicap_print',
+        data:{
+           lmId:"",
+           totalMoney:0,
+           pageData:[],
+            lines:0,
+           pager:{
+               pages:0,
+               currpage:1,
+               limit:150,
+               toPage:"",
+           },
+           title:'',
+           dataList:[],
+        },
+        methods:{
+            currTime(){
+                var date = new Date();
+                var yy = date.getFullYear();                // 获取完整的年份(4位,1970-至今)
+                var mm = date.getMonth()+1;                   // 获取当前月份(0-11,0代表1月)
+                var dd = date.getDate();
+                var hh = date.getHours();                   // 获取当前小时数(0-23)
+                var MM = date.getMinutes();                 // 获取当前分钟数(0-59)
+                var ss = date.getSeconds();
+                // return (mm<10?'0'+mm:mm)+"月"+(dd<10?'0'+dd:dd)+"日"+(hh<10?'0'+hh:hh)+"时"+(MM<10?'0'+MM:MM)+"分";
+                return (mm<10?'0'+mm:mm)+i18np.prop("shipan.time.month")+(dd<10?'0'+dd:dd)+i18np.prop("shipan.time.day")+(hh<10?'0'+hh:hh)+i18np.prop("shipan.time.hour")+(MM<10?'0'+MM:MM)+i18np.prop("shipan.time.branch");
+            },
+            initPager() {
+                this.pager.total = this.dataList.length;
+                this.pager.pages = Math.ceil(this.pager.total/this.pager.limit)
+            },
+            init(){
+                this.lmId = GetQueryString("lmId");
+                var time = this.currTime()
+                var title = "";
+                switch(this.lmId){
+                    case '1':
+                        title = "直选";
+                        break;
+                    case '2':
+                        title = "通选";
+                        break;
+                    case '3':
+                        title = "组三";
+                        break;
+                    case '4':
+                        title = "组六";
+                        break;
+                    case '5':
+                        title = "和数";
+                        break;
+                    case '6':
+                        title = "1D";
+                        break;
+                    case '7':
+                        title = "2D";
+                        break;
+                    case '8':
+                        title = "包选";
+                        break;
+                    case '9':
+                        title = "大小";
+                        break;
+                    case '10':
+                        title = "奇偶";
+                        break;
+                    case '11':
+                        title = "猜三同";
+                        break;
+                    case '12':
+                        title = "拖拉机";
+                        break;
+                }
+                this.title = title +"   "+time;
+                $("#pageTitle").html(this.title);
+                this.getTableData();
+            },
+            getTableData(){
+                var that = this;
+                var qs = "lmId="+this.lmId;
+                $.ajax({
+                    url:HOST+'admin/drawbuy/shipan/printList?'+qs,
+                    type:'get',
+                    success:function(res){
+                        if(res.code==0){
+                            that.dataList = res.data;
+                            that.initPager();
+                            that.initPageData();
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    }
+                })
+            },
+            initPageData(){
+                this.lines = 0;
+                if(this.dataList.length>0){
+                    var sp = (this.pager.currpage-1)*this.pager.limit;
+                    var ep = this.pager.currpage*this.pager.limit;
+                    if(ep>this.dataList.length){
+                        ep = this.dataList.length;
+                    }
+                    var dlist = this.dataList.slice(sp,ep);
+                    this.pageData = dlist;
+                    var that = this;
+                    dlist.forEach((item,idx)=>{
+                        that.totalMoney = accAdd(that.totalMoney,item.shihuoMoney);
+                    })
+                    this.lines = dlist.length%15==0?parseInt(dlist.length/15):parseInt(dlist.length/15)+1
+                }
+            },
+            toFirst() {//第一页
+                if (this.pager.currpage > 1) {
+                    this.pager.currpage = 1;
+                    this.initPageData();
+                }
+            },
+            toPrev() {//上一页
+                if (this.pager.currpage > 1) {
+                    this.pager.currpage--;
+                    this.initPageData();
+                }
+            },
+            toNext() {//下一页
+                if (this.pager.currpage < this.pager.pages) {
+                    this.pager.currpage++;
+                    this.initPageData();
+                }
+            },
+            toLast() {//尾页
+                if (this.pager.currpage < this.pager.pages) {
+                    this.pager.currpage = this.pager.pages;
+                    this.initPageData();
+                }
+            },
+            toPage() {//指定页
+                if (this.pager.toPage != "") {
+                    var topage = parseInt(this.pager.toPage);
+                    if (topage >= 1 && topage <= this.pager.pages) {
+                        this.pager.currpage = topage;
+                        this.initPageData();
+                    }
+                }
+            },
+            toPrint(){
+                if(this.pageData.length>0){
+                    const params = {
+                        dataList:this.pageData,
+                        totalMoney:this.totalMoney,
+                        dataTitle:this.title,
+                        pages:this.pager.pages,
+                        currpage:this.pager.currpage
+                    }
+                    //数据写入缓存
+                    sessionStorage.setItem("printParams",JSON.stringify(params));
+                    window.open("shipan-lm-print.html")
+                }else{
+                    // layer.alert($i18np.prop("xiazhu.noDataPrint"),
+                    //     {title:$i18np.prop("xiazhu.alertTitle"),
+                    //         btn:[$i18np.prop("xiazhu.confirm")]
+                    //     }
+                    // )
+                }
+            },
+        }
+
+    });
+    // vm.init()
+</script>
+
+</body>
+</html>

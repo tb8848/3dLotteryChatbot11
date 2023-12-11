@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>机器人玩家列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        /*.ew-tree-table-cell > .ew-tree-table-cell-content {*/
+        /*    padding: 5px 15px;*/
+        /*    line-height: 20px !important;*/
+        /*}*/
+
+        .mydk {
+            cursor: pointer;
+        }
+
+        .layui-table-header {
+            height: 30px;
+        }
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #1b59f3 !important;
+            background-color: #1b59f3;
+            color: #fff;
+        }
+
+        .layui-table thead tr th{
+            font-weight: bold !important;
+        }
+
+        .layui-table tbody tr td{
+            padding: 1px 0 1px 0 !important;
+            color: black;
+        }
+
+        .layui-table-cell{
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main">
+    <template>
+        <div class="module">
+            <div name="module" id="memberadmin" class="m5 mt10">
+                <div class="guide">
+                    <div class="fl">
+                        <a href="#!online_account" i18n="user.top.location">位置 </a>&gt;&gt;
+                        <span class="red" >机器人账号管理</span>
+                    </div>
+                    <div class="fr">
+                        <a class="mydk" onclick="leibiao()" style="color: #CC0000">玩家列表</a> |
+                        <a class="mydk" onclick="xinzeng()">账户列表</a>
+                    </div>
+                </div>
+                <div class="mt10">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td class="relative">机器人账号：<span id="botAccount"></span></td>
+                        </tr>
+                        </thead>
+                        <tbody class="fn-toggle-content">
+                        <tr>
+                            <td>
+                                <div style="display: flex;justify-content: start">
+                                    <div style="width: 250px">
+                                        <span>玩家总分：</span>
+                                        <span id="totalScore"></span>
+                                    </div>
+                                    <div style="width: 250px">
+                                        <span>当日总投：</span>
+                                        <span id="totalAmount"></span>
+                                    </div>
+                                    <div style="width: 250px">
+                                        <span>当日盈亏：</span>
+                                        <span id="totalProfitLoss"></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;justify-content: start">
+                                    <div style="width: 250px">
+                                        <span>当日上分：</span>
+                                        <span id="upScore"></span>
+                                    </div>
+                                    <div style="width: 250px">
+                                        <span>当日下分：</span>
+                                        <span id="downScore"></span>
+                                    </div>
+                                    <div style="width: 250px">
+                                        <span>玩家回水：</span>
+                                        <span id="backWater"></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;justify-content: start">
+                                    <div style="width: 250px">
+                                        <span>网盘余额：</span>
+                                        <span id="networkDiskBalance"></span>
+                                    </div>
+                                    <div style="width: 250px">
+                                        <span>当期报网：</span>
+                                        <span id="drawAmount"></span>
+                                    </div>
+                                    <div style="width: 250px">
+                                        <span>网盘回水：</span>
+                                        <span id="networkDiskBackWater"></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <form novalidate="novalidate">
+                    <div class="mt10">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1">
+                                <td colspan="11">查询</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td width="60">昵称：</td>
+                                <td width="100">
+                                    <input type="text" class="w90" name="username" id="username3" maxlength="16">
+                                </td>
+                                <td width="60">玩家类型：</td>
+                                <td width="60">
+                                    <select name="userType" id="userType">
+                                        <option value="">全部</option>
+                                        <option value="0">假人</option>
+                                        <option value="1">会员</option>
+                                        <option value="2">微信好友</option>
+                                    </select>
+                                </td>
+                                <td width="60">是否假托：</td>
+                                <td width="60">
+                                    <select name="pretexting" id="pretexting">
+                                        <option value="">全部</option>
+                                        <option value="1">是</option>
+                                        <option value="0">否</option>
+                                    </select>
+                                </td>
+                                <td width="60">是否报网：</td>
+                                <td width="60">
+                                    <select name="reportNet" id="reportNet">
+                                        <option value="">全部</option>
+                                        <option value="1">是</option>
+                                        <option value="0">否</option>
+                                    </select>
+                                </td>
+                                <td width="60">是否吃奖：</td>
+                                <td width="60">
+                                    <select name="eatPrize" id="eatPrize">
+                                        <option value="">全部</option>
+                                        <option value="1">是</option>
+                                        <option value="0">否</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button type="submit" lay-submit lay-filter="search" class="btn" style="cursor: pointer">查询</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+                <div class="mt10" style="border: 1px solid #000000">
+                    <table class="layui-hide" id="t" lay-filter="t"></table>
+                </div>
+            </div>
+        </div>
+        <div name="module" id="footer" class="footer">
+            <div class="bd"></div>
+        </div>
+    </template>
+</div>
+<script type="text/html" id="caozuo">
+    <a class="layui-btn  layui-btn-xs layui-btn-primary upDown" lay-event="upDown" style="color: #0000FF">上下分记录</a>
+    <a class="layui-btn  layui-btn-xs layui-btn-primary bet" lay-event="bet" style="color: #0000FF">下注记录</a>
+    <a class="layui-btn  layui-btn-xs layui-btn-primary report" lay-event="report" style="color: #0000FF;">个人报表</a>
+</script>
+<script type="text/html" id="checkbd">
+    <input type="checkbox" name="siam_one" disabled title="" lay-skin="primary" data-id = "{{ d.id }}">
+</script>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+
+<script type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    const messages = {
+        zh: {
+            all:"所有",
+            credit:"信用",
+            cash:"现金",
+        },
+        th: {
+            all:"ทั้งหมด",
+            credit:"เครดิต",
+            cash:"เงินสด",
+        }
+    }
+
+    var $ = layui.jquery;
+    var table = layui.table;
+
+    var moduleName = "user";
+    var defaultLang = layui.data('langTab').langType;
+    if (defaultLang == undefined || defaultLang == null || defaultLang == "") {
+        defaultLang = "zh";
+        layui.data('langTab',{key:'langType',value:"zh"});
+    }
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {},
+        methods: {
+            init() {
+                console.log("初始化vue了")
+            }
+        }
+    })
+
+    function getBotInfo() {
+        $.ajax({
+            url: HOST + "admin/botuser/getBotInfoById?userId=" + id,
+            success: function (res) {
+                if (res.code == 200) {
+                    $("#totalScore").html(res.data.totalScore);
+                    $("#botAccount").html(res.data.botName);
+                    $("#upScore").html(res.data.upScore);
+                    $("#downScore").html(res.data.downScore);
+                    $("#totalAmount").html(res.data.totalAmount);
+                    $("#totalProfitLoss").html(res.data.totalProfitLoss);
+                    $("#networkDiskBalance").html(res.data.networkDiskBalance);
+                    $("#networkDiskBackWater").html(res.data.networkDiskBackWater);
+                    $("#drawAmount").html(res.data.drawAmount);
+                    $("#backWater").html(res.data.backWater);
+                }
+            }
+        });
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var id = "";
+    window.onload = function () {
+        id = GetQueryString("userId");
+        if (id == null || id == "" || id == undefined) {
+            id = localStorage.getItem("id");
+        }
+        getBotInfo();
+    }
+
+    var form = layui.form;
+
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use(['form', 'jquery', 'table', 'i18np'], function () {
+
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.init();
+
+            //查询
+            form.on('submit(search)', function (data) {
+                var username = $("#username3").val();
+                var pretexting = $("#pretexting").val();
+                var reportNet = $("#reportNet").val();
+                var eatPrize = $("#eatPrize").val();
+                var userType = $("#userType").val();
+                table.reload('tt', {
+                    where: {"nickName": username,"userType":userType, "pretexting":pretexting, "reportNet":reportNet, "eatPrize":eatPrize}
+                    , page: {
+                        curr: 1
+                    }
+                });
+                return false;
+            });
+
+
+            table.render({
+                elem: '#t',
+                id: 'tt',
+                url: HOST + 'admin/player/listPagerByBotUserId',
+                where: {"userId":id},
+                cols: [
+                    [
+                        {title: i18np.prop('user.table.head.serialNumber'), type: 'numbers', align: 'center'},
+                        {field: 'nickname', title: '昵称'},
+                        {field: 'headimg', title: "头像",width: 140,align: 'center',templet: function (d) {
+                                if (d.headimg==null || d.headimg=="" || d.headimg==undefined){
+                                    return '<div><img src="../img/no.jpg" onclick="previewImgs(this)"></div>'
+                                }
+                                return '<div><img src="'+d.headimg+'" onclick="previewImgs(this)"></div>'
+                            }},
+                        {field: 'userType',title: '玩家类型', templet: function (res) {
+                                if (res.userType == 0) return "假人";
+                                else if (res.userType == 1) return "会员";
+                                else if (res.userType == 2) return "微信好友";
+                            }
+                        },
+                        {field: 'points', title: "可用积分"},
+                        {field: 'hsvalue', title: "回水值"},
+                        {field: 'pretexting', title: "是否假托", templet: function (res) {
+                                if (res.pretexting == 0) return "否";
+                                else return "<span style='color: blue'>是</span>";
+                            }
+                        },
+                        {field: 'reportNet', title: "是否报网", templet: function (res) {
+                                if (res.reportNet == 0) return "否";
+                                else return "<span style='color: blue'>是</span>";
+                            }
+                        },
+                        {field: 'eatPrize', title: "是否吃奖", templet: function (res) {
+                                if (res.eatPrize == 0) return "否";
+                                else return "<span style='color: blue'>是</span>";
+                            }
+                        },
+                        {field: 'status',title: i18np.prop('user.table.head.status'), templet: function (res) {
+                                if (res.status == 1) return "<span style='color: green'>正常</span>";
+                                else if (res.status == 2) return "<span style='color: orange'>黑名单</span>";
+                                else if (res.status == -1) return "<span style='color: red'>删除</span>";
+                            }
+                        },
+                        {toolbar: "#caozuo", align: 'left',width:260, title: i18np.prop('user.table.head.operation'), fixed: 'right'}
+                    ]
+                ],
+                page: true
+                , page: {
+                    curr: layui.data("t_page").index
+                },
+                text:{none: i18np.prop('user.table.noData')},
+                done: (res, curr, count) => {
+                    layui.data("t_page", {
+                        key: 'index',
+                        value: curr
+                    });
+                    $(".update").html(i18np.prop('user.table.btn.update'));
+                    $(".see").html(i18np.prop('user.table.btn.see'));
+                    $(".cunqu").html(i18np.prop('user.table.btn.access'));
+                    $(".bangding").html(i18np.prop('user.table.btn.unbound'));
+                    $(".ziguanli").html(i18np.prop('user.table.btn.subAdmin'));
+                    $(".month").html(i18np.prop('user.table.btn.monthReport'));
+                    $(".week").html(i18np.prop('user.table.btn.weekReport'));
+                }
+            });
+
+            //全选
+            form.on("checkbox(siam_all)", function () {
+                var status = $(this).prop("checked");
+                // console.log("全选状态："+status);
+                $.each($("input[name=siam_one]"), function (i, value) {
+                    $(this).prop("checked", status);
+                });
+                form.render();
+            });
+
+            table.on('tool(t)', function (obj) {
+                var data = obj.data
+                if (obj.event === 'bet') {
+                    window.location.href = "../zonghuo/zonghuoList.html?userId=" + data.id;
+                } else if (obj.event === 'upDown') {
+                    window.location.href = "../pointsRecord/pointsRecord.html?userId=" + data.id;
+                } else if(obj.event === 'xufei'){
+                    layui.data('t_page', null);
+                    var uri = encodeURI("xufei.html?userId=" + data.id);
+                    layer.open({
+                        type: 2
+                        , title: "续费"
+                        , area: ['600px', '220px']
+                        , content: (uri)  //js获取url参数
+                        , end: function () {
+                            table.reload("tt");
+                            // layer.closeAll();
+                        }
+                    });
+                } else if (obj.event === 'report') {
+                    window.location.href = "../report/reportList.html?playerId=" + data.id + "&botUserId=" + data.botUserId;
+                }
+            });
+        });
+</script>
+<script>
+    function previewImgs(obj) {
+        var img = new Image();
+        img.src = obj.src;
+        //var height = img.height + 50; // 原图片大小
+        //var width = img.width; //原图片大小
+        var imgHtml = "<img src='" + obj.src + "' width='800px' height='500px'/>";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: 'auto',
+            area: [800 + 'px', 550 + 'px'],// area: [width + 'px',height+'px'],  //原图显示
+            shadeClose: true,
+            scrollbar: false,
+            title: "图片预览", //不显示标题
+            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function () {
+                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+            }
+        });
+    }
+</script>
+</body>
+</html>

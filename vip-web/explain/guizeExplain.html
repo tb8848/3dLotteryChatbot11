@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>规则说明</title>
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+
+</head>
+<body style="overflow-y: auto">
+
+
+<div id="main">
+    <div class="module">
+        <div name="module" id="rule" class="m5 mt5 rule">
+            <div> <table class="t-1">
+                <thead> <tr class="title-bar"> <td></td> </tr> </thead>
+                <tbody> <tr>
+                    <td>
+                        <div id="ruleContent"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="../js/layui/layui.all.js"></script>
+    <script src="../js/token.js"></script>
+    <script src="../js/config.js"></script>
+    <script type="text/javascript">
+        var $ = layui.$;
+        $.ajax({
+            url:HOST+"statictext/getOne",
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    if(res.count==1){
+                        $("#ruleContent").html(res.data.ruleDescrib);
+                    }else{
+                        layer.msg("未获取到数据")
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

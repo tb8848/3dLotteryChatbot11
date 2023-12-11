@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>虚盘</title>
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+</head>
+<body style="overflow-y: auto">
+<div id="main">
+    <div class="module">
+        <div name="module" id="handicap_invented" class="m5 mt10 handicap">
+            <div name="module" id="guide_handicap" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="shipan.menu.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="shipan.menu.xupan">  虚盘  </span> </div>
+                <div class="fr">
+                    <a href="outPan.html" class="" i18n="shipan.menu.outPan">《出货盘</a> |
+                    <a href="outDetail.html" class="" i18n="shipan.menu.outDetail">出货明细</a> |
+                    <a href="winOutDetail.html" class="" i18n="shipan.menu.winOutDetail">出货中奖明细</a> |
+                    <a href="javascript:void(0)" class="fn-out" onclick="popChild(1)" i18n="shipan.menu.chuhuo">出货</a> |
+                    <a href="outImport.html" class="" i18n="shipan.menu.outImport">出货导入</a> |
+                    <a href="download.html" class="" i18n="shipan.menu.download">下载》</a> |
+                    <a href="shiHuoDetail.html" class="" i18n="shipan.menu.shiHuoDetail">实货明细</a> |
+                    <a href="shiHuoZhongJiang.html" class="" i18n="shipan.menu.shiHuoZhongJiang">中奖明细</a> |
+                    <a href="shiPan.html" class="" i18n="shipan.menu.shiPan">实盘</a> |
+                    <a href="baopai_shipan.html" class="" i18n="shipan.menu.baopai.shipan">包牌实盘</a> |
+                    <a href="xupan.html" class="fb red" i18n="shipan.menu.xupan">虚盘</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                        <tr class="bg1">
+                            <td colspan="20">
+                                <span i18n="shipan.menu.xupan">虚盘</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="red" i18n="shipan.click">点击</span>
+                                <span i18n="shipan.click.explain">号码变色查看转换信息</span>。
+                            </td>
+                        </tr>
+                        <tr><td colspan="20" height="30" id="bd_format">
+                            <!--<table class="t-1">-->
+                                <!--<tbody class="list">-->
+                                <!--<tr>-->
+                                    <!--<td class="l fn-number2 " number="00XX" fix_num="20" style="border-right-color: #dcf7db;">-->
+                                        <!--<strong class="blue">[1]</strong><br> 00XX </td> <td class="r r-bd fn-number2 "-->
+                                                                                             <!--maxlose="1" number="00XX" fix_num="20">-->
+                                    <!--<span class="blue" title="赔率(Odds)">100</span>&nbsp;&nbsp;-->
+                                    <!--<span class="black2" title="平均赔率(odds_avg)">0</span><br>-->
+                                    <!--<span title="总吃货-总出货(HoldMoney)">0</span><br>-->
+                                    <!--<span class="red" title="最大损失(MaxLose)">0</span>-->
+                                <!--</td>-->
+                                    <!--<td class="l fn-number2 " number="0X0X" fix_num="20" style="border-right-color: #dcf7db;"> <strong class="blue">[2]</strong><br> 0X0X </td> <td class="r r-bd fn-number2 " maxlose="1" number="0X0X" fix_num="20"> <span class="blue" title="赔率(Odds)">100</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="0XX2" fix_num="20" style="border-right-color: #dcf7db;"> <strong class="blue">[3]</strong><br> 0XX2 </td> <td class="r r-bd fn-number2 " maxlose="1" number="0XX2" fix_num="20"> <span class="blue" title="赔率(Odds)">99.6</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="X0X2" fix_num="20" style="border-right-color: #dcf7db;"> <strong class="blue">[4]</strong><br> X0X2 </td> <td class="r r-bd fn-number2 " maxlose="1" number="X0X2" fix_num="20"> <span class="blue" title="赔率(Odds)">100</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="X00X" fix_num="20" style="border-right-color: #dcf7db;"> <strong class="blue">[5]</strong><br> X00X </td> <td class="r r-bd fn-number2 " maxlose="1" number="X00X" fix_num="20"> <span class="blue" title="赔率(Odds)">100</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="XX02" fix_num="20" style="border-right-color: #dcf7db;"> <strong class="blue">[6]</strong><br> XX02 </td> <td class="r r-bd fn-number2 " maxlose="1" number="XX02" fix_num="20"> <span class="blue" title="赔率(Odds)">100</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number2 " number="000X" fix_num="30" style="border-right-color: #dcf7db;"> <strong class="blue">[7]</strong><br> 000X </td> <td class="r r-bd fn-number2 " maxlose="1" number="000X" fix_num="30"> <span class="blue" title="赔率(Odds)">995</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="00X2" fix_num="30" style="border-right-color: #dcf7db;"> <strong class="blue">[8]</strong><br> 00X2 </td> <td class="r r-bd fn-number2 " maxlose="1" number="00X2" fix_num="30"> <span class="blue" title="赔率(Odds)">996</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="0X02" fix_num="30" style="border-right-color: #dcf7db;"> <strong class="blue">[9]</strong><br> 0X02 </td> <td class="r r-bd fn-number2 " maxlose="1" number="0X02" fix_num="30"> <span class="blue" title="赔率(Odds)">995</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="X002" fix_num="30" style="border-right-color: #dcf7db;"> <strong class="blue">[10]</strong><br> X002 </td> <td class="r r-bd fn-number2 " maxlose="1" number="X002" fix_num="30"> <span class="blue" title="赔率(Odds)">996</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="00" fix_num="21" style="border-right-color: #dcf7db;"> <strong class="blue">[11]</strong><br> 00 </td> <td class="r r-bd fn-number2 " maxlose="1" number="00" fix_num="21"> <span class="blue" title="赔率(Odds)">16.6</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="02" fix_num="21" style="border-right-color: #dcf7db;"> <strong class="blue">[12]</strong><br> 02 </td> <td class="r r-bd fn-number2 " maxlose="1" number="02" fix_num="21"> <span class="blue" title="赔率(Odds)">9.8</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number2 " number="000" fix_num="31" style="border-right-color: #dcf7db;"> <strong class="blue">[13]</strong><br> 000 </td> <td class="r r-bd fn-number2 " maxlose="1" number="000" fix_num="31"> <span class="blue" title="赔率(Odds)">128</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="002" fix_num="31" style="border-right-color: #dcf7db;"> <strong class="blue">[14]</strong><br> 002 </td> <td class="r r-bd fn-number2 " maxlose="1" number="002" fix_num="31"> <span class="blue" title="赔率(Odds)">78.8</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number2 " number="0002" fix_num="41" style="border-right-color: #dcf7db;"> <strong class="blue">[15]</strong><br> 0002 </td> <td class="r r-bd fn-number2 " maxlose="1" number="0002" fix_num="41"> <span class="blue" title="赔率(Odds)">1408</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l  " number="0002" fix_num="40" style="border-right-color: #dcf7db;"> <strong class="blue">[16]</strong><br> 0002 </td> <td class="r r-bd  " maxlose="1" number="0002" fix_num="40"> <span class="blue" title="赔率(Odds)">9960</span>&nbsp;&nbsp;<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>  </tr>-->
+
+                        <!--</tbody>-->
+                        <!--</table>-->
+
+                    </td>
+                    </tr>
+                    <tr> <td colspan="20">
+                        <form autocomplete="off">
+                            <input type="hidden" name="bet_no" id="bet_no">
+                            <input type="hidden" name="fix_num" value="40" id="fix_num">
+                            <input type="hidden" name="isxian" value="0">
+                            <input type="hidden" id="no_type_id" value="">
+                            <table class="t-1">
+                                <tbody><tr class="bg3">
+                                    <td width="60" rowspan="2" id="prSelect">
+                                    <label class="dist-5"><input type="radio" name="rise_drop" value="1" class="radio">
+                                        <span i18n="shipan.rise">各升</span>
+                                    </label>
+                                    <label class="dist-5"><input type="radio" name="rise_drop" value="0" class="radio" checked="checked">
+                                        <span i18n="shipan.drop">各降</span>
+                                    </label>
+                                    <label class="dist-5">
+                                        <input type="radio" name="rise_drop" value="2" class="radio">
+                                        <span i18n="shipan.out">各出</span>
+                                    </label>
+                                </td>
+                                    <td width="60" rowspan="2">
+                                        <input type="text" class="input-odds" name="bet_money" id="set_odds" number="true" maxlength="7" autocomplete="off">
+                                        <input type="hidden" name="diff_odds" id="diff_odds">
+                                        <input type="hidden" name="log" value="1"> </td>
+                                    <td width="60" rowspan="2">
+                                        <div class="bd-islimit">
+                                            <label class="dist-5" id="maxLimitEq">
+                                                <input type="radio" name="islimit" class="radio" value="1">
+                                                <span i18n="shipan.upper.limit">上限</span>
+                                            </label>
+                                            <label class="dist-5" id="maxLimitAdd">
+                                                <input type="radio" name="islimit" class="radio" value="0" checked="checked">
+                                                <span i18n="shipan.add">各加</span>
+                                            </label>
+                                        </div>
+                                        <div class="bd-islimit hide" id="prLabel" i18n="shipan.odds">赔率</div>
+                                    </td>
+                                    <td width="60" class="h54" rowspan="2">
+                                        <input type="text" class="input-odds" name="one_item_limit" id="odds_item_limit" number="true" maxlength="8" autocomplete="off">
+                                    </td>
+                                    <td width="60" rowspan="2">
+                                        <div class="dist-5">
+                                            <input type="button" value="添加" class="btn-submit" id="btnAdd" i18n="shipan.save">
+                                        </div>
+                                        <div class="dist-5">
+                                            <input type="button" value="取消" class="btn-cancel" i18n="shipan.cancel">
+                                        </div>
+                                    </td>
+                                    <td width="30" class="tc bg-yellow" rowspan="2" i18n="shipan.negative">负值</td>
+                                    <td width="160" rowspan="2" id="multiSelect">
+                                        <div class="bd-sel-count">
+                                            <input type="button" value="10" class="sel-count">
+                                            <input type="button" value="20" class="sel-count">
+                                            <input type="button" value="25" class="sel-count">
+                                            <input type="button" value="30" class="sel-count">
+                                            <input type="button" value="35" class="sel-count">
+                                        </div>
+                                        <div class="bd-sel-count">
+                                            <input type="button" value="40" class="sel-count">
+                                            <input type="button" value="45" class="sel-count">
+                                            <input type="button" value="50" class="sel-count">
+                                            <input type="button" value="80" class="sel-count">
+                                            <input type="button" value="100" class="sel-count">
+                                        </div>
+                                        <div>
+                                            <input type="text" id="key_betno" class="w60" maxlength="4">
+                                            <input type="button" id="btn_search" value="号码搜索" i18n="shipan.number.search">
+                                        </div>
+                                    </td>
+                                    <td rowspan=" 2  " class="h54">
+                                        <div name="module" id="pager" class="pager" action="handicap_invented"
+                                             pagebody="tbody" pagecount="100" param="fix_num=&amp;pagesize=100">
+                                            <span i18n="shipan.page.no">第</span> <span class="pageindex red">1</span>
+                                            <span i18n="shipan.page.page">页</span> <span i18n="shipan.page.total">共</span>
+                                            <span class="pagecount red">100</span> <span i18n="shipan.page.page">页</span>
+                                            <span i18n="shipan.page.total">共</span> <span class="recordcount red">10000</span> <span i18n="shipan.page.count">条</span>
+                                            <a href="javascript:void(0)" class="fn-first" i18n="shipan.page.firstPage">首页</a>
+                                            <a href="javascript:void(0)" class="fn-prev" i18n="shipan.page.prePage">上一页</a>
+                                            <a href="javascript:void(0)" class="fn-next" i18n="shipan.page.nextPage">下一页</a>
+                                            <a href="javascript:void(0)" class="fn-last" i18n="shipan.page.lastPage">尾页</a>
+                                            <input type="text" class="input w30 fn-index" id="toPage">
+                                            <input type="button" class="btn btn-gray w30 fn-go" value="GO">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="bg3">  </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                        </td>
+                        </tr>
+                    </thead>
+                    <tbody class="list" id="tbody">
+                    <tr><td align="center"><img src="../img/load.gif"></td></tr>
+                        <!--<tr> <td colspan="20" class="tc"> <div> 四定位负值排行(0) 正值个数(10000) 平均赔率<span class="red">0</span> </div> </td> </tr>-->
+
+                        <!--<tr>  <td class="l fn-number " number="0000" fix_num="40" odds="9960"-->
+                                  <!--style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[1]</strong><br> 0000 </td>-->
+                              <!--<td class="r r-bd fn-number maxlose  " maxlose="0" number="0000" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br>-->
+                                  <!--<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br>-->
+                                  <!--<span class="red" title="最大损失(MaxLose)">0</span>-->
+                              <!--</td>-->
+                            <!--<td class="l fn-number  " number="0001" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[2]</strong><br> 0001 </td>-->
+                            <!--<td class="r r-bd fn-number maxlose  " maxlose="0" number="0001" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br>-->
+                                <!--<span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br>-->
+                                <!--<span class="red" title="最大损失(MaxLose)">0</span> </td>-->
+                            <!--<td class="l fn-number  " number="0002" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[3]</strong><br> 0002 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0002" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0003" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[4]</strong><br> 0003 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0003" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0004" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[5]</strong><br> 0004 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0004" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0005" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[6]</strong><br> 0005 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0005" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0006" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[7]</strong><br> 0006 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0006" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0007" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[8]</strong><br> 0007 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0007" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0008" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[9]</strong><br> 0008 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0008" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0009" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[10]</strong><br> 0009 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0009" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0010" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[11]</strong><br> 0010 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0010" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0011" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[12]</strong><br> 0011 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0011" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0012" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[13]</strong><br> 0012 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0012" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0013" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[14]</strong><br> 0013 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0013" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0014" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[15]</strong><br> 0014 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0014" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0015" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[16]</strong><br> 0015 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0015" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0016" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[17]</strong><br> 0016 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0016" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0017" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[18]</strong><br> 0017 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0017" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0018" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[19]</strong><br> 0018 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0018" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0019" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[20]</strong><br> 0019 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0019" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0020" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[21]</strong><br> 0020 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0020" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0021" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[22]</strong><br> 0021 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0021" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0022" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[23]</strong><br> 0022 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0022" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0023" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[24]</strong><br> 0023 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0023" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0024" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[25]</strong><br> 0024 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0024" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0025" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[26]</strong><br> 0025 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0025" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0026" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[27]</strong><br> 0026 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0026" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0027" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[28]</strong><br> 0027 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0027" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0028" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[29]</strong><br> 0028 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0028" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0029" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[30]</strong><br> 0029 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0029" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0030" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[31]</strong><br> 0030 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0030" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0031" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[32]</strong><br> 0031 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0031" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0032" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[33]</strong><br> 0032 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0032" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0033" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[34]</strong><br> 0033 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0033" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0034" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[35]</strong><br> 0034 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0034" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0035" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[36]</strong><br> 0035 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0035" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0036" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[37]</strong><br> 0036 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0036" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0037" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[38]</strong><br> 0037 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0037" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0038" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[39]</strong><br> 0038 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0038" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0039" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[40]</strong><br> 0039 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0039" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0040" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[41]</strong><br> 0040 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0040" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0041" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[42]</strong><br> 0041 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0041" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0042" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[43]</strong><br> 0042 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0042" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0043" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[44]</strong><br> 0043 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0043" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0044" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[45]</strong><br> 0044 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0044" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0045" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[46]</strong><br> 0045 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0045" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0046" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[47]</strong><br> 0046 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0046" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0047" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[48]</strong><br> 0047 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0047" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0048" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[49]</strong><br> 0048 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0048" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0049" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[50]</strong><br> 0049 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0049" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0050" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[51]</strong><br> 0050 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0050" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0051" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[52]</strong><br> 0051 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0051" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0052" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[53]</strong><br> 0052 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0052" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0053" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[54]</strong><br> 0053 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0053" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0054" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[55]</strong><br> 0054 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0054" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0055" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[56]</strong><br> 0055 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0055" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0056" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[57]</strong><br> 0056 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0056" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0057" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[58]</strong><br> 0057 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0057" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0058" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[59]</strong><br> 0058 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0058" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0059" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[60]</strong><br> 0059 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0059" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0060" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[61]</strong><br> 0060 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0060" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0061" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[62]</strong><br> 0061 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0061" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0062" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[63]</strong><br> 0062 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0062" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0063" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[64]</strong><br> 0063 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0063" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0064" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[65]</strong><br> 0064 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0064" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0065" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[66]</strong><br> 0065 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0065" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0066" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[67]</strong><br> 0066 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0066" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0067" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[68]</strong><br> 0067 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0067" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0068" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[69]</strong><br> 0068 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0068" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0069" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[70]</strong><br> 0069 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0069" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0070" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[71]</strong><br> 0070 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0070" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0071" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[72]</strong><br> 0071 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0071" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0072" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[73]</strong><br> 0072 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0072" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0073" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[74]</strong><br> 0073 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0073" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0074" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[75]</strong><br> 0074 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0074" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0075" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[76]</strong><br> 0075 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0075" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0076" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[77]</strong><br> 0076 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0076" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0077" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[78]</strong><br> 0077 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0077" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0078" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[79]</strong><br> 0078 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0078" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0079" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[80]</strong><br> 0079 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0079" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0080" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[81]</strong><br> 0080 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0080" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0081" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[82]</strong><br> 0081 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0081" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0082" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[83]</strong><br> 0082 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0082" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0083" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[84]</strong><br> 0083 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0083" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0084" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[85]</strong><br> 0084 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0084" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0085" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[86]</strong><br> 0085 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0085" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0086" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[87]</strong><br> 0086 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0086" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0087" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[88]</strong><br> 0087 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0087" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0088" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[89]</strong><br> 0088 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0088" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0089" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[90]</strong><br> 0089 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0089" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   </tr><tr>  <td class="l fn-number  " number="0090" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[91]</strong><br> 0090 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0090" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0091" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[92]</strong><br> 0091 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0091" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0092" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[93]</strong><br> 0092 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0092" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0093" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[94]</strong><br> 0093 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0093" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0094" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[95]</strong><br> 0094 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0094" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0095" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[96]</strong><br> 0095 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0095" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0096" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[97]</strong><br> 0096 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0096" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0097" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[98]</strong><br> 0097 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0097" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0098" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[99]</strong><br> 0098 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0098" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td>   <td class="l fn-number  " number="0099" fix_num="40" odds="9960" style="border-right-color: #dcf7db;" odds_avg="0"> <strong class="blue">[100]</strong><br> 0099 </td> <td class="r r-bd fn-number maxlose  " maxlose="0" number="0099" odds="9960" odds_avg="0"> <span class="blue" title="赔率(Odds)">9960</span><br> <span class="black2" title="平均赔率(odds_avg)">0</span><br> <span title="总吃货-总出货(HoldMoney)">0</span><br> <span class="red" title="最大损失(MaxLose)">0</span> </td> -->
+                        <!--</tr>-->
+                    <!---->
+                    <!---->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer" >
+        <div class="bd"> Copyright © 2022 xxx. All Rights Reserved </div>
+    </div>
+
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js?v2"></script>
+<script src="../js/codes_utils.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script type="text/javascript">
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        getSettings();
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+
+        getSettings();
+    });
+
+
+    var $ = layui.$;
+    var curpage = 1;
+    var limit = 100;
+    var pages = 1;
+    var codesList = [];
+    var pageData=[];
+    var selectedList=[];
+    var rise_drop = 0;
+    var buyList = [];
+    var settingList=[];
+    var fuzhiValue = 0;
+    var zzvalueMap=null;
+    var noBuyLossMap=null;
+    var searchList = []; //号码搜索结果
+    var oddsChangeList=[];
+    var totalAvgOdds = 0;
+    var stopCodesList = [];
+    var zzvalue = 10000;
+    var isSearch = false;
+    var distCode = "";
+
+    //选中"虚盘"一级菜单
+    window.parent.navSelect("handicap_invented");
+
+    function popChild(tag){
+        layer.open({
+            type:2,
+            // title:'出货',
+            title:i18np.prop("shipan.menu.chuhuo"),
+            content:'kuaida.html',
+            area:['80%','650px']
+        })
+    }
+
+    window.onload=function (e) {
+        getSettings();
+    }
+
+    function getSettings() {
+        //layer.msg("数据加载中...",{time:-1,shade:0.3,icon:16});
+        $.ajax({
+            url:HOST+'lotteryMethod/getAll?lotteryType=1',
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    settingList = res.data;
+                    fuzhiValue = 0;
+                    totalAvgOdds = 0;
+                    codesList=[];
+                    selectedList=[];
+                    //getStopBuyCodes();
+                    getBuyList4();
+                }else{
+                    layer.closeAll();
+                    layer.msg(res.msg);
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+                layer.msg(i18np.prop("shipan.msg.request.error"));
+            }
+        })
+    }
+
+
+    function getBuyList(){
+        // console.log("22222222222")
+        $.ajax({
+            //url:HOST+"admin/drawbuy/xupan/list",
+            url:HOST+"admin/shipan/listAll",
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    layer.closeAll();
+                    if(res.data.dataList!=null){
+                        buyList = res.data.dataList;
+                        zzvalueMap = res.data.zzvalueMap;
+                        noBuyLossMap = res.data.noBuyLossMap;
+                        oddsChangeList = res.data.prChangeList;
+                        totalAvgOdds = res.data.totalAvgOdds;
+                        fuzhiValue = res.data.totalFuzhi;
+                        $("#avg_odds").html(totalAvgOdds);
+                    }
+                    __createCodes4();
+                    //initData();
+                }else{
+                    layer.closeAll();
+                    layer.msg(res.msg);
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+                layer.msg(i18np.prop("shipan.msg.request.error"));
+            }
+        })
+    }
+
+    function getBuyList4(){
+        $.ajax({
+            //url:HOST+"admin/drawbuy/xupan/list",
+            url:HOST+"admin/xupan/listAll?page="+curpage+"&limit="+limit,
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    layer.closeAll();
+                    if(res.data.list1!=null){
+                        buyList = res.data.list1;
+                        codesList = buyList;
+                        zzvalueMap = res.data.zzvalueMap;
+                        noBuyLossMap = res.data.noBuyLossMap;
+                        oddsChangeList = res.data.prChangeList;
+                        totalAvgOdds = res.data.totalAvgOdds;
+                        fuzhiValue = res.data.totalFuzhi;
+                        zzvalue = res.data.zzvalue;
+                        stopCodesList = res.data.stopBuyCodesList;
+                        $("#avg_odds").html(totalAvgOdds);
+                    }
+                    initPager(10000);
+                    initData4();
+                }else{
+                    layer.closeAll();
+                    layer.msg(res.msg);
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+                layer.msg("请求错误");
+            }
+        })
+    }
+
+    //负值多选
+    $("#multiSelect").on("click",'.sel-count',function (e) {
+        var $this = $(this);
+        var count = 0;
+        if($this.is('.sel-active')){
+            $this.removeClass('sel-active');
+            $("#tbody").find("td").removeClass('active');
+            selectedList = [];
+        }else{
+            $this.addClass('sel-active');
+            $("#multiSelect").find("input.sel-count").not($this).removeClass("sel-active");
+            count = parseInt(this.value);
+            $("#tbody").find("td").removeClass('active');
+            for(var i=0;i<count;i++){
+                $("#l-td-"+i).addClass('active');
+                $("#r-td-"+i).addClass('active');
+                var num = $("#l-td-"+i).attr("number");
+                if(!selectedList.includes(num)){
+                    selectedList.push(num);
+                }
+            }
+        }
+    })
+
+
+    function searchCode(){
+        $.ajax({
+            url:HOST+"admin/xupan/search?page="+curpage+"&limit="+limit+"&searchCode="+distCode,
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    var isFind = res.data.isFind;
+                    var totals = res.data.searchTotal;
+                    if(isFind==1){
+                        codesList = res.data.dataList;
+                        curpage = res.data.page;
+                        $(".pageindex").html(curpage);
+                        initData4();
+                        $("td").each(function (idx) {
+                            var $this = $(this);
+                            var number = $this.attr("number");
+                            if (number == distCode) {
+                                $this.addClass("selected")
+                                setTimeout(function () {
+                                    $this.removeClass("selected") //5秒后选中颜色消失
+                                }, 5000)
+                            }
+                        });
+                    }else{
+                        $(".pageindex").html(1);
+                        initPager(totals);
+                        codesList = res.data.dataList;
+                        initData4();
+                    }
+
+                }
+            }
+        })
+    }
+
+
+    //号码搜索
+    $("#btn_search").on("click","",function (e) {
+        var scode = $("#key_betno").val();
+        scode = scode.replace("x","").replace("X","");
+        if(scode!=""){
+            distCode = scode;
+            curpage=1;
+            isSearch = true;
+            searchCode();
+        }else{
+            distCode= "";
+            isSearch = false;
+            curpage = 1;
+            getBuyList4();;
+        }
+    })
+
+
+
+    function _checkSearchList(item){
+        var exist = false;
+        if(searchList.length==0){
+            return exist;
+        }
+        for (var i = 0,len=searchList.length; i < len; i++) {
+            var dd = searchList[i];
+            if(dd.code == item.code){
+                exist = true;
+                break;
+            }
+        }
+        return exist;
+    }
+
+    $("#prSelect").on("click",'.radio',function (e) {
+        rise_drop = this.value;
+        if(this.value=='2'){
+            $("#maxLimitEq").hide();
+            $("#maxLimitAdd").hide();
+            $("#prLabel").removeClass('hide')
+        }else{
+            $("#maxLimitEq").show();
+            $("#maxLimitAdd").show();
+            $("#prLabel").addClass('hide')
+        }
+    })
+
+
+    function initPager(total) {
+        //var total = codesList.length;
+        pages = total%limit==0?parseInt(total/limit):parseInt(total/limit)+1;
+        $(".pageindex").html(curpage);
+        $('.pagecount').html(pages);
+        $('.recordcount').html(total);
+    }
+
+    $("#pager").on("click",'.fn-first',function (e) {
+        if(curpage>1){
+            curpage = 1;
+            $(".pageindex").html(curpage);
+            if(isSearch){
+                searchCode();
+            }else{
+                getBuyList4();
+            }
+
+            //initData();
+        }
+    })
+
+    $("#pager").on("click",'.fn-next',function (e) {
+        if(curpage<pages){
+            curpage++;
+            $(".pageindex").html(curpage);
+            if(isSearch){
+                searchCode();
+            }else{
+                getBuyList4();
+            }
+            //initData();
+            //getBuyList4();
+        }
+    })
+
+    $("#pager").on("click",'.fn-prev',function (e) {
+        if(curpage>1){
+            curpage--;
+            $(".pageindex").html(curpage);
+            if(isSearch){
+                searchCode();
+            }else{
+                getBuyList4();
+            }
+            //initData();
+            //getBuyList4();
+        }
+    })
+
+    $("#pager").on("click",'.fn-last',function (e) {
+        if(curpage<pages){
+            curpage=pages;
+            $(".pageindex").html(curpage);
+            if(isSearch){
+                searchCode();
+            }else{
+                getBuyList4();
+            }
+            //initData();
+            //getBuyList4();
+        }
+    })
+
+    $("#pager").on("click",'.fn-go',function (e) {
+        var toPage = $("#toPage").val();
+        if(toPage!=""){
+            if(parseInt(toPage)>=1 && parseInt(toPage)<=pages){
+                curpage=parseInt(toPage);
+                $(".pageindex").html(curpage);
+                if(isSearch){
+                    searchCode();
+                }else{
+                    getBuyList4();
+                }
+                //initData();
+                //getBuyList4();
+            }
+        }
+        // if(curpage<pages){
+        //     curpage=pages;
+        //     $(".pageindex").html(curpage);
+        //     initData();
+        // }
+    })
+
+    function isStopCode(code,lsid){
+        var exist = false;
+        stopCodesList.forEach((item,idx)=>{
+            if(item.codes==code && item.lotterySettingId==lsid){
+                exist = true;
+            }
+        })
+        return exist;
+    }
+
+    function initData4() {
+        pageData = codesList;
+        var fixRow = '<tr> <td colspan="20" class="tc"> <div> ' +
+            i18np.prop('shipan.four.fixed')+' ' +i18np.prop('shipan.negative.Ranking')+
+            '('+fuzhiValue+') ' +
+            i18np.prop('shipan.positive.number') +
+            '('+zzvalue+') ' +
+            i18np.prop('shipan.average.odds') +
+            '<span class="red" id="avg_odds">'+totalAvgOdds+'</span> </div> </td> </tr>'
+        var rows = "";
+        var codeDataStr='';
+        for(var i=0,len=pageData.length;i<len;i++){
+            var item = pageData[i];
+            if(parseInt(i%10)==0 && i>0){
+                rows = rows +'<tr>'+codeDataStr+'</tr>';
+                codeDataStr = '';
+            }
+            var isActive = isStopCode(item.code,item.lotterySettingId)?'active':'';
+            var xuhao = (curpage-1)*limit +(i+1);
+            codeDataStr = codeDataStr + '<td onclick="showRelateCodes('+i+')" id="l-td-'+i+'" class="l fn-number '+isActive+'" ' +
+                'xian="'+item.xian+'" number="'+item.code+'" lsId="'+item.lotterySettingId+'" fix_num="40" odds="'+item.odds+'" style="border-right-color: #dcf7db;" odds_avg="'+item.odds_avg+'"> '
+                +'<strong class="blue">['+xuhao+']</strong><br> '+item.code+' </td>' +
+                '<td id="r-td-'+i+'" onclick="showRelateCodes('+i+')" class="r r-bd fn-number maxlose  '+isActive+'" maxlose="'+item.maxLoss+'" ' +
+                'xian="'+item.xian+'" number="'+item.code+'" lsId="'+item.lotterySettingId+'" odds="'+item.odds+'" odds_avg="'+item.odds_avg+'"> ' +
+                '<span class="blue" title="赔率(Odds)">'+item.odds+'</span><br>' +
+                '<span class="black2" title="平均赔率(odds_avg)">'+item.odds_avg+'</span><br> <span title="总吃货-总出货(HoldMoney)">'+item.chuhuo+'</span><br>' +
+                '<span class="red" title="最大损失(MaxLose)">'+item.relateMaxLoss+'</span>' +
+                '</td>';
+
+        }
+        rows = rows +'<tr>'+codeDataStr+'</tr>';
+        $("#tbody").html(fixRow + rows);
+
+    }
+
+
+    function initData() {
+        var zzvalue = 0;
+        codesList.forEach((item,idx)=>{
+            if(item.maxLoss>=0){
+                zzvalue ++;
+            }
+        })
+        var si = (curpage-1)*limit;
+        var ei = curpage*limit;
+        if(ei>codesList.length){
+            ei=codesList.length;
+        }
+        pageData = codesList.slice(si,ei);
+        var fixRow =
+            '<tr> ' +
+            '<td colspan="20" class="tc"> ' +
+            '<div> <span>' +
+            i18np.prop("shipan.four.fixed") +
+            '</span> <span>' +
+            i18np.prop("shipan.negative.Ranking") +
+            '</span>('+fuzhiValue+') <span>' +
+            i18np.prop("shipan.positive.number") +
+            '</span>('+zzvalue+') <span>' +
+            i18np.prop("shipan.average.odds") +
+            '</span>' +
+            '<span class="red" id="avg_odds">0</span> ' +
+            '</div> ' +
+            '</td> ' +
+            '</tr>'
+        var rows = "";
+        var codeDataStr='';
+        for(var i=0,len=pageData.length;i<len;i++){
+            var item = pageData[i];
+            if(parseInt(i%10)==0 && i>0){
+                rows = rows +'<tr>'+codeDataStr+'</tr>';
+                codeDataStr = '';
+            }
+            var isActive = isStopCode(item.code,item.lotterySettingId)?'active':'';
+            //var isActive = item.isStopBuy==1?'active':'';
+            var xuhao = (curpage-1)*limit +(i+1);
+            codeDataStr = codeDataStr + '<td onclick="showRelateCodes('+i+')" id="l-td-'+i+'" class="l fn-number '+isActive+'" ' +
+                'xian="'+item.xian+'" number="'+item.code+'" lsId="'+item.lotterySettingId+'" fix_num="40" odds="'+item.odds+'" style="border-right-color: #dcf7db;" odds_avg="'+item.odds_avg+'"> '
+                +'<strong class="blue">['+xuhao+']</strong><br> '+item.code+' </td>' +
+                '<td id="r-td-'+i+'" onclick="showRelateCodes('+i+')" class="r r-bd fn-number maxlose  '+isActive+'" maxlose="'+item.maxLoss+'" ' +
+                'xian="'+item.xian+'" number="'+item.code+'" lsId="'+item.lotterySettingId+'" odds="'+item.odds+'" odds_avg="'+item.odds_avg+'"> ' +
+                '<span class="blue" title="赔率(Odds)">'+item.odds+'</span><br>' +
+                '<span class="black2" title="平均赔率(odds_avg)">'+item.odds_avg+'</span><br> <span title="总吃货-总出货(HoldMoney)">'+item.chuhuo+'</span><br>' +
+                '<span class="red" title="最大损失(MaxLose)">'+item.maxLoss+'</span>' +
+                '</td>';
+
+        }
+        rows = rows +'<tr>'+codeDataStr+'</tr>';
+        $("#tbody").html(fixRow + rows);
+    }
+
+    function __getRelateCodesBy(code) {
+        for(var i=0,len=pageData.length;i<len;i++){
+            var item = pageData[i];
+            if(item.code==code){
+                return item;
+            }
+        }
+        return null;
+    }
+
+    function showRelateCodes(tdIdx) {
+        $("#l-td-"+tdIdx).hasClass('active')?
+            $("#l-td-"+tdIdx).removeClass('active')
+            :$("#l-td-"+tdIdx).addClass('active');
+        $("#r-td-"+tdIdx).hasClass('active')?
+            $("#r-td-"+tdIdx).removeClass('active')
+            :$("#r-td-"+tdIdx).addClass('active');
+        //$(".fn-number").not($("#l-td-"+tdIdx)).not($("#r-td-"+tdIdx)).removeClass('active');
+        var number = $("#l-td-"+tdIdx).attr("number");
+        var codeObj = __getRelateCodesBy(number);
+        if(codeObj!=null){
+            var relateCodesArr = codeObj.relateCodes;
+            var tableEle = "";
+            var tbodyEle = "";
+            var trEle = "";
+            var str = '';
+            /**
+             * <table class="t-1">
+             <tbody class="list">
+             */
+            for(var i=0,len=relateCodesArr.length;i<len;i++){
+                var item = relateCodesArr[i];
+                if(parseInt(i%6)==0 && i>0){
+                    trEle = trEle +'<tr>'+str+'</tr>';
+                    str = '';
+                }
+                var isActive = isStopCode(item.code,item.lotterySettingId)?'active':'';
+                //var isActive = item.isStopBuy==1?'active':'';
+                str = str + '<td onclick="activeTopCodes('+i+')" id="top-td1-'+i+'" class="l fn-number2 '+isActive+' " xian="'+item.xian+'" ' +
+                    'number="'+item.code+'" lsId="'+item.lotterySettingId+'" fix_num="20" style="border-right-color: #dcf7db;">' +
+                    '<strong class="blue">['+(i+1)+']</strong><br> '+item.code+'</td> ' +
+                    '<td onclick="activeTopCodes('+i+')"  id="top-td2-'+i+'" class="r r-bd fn-number2 '+isActive+' " maxlose="'+item.maxLoss+'" xian="'+item.xian+'" ' +
+                    'number="'+item.code+'" lsId="'+item.lotterySettingId+'" fix_num="20">' +
+                    '<span class="blue" title="赔率(Odds)">'+item.odds+'</span>&nbsp;&nbsp;' +
+                    '<span class="black2" title="平均赔率(odds_avg)">'+item.odds_avg+'</span><br>' +
+                    '<span title="总吃货-总出货(HoldMoney)">'+item.chuhuo+'</span><br>' +
+                    '<span class="red" title="最大损失(MaxLose)">'+item.relateMaxLoss+'</span>' +
+                    '</td> ';
+            }
+            trEle = trEle +'<tr>'+str+'</tr>';
+            tbodyEle = '<tbody class="list">'+trEle+'</tbody>';
+            tableEle = '<table class="t-1">'+tbodyEle+'</table>';
+            $("#bd_format").html(tableEle);
+        }else{
+
+        }
+    }
+
+    function activeTopCodes(tdIdx) {
+        $("#top-td1-"+tdIdx).hasClass('active')?
+            $("#top-td1-"+tdIdx).removeClass('active')
+            :$("#top-td1-"+tdIdx).addClass('active');
+        $("#top-td2-"+tdIdx).hasClass('active')?
+            $("#top-td2-"+tdIdx).removeClass('active')
+            :$("#top-td2-"+tdIdx).addClass('active');
+        $("#tbody").find("td").each(function (idx) {
+            $(this).removeClass('active')
+        });
+    }
+
+
+    $("#btnAdd").on("click","",function (e) {
+        selectedList = [];
+        $("#tbody").find("td").each(function (idx) {
+            if($(this).hasClass('active')){
+                var nums = $(this).attr("number");
+                var xian = $(this).attr("xian");
+                var lsid = $(this).attr("lsId");
+                if(!__checkExist(nums,xian)){
+                    selectedList.push({
+                        code:nums,
+                        xian:xian,
+                        lsid:lsid
+                    });
+                }
+            }
+        });
+        $("#bd_format").find("td").each(function (idx) {
+            if($(this).hasClass('active')){
+                var nums = $(this).attr("number");
+                var xian = $(this).attr("xian");
+                var lsid = $(this).attr("lsId");
+                if(!__checkExist(nums,xian)){
+                    selectedList.push({
+                        code:nums,
+                        xian:xian,
+                        lsid:lsid
+                    });
+                }
+            }
+        });
+        if(selectedList.length<1){
+            // layer.msg("未选择号码");
+            layer.msg(i18np.prop("shipan.msg.no.selected.number"));
+            return;
+        }
+        var odds =  $("#set_odds").val();
+        var islimit = $("input[name='islimit']:checked").val();
+        var odds_item_limit = $("#odds_item_limit").val();
+        if(rise_drop=='2'){
+            if(odds=="" || odds_item_limit==""){
+                // layer.msg("请填写赔率和出货金额");
+                layer.msg(i18np.prop("shipan.msg.please.fill.odds.chmoney"));
+                return;
+            }
+            var t = odds;
+            odds = odds_item_limit;
+            odds_item_limit = t;
+        }else{
+            if(odds=="" && odds_item_limit==""){
+                // layer.msg("未填写任何内容");
+                layer.msg(i18np.prop("shipan.msg.no.fill.anything"));
+                return;
+            }
+        }
+
+        var datas = [];
+        selectedList.forEach((item,idx)=>{
+            datas.push({
+                hotNumber:item.code,
+                xianFlag:item.xian,
+                changePeiRate:odds,
+                prChangeWay:rise_drop,
+                oneItemUpperLimit:odds_item_limit,
+                limitChangeWay:islimit,
+                lotterySettingId:item.lsid
+            })
+        })
+
+        layer.msg(i18np.prop("shipan.msg.processing"),{time:-1,icon:16,shade:0.3})
+
+        $.ajax({
+            url:HOST+"peiRateChange/xupan",
+            type:'post',
+            data:JSON.stringify(datas),
+            contentType:'application/json',
+            success:function(res){
+                layer.closeAll();
+                if(res.code==0){
+                    if(rise_drop==2){
+                        //到下载页
+                        window.location.href="../shipan/download.html"
+                    }else{
+                        $("#set_odds").val("");
+                        $("input[name='islimit']").val("0");
+                        $("#odds_item_limit").val("");
+                        $("#bd_format").html("");
+                        var newOdds = res.data;
+                        if(newOdds.length>0){
+                            upOddsOfCodes(newOdds);
+                        }
+                        initData4();
+                    }
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+            }
+        })
+    })
+
+    //更新页面号码的最新赔率
+    function upOddsOfCodes(newOdds){
+        newOdds.forEach((odds,idx)=>{
+            codesList.forEach((cc,idx1)=>{
+                if(odds.hotNumber == cc.code){
+                    cc.odds = odds.changePeiRate
+                }
+                var relateCodes = cc.relateCodes;
+                relateCodes.forEach((rc,idx2)=>{
+                    if(odds.hotNumber == rc.code){
+                        rc.odds = odds.changePeiRate
+                    }
+                })
+            })
+        })
+    }
+
+
+    function __checkExist(num,xian) {
+        for(var i=0,len=selectedList.length;i<len;i++){
+            var item = selectedList[i];
+            if(item.code==num && item.xian==xian){
+                return true;
+            }
+        }
+        return false;
+    }
+</script>
+</body>
+</html>

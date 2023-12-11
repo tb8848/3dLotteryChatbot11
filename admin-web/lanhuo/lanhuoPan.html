@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>拦货盘</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style type="text/css">
+        .drawCode{
+            background-color: silver;
+        }
+    </style>
+</head>
+<body style="overflow-y:auto;">
+<div id="lanhuopan">
+    <template>
+    <div class="module">
+        <div name="module" id="handicap_reality" class="m5 mt10 handicap">
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                        <tr class="bg1">
+                            <td id="nav_fixnum" class="tc1" colspan="18"> <span i18n="lanhuo.title1">拦货盘</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,1,100)" class="white " :class="[lmId==1?'yellow':'']">
+                                    <span i18n="lanhuo.query.select.oneFixed">一定位</span>(<span id="lm-fz-1">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,2,100)" class="white " :class="[lmId==2?'yellow':'']">
+                                    <span i18n="lanhuo.query.select.twoFixed">二定位</span>(<span id="lm-fz-2">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,3,100)" class="white " :class="[lmId==3?'yellow':'']">
+                                    <span i18n="lanhuo.query.select.threeFixed">三定位</span>(<span id="lm-fz-3">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,4,100)" class="white" :class="[lmId==4?'yellow':'']">
+                                    <span i18n="lanhuo.query.select.fourFixed">四定位</span>(<span id="lm-fz-4">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,5,100)" class="white " :class="[lmId==5?'yellow':'']">
+                                    <span i18n="lanhuo.query.select.twoShow">二字现</span>(<span id="lm-fz-5">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,6,1000)" class="white " :class="[lmId==6?'yellow':'']">
+                                    <span i18n="lanhuo.query.select.threeShow">三字现</span>(<span id="lm-fz-6">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" @click="changeMethodClass(this,7,100)" class="white " :class="[lmId==7?'yellow':'']">
+                                    <span i18n="lanhuo.query.select.fourShow">四字现</span>(<span id="lm-fz-7">0</span>)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        <tr v-if="showMode==0 && pager.pages>1">
+                            <td align="center">
+                                <div name="module" id="pager" class="pager" action="handicap_reality" pagebody="tbody" pagecount="100"
+                                     param="fix_num=40&amp;pagesize=100">
+                                    <span>{{$t('di')}}</span>
+                                    <span class="pageindex red">{{pager.curpage}}</span>
+                                    <span>{{$t('page')}}</span>
+                                    <span>{{$t('total')}}</span>
+                                    <span class="pagecount red">{{pager.pages}}</span>
+                                    <span>{{$t('page')}}</span>
+                                    <span>{{$t('total')}}</span>
+                                    <span class="recordcount red">{{pager.total}}</span>
+                                    <span>{{$t('tiao')}}</span>
+                                    <a href="javascript:void(0)" class="fn-first" @click="toFirst()">{{$t('firstPage')}}</a>
+                                    <a href="javascript:void(0)" class="fn-prev" @click="toPre()">{{$t('prePage')}}</a>
+                                    <a href="javascript:void(0)" class="fn-next" @click="toNext()">{{$t('nextPage')}}</a>
+                                    <a href="javascript:void(0)" class="fn-last" @click="toLast()">{{$t('lastPage')}}</a>
+                                    <input type="text" class="input w30 fn-index" v-model="pager.toPage">
+                                    <input type="button" class="btn btn-gray w30 fn-go"  value="GO" @click="toPage()">
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table class="t-1">
+
+                    <tbody v-if="loadOver==0">
+                        <!-- loading -->
+                        <tr><td colspan="20" style="text-align: center"><img src="../img/load.gif"></td></tr>
+                    </tbody>
+
+                    <tbody class="list" v-if="loadOver==1 && showMode==0 && lsList.length==1" id="tbody">
+                        <tr>
+                            <td class="tc" colspan="20">
+                                <div>
+                                    <span>
+                                        {{settingCodesList[0].lsName}}
+                                        <span>{{$t('fzph')}}</span>
+                                        ({{settingCodesList[0].fuzhi}})
+                                    </span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span>
+                                        <span>{{$t('zzgs')}}</span>
+                                        ({{settingCodesList[0].zzvalue}})
+                                    </span>
+                                </div>
+                                <div style="margin:5px auto" v-if="canSetLanHuo">
+                                    <form autocomplete="off" novalidate="novalidate">
+                                        <span>{{$t('lanhuoMoney')}}</span>： <input type="hidden" name="dict_no_type_id" value="5">
+                                        <input type="text" class="w70" name="hold_money" notypeid="5" required="" nonnegative="true" :id="'lanhuo-money-'+settingCodesList[0].lsid">
+                                        <button type="button" class="btn" @click="setLanhuoMoney(this,settingCodesList[0].lsid)">{{$t('submit')}}</button>
+<!--                                        <input type="button" value="提交" class="btn" @click="setLanhuoMoney(this,settingCodesList[0].lsid)" i18n="lanhuo.btn.submit">-->
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- 动态生成 -->
+                        <tr v-if="dataFrom==0" v-for="(lineNo,idx) in lines">
+                            <td colspan="2" v-for="(loc,ii) in 10" width="10%">
+                                <table style="width:100%" border="none">
+                                    <tr>
+                                        <td  v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<settingCodesList[0].pageData.length"
+                                             :class="[settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].selected?'active':'',settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']"
+                                            class="fn-number" :number="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code"
+                                            style="border:none;border-right:1px solid #dcf7db;width:50%">
+                                            <strong class="blue">[{{(pager.curpage-1)*pager.limit+(lineNo-1)*10+loc}}]</strong>&nbsp;&nbsp;
+                                            {{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code}}
+                                        </td>
+                                        <td v-if="(lineNo*10+loc)%10==loc%10 && (lineNo-1)*10+(loc-1)<settingCodesList[0].pageData.length"  style="border:none;width:50%"
+                                            :class="[settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].selected?'active':'',settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].hasDraw?'drawCode':'']"
+                                            class=" r-bd fn-number maxlose "
+                                            :maxlose="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].maxLoss"
+                                            :number="settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].code">
+<!--                                            <span class="blue" title="赔率(Odds)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds}}</span>&nbsp;&nbsp;-->
+<!--                                            <span class="black2" title="平均赔率(odds_avg)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].odds_avg}}</span><br> -->
+                                            <span title="总吃货-总出货(HoldMoney)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].chuhuo}}</span><br>
+                                            <span class="red" title="最大损失(MaxLose)">{{settingCodesList[0].pageData[(lineNo-1)*10+(loc-1)].maxLoss}}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <!-- 全屏模式 -->
+                    <tbody class="list" v-if="loadOver==1 && showMode==0 && lsList.length>1 && fullScreen==1" > <!-- && lmId==2-->
+                        <tr>
+                            <td v-for="(item,idx) in settingCodesList" :class="[lsId!=item.lsid?'tc lc':'tc']" :colspan="(lmId==3 || lmId==1)?4:lsId==item.lsid?6:2">
+                                <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td v-if="lsId==item.lsid" style="border: none">
+                                            <div>
+<!--                                                <a :href="'../setting/groupPeiRateSetting.html?id='+item.lsid+'&lmId=2'">[A分批]</a>-->
+                                                <a href="#!handicap_reality.erdingrealbet|erdingrealbet?fix_num=20&amp;no_type_id=2">
+                                                    <span class="red">
+                                                        {{item.lsName}}
+                                                        <span>{{$t('fzph')}}</span>
+                                                        ({{item.fuzhi}})
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <span>{{$t('zzgs')}}</span>
+                                                ({{item.zzvalue}})
+                                                <a href="javascript:void(0)" class="fb red" @click="changeFullScreen(0,item.lsid)">
+                                                    [<span>{{$t('lanhuopan')}}</span>]
+                                                </a>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<!--                                                <a href="javascript:void(0)"-->
+<!--                                                   class="fb blue" @click="changeDataFrom(1)">[赔率变动]</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                                平均赔率<span class="red">{{item.odds_avg}}</span>-->
+                                            </div>
+                                            <div style="margin:5px auto" v-if="canSetLanHuo">
+                                                <form autocomplete="off" novalidate="novalidate">
+                                                    <span>{{$t('lanhuoMoney')}}</span>
+                                                    <input type="hidden" name="dict_no_type_id" value="5">
+                                                    <input type="text" class="w70" name="hold_money" notypeid="5" required="" nonnegative="true" :id="'lanhuo-money-'+item.lsid">
+                                                    <button type="button" class="btn" @click="setLanhuoMoney(this,item.lsid)">{{$t('submit')}}</button>
+<!--                                                    <input type="button" value="提交" class="btn" @click="setLanhuoMoney(this,item.lsid)" i18n="lanhuo.btn.submit">-->
+                                                </form>
+                                            </div>
+                                        </td>
+                                        <td v-else style="border: none">
+                                            <a href="javascript:void(0)" @click="changeFullScreen(1,item.lsid)">{{item.lsName}}</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr v-for="(lineNo,idx1) in lines">
+                            <td class="tc" v-for="(loc,ii) in 8" colspan="2">
+                                <table border="0" width="100%" cellpadding="0" cellspacing="0" @click="selectOne(currSettingCodes.pageData[(lineNo-1)*8+(loc-1)])" >
+                                    <tr>
+                                        <td v-if="(lineNo*8+loc)%8==loc%8 && (lineNo-1)*8+(loc-1)<currSettingCodes.pageData.length" class="l fn-number tc  "
+                                            number="00XX" style="border:none;border-right:1px solid #dcf7db;"
+                                            :class="[currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].selected?'active':'',currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].hasDraw?'drawCode':'']">
+                                            <div class="l-hd"> <strong class="blue">[{{(pager.curpage-1)*pager.limit+(lineNo-1)*8+loc}}]</strong>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].code}} </div>
+<!--                                            <div v-if="dataFrom==0"> -->
+<!--                                                <a class="btn" href="javascript:void(0)" @click.stop="zhuanCode(currSettingCodes.pageData[(lineNo-1)*8+(loc-1)])"-->
+<!--                                                     class="btn">转</a>-->
+<!--                                                <input type="radio" class="radio fn-partial" name="checkradio" tabindex="1">-->
+<!--                                            </div>-->
+                                        </td>
+                                        <td v-if="(lineNo*8+loc)%8==loc%8 && (lineNo-1)*8+(loc-1)<currSettingCodes.pageData.length" class="r r-bd fn-number maxlose  " maxlose="0"
+                                            number="00XX" style="border:none"
+                                            :class="[currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].selected?'active':'',currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].hasDraw?'drawCode':'']">
+<!--                                            <span class="blue">{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].odds}}</span> &nbsp;&nbsp;-->
+<!--                                            <span class="gray2">{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].odds_avg}}</span>-->
+                                            <br> {{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].chuhuo}}<br>
+                                            <span class="red">{{currSettingCodes.pageData[(lineNo-1)*8+(loc-1)].maxLoss}}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <!-- 非全屏模式 -->
+                    <tbody class="list" v-if="loadOver==1 && showMode==0 && lsList.length>1 && fullScreen==0" > <!-- && lmId==2-->
+                        <tr>
+                            <td class="tc" v-for="(item,idx) in settingCodesList">
+                                <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                                    <tr class="border0">
+                                        <td class="border0 f14">
+                                            <div>
+<!--                                                <input type="radio" class="radio" name="choice_second" :checked="batchSel.lsId==item.lsid" :value="item.lsid"-->
+<!--                                                       @click="changeSelSettingId(item.lsid)">-->
+<!--                                                &lt;!&ndash; href="setting.st_batchodds|st_batchodds?fix_num={{Param.fix_num}}&no_type_id={{item.NoTypeId}}&from=handicap&ispackage=0"&ndash;&gt;-->
+<!--                                                <a :href="'../setting/groupPeiRateSetting.html?id='+item.lsid+'&lmId=2'" class="fb blue">[A分批]</a>-->
+                                                <!-- href="handicap_reality.erdingrealbet|erdingrealbet?fix_num=20&no_type_id={{item.NoTypeId}}" 跳二字定页面 -->
+                                                <a href="javascript:void(0)" v-if="lmId==2"  class="red">
+                                                    <span class="red">
+                                                        {{item.lsName}}
+                                                        <span>{{$t('fzph')}}</span>
+                                                        ({{item.fuzhi}})
+                                                    </span>
+                                                </a>
+                                                <span class="red" v-if="lmId!=2">
+                                                    {{item.lsName}}
+                                                    <span>{{$t('fzph')}}</span>
+                                                    ({{item.fuzhi}})
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span>{{$t('zzgs')}}</span>
+                                                ({{item.zzvalue}})
+    <!--                                            href="handicap_reality.handicap_full|handicap_reality?fix_num={{Param.fix_num}}&no_type_id={{item.NoTypeId}}&pagesize=100"-->
+                                                <a href="javascript:void(0)"  class="fb blue" @click="changeFullScreen(1,item.lsid)">
+                                                    [
+                                                    <span>{{$t('quanping')}}</span>
+                                                    ]
+                                                </a>
+<!--                                                平均赔率<span class="red">{{item.odds_avg}}</span>-->
+                                            </div>
+                                            <div style="margin:5px auto" v-if="canSetLanHuo">
+                                                <form autocomplete="off" novalidate="novalidate">
+                                                    <span>{{$t('lanhuoMoney')}}</span>： <input type="hidden" name="dict_no_type_id" value="5">
+                                                    <input type="text" class="w70" name="hold_money" notypeid="5" required="" nonnegative="true" :id="'lanhuo-money-'+item.lsid">
+                                                    <button type="button" class="btn" @click="setLanhuoMoney(this,item.lsid)">{{$t('submit')}}</button>
+<!--                                                    <input type="button" value="提交" class="btn" @click="setLanhuoMoney(this,item.lsid)" i18n="lanhuo.btn.submit">-->
+                                                </form>
+                                            </div>
+                                        </td>
+
+    <!--                                    <td class="border0 f13 hide" width="30%">-->
+    <!--&lt;!&ndash;                                        href="handicap_combo?ispackage=1&fix_num=20&no_type_id={{item.NoTypeId}}&pagesize=100&isSortByProfit=false&showColor=1"&ndash;&gt;-->
+    <!--                                        <a ><span class="bgyellow">包牌停押</span></a>-->
+    <!--                                    </td>-->
+                                    </tr>
+                                    <!-- 数据展示 非全屏模式 -->
+                                    <tr v-if="lmId==2">
+                                        <td width="16.6%" class="choice_column item_list">
+                                            <table width="100%"  v-for="(_item,idx1) in item.pageData">
+                                                <tr>
+                                                    <td width="50%"
+                                                        class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.MaxLose" :number="_item.code">
+                                                        <div class="l-hd">
+                                                            <strong class="blue">[{{(pager.curpage-1)*pager.limit+idx1+1}}]</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{_item.code}}
+                                                        </div>
+<!--                                                        <div>-->
+<!--    &lt;!&ndash;                                                        :href="handicap_reality.handicap_transform|handicap_transform?fix_num=30&num=_item.code"&ndash;&gt;-->
+<!--                                                            <a  class="btn" href="javascript:void(0)" @click.stop="zhuanCode(_item)">转</a>-->
+<!--                                                        </div>-->
+                                                    </td>
+                                                    <td width="50%"
+                                                        class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.MaxLose" :number="_item.code" align="left" >
+<!--                                                        <span class="blue" title="赔率(Odds)">{{_item.odds}}</span>&nbsp;&nbsp;-->
+<!--                                                        <span class="black2" title="平均赔率(odds_avg)">{{_item.odds_avg}}</span><br>-->
+                                                        <span title="总吃货-总出货(HoldMoney)">{{_item.chuhuo}}</span><br>
+                                                        <span class="red" title="最大损失(MaxLose)">{{_item.maxLoss}}</span>
+                                                    </td>
+<!--                                                    <td class="tc bg-cyan-blue fn-package-number" width="30%">-->
+<!--                                                        <span v-if="idx1==0">包牌<br/>-->
+<!--                                                        <br/>-->
+<!--                                                        </span>-->
+<!--                                                        <span>{{_item.package_chuhuo.toFixed(2)}}</span>-->
+<!--                                                    </td>-->
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <tr v-if="lmId==3 || lmId==1">
+                                        <td width="25%" class="choice_column item_list">
+                                            <table width="100%"  v-for="(_item,idx1) in item.pageData">
+                                                <tr>
+                                                    <td width="50%"
+                                                        class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.maxLoss" :number="_item.code">
+                                                        <div class="l-hd">
+                                                            <strong class="blue">[{{(pager.curpage-1)*pager.limit+idx1+1}}]</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{_item.code}}
+                                                        </div>
+<!--                                                        <div>-->
+<!--                                                            &lt;!&ndash;                                                        :href="handicap_reality.handicap_transform|handicap_transform?fix_num=30&num=_item.code"&ndash;&gt;-->
+<!--                                                            <a class="btn" href="javascript:void(0)" @click.stop="zhuanCode(_item)">转</a>-->
+<!--                                                        </div>-->
+                                                    </td>
+                                                    <td width="50%" class = "r-bd fn-number maxlose"
+                                                        :class="[_item.selected?'active':'',_item.hasDraw?'drawCode':'']"
+                                                        :maxlose="_item.MaxLose" :number="_item.code" align="left">
+<!--                                                        <span class="blue" title="赔率(Odds)">{{_item.odds}}</span>&nbsp;&nbsp;-->
+<!--                                                        <span class="black2" title="平均赔率(odds_avg)">{{_item.odds_avg}}</span><br>-->
+                                                        <span title="总吃货-总出货(HoldMoney)">{{_item.chuhuo}}</span><br>
+                                                        <span class="red" title="最大损失(MaxLose)">{{_item.maxLoss}}</span>
+                                                    </td>
+<!--                                                    <td class="tc bg-cyan-blue fn-package-number" width="30%">-->
+<!--                                                        <span v-if="idx1==0">包牌<br/>-->
+<!--                                                        <br/>-->
+<!--                                                        </span>-->
+
+<!--                                                        <span>{{_item.package_chuhuo.toFixed(2)}}</span>-->
+<!--                                                    </td>-->
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/codes_utils.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/projects/lanhuopan-v2.js?v1"></script>
+
+<!--<script>-->
+<!--    var moduleName = "lanhuo";-->
+<!--    var defaultLang = layui.data('langTab').langType;-->
+<!--    var i18np = null;-->
+<!--    initLangConfig({-->
+<!--        defaultLang:defaultLang,-->
+<!--        filePath: "../js/i18n/"+moduleName+"/",-->
+<!--        module:moduleName,-->
+<!--        base:"../js/"-->
+<!--    })-->
+
+<!--    function changeLang(lang) {-->
+<!--        defaultLang = lang;-->
+<!--        reloadI18n({-->
+<!--            defaultLang:lang,-->
+<!--            filePath: "../js/i18n/"+moduleName+"/",-->
+<!--            module:moduleName,-->
+<!--        })-->
+<!--        i18np.loadProperties(moduleName);-->
+<!--    }-->
+
+<!--    layui.config({base: '../js/'})-->
+<!--        // 继承treetable.js插件-->
+<!--        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {-->
+<!--        i18np = layui.i18np;-->
+<!--        // changeLang(defaultLang);-->
+<!--        reloadI18n({-->
+<!--            defaultLang:defaultLang,-->
+<!--            filePath: "../js/i18n/"+moduleName+"/",-->
+<!--            module:moduleName,-->
+<!--        })-->
+<!--        i18np.loadProperties(moduleName);-->
+<!--        vm.initDataList();-->
+<!--    });-->
+<!--</script>-->
+
+</body>
+</html>

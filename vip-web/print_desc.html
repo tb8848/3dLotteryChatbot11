@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title i18n="print.subtitle">打印设置图示</title>
+    <link rel="stylesheet" href="css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="css/A-P5.css" media="all">
+</head>
+<body style="overflow: auto">
+<div name="module" id="printhelp" class="m5 mt5">
+    <div>
+        <table class="t-1 fb">
+            <thead>
+                <tr class="title-bar">
+                    <td>
+                        <a href="javascript:void(0);" data-html="tpl_print" class="fn-tip-btn mr20 white" i18n="print.subtitle">打印设置图示</a>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div style="padding:0 10px;width:1080px" class="f16" id="tip_con">
+                        <br>
+                        <br>
+                        <h1 class="tc blue" i18n="print.ie7">IE7 打印设置图示说明</h1>
+                        <br>
+                        <br> <span i18n="print.ie7.step1">步骤1、（如果您的浏览器已经设置菜单栏，直接从步骤2开始设置）</span> <br>
+                        <br> <img src="img/print/ie7_1.gif"> <br>
+                        <br> <span i18n="print.step2">步骤2、 </span><br>
+                        <br> <img src="img/print/ie7_2.gif"> <br>
+                        <br> <span i18n="print.step3">步骤3、</span> <br>
+                        <br> <img src="img/print/ie7_3.gif"> <br>
+                        <br> <span i18n="print.step4">步骤4、</span> <br>
+                        <br> <img src="img/print/ie7_4.gif"> <br>
+                        <br>
+                        <h1 class="tc blue" i18n="print.ie11">IE11 打印设置图示说明</h1>
+                        <br>
+                        <br> <span i18n="print.step1">步骤1、</span>
+                        <br>
+                        <br> <img src="img/print/ie11_1.gif"> <br>
+                        <br> <span i18n="print.step2">步骤2、</span> <br>
+                        <br> <img src="img/print/ie11_2.gif"> <br>
+                        <br> <span i18n="print.step3">步骤3、</span> <br>
+                        <br> <img src="img/print/ie11_3.gif"> <br>
+                        <br> <span i18n="print.step4">步骤4、</span> <br>
+                        <br> <img src="img/print/ie11_4.gif"> <br>
+                        <br> <span i18n="print.step5">步骤5、</span> <br>
+                        <br> <img src="img/print/ie11_5.gif"> <br>
+                        <br> <span i18n="print.step6">步骤6、</span> <br>
+                        <br> <img src="img/print/ie11_6.gif"> <br>
+                        <br>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/config.js"></script>
+
+<script src="js/multi_lang_config.js"></script>
+
+<script type="text/javascript">
+    function upOpenStatus(msg) {
+
+    }
+    var moduleName = "print";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"js/"
+    })
+
+    function changeLang(lang){
+        initLangConfig({
+            defaultLang:lang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+            base:"js/"
+        })
+    }
+</script>
+</body>
+</html>

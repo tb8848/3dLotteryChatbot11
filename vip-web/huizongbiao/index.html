@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <title i18n="huizongbiao.detail">预下注明细</title>
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+            /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div class="module">
+    <div name="module" id="betlist" class="m5 mt10">
+        <div class="mt10" id="vueI18n">
+            <template>
+            <form autocomplete="off" novalidate="novalidate">
+                <input type="hidden" value="22346" name="period_number" id="period_number">
+                <input type="hidden" value="0" name="Is_Winning" id="Is_Winning">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1"><td colspan="19" i18n="huizongbiao.search">{{$t('message.search')}}</td></tr>
+                    </thead>
+                    <tbody class="noBD">
+                    <tr>
+                        <td width="50">
+                            <select name="drawId" id="drawId">
+<!--                                <option value="-1">全部</option>-->
+<!--                                <option value="0">未下注</option>-->
+<!--                                <option value="1">已下注</option>-->
+                            </select>
+                        </td>
+                        <td width="50" i18n="huizongbiao.searchCode"> {{$t('message.xiazhuMingxi.searchCode')}} </td>
+                         <td width="60"> <input type="text" class="w60" name="buyCodes" maxlength="4" betno="true" id="buyCodes"> </td>
+                        <td width="60" i18n="huizongbiao.buyStatus">{{$t('message.buyStatus')}}</td>
+                        <td width="40">
+                            <select name="buyFlag" id="buyFlag">
+                                <option value="-1" >{{$t('message.all')}}</option>
+                                <option value="0" >{{$t('message.unBuy')}}</option>
+                                <option value="1" >{{$t('message.hasBuy')}}</option>
+                            </select>
+                        </td>
+                        <td width="60" i18n="huizongbiao.cancelStatus">{{$t('message.cancelStatus')}}</td>
+                        <td width="40">
+                            <select name="delFlag" id="delFlag">
+                                <option value="-1">{{$t('message.all')}}</option>
+                                <option value="0">{{$t('message.unCancel')}}</option>
+                                <option value="1">{{$t('message.hasCancel')}}</option>
+                            </select>
+                        </td>
+                         <td width="35" i18n="huizongbiao.show">{{$t('message.xiazhuMingxi.show')}}</td>
+                        <td width="50">
+                            <select name="colType" id="colType">
+                                <option value="0">{{$t('message.odds')}}</option>
+                                <option value="1">{{$t('message.money')}}</option>
+                            </select>
+                        </td>
+                        <td width="50"> <input type="text" class="w50" name="minValue" maxlength="8" nonnegative="true" lessthan="#search_max" id="minValue"> </td>
+                        <td width="15" i18n="huizongbiao.to">{{$t('message.xiazhuMingxi.to')}}</td>
+                        <td width="50"> <input type="text" class="w50" name="maxValue" id="maxValue" maxlength="8" nonnegative="true" > </td>
+                        <td width="30" i18n="huizongbiao.class">{{$t('message.xiazhuMingxi.class')}}</td>
+                        <td width="80">
+                            <select name="dataType" id="dataType">
+<!--                                <option value="0" ><span i18n="huizongbiao.class.all">全部</span></option>-->
+                                <!--                                <option value="20">二定位</option> <option value="1">口口XX</option> -->
+                                <!--                                <option value="2">口X口X</option> <option value="3">口XX口</option> <option value="4">X口X口</option> <option value="5">X口口X</option> <option value="6">XX口口</option> -->
+                                <!--                                <option value="30">三定位</option> <option value="7">口口口X</option> <option value="8">口口X口</option> <option value="9">口X口口</option> <option value="10">X口口口</option> -->
+                                <!--                                <option value="11">四定位</option> <option value="12">二字现</option> <option value="13">三字现</option> <option value="14">四字现</option> <option value="101">快打</option> -->
+                                <!--                                <option value="102">快选</option> <option value="103">txt导入</option> <option value="104">二定</option>  <option value="107">汇总表</option>  -->
+                            </select>
+                        </td>
+                        <td width="50"> <input type="button" :value="$t('message.submit')" class="btn" id="btnSearch" i18n="huizongbiao.submit" @click="toSearch"> </td>
+                        <td width="50"><input type="button" :value="$t('message.print')" data-type="1" class="btn fn-print" id="btnPrint" i18n="huizongbiao.print" @click="toPrint"></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            </template>
+        </div>
+        <div class="mt10">
+            <table class="t-1 table_bg" id="test">
+                <thead>
+                <tr class="bg1"> <td colspan="8" class="tc" i18n="huizongbiao.detail">  本期预下注单明细   </td> </tr>
+                <tr class="bg2 tc">
+                    <td i18n="huizongbiao.billNO">注单编号</td>
+                    <td i18n="huizongbiao.buyCode">号码</td>
+                    <td i18n="huizongbiao.buyMoney">金额</td>
+                    <td i18n="huizongbiao.peirate">赔率</td>
+                    <td i18n="huizongbiao.codeType">号码类型</td>
+                    <td i18n="huizongbiao.submitTime">提交时间</td>
+                    <td i18n="huizongbiao.status">状态</td>
+                    <td id="optCell"><label><span i18n="huizongbiao.selectAll">全选</span> <input type="checkbox" class="checkbox" id="selectAll"></label></td>
+                </tr>
+                </thead>
+                <tbody id="tbody" class="fn-hover tc">
+                    <tr> <td colspan="8" i18n="huizongbiao.noData">暂无数据!</td> </tr>
+                </tbody>
+            </table>
+            <div class="mt10 tc">  <input type="button" value="删除选中" class="btn fn-cancelbet" id="btnDel" i18n="huizongbiao.delSelect">  </div>
+            <div name="module" id="pager" class="pager" action="betlist" pagebody="tbody" pagecount="1">
+                <span i18n="huizongbiao.page.cur">第</span>
+                <span class="pageindex red">1</span>
+                <span i18n="huizongbiao.page">页</span>
+                 <span class="pagecount red">1</span>
+                <span i18n="huizongbiao.page">页</span>
+                <span i18n="huizongbiao.gong">共</span> <span class="recordcount red">0</span>
+                <span i18n="huizongbiao.tiao">条</span>
+                <a href="javascript:void(0)" class="fn-first" i18n="huizongbiao.firstPage">首页</a>
+                <a href="javascript:void(0)" class="fn-prev" i18n="huizongbiao.prevPage">上一页</a>
+                <a href="javascript:void(0)" class="fn-next" i18n="huizongbiao.nextPage">下一页</a>
+                <a href="javascript:void(0)" class="fn-last" i18n="huizongbiao.lastPage">尾页</a>
+                <input type="text" class="input w30 fn-index" maxlength="10" digits="true" id="goTo">
+                <input type="button" class="btn btn-gray w30 fn-go" value="GO">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/vue-i18n-messages.js?v1"></script>
+
+<script src="../js/projects/prebuy_detail.js?v4"></script>
+
+<script>
+    var moduleName = "huizongbiao";
+    var layer = layui.layer;
+    var $i18np = null;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        i18n.locale = lang;
+        initDataType();
+    }
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            //getDrawInfo()
+            initDrawList();
+            window.parent.frameLoad();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    })
+    const vm = new Vue({
+        el:'#vueI18n',
+        i18n,
+        data:{},
+        methods:{
+            toPrint(){
+                window.doPrint();
+            },
+            toSearch(){
+                window.doSearch()
+            }
+        }
+    })
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: prop
+  application:
+    name: 3d_chatbot_task

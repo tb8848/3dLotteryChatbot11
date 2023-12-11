@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>基本设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+
+<!--    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">-->
+<!--    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">-->
+</head>
+<body style="overflow-y: auto">
+<div id="main" >
+    <div class="module">
+        <div name="module" id="st_basic" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red">  代理设置  </span>
+                </div>
+                <div class="fr">
+                    <a href="basicSetting.html" class="fb red">代理设置</a> |
+                    <a href="notice.html" class="" i18n="setting.announcement.settings">公告设置</a> |
+                    <a href="accountSetting.html" class="" i18n="setting.basic.information">基本资料</a> |
+                    <a href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a>
+                </div>
+            </div>
+            <form autocomplete="off" novalidate="novalidate">
+                <div class="mt10">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="6">代理设置</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="bg3">下级月报表显示</td>
+                            <td>
+                                <input type="text" name="lowerMonthReportShow" class="w30"
+                                       required="required" digits="true" min="0" maxlength="4" aria-required="true">
+                                <span i18n="setting.one.qwwxz">期,0为无限制。</span>
+                            </td>
+                            <td class="bg3" i18n="setting.one.xzhyxyexz">新增会员信用额限制</td>
+                            <td>
+                                <input type="text" name="newVipCreditLimit" class="w60"
+                                       required="required" digits="true" min="0" maxlength="8" aria-required="true">
+                            </td>
+                            <td class="bg3" i18n="setting.one.xzgdjxjxgzs">限制股东及下级修改赚水</td>
+                            <td><input type="checkbox" value="1" name="shareHolderLowerReturnWaterLimit"></td>
+                        </tr>
+                        <tr>
+                            <td class="bg3" i18n="setting.one.dgdjb">大股东级别</td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" class="checkbox" value="1"
+                                              name="bigShareHolderReportShowBenefit">
+                                    <span i18n="setting.one.bbxsfl">报表显示福利</span>
+                                </label>
+                            </td>
+                            <td class="bg3" i18n="setting.one.xzdgdxgzs">限制大股东修改赚水</td>
+                            <td colspan="3"><input type="checkbox" class="checkbox" value="1"
+                                                   name="limitBigShareHolderModifyWater"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt10 tc">
+                        <button class="btn" id="add" lay-submit lay-filter="add" style="cursor: pointer"><span i18n="setting.submit">提交</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    var form = layui.form;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+    });
+
+    window.onload = function () {
+        $.ajax({
+            url: HOST+"basicSetting/getBasicSetting"
+            , type: "GET"
+            , success:function(res){
+                if(res.code == 200) {
+                    let data = res.data;
+                    // 显示可下余额
+                    if (data.showBetBalance == 1 || data.showBetBalance == "1") {
+                        $("input[name='showBetBalance']").attr("checked", true);
+                    }
+                    $("input[name='showBetBalanceMinute']").val(data.showBetBalanceMinute);
+                    // 前台默认设置：小票打印和显示彩种
+                    $("input:radio[name='printOrShowLottery'][value='"+data.printOrShowLottery+"']").attr("checked",'checked');
+                    // 退码：批量和单个
+                    $("input:radio[name='batchOrSingleCancel'][value='"+data.batchOrSingleCancel+"']").attr("checked",'checked');
+                    // 赔率：转换赔率和实际赔率
+                    $("input:radio[name='realOrTransformOdds'][value='"+data.realOrTransformOdds+"']").attr("checked",'checked');
+                    // 包牌下注开关：开和关
+                    $("input:radio[name='bpBetFlag'][value='"+data.bpBetFlag+"']").attr("checked",'checked');
+                    // 二字定栏目
+                    $("input[name='twoFixForbiddenMinute']").val(data.twoFixForbiddenMinute);
+                    // 会员历史账单显示
+                    $("select[name='vipHistoryBillShow']").val(data.vipHistoryBillShow);
+                    // 二字定降价
+                    $("input[name='oddsChangeColor']").val(data.oddsChangeColor);
+                    // 在线分钟
+                    $("input[name='onlineMinuteOpen']").val(data.onlineMinuteOpen);
+                    $("input[name='onlineMinuteStop']").val(data.onlineMinuteStop);
+                    // 退码
+                    $("input[name='cancelBetMinute']").val(data.cancelBetMinute);
+                    // 离停盘
+                    $("input[name='batchLimitMinute']").val(data.batchLimitMinute);
+                    $("input[name='batchLimitCount']").val(data.batchLimitCount);
+                    $("input[name='openQuickTxt']").val(data.openQuickTxt);
+                    // 赔率上限小于设置，会员明细变色提醒
+                    $("input[name='colorYiZiDing']").val(data.colorYiZiDing);
+                    $("input[name='colorErZiDing']").val(data.colorErZiDing);
+                    $("input[name='colorSanZiDing']").val(data.colorSanZiDing);
+                    $("input[name='colorSiZiDing']").val(data.colorSiZiDing);
+                    $("input[name='colorErZiXian']").val(data.colorErZiXian);
+                    $("input[name='colorSanZiXian']").val(data.colorSanZiXian);
+                    $("input[name='colorSiZiXian']").val(data.colorSiZiXian);
+                    // 赔率上限小于设置，会员赔率变动才显示
+                    $("input[name='showYiZiDing']").val(data.showYiZiDing);
+                    $("input[name='showErZiDing']").val(data.showErZiDing);
+                    $("input[name='showSanZiDing']").val(data.showSanZiDing);
+                    $("input[name='showSiZiDing']").val(data.showSiZiDing);
+                    $("input[name='showErZiXian']").val(data.showErZiXian);
+                    $("input[name='showSanZiXian']").val(data.showSanZiXian);
+                    $("input[name='showSiZiXian']").val(data.showSiZiXian);
+
+                    /* -------- 后台设置 --------*/
+                    // 下级修改
+                    if (data.oneBetOrOneItemClose == 1 || data.oneBetOrOneItemClose == "1") {
+                        $("input[name='oneBetOrOneItemClose']").attr("checked", true);
+                    }
+                    // 下级月报表显示
+                    $("input[name='lowerMonthReportShow']").val(data.lowerMonthReportShow);
+                    // 新增会员信用额限制
+                    $("input[name='newVipCreditLimit']").val(data.newVipCreditLimit);
+                    // 限制股东及下级修改赚水
+                    if (data.shareHolderLowerReturnWaterLimit == 1 || data.shareHolderLowerReturnWaterLimit == "1") {
+                        $("input[name='shareHolderLowerReturnWaterLimit']").attr("checked", true);
+                    }
+                    // 大股东报表显示福利
+                    if (data.bigShareHolderReportShowBenefit == 1 || data.bigShareHolderReportShowBenefit == "1") {
+                        $("input[name='bigShareHolderReportShowBenefit']").attr("checked", true);
+                    }
+                    // 限制大股东修改赚水
+                    if (data.limitBigShareHolderModifyWater == 1 || data.limitBigShareHolderModifyWater == "1") {
+                        $("input[name='limitBigShareHolderModifyWater']").attr("checked", true);
+                    }
+
+                    // 前台跑马灯
+                    $("#frontendMarquee").val(data.frontendMarquee);
+                    // 后台跑马灯
+                    $("#backendMarquee").val(data.backendMarquee);
+                    // 临时公告
+                    $("#tempBulletin").val(data.tempBulletin);
+                    // 临时公告打开和关闭
+                    $("input:radio[name='tempBulletinOpen'][value='"+data.tempBulletinOpen+"']").attr("checked",'checked');
+
+                    /* -------- 快选设置 --------*/
+                    // 定位置
+                    if (data.dingWeiZhi == 1 || data.dingWeiZhi == "1") {
+                        $("input[name='dingWeiZhi']").attr("checked", true);
+                    }
+                    // 合分
+                    if (data.heFen == 1 || data.heFen == "1") {
+                        $("input[name='heFen']").attr("checked", true);
+                    }
+                    // 不定位合分
+                    if (data.buDingWeiHeFen == 1 || data.buDingWeiHeFen == "1") {
+                        $("input[name='buDingWeiHeFen']").attr("checked", true);
+                    }
+                    // 值范围
+                    if (data.zhiFanWei == 1 || data.zhiFanWei == "1") {
+                        $("input[name='zhiFanWei']").attr("checked", true);
+                    }
+                    // 全转
+                    if (data.quanZhuan == 1 || data.quanZhuan == "1") {
+                        $("input[name='quanZhuan']").attr("checked", true);
+                    }
+                    // 排除
+                    if (data.paiChu == 1 || data.paiChu == "1") {
+                        $("input[name='paiChu']").attr("checked", true);
+                    }
+                    // 乘号位置
+                    if (data.chengHaoWeiZhi == 1 || data.chengHaoWeiZhi == "1") {
+                        $("input[name='chengHaoWeiZhi']").attr("checked", true);
+                    }
+                    // 复式
+                    if (data.fuShi == 1 || data.fuShi == "1") {
+                        $("input[name='fuShi']").attr("checked", true);
+                    }
+                    // 双重
+                    if (data.shuangChong == 1 || data.shuangChong == "1") {
+                        $("input[name='shuangChong']").attr("checked", true);
+                    }
+                    // 双双重
+                    if (data.shuangShuangChong == 1 || data.shuangShuangChong == "1") {
+                        $("input[name='shuangShuangChong']").attr("checked", true);
+                    }
+                    // 三重
+                    if (data.sanChong == 1 || data.sanChong == "1") {
+                        $("input[name='sanChong']").attr("checked", true);
+                    }
+                    // 四重
+                    if (data.siChong == 1 || data.siChong == "1") {
+                        $("input[name='siChong']").attr("checked", true);
+                    }
+                    // 二兄弟
+                    if (data.erXiongDi == 1 || data.erXiongDi == "1") {
+                        $("input[name='erXiongDi']").attr("checked", true);
+                    }
+                    // 三兄弟
+                    if (data.sanXiongDi == 1 || data.sanXiongDi == "1") {
+                        $("input[name='sanXiongDi']").attr("checked", true);
+                    }
+                    // 四兄弟
+                    if (data.siXiongDi == 1 || data.siXiongDi == "1") {
+                        $("input[name='siXiongDi']").attr("checked", true);
+                    }
+                    // 对数
+                    if (data.duiShu == 1 || data.duiShu == "1") {
+                        $("input[name='duiShu']").attr("checked", true);
+                    }
+                    // 单
+                    if (data.dan == 1 || data.dan == "1") {
+                        $("input[name='dan']").attr("checked", true);
+                    }
+                    // 双
+                    if (data.shuang == 1 || data.shuang == "1") {
+                        $("input[name='shuang']").attr("checked", true);
+                    }
+                    // 上奖
+                    if (data.shangJiang == 1 || data.shangJiang == "1") {
+                        $("input[name='shangJiang']").attr("checked", true);
+                    }
+                    // 四字定
+                    if (data.siZiDing == 1 || data.siZiDing == "1") {
+                        $("input[name='siZiDing']").attr("checked", true);
+                    }
+                    // 固定位置
+                    if (data.guDingWeiZhi == 1 || data.guDingWeiZhi == "1") {
+                        $("input[name='guDingWeiZhi']").attr("checked", true);
+                    }
+                    // 大
+                    if (data.da == 1 || data.da == "1") {
+                        $("input[name='da']").attr("checked", true);
+                    }
+                    // 小
+                    if (data.xiao == 1 || data.xiao == "1") {
+                        $("input[name='xiao']").attr("checked", true);
+                    }
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+    layui.use(['form' , 'jquery'], function(){
+        form.on('submit(add)',function(data){
+            // 开盘密码
+            var openPanPwd = $("input[name='openPwd']").val();
+            data.field.openPanPwd = openPanPwd;
+            // 是否启用管理员密码作为开盘密码
+            var isAdminPwd = $("#confirm_admin_pwd").prop("checked");
+            if (isAdminPwd) {
+                data.field.isAdminPwd = 1;
+            }else {
+                data.field.isAdminPwd = 0;
+            }
+            // 显示可下金额-离停盘
+            var showBetBalanceFlag = $("input[name='showBetBalance']").prop("checked");
+            if (showBetBalanceFlag) {
+                data.field.showBetBalance = 1;
+            }else {
+                data.field.showBetBalance = 0;
+            }
+            var showBetBalanceMinute = $("input[name='showBetBalanceMinute']").val();
+            data.field.showBetBalanceMinute = showBetBalanceMinute;
+
+            // 小票打印和显示彩种redio
+            var printOrShowLottery = $("input[name='printOrShowLottery']:checked").val();
+            data.field.printOrShowLottery = printOrShowLottery;
+
+            // 实际赔率
+            var realOrTransformOdds = $("input[name='realOrTransformOdds']:checked").val();
+            data.field.realOrTransformOdds = realOrTransformOdds;
+
+            // 包牌下注开关
+            var bpBetFlag = $("input[name='bpBetFlag']:checked").val();
+            data.field.bpBetFlag = bpBetFlag;
+
+            // 二字定栏目
+            var twoFixForbiddenMinute = $("input[name='twoFixForbiddenMinute']").val();
+            data.field.twoFixForbiddenMinute = twoFixForbiddenMinute;
+
+            // 会员历史账单
+            var vipHistoryBillShow = $("#vipHistoryBillShow").find("option:selected").val();
+            data.field.vipHistoryBillShow = vipHistoryBillShow;
+
+            // 二字定降价
+            var oddsChangeColor = $("input[name='oddsChangeColor']").val();
+            data.field.oddsChangeColor = oddsChangeColor;
+
+            // 在线分钟
+            var onlineMinuteOpen = $("input[name='onlineMinuteOpen']").val();
+            data.field.onlineMinuteOpen = onlineMinuteOpen;
+            var onlineMinuteStop = $("input[name='onlineMinuteStop']").val();
+            data.field.onlineMinuteStop = onlineMinuteStop;
+
+            // 退码
+            var cancelBetMinute = $("input[name='cancelBetMinute']").val();
+            data.field.cancelBetMinute = cancelBetMinute;
+
+            // 离停盘
+            var batchLimitMinute = $("input[name='batchLimitMinute']").val();
+            data.field.batchLimitMinute = batchLimitMinute;
+            var batchLimitCount = $("input[name='batchLimitCount']").val();
+            data.field.batchLimitCount = batchLimitCount;
+            var openQuickTxt = $("input[name='openQuickTxt']").val();
+            data.field.openQuickTxt = openQuickTxt;
+
+            // 赔率上限小于设置，会员明细变色提醒
+            data.field.colorYiZiDing = $("input[name='colorYiZiDing']").val();
+            data.field.colorErZiDing = $("input[name='colorErZiDing']").val();
+            data.field.colorSanZiDing = $("input[name='colorSanZiDing']").val();
+            data.field.colorSiZiDing = $("input[name='colorSiZiDing']").val();
+            data.field.colorErZiXian = $("input[name='colorErZiXian']").val();
+            data.field.colorSanZiXian = $("input[name='colorSanZiXian']").val();
+            data.field.colorSiZiXian = $("input[name='colorSiZiXian']").val();
+
+            // 赔率上限小于设置，会员赔率变动才显示
+            data.field.showYiZiDing = $("input[name='showYiZiDing']").val();
+            data.field.showErZiDing = $("input[name='showErZiDing']").val();
+            data.field.showSanZiDing = $("input[name='showSanZiDing']").val();
+            data.field.showSiZiDing = $("input[name='showSiZiDing']").val();
+            data.field.showErZiXian = $("input[name='showErZiXian']").val();
+            data.field.showSanZiXian = $("input[name='showSanZiXian']").val();
+            data.field.showSiZiXian = $("input[name='showSiZiXian']").val();
+
+            // 下级修改-单注和单项关闭
+            var oneBetOrOneItemCloseFlag = $("input[name='oneBetOrOneItemClose']").prop("checked");
+            if (oneBetOrOneItemCloseFlag) {
+                data.field.oneBetOrOneItemClose = 1;
+            }else {
+                data.field.oneBetOrOneItemClose = 0;
+            }
+
+            // 下级月报表显示期数
+            data.field.lowerMonthReportShow = $("input[name='lowerMonthReportShow']").val();
+
+            // 新增会员信用额限制
+            data.field.newVipCreditLimit = $("input[name='newVipCreditLimit']").val();
+
+            // 限制股东及下级修改赚水
+            var shareHolderLowerReturnWaterLimitFlag = $("input[name='shareHolderLowerReturnWaterLimit']").prop("checked");
+            if (shareHolderLowerReturnWaterLimitFlag) {
+                data.field.shareHolderLowerReturnWaterLimit = 1;
+            }else {
+                data.field.shareHolderLowerReturnWaterLimit = 0;
+            }
+            // 大股东报表显示福利
+            var bigShareHolderReportShowBenefitFlag = $("input[name='bigShareHolderReportShowBenefit']").prop("checked");
+            if (bigShareHolderReportShowBenefitFlag) {
+                data.field.bigShareHolderReportShowBenefit = 1;
+            }else {
+                data.field.bigShareHolderReportShowBenefit = 0;
+            }
+            // 限制大股东修改赚水
+            var limitBigShareHolderModifyWaterFlag = $("input[name='limitBigShareHolderModifyWater']").prop("checked");
+            if (limitBigShareHolderModifyWaterFlag) {
+                data.field.limitBigShareHolderModifyWater = 1;
+            }else {
+                data.field.limitBigShareHolderModifyWater = 0;
+            }
+            // 前台跑马灯
+            var frontendMarquee = $("#frontendMarquee").val();
+            data.field.frontendMarquee = frontendMarquee;
+            // 后台跑马灯
+            var backendMarquee = $("#backendMarquee").val();
+            data.field.backendMarquee = backendMarquee;
+            // 临时公告
+            var tempBulletin = $("#tempBulletin").val();
+            data.field.tempBulletin = tempBulletin;
+            // 临时公告打开和关闭
+            var tempBulletinOpen = $("input[name='tempBulletinOpen']:checked").val();
+            data.field.tempBulletinOpen = tempBulletinOpen;
+
+            // 定位置
+            var dingWeiZhi = $("input[name='dingWeiZhi']").prop("checked");
+            if (dingWeiZhi) {
+                data.field.dingWeiZhi = 1;
+            }else {
+                data.field.dingWeiZhi = 0;
+            }
+            // 合分
+            var heFen = $("input[name='heFen']").prop("checked");
+            if (heFen) {
+                data.field.heFen = 1;
+            }else {
+                data.field.heFen = 0;
+            }
+            // 不定位合分
+            var buDingWeiHeFen = $("input[name='buDingWeiHeFen']").prop("checked");
+            if (buDingWeiHeFen) {
+                data.field.buDingWeiHeFen = 1;
+            }else {
+                data.field.buDingWeiHeFen = 0;
+            }
+            var zhiFanWei = $("input[name='zhiFanWei']").prop("checked");
+            if (zhiFanWei) {
+                data.field.zhiFanWei = 1;
+            }else {
+                data.field.zhiFanWei = 0;
+            }
+            var quanZhuan = $("input[name='quanZhuan']").prop("checked");
+            if (quanZhuan) {
+                data.field.quanZhuan = 1;
+            }else {
+                data.field.quanZhuan = 0;
+            }
+            var paiChu = $("input[name='dingWeiZhi']").prop("checked");
+            if (paiChu) {
+                data.field.paiChu = 1;
+            }else {
+                data.field.paiChu = 0;
+            }
+            var chengHaoWeiZhi = $("input[name='chengHaoWeiZhi']").prop("checked");
+            if (chengHaoWeiZhi) {
+                data.field.chengHaoWeiZhi = 1;
+            }else {
+                data.field.chengHaoWeiZhi = 0;
+            }
+            var fuShi = $("input[name='fuShi']").prop("checked");
+            if (fuShi) {
+                data.field.fuShi = 1;
+            }else {
+                data.field.fuShi = 0;
+            }
+            var shuangChong = $("input[name='shuangChong']").prop("checked");
+            if (shuangChong) {
+                data.field.shuangChong = 1;
+            }else {
+                data.field.shuangChong = 0;
+            }
+            var shuangShuangChong = $("input[name='shuangShuangChong']").prop("checked");
+            if (shuangShuangChong) {
+                data.field.shuangShuangChong = 1;
+            }else {
+                data.field.shuangShuangChong = 0;
+            }
+            var sanChong = $("input[name='sanChong']").prop("checked");
+            if (sanChong) {
+                data.field.sanChong = 1;
+            }else {
+                data.field.sanChong = 0;
+            }
+            var siChong = $("input[name='siChong']").prop("checked");
+            if (siChong) {
+                data.field.siChong = 1;
+            }else {
+                data.field.siChong = 0;
+            }
+            var erXiongDi = $("input[name='erXiongDi']").prop("checked");
+            if (erXiongDi) {
+                data.field.erXiongDi = 1;
+            }else {
+                data.field.erXiongDi = 0;
+            }
+            var sanXiongDi = $("input[name='sanXiongDi']").prop("checked");
+            if (sanXiongDi) {
+                data.field.sanXiongDi = 1;
+            }else {
+                data.field.sanXiongDi = 0;
+            }
+            var siXiongDi = $("input[name='siXiongDi']").prop("checked");
+            if (siXiongDi) {
+                data.field.siXiongDi = 1;
+            }else {
+                data.field.siXiongDi = 0;
+            }
+            var duiShu = $("input[name='duiShu']").prop("checked");
+            if (duiShu) {
+                data.field.duiShu = 1;
+            }else {
+                data.field.duiShu = 0;
+            }
+            var dan = $("input[name='dan']").prop("checked");
+            if (dan) {
+                data.field.dan = 1;
+            }else {
+                data.field.dan = 0;
+            }
+            var shuang = $("input[name='shuang']").prop("checked");
+            if (shuang) {
+                data.field.shuang = 1;
+            }else {
+                data.field.shuang = 0;
+            }
+            var shangJiang = $("input[name='shangJiang']").prop("checked");
+            if (shangJiang) {
+                data.field.shangJiang = 1;
+            }else {
+                data.field.shangJiang = 0;
+            }
+            var siZiDing = $("input[name='siZiDing']").prop("checked");
+            if (siZiDing) {
+                data.field.siZiDing = 1;
+            }else {
+                data.field.siZiDing = 0;
+            }
+            var guDingWeiZhi = $("input[name='guDingWeiZhi']").prop("checked");
+            if (guDingWeiZhi) {
+                data.field.guDingWeiZhi = 1;
+            }else {
+                data.field.guDingWeiZhi = 0;
+            }
+            var da = $("input[name='da']").prop("checked");
+            if (da) {
+                data.field.da = 1;
+            }else {
+                data.field.da = 0;
+            }
+            var xiao = $("input[name='xiao']").prop("checked");
+            if (xiao) {
+                data.field.xiao = 1;
+            }else {
+                data.field.xiao = 0;
+            }
+            data.field.openPwd =  $("input[name='openPwd']:checked").val();
+            layer.msg(i18np.prop("setting.one.submitting"),{time:-1,icon:16,shade:0.3})
+            $.ajax({
+                url: HOST+'basicSetting/updateBasicSetting',
+                type:"post",
+                data:JSON.stringify(data.field),
+                contentType: 'application/json',
+                success:function(res){
+                    layer.closeAll();
+                    if(res.code==200){
+                        layer.msg(i18np.prop("setting.operation.succeeded"));
+                        setTimeout(function () {
+                            layer.close(layer.index);
+                            window.location.reload();
+                        }, 1000);
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                error:function(){
+                    layer.closeAll();
+                    layer.msg(i18np.prop("setting.one.network.exception"));
+                }
+
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

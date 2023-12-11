@@ -1,0 +1,141 @@
+H1 {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+H2 {
+  font-size: 16px;
+  font-weight: normal;
+}
+#popup_container {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  min-width: 300px; /* Dialog will be no smaller than this */
+  max-width: 600px; /* Dialog will wrap after this width */
+  background: #FFF;
+  border: solid 5px #8e779b;
+  color: #000;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+
+
+}
+
+#popup_title {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 2.75em;
+  color: #666;
+  background: #ac99b6;
+  border: solid 1px #FFF;
+  border-bottom: solid 1px #8e779b;
+  cursor: default;
+  padding: 0em;
+  margin: 0em;
+
+}
+
+
+#popup_close {
+  float: right;padding: 10px ;;vertical-align:middle;text-align: center;cursor:pointer;clear:both;
+}
+#popup_content {
+  /*background: 16px 16px no-repeat url(../images/showinfo.gif);*/
+  padding: 2em 1.75em;
+  margin: 0em;
+}
+
+#popup_content.ProgressBar, #popup_container.alertPrint #popup_content {
+  background-image:none!important;
+}
+#popup_content.alert {
+  /*background-image: url(../images/showinfo.gif);*/
+}
+
+#popup_content.confirm {
+  background-image: url(../images/important.gif);
+}
+
+#popup_content.prompt {
+  background-image: url(../images/help.gif);
+}
+
+#popup_message {
+  padding-left: 68px;
+}
+
+#popup_panel {
+  text-align: center;
+  margin: 1em 0em 0em 1em;padding:4px 0px 8px 0px;height: 50px;
+}
+
+#popup_prompt {
+  margin: .5em 0em;
+}
+
+#popup_content.ProgressBar .ProgressBar_t {
+  font-size:16px;line-height:20px;
+}
+.ProgressBar_t span{
+  color: #FF0000;font-size:26px;
+}
+#popup_content.ProgressBar .ProgressBar_w_s {
+  position:absolute;z-index:900002;color: #FFFFFF;font-size:18px;font-weight:bold
+}
+#popup_content.ProgressBar .ProgressBar_w {
+  position:absolute;
+  background-color: #3498db;
+  z-index:900001;
+  top:0;
+  bottom:0;
+  left:0;height: 40px;
+
+}
+#popup_content.ProgressBar .bi-bar {
+  position:relative;
+  width:100%;
+
+  float: left;
+  border:1px solid #696969;
+  background-color: #d0f0ff;
+  line-height:40px;
+  text-align:center;
+
+}
+#popup_content.alertOn{
+  color: #FF0000;font-size:26px;
+}
+#popup_container.alertPrint{
+  width:720px;
+}
+.alertPrint #popup_message{
+  padding-left: 0px;
+}
+.ProgressBar #popup_message{
+  padding-left: 40px;
+}
+
+.alertsPrint1 {
+  outline: 1px solid #660000;
+  border: 0px !important;
+> border: 1px solid #660000 !important;
+  border: 1px solid #660000;
+  empty-cells: show;
+  border-collapse: separate !important;
+> border-collapse: collapse !important;
+  border-collapse: collapse;
+}
+.alertsPrint1 td {
+  line-height: 18px;
+  height: 18px;
+  padding: 1px;
+  background: #FFFFFF;
+  margin: 0;
+}
+.alertsPrint2 td{height:28px;line-height:19px;font: 12px Arial, Helvetica, sans-serif;font-weight:bold;}
+.appnews td{line-height:24px;font: 18px Arial, Helvetica, sans-serif;}
+
+.alertsPrint1 tbody tr.tuima td{color:red;background-color:#f2dede;}
+.alertsPrint1 tbody tr.hotcss td{color:red;background-color:#ffff00;}

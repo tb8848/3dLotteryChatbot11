@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>快选</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+</head>
+<body>
+<div id="main" class="main">
+    <div class="module">
+        <div name="module" id="st_kuaixuan" class="kuaixuan">
+            <div class="left">
+                <div class="bd m5 module">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td i18n="shipan.table.generate.number.box">生成号码框</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="no-padding">
+                                <div style="overflow-y:scroll;height:300px; overflow-x:hidden;">
+                                    <div class="module">
+                                        <table class="t-2 tc" id="numberList"></table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <form id="sendForm" autocomplete="off" novalidate="novalidate">
+                        <input type="hidden" name="bet_no"
+                               id="bet_no_out"> <input
+                            type="hidden" name="isxian" id="isxian" value="0"> <input type="hidden" name="guid"
+                                                                                      id="guid" value=""> <input
+                            type="hidden" name="log" value="1"> <input type="hidden" name="condition"
+                                                                       id="operation_condition">
+                        <div class="mt10"><input type="hidden" id="is_package" name="is_package" value=""> <input
+                                type="hidden" name="no_set_name" id="no_set_name"> <input type="hidden" name="fix_num"
+                                                                                          id="fix_num">
+                            <table class="t-1">
+                                <thead>
+                                <tr class="bg1">
+                                    <td colspan="3" i18n="shipan.table.send.box">发送框</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td width="100" i18n="shipan.odds">赔率</td>
+                                    <td width="70"><input type="text" class="text-large w70" name="odds" positive="true"
+                                                          maxlength="8" id="peiRate"></td>
+                                    <td>
+                                        <p><span i18n="shipan.table.bishu">笔数</span>:<span id="numberCount"></span></p>
+                                        <p><span i18n="shipan.query.amount">金额</span>:<span id="moneyCount"></span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="100" i18n="shipan.table.shipment.amount">出货金额</td>
+                                    <td width="70"><input type="text" class="text-large w70" positive="true"
+                                                          maxlength="8" id="buyMoney"></td>
+                                    <td><button id="toBuy" i18n="shipan.save">添加</button></td>
+                                </tr>
+                                <tr></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="right">
+                <div class="bd m5">
+                    <table width="100%" class="tb-kuaixuan">
+                        <tbody>
+                        <tr class="tc" id="ruleMethodList">
+                        </tr>
+                        </tbody>
+                    </table>
+                    <form id="createForm">
+                        <div id="bd_template">
+                            <table class="t-1">
+                                <tbody>
+                                <tr class="bg2" id="dingweiTr1">
+                                    <td colspan="2" class="tc">
+                                        <strong class="red2" i18n="shipan.fixed.position">定位置</strong>
+                                        <label>
+                                            <input type="checkbox" class="position-filter checkbox" positiontype="0" id="__dingwei_chu"
+                                                   positionfilter="1"
+                                                   onclick="showdis(this,'__dingwei_qu','fixLoc','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" class="position-filter checkbox" positiontype="0"
+                                                   positionfilter="0" checked id="__dingwei_qu"
+                                                   onclick="showdis(this,'__dingwei_chu','fixLoc','',1);">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                    </td>
+                                    <td colspan="2" class="tc" id="matchRotate">
+                                        <div>
+                                            <strong class="red2" i18n="shipan.table.allotment.full.rotation">配数全转</strong>
+                                            <label>
+                                                <input type="checkbox" class="position-filter checkbox" positiontype="1"
+                                                       id="__peishu_chu1"
+                                                       onclick="showdis(this,'__peishu_qu1','match1','',0);"
+                                                       positionfilter="1">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label>
+                                                <input type="checkbox" class="position-filter checkbox" positiontype="1" id="__peishu_qu1"
+                                                       positionfilter="0" onclick="showdis(this,'__peishu_chu1','match1','',1);" checked>
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="fixed-input tc" id="dingweiTr2">
+                                    <td width="25%" i18n="shipan.table.thousand">仟</td>
+                                    <td width="25%" i18n="shipan.table.hundred">佰</td>
+                                    <td width="25%" i18n="shipan.table.ten">拾</td>
+                                    <td width="25%" i18n="shipan.table.individual">个</td>
+                                </tr>
+                                <tr class="fixed-input tc" id="dingweiTr3">
+                                    <td><input type="text" class="w90" boxnumber="1" name="qian" digits="true"
+                                               maxlength="10" onkeyup="limitRepeatNums(this,'fixCode',0)"></td>
+                                    <td><input type="text" class="w90" boxnumber="2" name="bai" digits="true"
+                                               maxlength="10" onkeyup="limitRepeatNums(this,'fixCode',1)"></td>
+                                    <td><input type="text" class="w90" boxnumber="3" name="shi" digits="true"
+                                               maxlength="10" onkeyup="limitRepeatNums(this,'fixCode',2)"></td>
+                                    <td><input type="text" class="w90" boxnumber="4" name="ge" digits="true"
+                                               maxlength="10" onkeyup="limitRepeatNums(this,'fixCode',3)"></td>
+                                </tr>
+
+                                <tr class="bg2 hide" id="matchTr1">
+                                    <td colspan="4" class="tc">
+                                        <strong class="red2" i18n="shipan.table.matching.number">配数</strong>
+                                        <label><input type="checkbox" class="position-filter checkbox" positiontype="1" id="__peishu_chu2"
+                                                      onclick="showdis(this,'__peishu_qu2','match2','',0);"
+                                                      positionfilter="1"><span i18n="shipan.table.except">除</span></label>
+                                        <label><input type="checkbox" class="position-filter checkbox" positiontype="1" id="__peishu_qu2"
+                                                      positionfilter="0" onclick="showdis(this,'__peishu_chu2','match2','',1);" checked
+                                                      positionfilter="0"><span i18n="shipan.table.take">取</span></label>
+                                    </td>
+                                </tr>
+                                <tr class="match-input hide" id="matchTr2">
+                                    <td colspan="4" class="tc">
+                                        <span id="match1">
+                                            <input type="text" class="w90" boxNumber="1" name="pei1" digits="true"
+                                                   maxlength="10" onkeyup="limitRepeatNums(this,'peishu',0)" >
+                                            <span i18n="shipan.table.pei">配</span>,
+                                        </span>
+                                        <span id="match2">
+                                            <input type="text" class="w90" boxNumber="2" name="pei2" digits="true"
+                                                   maxlength="10" onkeyup="limitRepeatNums(this,'peishu',1)">
+                                        </span>
+                                        <span id="match3">
+                                            ,<span i18n="shipan.table.pei">配</span>
+                                            <input type="text" class="w90" boxNumber="3" name="pei3" digits="true"
+                                                   maxlength="10" onkeyup="limitRepeatNums(this,'peishu',2)">
+                                        </span>
+                                        <span id="match4">
+                                            ,<span i18n="shipan.table.pei">配</span>
+                                            <input type="text" class="w90" boxNumber="4" name="pei4" digits="true"
+                                                   maxlength="10" onkeyup="limitRepeatNums(this,'peishu',3)">
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr class="bg2" id="hefenTr1" style="display: none">
+                                    <td colspan="4" class="tc">
+                                        <strong class="red2" i18n="shipan.table.close">合</strong>&nbsp;&nbsp;
+                                        <strong class="red2" i18n="shipan.table.branch">分</strong>
+                                        <label>
+                                            <input type="checkbox" class="remain-fixed-filter checkbox"
+                                                   remainfixedfilter="1" id="__hefen_chu" onclick="showdis(this,'__hefen_qu','hefen','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" class="remain-fixed-filter checkbox"
+                                                   remainfixedfilter="0" checked="checked" id="__hefen_qu" onclick="showdis(this,'__hefen_chu','hefen','',1);">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr class="tc" id="hefenTr2" style="display: none">
+                                    <td class="remain-fixed-filter-item">
+                                        1.
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem1',0)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem1',1)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem1',2)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem1',3)">
+                                        <br>
+                                        <input type="text" class="w90" name="he1" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'hefenItem1',0)">
+                                    </td>
+                                    <td class="remain-fixed-filter-item">
+                                        2.
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem2',0)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem2',1)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem2',2)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem2',3)">
+                                        <br>
+                                        <input type="text" class="w90" name="he2" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'hefenItem2',1)">
+                                    </td>
+                                    <td class="remain-fixed-filter-item">
+                                        3.
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem3',0)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem3',1)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem3',2)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem3',3)">
+                                        <br>
+                                        <input type="text" class="w90" name="he3" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'hefenItem3',2)">
+                                    </td>
+                                    <td class="remain-fixed-filter-item">
+                                        4.
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem4',0)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem4',1)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem4',2)">
+                                        <input type="checkbox" onclick="showChkResult(this,'hefenItem4',3)">
+                                        <br>
+                                        <input type="text" class="w90" name="he4" digits="true" maxlength="10" onkeyup="limitRepeatNums(this,'hefenItem4',3)">
+                                    </td>
+                                </tr>
+
+                                <tr id="bdweihfContainer" style="display:none;">
+                                    <td colspan="2">
+                                        <div id="bdweihf">
+                                            <strong class="red2" i18n="shipan.table.bdwhf">不定位合分</strong>
+                                            <label id="sum2">
+                                                <input type="checkbox" remainmatchfilter="2" id="__bdwhefen_1"  name="__bdwhefen_1" onclick="showdis(this,'__bdwhefen_2','bdwhefen','sum2',0);"
+                                                       class="remain-match-filter checkbox">
+                                                <span i18n="shipan.table.disjunction">两数合</span>
+                                            </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <label id="sum3">
+                                                <input type="checkbox" remainmatchfilter="2" id="__bdwhefen_2"
+                                                       class="remain-match-filter checkbox" onclick="showdis(this,'__bdwhefen_1','bdwhefen','sum3',0);">
+                                                <span i18n="shipan.table.trinity">三数合</span>
+                                            </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <input type="text" class="w90" name="budinghe" digits="true" maxlength="10"  onkeyup="limitRepeatNums(this,'sum2',0)" >
+                                        </div>
+                                    </td>
+
+                                    <td colspan="2">
+                                        <div id="valueRangeContainer" style="display: none">
+                                            <strong class="red2">
+                                                <span i18n="shipan.table.value">值</span><span i18n="shipan.table.range">范围</span>
+                                            </strong>
+                                            <label>
+                                                <span i18n="shipan.table.from">从</span>
+                                                <input type="text" class="w90" name="budinghe" digits="true" maxlength="10"  onkeyup="limitRepeatNums(this,'valueRange',0)" >
+                                                <span i18n="shipan.table.value">值</span>
+                                            </label>&nbsp;
+                                            <label>
+                                                <span i18n="shipan.table.reach">到</span>
+                                                <input type="text" class="w90" name="budinghe" digits="true" maxlength="10"  onkeyup="limitRepeatNums(this,'valueRange',1)" >
+                                                <span i18n="shipan.table.value">值</span>
+                                            </label>&nbsp;
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr style="display: none" id="otherRuleContainer">
+                                    <td colspan="4">
+                                        <div style="display: inline-block">
+                                            <strong class="red2" i18n="shipan.table.full.rotation">全转</strong> <input type="text"
+                                                                                                                      class="transform-filter-item w70"
+                                                                                                                      name="quanzhuan" digits="true"
+                                                                                                                      maxlength="10" onkeyup="limitRepeatNums(this,'quanzhuan',0)">
+                                        </div>
+
+                                        <div style="display: inline-block">
+                                            <strong class="red2" i18n="shipan.table.award">上奖</strong> <input type="text"
+                                                                                                              class="upper-filter-item w70"
+                                                                                                              name="shangjiang" digits="true"
+                                                                                                              maxlength="10" onkeyup="limitRepeatNums(this,'shangjiang',0)">
+                                        </div>
+
+                                        <div style="display: inline-block">
+                                            <strong class="red2" i18n="shipan.table.exclude">排除</strong> <input type="text"
+                                                                                                                class="except-filter-item w70"
+                                                                                                                name="paichu" digits="true"
+                                                                                                                maxlength="10" onkeyup="limitRepeatNums(this,'paichu',0)">
+                                        </div>
+
+                                        <div style="display: inline-block" id="chenghaoContainer">
+                                            <strong class="red2" i18n="shipan.table.multiplier.position">乘号位置</strong>
+                                            <input type="checkbox" class="symbol-filter-item" onclick="showChkResult(this,'xlocArr',0)">
+                                            <input type="checkbox" class="symbol-filter-item" onclick="showChkResult(this,'xlocArr',1)">
+                                            <input type="checkbox" class="symbol-filter-item" onclick="showChkResult(this,'xlocArr',2)">
+                                            <input type="checkbox" class="symbol-filter-item" onclick="showChkResult(this,'xlocArr',3)">
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr style="display: none;" id="fushiContainer">
+                                    <td colspan="4">
+                                        <label>
+                                            <input type="checkbox" id="__chu_1" class="contain-filter checkbox" containfilter="1" onclick="showdis(this,'__qu_1','fushi','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" class="contain-filter checkbox" containfilter="0" onclick="showdis(this,'__chu_1','fushi','',1);"
+                                                   checked="checked" id="__qu_1">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                        <span id="ruleName1"></span>
+                                        <span i18n="shipan.table.contain">含</span> <input type="text" class="contain-filter-item w70" name="han" digits="true"
+                                                                                          maxlength="10"  onkeyup="limitRepeatNums(this,'includes',0)">
+                                        <span id="ruleName2"></span>
+                                        <span i18n="shipan.table.compound">复式</span> <input type="text" class="multiple-filter-item" name="fushi" digits="true"
+                                                                                            maxlength="10"  onkeyup="limitRepeatNums(this,'fushi',0)">
+                                    </td>
+                                </tr>
+
+                                <tr id="chongTr" style="display: none">
+                                    <td>
+                                        <div id="chong1">
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          ID="__chu_chong_1" onclick="showdis(this,'__qu_chong_1','repeat','repeat1',0);"
+                                                          repeatwordsfilter2="1">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          repeatwordsfilter2="0" ID="__qu_chong_1" onclick="showdis(this,'__chu_chong_1','repeat','repeat1',1);">
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                            (<strong class="red2" i18n="shipan.table.double">双重</strong>)
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="chong2">
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          repeatwordsfilter3="1" ID="__chu_chong_2" onclick="showdis(this,'__qu_chong_2','repeat','repeat2',0);">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          repeatwordsfilter3="0" ID="__qu_chong_2" onclick="showdis(this,'__chu_chong_2','repeat','repeat2',1);">
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                            (<strong class="red2" i18n="shipan.table.double.double">双双重</strong>)
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="chong3">
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          repeatwordsfilter3="1" ID="__chu_chong_3" onclick="showdis(this,'__qu_chong_3','repeat','repeat3',0);">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          repeatwordsfilter3="0" ID="__qu_chong_3" onclick="showdis(this,'__chu_chong_3','repeat','repeat3',1);">
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                            (<strong class="red2" i18n="shipan.table.triple">三重</strong>)
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <div id="chong4">
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          repeatwordsfilter4="1" ID="__chu_chong_4" onclick="showdis(this,'__qu_chong_4','repeat','repeat4',0);">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label><input type="checkbox" class="repeat-two-words-filter checkbox"
+                                                          repeatwordsfilter4="0" onclick="showdis(this,'__chu_chong_4','repeat','repeat4',1);">
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                            (<strong class="red2" i18n="shipan.table.quadruple">四重</strong>)
+                                        </div>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr id="xiongdiTr" style="display: none">
+                                    <td>
+                                        <div  id="xiongdi2">
+                                            <label><input type="checkbox" class="two-brother-filter checkbox"
+                                                          brotherfilter2="1" ID="__chu_xiongdi_1" onclick="showdis(this,'__qu_xiongdi_1','xiongdi','xiongdi1',0);">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label><input type="checkbox" class="two-brother-filter checkbox"
+                                                          brotherfilter2="0" ID="__qu_xiongdi_1" onclick="showdis(this,'__chu_xiongdi_1','xiongdi','xiongdi1',1);">
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                            (<strong class="red2" i18n="shipan.table.second.brother">二兄弟</strong>)
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <div id="xiongdi3">
+                                            <label><input type="checkbox" class="two-brother-filter checkbox"
+                                                          brotherfilter3="1" ID="__chu_xiongdi_2" onclick="showdis(this,'__qu_xiongdi_2','xiongdi','xiongdi2',0);">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label><input type="checkbox" class="two-brother-filter checkbox"
+                                                          brotherfilter3="0" ID="__qu_xiongdi_2" onclick="showdis(this,'__chu_xiongdi_2','xiongdi','xiongdi2',1);">
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                            (<strong class="red2" i18n="shipan.table.three.brothers">三兄弟</strong>)
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <div id="xiongdi4">
+                                            <label><input type="checkbox" class="two-brother-filter checkbox"
+                                                          brotherfilter4="1" ID="__chu_xiongdi_3" onclick="showdis(this,'__qu_xiongdi_3','xiongdi','xiongdi3',0);">
+                                                <span i18n="shipan.table.except">除</span>
+                                            </label>
+                                            <label><input type="checkbox" class="two-brother-filter checkbox"
+                                                          brotherfilter4="0" ID="__qu_xiongdi_3" onclick="showdis(this,'__chu_xiongdi_3','xiongdi','xiongdi3',1);">
+                                                <span i18n="shipan.table.take">取</span>
+                                            </label>
+                                            (<strong class="red2" i18n="shipan.table.four.brothers">四兄弟</strong>)
+                                        </div>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr id="duishuTr" style="display: none">
+                                    <td colspan="4" class="logarithm-number-item">
+                                        <label><input type="checkbox" class="logarithm-number-filter checkbox"
+                                                      logarithmnumberfilter="1" ID="__chu_duishu" onclick="showdis(this,'__qu_duishu','duishu','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label><input type="checkbox" class="logarithm-number-filter checkbox"
+                                                      logarithmnumberfilter="0" ID="__qu_duishu" onclick="showdis(this,'__chu_duishu','duishu','',1);">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                        (<strong class="red2" i18n="shipan.table.logarithm">对数</strong>)
+                                        <input type="text" class="w60" name="duishu1" pairnumber="true" maxlength="2" onkeyup="limitRepeatNums(this,'duishu',0)">
+                                        <input type="text" class="w60" name="duishu2" pairnumber="true" maxlength="2" onkeyup="limitRepeatNums(this,'duishu',1)">
+                                        <input type="text" class="w60" name="duishu3" pairnumber="true" maxlength="2" onkeyup="limitRepeatNums(this,'duishu',2)">
+                                        <input type="text" class="w60" name="duishu4" pairnumber="true" maxlength="2" onkeyup="limitRepeatNums(this,'duishu',3)">
+                                        <input type="text" class="w60" name="duishu5" pairnumber="true" maxlength="2" onkeyup="limitRepeatNums(this,'duishu',4)">
+                                    </td>
+                                </tr>
+                                <tr id="singleOrDoubleTr">
+                                    <td colspan="2">
+                                        <label><input type="checkbox" class="odd-number-filter checkbox"
+                                                      oddnumberfilter="1" ID="__dan_chu" onclick="showdis(this,'__dan_qu','singleNum','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label><input type="checkbox" class="odd-number-filter checkbox"
+                                                      oddnumberfilter="0" ID="__dan_qu" onclick="showdis(this,'__dan_chu','singleNum','',1);">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                        (<strong class="red2" i18n="shipan.single">单</strong>)
+                                        <input type="checkbox" class="odd-number-item checkbox" value="1" onclick="showChkResult(this,'singleNum',0)">
+                                        <input type="checkbox" class="odd-number-item checkbox" value="1" onclick="showChkResult(this,'singleNum',1)">
+                                        <input type="checkbox" class="odd-number-item checkbox" value="1" onclick="showChkResult(this,'singleNum',2)">
+                                        <input type="checkbox" class="odd-number-item checkbox" value="1" onclick="showChkResult(this,'singleNum',3)">
+                                        <span class="green fb f12">
+                                            <span id="selectWord_odd"></span>&nbsp;&nbsp;
+                                            <span id="selectCondition_odd"></span>
+                                        </span>
+                                    </td>
+                                    <td colspan="2">
+                                        <label><input type="checkbox" class="even-number-filter checkbox"
+                                                      evennumberfilter="1" ID="__shuang_chu" onclick="showdis(this,'__shuang_qu','doubleNum','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label><input type="checkbox" class="even-number-filter checkbox"
+                                                      evennumberfilter="0" ID="__shuang_qu" onclick="showdis(this,'__shuang_chu','doubleNum','',1);">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                        (<strong class="red2" i18n="shipan.double">双</strong>)
+                                        <input type="checkbox" class="even-number-item checkbox" onclick="showChkResult(this,'doubleNum',0)">
+                                        <input type="checkbox" class="even-number-item checkbox" onclick="showChkResult(this,'doubleNum',1)">
+                                        <input type="checkbox" class="even-number-item checkbox" onclick="showChkResult(this,'doubleNum',2)">
+                                        <input type="checkbox" class="even-number-item checkbox" onclick="showChkResult(this,'doubleNum',3)">
+                                        <span class="green fb f12"><span id="selectWord_even"></span>&nbsp;&nbsp;<span id="selectCondition_even"></span></span>
+                                    </td>
+                                </tr>
+                                <tr id="bigOrSmallTr">
+                                    <td colspan="2">
+                                        <label><input type="checkbox" class="big-number-filter checkbox"
+                                                      bignumberfilter="1" ID="__min_chu" onclick="showdis(this,'__min_qu','bigNum','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label><input type="checkbox" class="big-number-filter checkbox"
+                                                      bignumberfilter="0" ID="__min_qu" onclick="showdis(this,'__min_chu','bigNum','',1);">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                        (<strong class="red2" i18n="shipan.table.large">大</strong>)
+                                        <input type="checkbox" class="big-number-item checkbox" id="__min_1" value="1" onclick="showChkResult(this,'bigNum',0)">
+                                        <input type="checkbox" class="big-number-item checkbox" id="__min_2" value="1" onclick="showChkResult(this,'bigNum',1)">
+                                        <input type="checkbox" class="big-number-item checkbox" id="__min_3" value="1" onclick="showChkResult(this,'bigNum',2)">
+                                        <input type="checkbox" class="big-number-item checkbox" id="__min_4" value="1" onclick="showChkResult(this,'bigNum',3)">
+                                        <span class="green fb f12"><span id="selectWord_big"></span>&nbsp;&nbsp;<span id="selectCondition_big"></span></span>
+                                    </td>
+                                    <td colspan="2">
+                                        <label><input type="checkbox" class="small-number-filter checkbox"
+                                                      smallnumberfilter="1" ID="__max_chu" onclick="showdis(this,'__max_qu','smallNum','',0);">
+                                            <span i18n="shipan.table.except">除</span>
+                                        </label>
+                                        <label><input type="checkbox" class="small-number-filter checkbox"
+                                                      smallnumberfilter="0" ID="__max_qu" onclick="showdis(this,'__max_chu','smallNum','',1);">
+                                            <span i18n="shipan.table.take">取</span>
+                                        </label>
+                                        (<strong class="red2" i18n="shipan.table.small">小</strong>)
+                                        <input type="checkbox" class="small-number-item checkbox" id="__max_1" value="1" onclick="showChkResult(this,'smallNum',0)">
+                                        <input type="checkbox" class="small-number-item checkbox" id="__max_2" value="1" onclick="showChkResult(this,'smallNum',1)">
+                                        <input type="checkbox" class="small-number-item checkbox" id="__max_3" value="1" onclick="showChkResult(this,'smallNum',2)">
+                                        <input type="checkbox" class="small-number-item checkbox" id="__max_4" value="1" onclick="showChkResult(this,'smallNum',3)">
+                                        <span class="green fb f12"><span id="selectWord_small"></span>&nbsp;&nbsp;<span id="selectCondition_small"></span></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <div class="tc">
+                    <input id="btn_create" type="button" value="生成" class="btn-large" onclick="createCodes()" i18n="shipan.table.generate">
+                    <input id="btn_reset"  type="button" value="复位" class="btn-large" onclick="resetXuan()" i18n="shipan.table.reset">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/kuaixuan.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script type="text/javascript">
+
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var mList = [];
+    var lmId = null;
+    var isXian = 0;
+    var codesList = [];
+    var dataList = [];
+    var settingFixOdds = 0;
+    var isShow = 1; //是否显示
+
+    var ruleName = "";
+
+    var emptyRules = JSON.stringify(rules);
+
+    var moduleName = "shipan";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        initData();
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        initData();
+    });
+
+    // window.onload=function(){
+    //     initData();
+    // }
+
+    function initData(){
+        getRuleMethodList();
+    }
+
+    function showControl(obj) {
+        if(obj.checked){
+            isShow = 0;
+        }else{
+            isShow = 1;
+        }
+    }
+
+    function getRuleMethodList() {
+        $.ajax({
+            url:HOST+"lotteryMethod/list?lotteryType=1",
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code==0){
+                    mList = res.data;
+                    var html = '';
+
+                    if (defaultLang=="zh"){
+                        mList.forEach((item,idx)=>{
+                            html = html +'<td width="14%" id="btn'+item.id+'">'
+                                +'<input type="button" value="'+item.bettingMethod+'" class="fn-module btn-large" onclick="changeRule(this,'+item.id+','+idx+')"/></td>';
+                        })
+                    }else{
+                        mList.forEach((item,idx)=>{
+                            html = html +'<td width="14%" id="btn'+item.id+'">'
+                                +'<input type="button" value="'+item.bettingMethodTh+'" class="fn-module btn-large" onclick="changeRule(this,'+item.id+','+idx+')"/></td>';
+                        })
+                    }
+
+                    // mList.forEach((item,idx)=>{
+                    //     html = html +'<td width="14%" id="btn'+item.id+'">'
+                    //         +'<input type="button" value="'+item.bettingMethod+'" class="fn-module btn-large" onclick="changeRule(this,'+item.id+','+idx+')"/></td>';
+                    // })
+                    $("#ruleMethodList").html(html);
+                    lmId = mList[1].id;
+                    $("#btn"+lmId).addClass("on");
+                    rules.lotteryMethodId = lmId;
+                    initRules();
+                    mList.forEach((item,idx)=>{
+                        if (item.id == lmId){
+                            if(defaultLang=='th'){
+                                ruleName = item.bettingMethodTh;
+                            }else{
+                                ruleName = item.bettingMethod;
+                            }
+                        }
+                    })
+                    //ruleName = mList[0].bettingMethod;
+                    // if (lmId != mList[1].id){
+                    //     mList.forEach((item,idx)=>{
+                    //         if (item.id == lmId){
+                    //             ruleName = item.bettingMethod;
+                    //         }
+                    //     })
+                    // }
+                    $("#ruleName1").html(ruleName);
+                    $("#ruleName2").html(ruleName);
+                    // ruleName = mList[1].bettingMethod;
+                    // $("#ruleName1").html(ruleName);
+                    // $("#ruleName2").html(ruleName)
+                }
+            }
+        })
+    }
+
+    function changeRule(obj,methodId,idx){
+        // lmId = methodId;
+        // rules.lotteryMethodId = lmId;
+        // ruleName = obj.value;
+        // $("#ruleName1").html(ruleName);
+        // $("#ruleName2").html(ruleName)
+        // $("#btn"+lmId).addClass("on");
+        // $("#btn"+lmId).siblings().removeClass("on");
+        // initRules();
+
+        if(lmId!=methodId){
+            lmId = methodId;
+            ruleName = obj.value;
+            $("#ruleName1").html(ruleName);
+            $("#ruleName2").html(ruleName)
+            $("#btn"+lmId).addClass("on");
+            $("#btn"+lmId).siblings().removeClass("on");
+            rules = JSON.parse(emptyRules);
+            if(parseInt(methodId)>4){
+                rules.matchCodes.included=1;
+                rules.matchCodes.isXian=1;
+            }else{
+                rules.matchCodes.included=0;
+                rules.matchCodes.isXian=0;
+            }
+            rules.lotteryMethodId = lmId;
+            $("input[type='text']").val(""); //所有的输入框内容清空
+            initRules();
+        }
+    }
+
+    function getDpPeiRate(lmId) {
+        $.ajax({
+            url:HOST+"peiRateChange/getDpPeiRate?lotteryMethodId=" + lmId,
+            success:function (res) {
+                if(res.code == 200){
+                    settingFixOdds = res.data;
+                    $("#settingFixOdds").html(res.data);
+                }
+            }
+        })
+    }
+
+    function initRules(){
+        getDpPeiRate(lmId);
+        $("#__dingwei_qu").prop("checked",true);
+        $("#__dingwei_chu").prop("checked",false);
+        $("#__peishu_qu1").prop("checked",false);
+        $("#__peishu_chu1").prop("checked",false);
+        $("input[type='text']").val("");
+        //$("input[type='checkbox']").prop("checked",false);
+        lmId = parseInt(lmId);
+        switch(lmId){
+            case 5: //二字现
+            case 6: //三字现
+            case 7: //四字现
+                isXian = 1;
+                $("#dingweiTr1").hide();
+                $("#dingweiTr2").hide();
+                $("#dingweiTr3").hide();
+                $("#matchTr1").show();
+                $("#matchTr2").show();
+                $("#hefenTr1").hide();
+                $("#hefenTr2").hide();
+                $("#fushiContainer").show();
+                var idx = lmId-3;
+                _chongRuleShow(idx);
+                _duishuRuleShow(idx);
+                _xiongdiRuleShow(idx);
+                _matchRuleShow(idx);
+                _bdweihfRuleShow(idx);
+                _otherRuleShow(idx);
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                isXian = 0;
+                if(lmId==1){
+                    $("#fushiContainer").hide();
+                    $("#matchRotate").hide();
+                }else{
+                    $("#fushiContainer").show();
+                    $("#matchRotate").show();
+                }
+                $("#dingweiTr1").show();
+                $("#dingweiTr2").show();
+                $("#dingweiTr3").show();
+                $("#matchTr1").hide();
+                $("#matchTr2").hide();
+                if(lmId>1) {
+                    $("#hefenTr1").show();
+                    $("#hefenTr2").show();
+                }else{
+                    $("#hefenTr1").hide();
+                    $("#hefenTr2").hide();
+                }
+                var idx = lmId-0;
+                _chongRuleShow(idx);
+                _duishuRuleShow(idx);
+                _xiongdiRuleShow(idx);
+                _bdweihfRuleShow(idx);
+                _otherRuleShow(idx);
+                _matchRuleShow(idx);
+                break;
+
+        }
+    }
+
+    function _otherRuleShow(idx){
+        switch (idx) {
+            case 1:
+                $("#otherRuleContainer").hide();
+                break;
+            case 2:
+            case 3:
+            case 4:
+                if(isXian==1){
+                    $("#otherRuleContainer").hide();
+                }else{
+                    if(idx==4){
+                        $("#otherRuleContainer").show();
+                        $("#chenghaoContainer").hide();
+                    }else{
+                        $("#otherRuleContainer").show();
+                        $("#chenghaoContainer").show();
+                    }
+                }
+                break;
+
+        }
+    }
+
+    function _xiongdiRuleShow(idx){
+        switch (idx) {
+            case 1:
+                $("#xiongdiTr").hide();
+                break;
+            case 2:
+                $("#xiongdiTr").show();
+                $("#xiongdi2").show();
+                $("#xiongdi3").hide();
+                $("#xiongdi4").hide();
+                break;
+            case 3:
+                $("#xiongdiTr").show();
+                $("#xiongdi2").show();
+                $("#xiongdi3").show();
+                $("#xiongdi4").hide();
+                break;
+            case 4:
+                $("#xiongdiTr").show();
+                $("#xiongdi2").show();
+                $("#xiongdi3").show();
+                $("#xiongdi4").show();
+                break;
+        }
+    }
+
+    function _duishuRuleShow(idx){
+        switch (idx) {
+            case 1:
+                $("#duishuTr").hide();
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $("#duishuTr").show();
+                break;
+        }
+    }
+
+    function _chongRuleShow(idx){
+        switch (idx) {
+            case 1:
+                $("#chongTr").hide();
+                break;
+            case 2:
+                $("#chongTr").show();
+                $("#chong2").show();
+                $("#chong3").hide();
+                $("#chong4").hide();
+                $("#chong2").hide();
+                break;
+            case 3:
+                $("#chongTr").show();
+                $("#chong2").show();
+                $("#chong3").show();
+                $("#chong4").hide();
+                $("#chong2").hide();
+                break;
+            case 4:
+                $("#chongTr").show();
+                $("#chong2").show();
+                $("#chong3").show();
+                $("#chong4").show();
+                if(isXian==0){
+                    $("#chong2").show();
+                }else{
+                    $("#chong2").hide();
+                }
+                break;
+        }
+    }
+
+    function _matchRuleShow(idx){
+        switch (idx) {
+            case 2:
+                $("#match1").show();
+                $("#match2").show();
+                $("#match3").hide();
+                $("#match4").hide();
+                break;
+            case 3:
+                $("#match1").show();
+                $("#match2").show();
+                $("#match3").show();
+                $("#match4").hide();
+                break;
+            case 4:
+                $("#match1").show();
+                $("#match2").show();
+                $("#match3").show();
+                $("#match4").show();
+                break;
+            default:
+                $("#match1").hide();
+                $("#match2").hide();
+                $("#match3").hide();
+                $("#match4").hide();
+                break;
+        }
+    }
+
+    function _bdweihfRuleShow(idx){
+        if(idx==1){
+            $("#bdweihfContainer").hide();
+        }else{
+            $("#bdweihfContainer").show();
+        }
+        switch (idx) {
+            case 1:
+                $("#sum2").hide();
+                $("#sum3").hide();
+                break;
+            case 2:
+            case 3:
+            case 4:
+                if(idx==2){
+                    $("#sum2").show();
+                    $("#sum3").hide();
+                }else{
+                    $("#sum2").show();
+                    $("#sum3").show();
+                }
+                if(idx ==4 && isXian==0){
+                    $("#valueRangeContainer").show();
+                }else{
+                    $("#valueRangeContainer").hide();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    function createCodes(){
+        console.log("==============createCodes,"+JSON.stringify(rules));
+        layer.msg(i18np.prop("shipan.msg.processing"), {
+            icon: 16
+            ,shade: 0.3
+            ,time:-1
+        });
+        $.ajax({
+            url:HOST+"plvSetting/create",
+            type:'post',
+            contentType:'application/json',
+            data:JSON.stringify(rules),
+            success:function(res){
+                layer.closeAll();
+                if(res.code==0){
+                    if(res.count<1){
+                        // layer.msg("未找到符合条件的号码");
+                        layer.msg(i18np.prop("shipan.msg.no.matching.number.found"));
+                        $("#numberList").html("");
+                        $("#numberCount").html("");
+                    }else{
+                        dataList = res.data;
+                        codesList=[];
+                        dataList.forEach((item,idex)=>{
+                            codesList.push(item.buyCode);
+                        })
+                        codesNum = res.count;
+                        $("#numberCount").html(res.count);
+                        initCodesToBuy()
+                    }
+                }
+            },
+            error:function(){
+                layer.closeAll();
+            }
+        })
+        return false;
+    }
+
+    function initCodesToBuy(){
+        var rows = codesList.length%8==0 ? parseInt(codesList.length/8):parseInt(codesList.length/8)+1;
+        var leftCodesNum = 0;
+        if(codesList.length%8>0){
+            leftCodesNum = 8-codesList.length%8;
+        }
+        var html = "";
+        for(var i=0;i<rows;i++){
+            var st = i*8;
+            var et = (i+1)*8;
+            if(et>codesList.length){
+                et = codesList.length;
+            }
+            var r = '<tr>';
+            for(var j=st;j<et;j++){
+                r = r +"<td width='12%'>"+codesList[j]+"</td>";
+            }
+            console.log("i==rows-1",i,rows-1);
+            if(i==rows-1){
+                console.log("leftCodesNum2 ========= ",leftCodesNum);
+                for(var k=0;k<leftCodesNum;k++){
+                    r = r +"<td width='12%'>--</td>";
+                }
+            }
+            r = r+"</tr>"
+            html = html+r;
+        }
+        for (var i=0;i<10-rows;i++){
+            html = html + "<tr><td width='12%'>--</td width='12%'><td width='12%'>--</td><td width='12%'>--</td><td width='12%'>--</td><td width='12%'>--</td><td width='12%'>--</td><td width='12%'>--</td><td width='12%'>--</td></tr>"
+        }
+        $("#numberList").html(html);
+    }
+
+    // function initHtml(){
+    //     for (var html = "", i = 1; i <= 7; i++)
+    //         html += "<tr><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>";
+    //     return html
+    // }
+
+    //checkbox点击事件处理函数
+    function showChkResult(my,ruleTypeName,itemIdx) {
+        switch(ruleTypeName){
+            case 'bigNum':
+                rules.bigNum.locArr[itemIdx]= (my.checked?1:0);
+                break;
+            case 'smallNum':
+                rules.singleNum.locArr[itemIdx]=(my.checked?1:0);
+                break;
+            case 'doubleNum':
+                rules.doubleNum.locArr[itemIdx]=(my.checked?1:0);
+                break;
+            case 'singleNum':
+                rules.singleNum.locArr[itemIdx]=(my.checked?1:0);
+                break;
+            case 'xlocArr':
+                rules.others.locArr[itemIdx]=(my.checked?1:0);
+                break;
+            case 'hefenItem1':
+                rules.hefen.binds[0].locArr[itemIdx]=(my.checked?1:0);
+                break;
+            case 'hefenItem2':
+                rules.hefen.binds[1].locArr[itemIdx]=(my.checked?1:0);
+                break;
+            case 'hefenItem3':
+                rules.hefen.binds[2].locArr[itemIdx]=(my.checked?1:0);
+                break;
+            case 'hefenItem4':
+                rules.hefen.binds[3].locArr[itemIdx]=(my.checked?1:0);
+                break;
+
+        }
+        console.log("===============bbbb,"+JSON.stringify(rules));
+    }
+
+
+    function showdis(my, to,ruleTypeName,ruleName,included) {
+        if(my.checked){
+            $("#"+to).attr("checked",false);
+        }
+        switch(ruleTypeName){
+            case 'match1':
+            case 'fixLoc':
+                initDingweiRule(ruleTypeName,included,my.checked)
+                break;
+            case 'repeat':
+                initRepeatRule(ruleName,included,my.checked)
+                break;
+            case 'xiongdi':
+                initXiongdiRule(ruleName,included,my.checked)
+                break;
+            case 'bigNum':
+                if(included==0 && my.checked){
+                    rules.bigNum.excluded=1;
+                    rules.bigNum.included=0;
+                }else if(included==1 && my.checked){
+                    rules.bigNum.excluded=0;
+                    rules.bigNum.included=1;
+                }else{
+                    rules.bigNum.excluded=0;
+                    rules.bigNum.included=0;
+                    rules.bigNum.locArr=[0,0,0,0]
+                }
+                break;
+            case 'smallNum':
+                if(included==0 && my.checked){
+                    rules.smallNum.excluded=1;
+                    rules.smallNum.included=0;
+                }else if(included==1  && my.checked){
+                    rules.smallNum.excluded=0;
+                    rules.smallNum.included=1;
+                }else{
+                    rules.smallNum.excluded=0;
+                    rules.smallNum.included=0;
+                    rules.smallNum.locArr=[0,0,0,0]
+                }
+                break;
+            case 'doubleNum':
+                if(included==0 && my.checked){
+                    rules.doubleNum.excluded=1;
+                    rules.doubleNum.included=0;
+                }else if(included==1 && my.checked){
+                    rules.doubleNum.excluded=0;
+                    rules.doubleNum.included=1;
+                }else{
+                    rules.doubleNum.excluded=0;
+                    rules.doubleNum.included=0;
+                    rules.doubleNum.locArr=[0,0,0,0]
+                }
+                break;
+            case 'singleNum':
+                if(included==0 && my.checked){
+                    rules.singleNum.excluded=1;
+                    rules.singleNum.included=0;
+                }else if(included==1 && my.checked){
+                    rules.singleNum.excluded=0;
+                    rules.singleNum.included=1;
+                }else{
+                    rules.singleNum.excluded=0;
+                    rules.singleNum.included=0;
+                    rules.singleNum.locArr=[0,0,0,0]
+                }
+                break;
+            case 'bdwhefen':
+                if(ruleName==='sum2' || ruleName==='sum3'){
+                    if(my.checked){
+                        rules.sum2.excluded=0;
+                        rules.sum2.included=1;
+                        rules.sum2.sumType = (ruleName==='sum2'?2:3);
+                    }else{
+                        rules.sum2.excluded=0;
+                        rules.sum2.included=0;
+                        rules.sum2.sum='';
+                        rules.sum2.sumType="";
+                    }
+                }
+                break;
+            case 'duishu':
+                if(included==0 && my.checked){
+                    rules.pairs.excluded=1;
+                    rules.pairs.included=0;
+                }else if(included==1 && my.checked){
+                    rules.pairs.excluded=0;
+                    rules.pairs.included=1;
+                }else{
+                    rules.pairs.excluded=0;
+                    rules.pairs.included=0;
+                }
+                break;
+            case 'fushi':
+                if(included==0 && my.checked){
+                    rules.fushi.excluded=1;
+                    rules.fushi.included=0;
+                }else if(included==1 && my.checked){
+                    rules.fushi.excluded=0;
+                    rules.fushi.included=1;
+                }else{
+                    rules.fushi.excluded=0;
+                    rules.fushi.included=0;
+                }
+                break;
+
+            case 'match2':
+                if(included==0 && my.checked){
+                    rules.matchCodes.excluded=1;
+                    rules.matchCodes.included=0;
+                    rules.matchCodes.isXian=1;
+                }else if(included==1 && my.checked){
+                    rules.matchCodes.excluded=0;
+                    rules.matchCodes.included=1;
+                    rules.matchCodes.isXian=1;
+                }else{
+                    rules.matchCodes.excluded=0;
+                    rules.matchCodes.included=0;
+                    rules.matchCodes.isXian=1;
+                }
+                break;
+        }
+        console.log("===============aaaa,"+JSON.stringify(rules));
+    }
+
+    function initDingweiRule(ruleName,included,checked){
+        if(ruleName=="match1"){
+            $("#__dingwei_chu").attr("checked",false);
+            $("#__dingwei_qu").attr("checked",false);
+            $("#matchTr2").show();
+            $("#dingweiTr2").hide();
+            $("#dingweiTr3").hide();
+            if(checked){
+                rules.fixCode.excluded=0;
+                rules.fixCode.included=0;
+                if(included==1){
+                    rules.matchCodes.included=1;
+                    rules.matchCodes.excluded=0;
+                    rules.matchCodes.isXian = 0;
+                }else{
+                    rules.matchCodes.included=0;
+                    rules.matchCodes.excluded=1;
+                    rules.matchCodes.isXian = 0;
+                }
+            }else{
+                rules.matchCodes.included=0;
+                rules.matchCodes.excluded=0;
+                rules.matchCodes.isXian = 0;
+            }
+        }else if(ruleName=="fixLoc"){
+            $("#__peishu_qu1").attr("checked",false);
+            $("#__peishu_chu1").attr("checked",false);
+            $("#dingweiTr2").show();
+            $("#dingweiTr3").show();
+            $("#matchTr2").hide();
+            $("#match1").hide();
+            if(checked){
+                rules.matchCodes.excluded=0;
+                rules.matchCodes.included=0;
+                if(included==1){
+                    rules.fixCode.excluded=0;
+                    rules.fixCode.included=1;
+                }else{
+                    rules.fixCode.excluded=1;
+                    rules.fixCode.included=0;
+                }
+            }else{
+                rules.fixCode.excluded=0;
+                rules.fixCode.included=0;
+                rules.fixCode.loc1='';
+                rules.fixCode.loc2='';
+                rules.fixCode.loc3='';
+                rules.fixCode.loc4='';
+            }
+        }
+    }
+
+    function initRepeatRule(ruleName,included,checked){
+        switch(ruleName){
+            case 'repeat1':
+                if(included==0 && checked){
+                    rules.repeat.double1.excluded=1;
+                    rules.repeat.double1.included=0;
+                }else if(included==1 && checked){
+                    rules.repeat.double1.excluded=0;
+                    rules.repeat.double1.included=1;
+                }else{
+                    rules.repeat.double1.excluded=0;
+                    rules.repeat.double1.included=0;
+                }
+                break;
+            case 'repeat2':
+                if(included==0 && checked){
+                    rules.repeat.doubledouble.excluded=1;
+                    rules.repeat.doubledouble.included=0;
+                }else if(included==1 && checked){
+                    rules.repeat.doubledouble.excluded=0;
+                    rules.repeat.doubledouble.included=1;
+                }else{
+                    rules.repeat.doubledouble.excluded=0;
+                    rules.repeat.doubledouble.included=0;
+                }
+                break;
+            case 'repeat3':
+                if(included==0 && checked){
+                    rules.repeat.triple.excluded=1;
+                    rules.repeat.triple.included=0;
+                }else if(included==1 && checked){
+                    rules.repeat.triple.excluded=0;
+                    rules.repeat.triple.included=1;
+                }else{
+                    rules.repeat.triple.excluded=0;
+                    rules.repeat.triple.included=0;
+                }
+                break;
+            case 'repeat4':
+                if(included==0 && checked){
+                    rules.repeat.double2.excluded=1;
+                    rules.repeat.double2.included=0;
+                }else if(included==1 && checked){
+                    rules.repeat.double2.excluded=0;
+                    rules.repeat.double2.included=1;
+                }else{
+                    rules.repeat.double2.excluded=0;
+                    rules.repeat.double2.included=0;
+                }
+                break;
+
+        }
+    }
+
+    function initXiongdiRule(ruleName,included,checked){
+        switch(ruleName){
+            case 'xiongdi1':
+                if(included==0 && checked){
+                    rules.brothers.br2.excluded=1;
+                    rules.brothers.br2.included=0;
+                }else if(included==1 && checked){
+                    rules.brothers.br2.excluded=0;
+                    rules.brothers.br2.included=1;
+                }else{
+                    rules.brothers.br2.excluded=0;
+                    rules.brothers.br2.included=0;
+                }
+                break;
+            case 'xiongdi2':
+                if(included==0 && checked){
+                    rules.brothers.br3.excluded=1;
+                    rules.brothers.br3.included=0;
+                }else if(included==1 && checked){
+                    rules.brothers.br3.excluded=0;
+                    rules.brothers.br3.included=1;
+                }else{
+                    rules.brothers.br3.excluded=0;
+                    rules.brothers.br3.included=0;
+                }
+                break;
+            case 'xiongdi3':
+                if(included==0 && checked){
+                    rules.brothers.br4.excluded=1;
+                    rules.brothers.br4.included=0;
+                }else if(included==1 && checked){
+                    rules.brothers.br4.excluded=0;
+                    rules.brothers.br4.included=1;
+                }else{
+                    rules.brothers.br4.excluded=0;
+                    rules.brothers.br4.included=0;
+                }
+                break;
+
+        }
+    }
+
+    function limitRepeatNums(t,ruleTypeName,itemIdx) {
+        var n = t.value;
+        num = n.length;
+        var y_n = n.slice(0, num - 1),g_n = n.slice(num - 1, num);
+        - 1 != y_n.indexOf(g_n) ? t.value = y_n.replace(/[^0-9]/g, "") : t.value = t.value.replace(/[^0-9]/g, "");
+        switch(ruleTypeName){
+            case 'sum2':
+                rules.sum2.sum=t.value;
+                break;
+            case 'duishu':
+                pairCodeRuleValues(itemIdx,t.value);
+                break;
+            case 'peishu':
+                matchRuleValues(itemIdx,t.value);
+                break;
+            case 'fixCode':
+                fixCodeRuleValues(itemIdx,t.value);
+                break;
+            case 'valueRange':
+                rules.others.valueRange[itemIdx]=t.value;
+                break;
+            case 'hefenItem4':
+                rules.hefen.binds[3].value = t.value;
+                break;
+            case 'hefenItem3':
+                rules.hefen.binds[2].value = t.value;
+                break;
+            case 'hefenItem2':
+                rules.hefen.binds[1].value = t.value;
+                break;
+            case 'hefenItem1':
+                rules.hefen.binds[0].value = t.value;
+                break;
+            case 'quanzhuan':
+                rules.others.fullChange = t.value;
+                break;
+            case 'shangjiang':
+                rules.others.shangJiang = t.value;
+            case 'paichu':
+                rules.others.excludes = t.value;
+                break;
+            case 'includes':
+                rules.fushi.contains= t.value;
+                break;
+            case 'fushi':
+                rules.fushi.combines = t.value;
+                break;
+
+        }
+    }
+
+    function matchRuleValues(locIdx,val){
+        switch(locIdx){
+            case 0:
+                rules.matchCodes.loc1=val;
+                break;
+            case 1:
+                rules.matchCodes.loc2=val;
+                break;
+            case 2:
+                rules.matchCodes.loc3=val;
+                break;
+            case 3:
+                rules.matchCodes.loc4=val;
+                break;
+        }
+    }
+
+    function fixCodeRuleValues(locIdx,val){
+        switch(locIdx){
+            case 0:
+                rules.fixCode.loc1=val;
+                break;
+            case 1:
+                rules.fixCode.loc2=val;
+                break;
+            case 2:
+                rules.fixCode.loc3=val;
+                break;
+            case 3:
+                rules.fixCode.loc4=val;
+                break;
+        }
+    }
+
+    function pairCodeRuleValues(locIdx,val){
+        switch(locIdx){
+            case 0:
+                rules.pairs.pair1=val;
+                break;
+            case 1:
+                rules.pairs.pair2=val;
+                break;
+            case 2:
+                rules.pairs.pair3=val;
+                break;
+            case 3:
+                rules.pairs.pair4=val;
+                break;
+            case 4:
+                rules.pairs.pair5=val;
+                break;
+        }
+    }
+
+    //复位
+    function resetXuan(){
+        rules = JSON.parse(emptyRules);
+        $("#numberList").html("");
+        $("#odds_max").val("");
+        $("#numberCount").html("");
+        $("#odds_kuaixuan").val("");
+        $("input[type='text']").val("");
+        $("input[type='checkbox']").prop("checked",false);
+        $("#__hefen_qu").prop("checked",true);
+        $("#__dingwei_qu").prop("checked",true);
+        $("#__qu_1").prop("checked",true);
+        getRuleMethodList();
+    }
+
+    $("#toBuy").on("click","",function(e){
+        console.log("=====================toBuy");
+        if(codesList.length<1){
+            return;
+        }
+        var plv = $("#peiRate").val();
+        var buyMoney = $("#buyMoney").val();
+        if(plv=='' || buyMoney==''){
+            // layer.msg("请输入赔率或金额");
+            layer.msg(i18np.prop("shipan.msg.input.odds.or.money"));
+            return;
+        }
+        console.log("=====================toBuy1");
+        // if(parseFloat(plv)>parseFloat(settingFixOdds)){
+        //     layer.msg("赔率值不能大于定盘赔率");
+        //     return;
+        // }
+        console.log("=====================toBuy2");
+        layer.msg(i18np.prop("shipan.msg.processing"), {
+            icon: 16
+            ,shade: 0.3
+            ,time:-1
+        });
+
+        var params = {
+            "codesList":dataList,
+            "peiRate":plv,
+            "amount":buyMoney,
+            "isXian":isXian,
+            "chType":1
+        }
+
+        $.ajax({
+            url:HOST+'chuHuo/batchBuy',
+            type:'post',
+            contentType:'application/json',
+            data:JSON.stringify(params),
+            success:function (res) {
+                layer.closeAll();
+                if(res.code==200){
+                    console.log("=====================toBuy3");
+                    codesList = [];
+                    //window.parent.reloadData();
+                    //var index = parent.layer.getFrameIndex(window.name);
+                    //parent.layer.close(index);
+                    //parent.layer.closeAll();
+                    parent.window.location.href="download.html";
+                }else{
+                    layer.msg(res.msg);
+                }
+            },
+            error:function(err){
+                console.log(err);
+            }
+        })
+        return false;
+    });
+</script>
+</body>
+</html>

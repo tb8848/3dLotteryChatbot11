@@ -1,0 +1,99 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>html{overflow-y:scroll;}</style>
+    <STYLE type=text/css><!--
+    .ttt {LINE-HEIGHT: 14px}
+    .style6 {font-size: 16px;
+        font-weight: bold;}
+    td{font-size:15px;line-height:30px;}
+    .button{
+        padding: 0px;
+        color: #000;
+        /*for Mozilla*/
+        height: 42px !important;
+        line-height: 43px !important;
+
+        /*for IE7*/
+    > height: 42px !important;
+    > line-height: 40px !important;
+
+        /*for IE*/
+        height: 41px;
+        line-height: 42px;
+        width:60px;font: 14px Arial, Helvetica, sans-serif;
+        font-weight: bold;
+    }
+    .rule_button1{
+        background: red;
+    }
+    .rule_button2{
+        background: #00CC00;
+    }
+    .style6{color:red;}
+    .style7{color:#0000ff;font-size: 16px;font-weight: bold;}
+    .style8{color:red;font-size: 24px;font-weight: bold;}
+    -->
+    </STYLE>
+    <script>
+        seconds=10;
+        function sinfochange()
+        {
+            seconds--;
+            sinfo.enters.value="阅读倒计时 "+seconds+" 秒"
+            if(seconds==0)
+            {
+                sinfo.enters.disabled=false;
+                sinfo.enters.value=" 进入 >>";
+                window.location.href='./onlineBettingAgreement.html'
+            }else{
+                setTimeout("sinfochange()",1000)
+            }
+        }
+        window.onload=sinfochange;
+    </script>
+</head>
+<BODY bgcolor="#ffffff">
+
+<TABLE height="80%" cellSpacing=1 cellPadding=0 width="98%" align=center bgColor=#666666 border=0 id="ruletable">
+    <FORM NAME='sinfo'  ACTION="/?frames=yes&">
+        <TR>
+            <TD vAlign=center bgColor=#ccccd4 height=18>
+                <P align=center class=style6>系统提示  </P>
+            </TD>
+        </TR>
+        <TR>
+            <TD vAlign=top bgColor=#ffffff >
+                <TABLE cellSpacing=0 cellPadding=5 width="98%" align=center border=0>
+                    <TR>
+                        <TD height="300" valign="top"> <font color=#3300ff size=4> 如果出现打不开网站的用户，请这样设置，删除自己电脑上的（360安全卫士或金山卫士或百度卫士），只保留（360杀毒或金山毒霸或百度杀毒），用电脑自带（IE）浏览器，就可以打开网站了。（如果自己不懂删除和安装，请电脑店工作人员帮忙，一次性把问题解决了，方便以后工作）请配合，谢谢！<a href=http://www.xx007.cc target=_blank><font color=#ff0000>下载地址</font></a></font>
+                            <br>
+                            <br>
+                            <br><font color=red size=4>特别提醒：本公司如果输入开奖结果错误，有权利更正开奖结果，最终以官方最后公布结果来结账，不得异议。</font>
+                            <br><font color=red size=4>特别提醒：为了避免出现争议，请各会员到第二天早上才开始兑奖。不要当天晚上知道结果后，马上就兑奖给客人，出现当天晚上兑奖造成的损失，会员自负，不得异议。</font>
+                            <br>
+                            <br><font color=#3300ff size=5>告知：本网站适用<font color=red size=6>（电信，联通）两种上网方式，千万不要使用（移动手机卡）登录本网站</font>，避免出现不正常现象，影响工作，谢谢合作。</font>
+                            <br>
+                            <br><font color=#3300ff size=5>请各级别一个月更换一次复杂密码<font color=red size=6>（字母大小写+数字+字符）混合为佳</font>，避免万一密码泄露造成的损失。</font></TD>
+                    </TR>
+                    <TR>
+                        <TD height="50" valign="middle" align="center"> <input type=button name=enters disabled onClick="self.location='./onlineBettingAgreement.html'"> </TD>
+                    </TR>
+                </TABLE>
+
+    </FORM>
+</TABLE>
+</table>
+
+<!--
+	<table width="98%" align="center" border="0" cellpadding="0" cellspacing="0" >
+	<tr >
+	<td align="center" style="text-align:center">
+版权所有 Copyright@2009-2010 usetime:0.009357
+mysqlquery:3
+</td>
+<tr>
+</table> -->
+</body>
+</html>

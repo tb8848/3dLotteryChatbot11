@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../css/common.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../../css/A-P5.css" media="all">
+
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+            /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div id="main" >
+    <template>
+    <div class="module">
+        <div name="module" id="betlist" class="m5" deps="betlist">
+            <div class="guide-memberadmin" name="module" deps="guide_memberadmin">
+                <div class="hd"> {{roleName}}{{userName}} </div>
+                <div class="bd">
+                    <a class="active" id="buyDetail" :href="'xiazhuDetail.html?vipId='+userId+'&pid='+pid" i18n="vip.buyDetail">下注明细</a>
+                    <a class="" id="drawDetail" :href="'zhongjiang_detail.html?vipId='+userId+'&pid='+pid" i18n="vip.drawDetail">中奖明细</a>
+                    <a class="" id="stopBuyCodes" :href="'stop_buy_codes.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCode">停押号码</a>
+                    <a class="" id="lackCodes" :href="'stop_buy_codes_keep.html?vipId='+userId+'&pid='+pid" i18n="vip.stopBuyCodeKeep">停押保留区</a>
+                    <a class="" id="monthReport" :href="'month_report.html?vipId='+userId+'&pid='+pid" i18n="vip.monthReport">月报表</a>
+                    <a class=""   id="bills" :href="'bills.html?vipId='+userId+'&pid='+pid" i18n="vip.bills">历史账单</a>
+                    <a id="userInfo" :href="'user_info.html?vipId='+userId+'&pid='+pid" i18n="vip.info">会员资料</a>
+                    <a href="javascript:void(0)" @click="goBack" i18n="vip.back">返回</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <form autocomplete="off" novalidate="novalidate">
+                    <input type="hidden" value="23008" name="period_no" id="period_no">
+                    <input type="hidden" value="0" name="Is_Winning" id="Is_Winning">
+                    <input type="hidden" value="86" name="member_id">
+                    <input type="hidden" value="1" name="member_level">
+                    <table class="t-1">
+                        <thead>  <tr class="bg1"> <td colspan="15" i18n="detail.search">搜索</td> </tr> </thead>
+                        <tbody class="noBD">
+                        <tr>
+                            <td width="50" i18n="detail.searchCode"> 查号码 </td>
+                            <td width="60"> <input type="text" class="w60" maxlength="3" betno="true" v-model="searchParam.buyCodes"> </td>
+                            <td width="30" i18n="xiazhu.show">列出</td>
+                            <td width="50">
+                                <select name="Search_Type" v-model="searchParam.colType">
+<!--                                    <option value="0" i18n="vip.odds">{{$t('message.odds')}}</option>-->
+                                    <option value="1">{{$t('message.money')}}</option>
+                                    <option value="2">{{$t('message.tuima')}}</option>
+                                </select>
+                            </td>
+                            <td width="50"> <input type="text" class="w50" name="Search_Min" maxlength="8" nonnegative="true" lessthan="#search_max" v-model="searchParam.minValue"> </td>
+                            <td width="15" i18n="xiazhu.to">至</td> <td width="50">
+                            <input type="text" class="w50" name="Search_Max" id="search_max" maxlength="8" nonnegative="true" v-model="searchParam.maxValue"> </td>
+                            <td width="30" i18n="xiazhu.class">分类</td> <td width="80">
+                            <select id="category_id" v-model="dataType">
+                                <option v-for="(opt,ii) in dataTypeList" :value="opt.value">{{opt.text}}</option>
+                            </select>
+                        </td>
+
+                            <td width="50"> <input type="button" value="提交" class="btn" @click="toSearch()" i18n="detail.submit"> </td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10">
+                <table class="t-1 table_bg">
+                    <thead> <tr class="bg1"> <td colspan="10" class="tc" i18n="xiazhu.title">  本期下注明细  </td>
+                        <td>
+                            <select class="w110" id="sel_period_no" @change="changeDrawId()">
+                                <option v-for="(item,idx) in drawList" :value="item.drawId" :selected="item.drawId==searchParam.drawNo">{{item.drawId}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="bg2 tc">
+                        <td i18n="xiazhu.lotteryType">彩种</td>
+                        <td>方案名称</td>
+                        <td i18n="xiazhu.billNO">注单编号</td>
+                        <td i18n="xiazhu.buyTime">下单时间</td>
+                        <td i18n="detail.buyCode">号码</td>
+                        <td i18n="detail.buyMoney">金额</td>
+                        <td i18n="detail.odds">赔率</td>
+                        <td i18n="bills.zhongjiang">中奖</td>
+                        <td i18n="bills.huishui">回水</td>
+                        <td i18n="bills.yingkui">盈亏</td>
+                        <td i18n="xiazhu.status">状态</td>
+                    </tr>
+                    </thead>
+                    <tbody class="fn-hover tc" v-if="pager.total==-1">
+                        <tr > <td colspan="11" align="center" i18n="dataLoading">数据加载中...</td> </tr>
+                    </tbody>
+                    <tbody class="fn-hover tc" v-if="pager.total==0">
+                        <tr > <td colspan="11" align="center">{{$t('message.noData')}}</td> </tr>
+                    </tbody>
+                    <tbody class="fn-hover tc" v-if="pager.total>0">
+                        <tr class="bg2 tc" v-for="(item,idx) in buyList" :class="[item.backCodeFlag==1?'bg4':'']">
+                            <td>福彩3D</td>
+                            <td>{{item.huizongName}}</td>
+                            <td>{{item.printId}}</td>
+                            <td v-if="item.backCodeFlag==1">{{item.createTime}}<br/><span i18n="xiazhu.tui">{{$t('message.tui')}}</span>:{{item.backCodeTime}}</td>
+                            <td v-else>{{item.createTime}}</td>
+                            <td v-if="item.huizongFlag==1"><a href="javascript:void(0)" :id="'bp-'+item.id"
+                                                          style="color:blue;text-decoration: underline"
+                                                          @click="bpcodesDetail(item)">{{item.buyCodes}}</a></td>
+                            <td v-else>{{item.buyCodes}}</td>
+                            <td v-if="item.huizongFlag==1"><a href="javascript:void(0)" :id="'bp-'+item.id"
+                                   style="color:blue;text-decoration: underline"
+                                   @click="bpcodesDetail(item)">{{item.buyMoney}}</a>
+                            </td>
+                            <td v-else>{{item.buyMoney}}</td>
+                            <td v-if="item.huizongFlag==1"><a href="javascript:void(0)" :id="'bp-'+item.id"
+                                                          style="color:blue;text-decoration: underline"
+                                                          @click="bpcodesDetail(item)">查看赔率</a></td>
+                            <td v-else>{{item.param3}}</td>
+                            <td>{{item.drawStatus==1?item.drawMoney:'--'}}</td>
+                            <td>{{item.huishui}}</td>
+                            <td>{{item.shProfitLoss}}</td>
+                            <td v-if="item.backCodeFlag==1"><span style='color:orangered' i18n="xiazhu.yituima">{{$t('message.codeBack')}}</span></td>
+                            <td v-else i18n="xiazhu.success">{{$t('message.success')}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="tc" i18n="bills.heji">{{$t('message.heji')}}</td>
+                            <td>{{heji.amount}}</td>
+                            <td></td>
+                            <td></td>
+                            <td>{{heji.money}}</td>
+                            <td></td>
+                            <td>{{heji.drawMoney>0?heji.drawMoney:''}}</td>
+                            <td>{{heji.huishui}}</td>
+                            <td>{{heji.earn}} </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div name="module" id="pager" class="pager" pagecount="1">
+                    <span i18n="xiazhu.page.cur">第</span>
+                    <span class="pageindex red">{{pager.currpage}}</span>
+                    <span i18n="xiazhu.page">页</span>
+                    <span i18n="xiazhu.gong">共</span>
+                    <span class="pagecount red">{{pager.pages}}</span>
+                    <span i18n="xiazhu.page">页</span>
+                    <span i18n="xiazhu.gong">共</span>
+                    <span class="recordcount red">{{pager.total<0?0:pager.total}}</span>
+                    <span i18n="xiazhu.tiao">条</span>
+                    <a href="javascript:void(0)" class="fn-first" @click="firstPage()" i18n="xiazhu.firstPage">首页</a>
+                    <a href="javascript:void(0)" class="fn-prev" @click="prePage()" i18n="xiazhu.prevPage">上一页</a>
+                    <a href="javascript:void(0)" class="fn-next" @click="nextPage()" i18n="xiazhu.nextPage">下一页</a>
+                    <a href="javascript:void(0)" class="fn-last" @click="lastPage()" i18n="xiazhu.lastPage">尾页</a>
+                    <input type="text" class="input w30 fn-index" maxlength="10" digits="true" v-model="pager.toPage">
+                    <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="goPage()">
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</div>
+
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script src="../../js/projects/vue-i18n-messages.js"></script>
+<script src="../../js/projects/xiazhu_detail.js?v4"></script>
+
+<script type="text/javascript">
+
+    var moduleName = "admin_vip";
+
+    var i18np=null
+
+    var $ = layui.jquery;
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.init(0);
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale = lang
+        vm.init(0);
+    }
+    //vm.init();
+    //vm.init(0);
+</script>
+</body>
+</html>

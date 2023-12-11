@@ -1,0 +1,527 @@
+
+<!DOCTYPE html>
+<html  class="notie">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="copyright" content="Copyright 版权所有" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="renderer" content="webkit" />
+    <base target="_self" />
+    <title>【福彩3D】</title>
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico"/>
+    <link rel="stylesheet" href="../css/3603d/reset.css" />
+    <link rel="stylesheet" href="../css/3603d/i6fzam.css" />
+    <link rel="stylesheet" href="../css/3603d/mod.caiz.css" />
+    <link rel="stylesheet" href="../css/3603d/mod.mv.css" />
+    <link rel="stylesheet" href="../css/3603d/tools_infor.css" />
+    <style>
+
+        #doc3{
+            width:800px !important;
+        }
+
+        .article-main-bd img{
+            width:100%;
+        }
+
+        .mod-select-bolls{
+            margin:0 30px
+        }
+
+        .mod-select-bolls .boll-item-col3 .t{
+            width:260px
+        }
+
+        .t-1 td{
+            border:1px solid #e2e2e2;
+        }
+    </style>
+</head>
+<body style="overflow: auto">
+
+
+<table style="width: 100%">
+    <tr>
+        <td  style="text-align: left;width: 800px" valign="top">
+            <div id="stopBuy" style="margin:10px;width: 800px;height: 300px;line-height:300px;text-align: center;display: none">
+                <div>
+                    <div class="mod-cz-bd">
+                        <div class="grid-1 clearfix">
+                            <div class="article" style="width: 800px">
+                                <div class="plays_box">
+                                    <h2 style="font-size: 30px;font-weight: bolder;" id="openStatusDesc">已停盘</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="doc3" style="margin:10px">
+                <div id="bd">
+                    <div class="mod-cz-bd">
+                        <div class="nav-cz-sub" style="padding:5px 0 6px 11px">
+                            <ul class="clearfix" id="plays">
+                                <li desc="JO|奇偶" maxplay=""  combo="" id="lm-10" class="active"><a href="#">奇偶</a></li>
+                            </ul>
+                        </div>
+                        <div class="grid-1 clearfix">
+                            <div class="article" style="width: 800px">
+                                <div class="plays_box">
+                                    <div class="mod-select-filter zx_plays none" id="lm-10-ls">
+                                        <label style="position: relative;display: inline-block">
+                                            <input checked="checked" type="radio" autocomplete="off" name="jo" desc="jo" value="1"><span>奇偶</span></label>
+                                    </div>
+
+                                    <div id="lm-plays-10" class="plays">
+                                        <div id="lm-plays-10-1" class="zx-type" desc="jo">
+                                            <div class="mod-select-info">
+                                                <p  class="plays-memo"><i class="ico ico-info-s"></i><b>奇偶玩法提示：</b><span>投注号码全部为奇数即为奇(例如：135)，全部为偶数即为偶(例如：246)</span></p>
+                                            </div>
+                                            <div class="mod-select-bolls mod-select-bolls-col4" style="text-align: center">
+                                                <div class="hd">
+                                                    <h3 class="clearfix">
+                                                        <span id="play_tips" class="t1"><em>选号区</em> <span class="muted">(请选择一种属性)</span></span>
+                                                        <!--                                            <span class="t2"><em>选号区</em> <span class="muted">(请选择一种属性)</span></span>-->
+                                                    </h3>
+                                                </div>
+                                                <div class="bd">
+                                                    <div class="tools-boll-list  code_box">
+                                                        <div class="boll-item boll-item-col5 sd_zx_dd">
+                                                            <div style="margin-top:10px;" class="k">
+                                                                <span class="k1">号码<span class="caret"></span></span>
+                                                                <!--                                                    <span class="k2">遗漏</span>-->
+                                                            </div>
+
+                                                            <div class="v">
+                                                                <div class="boll-list btn-boll-large-box" desc="DX|大小">
+                                                                    <ul class="clearfix">
+                                                                        <li><em class="btn-boll btn-boll-large" onclick="selectBall(this,1)">奇</em>
+                                                                            <!--                                                                <span>2</span>-->
+                                                                        </li>
+                                                                        <li><em class="btn-boll btn-boll-large" onclick="selectBall(this,0)">偶</em>
+                                                                            <!--                                                                <span class="red" >3</span>-->
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ft">
+                                                        <p class="sel_info">您选了 <b>0</b> 注</p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- {{选号结果 -->
+                                    <div class="mod-select-result">
+                                        <div class="panel panel-t9 none" id="cd_list_try" style="position:absolute; bottom: 143px;right: 58px;width: 130px;cursor: pointer;_overflow: hidden;">
+                                            <div class="panel-content">
+                                                <div class="bd">
+                                                    <p>手气不错，机选一注试试</p>
+                                                </div>
+                                            </div>
+                                            <span class="sd"></span>
+                                        </div>
+                                        <div class="hd confirm_sel_code_list" style="margin-left: 200px;text-align: left;">
+                                            <button type="button" class="btn" id="confirm_sel_code"><span class="btn-large btn-slt-ok"><i class="l"><i class="r">确认选号</i></i></span></button>
+                                            <a href="javascript:void(0)" class="lnk lnk-calcel" onclick="clearAllBall()">清空选号</a>
+                                        </div>
+                                        <div class="bd clearfix">
+                                            <div class="result">
+                                                <div class="content" >
+                                                    <ul class="clearfix codelist" id="codelist">
+                                                        <!--                                            <li class="" codes="Z1|234,3,3">-->
+                                                        <!--                                                <span class="del" count="3">删除</span>-->
+                                                        <!--                                                <span class="modi" count="3">修改</span>-->
+                                                        <!--                                                <div class="code">-->
+                                                        <!--                                                    <b>直选复式</b><b class="em">234,3,3</b>  [3注]</div>-->
+                                                        <!--                                            </li>-->
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="qkmethod">
+                                                <ul plays="Z1|直选">
+                                                    <li><a class="btn-middle" count="1" href="#" onclick="robotChoose(1)">机选1注</a></li>
+                                                    <li><a class="btn-middle" count="5" href="#" onclick="robotChoose(5)">机选5注</a></li>
+                                                    <li><a class="btn-middle" count="10" href="#" onclick="robotChoose(10)">机选10注</a></li>
+                                                    <li><a class="btn-middle" count="0" href="javascript:void(0)" onclick="clearList()">清空列表</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mod-select-result" id="result">
+                                    <div class="ft">
+                                        <div class="total">
+                                            您选了 <b class="em" id="count">0</b> 注，下注金额 <input class="text" id="buyMoney" type="text" value="" style="width: 80px;height: 30px" autocomplete="off" maxlength="6"> 元，共 <b class="em" id="money">0</b> 元
+                                        </div>
+                                        <div style="text-align: center">
+                                            <button type="button" class="btn" id="confirm_buy"><span class="btn-large btn-slt-ok">确认下注</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 中奖说明}} -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                .home-newser p {
+                    display: none
+                }
+
+                .home-newser ul {
+                    float: none
+                }
+
+                .home-newser li {
+                    width: 100%
+                }
+            </style>
+            </div>
+
+        </td>
+        <td style="text-align: left;padding-top:10px;width: calc(100% - 800px)" valign="top">
+            <div class="bd m5" style="margin-bottom: 10px">
+                <div class="div_print " id="betlackPrint">
+                    <table class="t-1 tc" style="width:100%">
+                        <thead>
+                        <tr class="title-bar">
+                            <td colspan="4" class="print_action" i18n="kuaida.current.stopBuyCodes">目前停押号码</td>
+                        </tr>
+                        <tr class="bg2">
+                            <td width="50%">方案</td>
+                            <td width="15%">号码</td>
+                            <td width="15%">金额</td>
+                            <td width="20%">时间</td>
+                            <!--                            <td width="10%"><label>-->
+                            <!--                                <span i18n="kuaida.selectAll">全选</span>-->
+                            <!--                                <input type="checkbox" id="selectAll_lack" class="checkbox"></label> -->
+                            <!--                            </td> -->
+                        </tr>
+                        </thead>
+                        <tbody id="tbody_lack" class="tc">
+                        <!--                                    <tr><td colspan="3" class="blank_area"></td></tr>-->
+                        <!--                                    <tr> <td colspan="3" class="fb tfoot"> 笔数:0&nbsp;&nbsp;总金额:0 </td></tr>-->
+                        </tbody>
+                        <tfoot>
+                        <tr> <td colspan="4" class="fb tfoot">
+                            <span i18n="kuaida.bishu">笔数:</span><span  id="stopBuy-bishu">0</span>&nbsp;&nbsp;
+                            <span i18n="kuaida.totalMoney">总金额:</span><span  id="stopBuy-totalMoney">0</span></td></tr>
+                        <tr class="hide" id="stopBuy-pageRow">
+                            <td colspan="4" class="fb tfoot" style="text-align: center">
+                                <a href="javascript:void(0)" class="btn-common" id="stopBuy-prevPage" i18n="kuaida.prevPage">上一页</a>
+                                &nbsp;&nbsp;
+                                <span id="stopBuy-currpage">0</span>&nbsp;/&nbsp;<span id="stopBuy-pages">0</span>
+                                &nbsp;&nbsp;
+                                <a href="javascript:void(0)" class="btn-common" id="stopBuy-nextPage" i18n="kuaida.nextPage">下一页</a>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="bd m5 module">
+                <table class="t-1 tc table_bg">
+                    <thead>
+                    <tr class="title-bar"> <td colspan="8" class="tc">下注框</td> </tr>
+                    <!--                    <tr class="mod-cz-bd nav-cz-sub active"><td colspan="8" class="tc">下注框</td></tr>-->
+                    <tr class="bg3">
+                        <td width="7%">彩种</td>
+                        <td width="20%">方案</td>
+                        <td width="20%">注单编号</td>
+                        <td width="8%">号码</td>
+                        <td width="14%">赔率</td>
+                        <td width="10%">金额</td>
+                        <td width="7%">状态</td>
+                        <td class="align-checkbox-wrap print_area" width="14%">
+                            <label class="align-checkbox">
+                                <span>全选</span><input type="checkbox" id="selectAll" class="checkbox">
+                            </label>
+                            <input type="button" value="退码" class="btn-common fn-cancelbet" id="cancelbet">
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+
+
+<!-- 保存方案}} -->
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/kuaixuan-3d.js"></script>
+<script src="../js/projects/validate.js"></script>
+
+<script type="text/javascript">
+    var $ = layui.$;
+    var lmId = 10;
+    var lsType = 1;
+    var totalAmount = 0;
+    var totalMoney  = 0;
+
+    var rules = {
+        lmId:10,
+        lsTypeId:1,
+        "jo":{
+            ji:'',
+            ou:'',
+            totals:0,
+        }
+    }
+
+    var selectList = [];
+
+    window.onload=function(){
+        parent.window.frameLoad();
+        //initBuyList();
+        getData();
+    }
+
+    //清空列表
+    function clearList(){
+        selectList = [];
+        upSelectList();
+    }
+
+    //刷新选号列表
+    function upSelectList(){
+        if(selectList.length>0){
+            var html = "";
+            for(var i=0;i<selectList.length;i++){
+                var item = selectList[i];
+                var na = item.huizongName;
+                var codes = item.value;
+                var buyAmount = item.buyAmount;
+                var li = '<li class="" codes="Z1|234,3,3">'+
+                    '<span class="del" count="3" onclick="delSelect(\''+item.uuid+'\')">删除</span>'+
+                    '<div class="code">'+
+                    '<b>'+na+'</b><b class="em">'+codes+'</b>  ['+buyAmount+'注]</div>'+
+                '</li>'
+                html+=li;
+            }
+            $("#codelist").html(html);
+        }else{
+            $("#codelist").html("");
+        }
+        sumTotalMoney();
+    }
+
+    //删除
+    function delSelect(uuid) {
+        if(selectList.length>0){
+            var newList = [];
+            for(var i=0;i<selectList.length;i++) {
+                var item = selectList[i];
+                if(item.uuid!=uuid){
+                    newList.push(item);
+                }
+            }
+            selectList = newList;
+            upSelectList();
+        }
+    }
+
+    //选择球
+    function selectBall(domThis,joFlag) {
+        var playId = "lm-plays-" + lmId + "-" + lsType;
+        $(domThis).is(".btn-boll-active") ? $(domThis).removeClass("btn-boll-active") : $(domThis).addClass("btn-boll-active");
+        if($(domThis).is(".btn-boll-active")){
+            $(domThis).parent().addClass('k3-btn-boll-active')
+            rules.jo.totals += 1;
+            joFlag==0 ? rules.jo.ou=1:rules.jo.ji=1;
+        }else{
+            $(domThis).parent().removeClass('k3-btn-boll-active')
+            rules.jo.totals -= 1;
+            joFlag==0 ? rules.jo.ou=0:rules.jo.ji=0;
+        }
+        $("#"+playId).find(".sel_info").eq(0).find("b").eq(0).html(rules.jo.totals)
+        sumTotalMoney();
+    }
+
+    //清空所有选中的号码
+    function clearAllBall(){
+        var playId = "lm-plays-" + lmId + "-" + lsType;
+        $("#"+playId).find(".btn-boll").removeClass("btn-boll-active");
+        $("#"+playId).find(".k3-btn-boll").removeClass("k3-btn-boll-active");
+        rules.jo.totals = 0;
+        rules.jo.ou='';
+        rules.jo.ji='';
+        $("#"+playId).find(".sel_info").eq(0).find("b").eq(0).html(rules.jo.totals)
+    }
+
+    //确认选号
+    $("#confirm_sel_code").on("click","",function(e){
+        if(rules.jo.totals>0){
+            if(rules.jo.ji==1){
+                selectList.push({
+                    uuid:guid(),
+                    huizongName:'奇偶单式',
+                    buyAmount:1,
+                    value:'奇',
+                    buyCodes:'奇',
+                    lmId:lmId,
+                    lsTypeId:lsType,
+                    buyMoney:""
+                })
+            }
+            if(rules.jo.ou==1){
+                selectList.push({
+                    uuid:guid(),
+                    huizongName:'奇偶单式',
+                    buyAmount:1,
+                    value:'偶',
+                    buyCodes:'偶',
+                    lmId:lmId,
+                    lsTypeId:lsType,
+                    buyMoney:""
+                })
+            }
+
+            upSelectList();
+            clearAllBall();
+        }
+    })
+
+    function sumTotalMoney(){
+        var ta = 0;
+        if(selectList.length>0){
+            selectList.forEach((item,idx)=>{
+                ta = ta + item.buyAmount;
+            })
+        }
+        totalAmount = ta;
+        $("#count").html(totalAmount);
+        var buyMoney = $("#buyMoney").val()==""?0: $("#buyMoney").val();
+        totalMoney = buyMoney*1*totalAmount;
+        $("#money").html(totalMoney); //总金额
+    }
+
+    $("#buyMoney").on("keyup","",function(e){
+        if(!checkPhoneBrowser()){
+            if(e.key=='.' || (e.keyCode>=48 && e.key<=57) || e.keyCode==8){
+                if(this.value.indexOf(".")==0){
+                    this.value = this.value.substr(1,this.value.length-1);
+                }
+            }else{
+                this.value = this.value.substr(0,this.value.length-1);
+            }
+        }
+        if(validateMoney(this.value)){
+            if(this.value!=""){
+                totalMoney = this.value*1*totalAmount;
+            }else{
+                totalMoney = 0;
+            }
+        }else{
+            totalMoney = 0;
+        }
+        $("#money").html(totalMoney); //总金额
+
+    });
+
+
+    //确认下注
+    $("#confirm_buy").on("click","",function(e){
+        if(selectList.length<1){
+            layer.alert("请选择号码");
+            return;
+        }
+        var buyMoney = $("#buyMoney").val();
+        if(buyMoney==""){
+            layer.alert("请输入下注金额");
+            return;
+        }
+        if(!validateMoney(buyMoney)){
+            layer.alert("下注金额格式错误");
+            return;
+        }
+        selectList.forEach((item,idx)=>{
+            item.buyMoney = buyMoney;
+        })
+        var loading = layer.msg("正在提交...",{icon:16,time:-1,shade:0.3})
+
+        $.ajax({
+            url:HOST+"draw/pc/buy3d",
+            type:'post',
+            data:JSON.stringify(selectList),
+            success:function (res) {
+                layer.close(loading);
+                if(res.code==0){
+                    clearList();
+                    stopBuyPager.currpage=1;
+                    getStopBuyCodes(0);
+                    initBuyList();
+                    parent.window.getCredit();
+                    parent.window.print
+                }else{
+                    layer.alert(res.msg)
+                }
+            }
+        })
+    })
+
+
+    //机选
+    function robotChoose(count) {
+        var codeList = [];
+        for(var i=0;i<count;i++) {
+            var rad = parseInt(Math.random() * 10);
+            if(rad%2==0){
+                selectList.push({
+                    uuid:guid(),
+                    huizongName:'奇偶单式',
+                    buyAmount:1,
+                    value:'偶',
+                    buyCodes:'偶',
+                    lmId:lmId,
+                    lsTypeId:lsType,
+                    buyMoney:""
+                })
+            }else{
+                selectList.push({
+                    uuid:guid(),
+                    huizongName:'奇偶单式',
+                    buyAmount:1,
+                    value:'奇',
+                    buyCodes:'奇',
+                    lmId:lmId,
+                    lsTypeId:lsType,
+                    buyMoney:""
+                })
+            }
+
+        }
+        upSelectList();
+        clearAllBall();
+    }
+
+</script>
+
+</body>
+</html>

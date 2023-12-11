@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日分类账</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <style>
+        th {
+            background: url(../../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main">
+    <template>
+    <div class="module">
+        <div name="module" id="reportclass" class="m5 mt10 reportclass">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="ledger.top.location">位置 </a>
+                    <span class="red"> &gt;&gt;  <span i18n="ledger.top.dayLedger">日分类帐</span>    &gt;&gt;
+                        <!--<a class="blue" href=" #!reportclass|dayledger?level=5&amp;list=1&amp;parent_id=74&amp;period_no= "-->
+                            <!--title="查看up66862"> up66862(总监) </a>-->
+                        <span id="navPath"></span>
+                    </span>
+                </div>
+                <div class="fr">
+                    <a href="gongXianDu.html" class="" i18n="ledger.top.gongxiandu">贡献度</a> |
+                    <a href="dayfelei.html" class="fb red" i18n="ledger.top.dayLedger">日分类帐</a> |
+                    <a href="yuefelei.html?all=1" class="" i18n="ledger.top.monthLedger">月分类账</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td colspan="5">
+                            <span i18n="ledger.table.head.title.ledger">分类账 </span>
+                            <span i18n="ledger.table.head.title.drawNo">期号</span>{{drawId}}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr class="bg2">
+                        <td width="14%"> {{roleName}}</td>
+                        <td width="14%" i18n="ledger.table.head.type">类别</td>
+                        <td width="14%" i18n="ledger.table.head.count">笔数</td>
+                        <td width="14%" i18n="ledger.table.head.betAmount">下注金额</td>
+                        <td width="14%" i18n="ledger.table.head.backWater">回水</td>
+                        <td width="14%" i18n="ledger.table.head.winLottery">中奖</td>
+                        <td width="14%" i18n="ledger.table.head.profitLoss">盈亏</td>
+                    </tr>
+                    </thead>
+                    <tbody v-if="userDayTotal != null" v-for="total in userDayTotal">
+                        <tr class="fn-hover">
+                            <td class="bg3" v-if="roleNameId != 6">
+                                <a :href="'subDayFenLei.html?userId=' + total.userId+'&drawId='+drawId" v-if="total.nickName != ''">{{total.userName}}({{total.nickName}})</a>
+                                <a :href="'subDayFenLei.html?userId=' + total.userId+'&drawId='+drawId" v-else>{{total.userName}}</a>
+                            </td>
+                            <td class="bg3" v-else>
+                                <span v-if="total.nickName != ''">{{total.userName}}({{total.nickName}})</span>
+                                <span v-else>{{total.userName}}</span>
+                            </td>
+                            <td class="blue">
+                                <span class="ico-open"></span>
+                                <a href="javascript:void(0)" class="fn-getledger" _target="a"  @click="totalCargo(total.userName)" i18n="ledger.table.totalGoods">总货合计</a>
+                            </td>
+                            <td class="bg3 bold f14">{{total.zhLedger.exchangeCount == null ? '--' : total.zhLedger.exchangeCount}}</td>
+                            <td class="bold f14">{{total.zhLedger.amount == null ? '--' : total.zhLedger.amount}}</td>
+                            <td class="bg3 fb f14">{{total.zhLedger.backWater == null ? '--' : total.zhLedger.backWater}}</td>
+                            <td class="fb f14">{{total.zhLedger.drawAmount == null ? '--' : total.zhLedger.drawAmount}}</td>
+                            <td class="bg3 fb f14">{{total.zhLedger.ykAmount == null ? '--' : total.zhLedger.ykAmount}}</td>
+                        </tr>
+                        <tr class="hide" :id="'zh'+total.userName" >
+                            <td colspan="7" class="no-padding" id="a">
+                                <table class="t-1" v-for="zh in total.zhLedgerTotalList">
+                                    <tbody class="fn-hover">
+                                        <tr class="">
+                                            <td width="14%" class="bg6"></td>
+                                            <td width="14%">{{zh.betRule}}</td>
+                                            <td width="14%" class="bg3 f14 bold">{{zh.exchangeCount == null ? '--' : zh.exchangeCount}}</td>
+                                            <td width="14%" class="f14 bold">{{zh.amount == null ? '--' : zh.amount}}</td>
+                                            <td width="14%" class="bg3 f14 bold">{{zh.backWater == null ? '--' : zh.backWater}}</td>
+                                            <td width="14%" class="f14 bold">{{zh.drawAmount == null ? '--' : zh.drawAmount}}</td>
+                                            <td width="14%" class="bg3 f14 bold">{{zh.ykAmount == null ? '--' : zh.ykAmount}}</td>
+                                        </tr>
+                                        <tr v-if="zh.ledgerTotalDetailResList != null">
+                                            <td colspan="7" class="no-padding">
+                                                <table class="t-1">
+                                                    <tbody class="fn-hover" >
+                                                    <tr class="bg5" v-for="detail in zh.ledgerTotalDetailResList" >
+                                                        <td width="14%" class="bg6"></td>
+                                                        <td width="14%">{{detail.betRule}}</td>
+                                                        <td width="14%" class="bg3 f14 bold">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                        <td width="14%" class="f14 bold">{{detail.amount == null ? '--' : detail.amount}}</td>
+                                                        <td width="14%" class="bg3 f14 bold">{{detail.backWater == null ? '--' : detail.backWater}}</td>
+                                                        <td width="14%" class="f14 bold">{{detail.drawAmount == null ? '--' : detail.drawAmount}}</td>
+                                                        <td width="14%" class="bg3 f14 bold">{{detail.ykAmount == null ? '--' : detail.ykAmount}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="fn-hover" v-if="total.shLedgerTotalList != null">
+                            <td class="bg3" v-if="total.nickName != ''"> {{total.userName}}({{total.nickName}})</td>
+                            <td class="bg3" v-else> {{total.userName}}</td>
+                            <td class="blue">
+                                <span class="ico-open"></span>
+                                <a href="javascript:void(0)" class="fn-getledger" _target="b" @click="shiHuoTotal(total.userName)" i18n="ledger.table.totalZc">占成合计</a>
+                            </td>
+                            <td class="bg3 bold f14">{{total.shLedger.exchangeCount == null ? '--' : total.shLedger.exchangeCount}}</td>
+                            <td class="bold f14">{{total.shLedger.amount == null ? '--' : total.shLedger.amount}}</td>
+                            <td class="bg3 f14 fb">{{total.shLedger.backWater == null ? '--' : total.shLedger.backWater}}</td>
+                            <td class="f14 fb">{{total.shLedger.drawAmount == null ? '--' : total.shLedger.drawAmount}}</td>
+                            <td class="bg3 f14 fb">{{total.shLedger.ykAmount == null ? '--' : total.shLedger.ykAmount}}</td>
+                        </tr>
+                        <tr class="hide" :id="'sh'+total.userName" v-if="total.shLedgerTotalList != null">
+                            <td colspan="7" class="no-padding" id="b">
+                                <table class="t-1" v-for="sh in total.shLedgerTotalList">
+                                    <tbody class="fn-hover">
+                                        <tr class="">
+                                            <td width="14%" class="bg6" v-if="sh.betRule == '一定位'" i18n="ledger.table.MaximumNegativeValue">最大负值</td>
+                                            <td width="14%" class="bg6" v-else></td>
+                                            <td width="14%">{{sh.betRule}}</td>
+                                            <td width="14%" class="bg3 f14 bold">{{sh.exchangeCount == null ? '--' : sh.exchangeCount}}</td>
+                                            <td width="14%" class="f14 bold">{{sh.amount == null ? '--' : sh.amount}}</td>
+                                            <td width="14%" class="bg3 f14 bold">{{sh.backWater == null ? '--' : sh.backWater}}</td>
+                                            <td width="14%" class="f14 bold">{{sh.drawAmount == null ? '--' : sh.drawAmount}}</td>
+                                            <td width="14%" class="bg3 f14 bold">{{sh.ykAmount == null ? '--' : sh.ykAmount}}</td>
+                                        </tr>
+                                        <tr v-if="sh.ledgerTotalDetailResList != null">
+                                            <td colspan="7" class="no-padding">
+                                                <table class="t-1">
+                                                    <tbody class="fn-hover" >
+                                                    <tr class="bg5" v-for="detail in sh.ledgerTotalDetailResList" >
+                                                        <td width="14%" class="bg6"></td>
+                                                        <td width="14%">{{detail.betRule}}</td>
+                                                        <td width="14%" class="bg3 f14 bold">{{detail.exchangeCount == null ? '--' : detail.exchangeCount}}</td>
+                                                        <td width="14%" class="f14 bold">{{detail.amount == null ? '--' : detail.amount}}</td>
+                                                        <td width="14%" class="bg3 f14 bold">{{detail.backWater == null ? '--' : detail.backWater}}</td>
+                                                        <td width="14%" class="f14 bold">{{detail.drawAmount == null ? '--' : detail.drawAmount}}</td>
+                                                        <td width="14%" class="bg3 f14 bold">{{detail.ykAmount == null ? '--' : detail.ykAmount}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                    <tr><td colspan="7" i18n="ledger.table.noData">暂无数据！</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"> </div>
+    </div>
+    </template>
+</div>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+
+    var moduleName = "subAccount_feleizhang";//ledger
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.initData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        data: {
+            userDayTotal: [],
+            drawId: "",
+            roleName: "",
+            roleNameId: "",
+            userName:'',
+            isBack:'',
+            userId:''
+        },
+        methods: {
+            initDataList() {
+                const _this = this;
+                this.userId = GetQueryString("userId");
+                this.drawId = GetQueryString("drawId");
+                this.isBack = GetQueryString("isBack");
+                if (this.userId != null && this.userId != "" && this.userId != undefined) {
+                    $.ajax({
+                        url: HOST + "ledger/getSubDayLedgerList?userId=" + _this.userId + "&drawId=" + _this.drawId
+                        , type: "get"
+                        , success: function (res) {
+                            if (res.code == 200) {
+                                //_this.drawId = res.data.drawId;
+                                _this.roleName = res.data.roleName;
+                                _this.roleNameId = res.data.roleNameId;
+                                _this.userName = res.data.userName;
+                                _this.userDayTotal = res.data.userDayTotal;
+                                var selfRoleName = res.data.selfRoleName;
+                                var selfUserName = res.data.selfUserName;
+                                var qs = {
+                                    uid:_this.userId,
+                                    drawId:_this.drawId,
+                                    isBack:1,
+                                    roleName:selfRoleName,
+                                    userName:selfUserName
+                                }
+                                _this.buildNavPath(qs)
+                            } else {
+                                layer.msg(i18np.prop('ledger.ajax.errorMsg'));
+                            }
+                        }
+                    });
+                }
+            },
+            totalCargo(userName) {
+                if ($("#zh" + userName).is(":hidden")) {
+                    $("#zh" + userName).show();
+                }else {
+                    $("#zh" + userName).hide();
+                }
+            },
+            shiHuoTotal (userName) {
+                if ($("#sh" + userName).is(":hidden")) {
+                    $("#sh" + userName).show();
+                }else {
+                    $("#sh" + userName).hide();
+                }
+            },
+            buildNavPath(qs){
+                var that = this;
+                var pp = sessionStorage.getItem("yueji_nav");
+                var navPath = [];
+                var pathStr = "";
+                if(pp==null || pp==""){
+                    navPath.push(qs)
+                }else{
+                    var newArr=[];
+                    navPath=JSON.parse(pp);
+                    var exist = false;
+                    for(var i=0,len=navPath.length;i<len;i++){
+                        var item = navPath[i];
+                        newArr.push(item);
+                        if(item.uid==that.userId){
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if(exist && that.isBack=="1"){
+                        navPath = newArr;
+                    }else{
+                        navPath.push(qs)
+                    }
+                }
+                navPath.forEach((item,idx)=>{
+                    var url = "subDayFenLei.html?userId="+item.uid+"&drawId="+item.drawId+"&isBack="+item.isBack;
+                    var alink = '<a class="blue" href="'+url+'" title="查看'+item.userName+'">\n' +
+                        '<span style="color: #0000FF;">'+item.userName+'</span>\n' +
+                        '<span style="color: #0000FF;">('+item.roleName+')</span>\n' +
+                        '</a>';
+                    if(pathStr==''){
+                        pathStr = alink;
+                    }else{
+                        pathStr = pathStr + ">>"+alink;
+                    }
+                })
+                $("#navPath").html(pathStr);
+                console.log("===================",navPath);
+                sessionStorage.setItem("yueji_nav",JSON.stringify(navPath))
+            }
+        }
+    })
+    vm.initDataList();
+</script>
+</body>
+</html>

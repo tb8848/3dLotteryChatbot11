@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+            /*position:relative;*/
+        /*}*/
+
+        .t-1 td{
+            border:1px solid #e2e2e2;
+        }
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div class="module">
+    <div name="module" id="betlist" class="m5 mt10">
+        <template>
+        <div class="mt10">
+            <form autocomplete="off" novalidate="novalidate">
+                <input type="hidden" value="22346" name="period_number" id="period_number">
+                <input type="hidden" value="0" name="Is_Winning" id="Is_Winning">
+                <table class="t-1">
+                    <thead>
+                    <tr class="title-bar">
+                        <td colspan="19" i18n="xiazhu.search">搜索</td>
+                    </tr>
+                    </thead>
+                    <tbody class="noBD" id="dapingmu">
+                    <tr>
+                        <td width="50" i18n="xiazhu.searchCode"> {{$t('message.xiazhuMingxi.searchCode')}} </td>
+                        <td width="60">
+                            <input type="text" class="w60" v-model="searchParam.buyCodes" maxlength="3" betno="true" id="buyCodes"> </td>
+<!--                        <td width="15" i18n="xiazhu.xian">{{$t('message.xian')}}</td>-->
+<!--                        <td width="30"> <input type="checkbox" value="1"  id="xianFlag" :checked="selectXian" @click="changeXianFlag"> </td>-->
+                        <td width="30" i18n="xiazhu.show">{{$t('message.xiazhuMingxi.show')}}</td>
+                        <td width="50">
+                            <select v-model="searchParam.colType" id="colType">
+                                <option value="0">{{$t('message.odds')}}</option>
+                                <option value="1">{{$t('message.money')}}</option>
+                                <option value="2">{{$t('message.tuima')}}</option>
+                            </select>
+                        </td>
+                        <td width="50">
+                            <input type="text" class="w50" v-model="searchParam.minValue" maxlength="8" nonnegative="true" lessthan="#search_max" id="minValue"> </td>
+                        <td width="15" i18n="xiazhu.to">{{$t('message.xiazhuMingxi.to')}}</td>
+                        <td width="50">
+                            <input type="text" class="w50" v-model="searchParam.maxValue" id="maxValue" maxlength="8" nonnegative="true" > </td>
+                        <td width="30" i18n="xiazhu.class">{{$t('message.xiazhuMingxi.class')}}</td>
+                            <td width="80">
+                                <select v-model="dataType" id="dataType">
+                                    <option v-for="(item,idx) in dataTypeList" :value="item.value">{{item.text}}</option>
+                                </select>
+                            </td>
+<!--                        <td width="30" i18n="xiazhu.type">{{$t('message.type')}}</td>-->
+<!--                        <td width="60">-->
+<!--                            <select v-model="searchParam.buyType" id="buyType">-->
+<!--                                <option value="0">{{$t('message.all')}}</option>-->
+<!--                                <option value="1">{{$t('message.toBuy')}}</option>-->
+<!--                                <option value="2">{{$t('message.baopai')}}</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
+                        <td width="70" i18n="xiazhu.printId">{{$t('message.xiazhuMingxi.printId')}}</td>
+                        <td width="150"> <input type="text" style="width:130px" v-model="searchParam.printNo" id="printNo" nonnegative="true" maxlength="18"> </td>
+                        <td width="50"> <input type="button" :value="$t('message.submit')" class="btn-common" id="btnSearch" @click="toSearch()" i18n="xiazhu.submit"> </td>
+                        <td width="50"><input type="button" :value="$t('message.print')" data-type="1" class="btn-common" @click="toPrint()" i18n="xiazhu.print"></td>
+                        <td>
+                            <input type="button" value="中奖明细" data-type="1" class="btn-common" @click="winDetail()">
+                            </td>
+                    </tr>
+                    </tbody>
+                    <tbody class="noBD" id="xiaopingmu" style="display: none;">
+                    <tr>
+                        <td width="230">
+                            {{$t('message.xiazhuMingxi.searchCode')}}
+                            <input type="text" class="w60" v-model="searchParam.buyCodes" maxlength="3" betno="true" id="buyCodes">
+                            {{$t('message.xian')}}&nbsp;&nbsp;
+                            <input type="checkbox" value="1"  id="xianFlag" :checked="selectXian" @click="changeXianFlag">
+                        </td>
+                        <td width="300">
+                            {{$t('message.xiazhuMingxi.show')}}&nbsp;&nbsp;
+                            <select v-model="searchParam.colType" id="colType">
+                                <option value="0">{{$t('message.odds')}}</option>
+                                <option value="1">{{$t('message.money')}}</option>
+                                <option value="2">{{$t('message.tuima')}}</option>
+                            </select>
+                            <input type="text" class="w50" v-model="searchParam.minValue" maxlength="8" nonnegative="true" lessthan="#search_max" id="minValue">
+                            {{$t('message.xiazhuMingxi.to')}}
+                            <input type="text" class="w50" v-model="searchParam.maxValue" id="maxValue" maxlength="8" nonnegative="true" >
+                        </td>
+<!--                        <td width="420">-->
+<!--                            {{$t('message.xiazhuMingxi.class')}}&nbsp;&nbsp;-->
+<!--                            <select v-model="dataType" id="dataType">-->
+<!--                                <option v-for="(item,idx) in dataTypeList" :value="item.value">{{item.text}}</option>-->
+<!--                            </select>-->
+<!--                            {{$t('message.type')}}&nbsp;&nbsp;-->
+<!--                            <select v-model="searchParam.buyType" id="buyType">-->
+<!--                                <option value="0">{{$t('message.all')}}</option>-->
+<!--                                <option value="1">{{$t('message.toBuy')}}</option>-->
+<!--                                <option value="2">{{$t('message.baopai')}}</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
+                    </tr>
+                    <tr>
+                        <td width="230">
+                            {{$t('message.xiazhuMingxi.printId')}}
+                            <input type="text" style="width:130px" v-model="searchParam.printNo" id="printNo" nonnegative="true" maxlength="18">
+                        </td>
+                        <td width="100">
+                            <input type="button" :value="$t('message.submit')" class="btn" id="btnSearch" @click="toSearch()" i18n="xiazhu.submit">
+                            <input type="button" :value="$t('message.print')" data-type="1" class="btn fn-print" @click="toPrint()" i18n="xiazhu.print">
+                        </td>
+                        <td><input type="button" :value="$t('message.xiazhuMingxi.drawDetail')" data-type="1" class="btn" @click="winDetail()" i18n="xiazhu.drawDetail"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <div class="mt10" id="test">
+            <table class="t-1 table_bg" >
+                <thead>
+                <tr class="title-bar" v-if="searchParam.codeWinType==0">
+                    <td colspan="12" class="tc" v-if="isBillDetail">  {{$t('message.page_curr')}}{{searchParam.drawNo}}{{$t('message.qi')}} {{$t('message.xiazhuMingxi.title')}}  </td>
+                    <td colspan="12" class="tc" v-else>  {{$t('message.xiazhuMingxi.subTitle')}}  </td>
+                </tr>
+                <tr class="title-bar" v-if="searchParam.codeWinType==1">
+                    <td colspan="12" class="tc" v-if="isBillDetail">  {{$t('message.page_curr')}}{{searchParam.drawNo}}{{$t('message.qi')}} {{$t('message.xiazhuMingxi.drawDetail')}}  </td>
+                    <td colspan="12" class="tc" v-else>  {{$t('message.xiazhuMingxi.subTitle1')}}</td>
+                </tr>
+                <tr class="bg2 tc">
+                    <td>{{$t('message.xiazhuMingxi.lotteryType')}}</td>
+                    <td>方案</td>
+                    <td v-if="searchParam.codeWinType==0">{{$t('message.billNO')}}</td>
+                    <td v-else>{{$t('message.ticketNo')}}</td>
+                    <td v-if="searchParam.codeWinType==0">{{$t('message.billTime')}}</td>
+                    <td v-else>{{$t('message.ticketTime')}}</td>
+                    <td i18n="xiazhu.buyCode">{{$t('message.buyCode')}}</td>
+                    <td i18n="xiazhu.buyMoney">{{$t('message.money')}}</td>
+                    <td i18n="xiazhu.peirate">{{$t('message.odds')}}</td>
+                    <td i18n="xiazhu.zhongjiang">{{$t('message.xiazhuMingxi.zhongjiang')}}</td>
+                    <td i18n="xiazhu.huishui">{{$t('message.xiazhuMingxi.huishui')}}</td>
+                    <td i18n="xiazhu.yingkui">{{$t('message.xiazhuMingxi.yingkui')}}</td>
+                    <td i18n="xiazhu.status">{{$t('message.xiazhuMingxi.status')}}</td>
+                    <td  v-if="searchParam.codeWinType==0">
+                        <div v-if="!isBillDetail && openStatus==1">
+                            <label><span i18n="xiazhu.selectAll">{{$t('message.selectAll')}}</span> <input type="checkbox" class="checkbox" value="selectAll" @click="selectAll" :checked="selectAllStatus"></label>
+                            <input type="button" :value="$t('message.tuima')" class="btn-common fn-cancelbet" id="tuima" @click="tuima()" i18n="xiazhu.tuima">
+                            <input type="button" :value="$t('message.tuiOrder')" class="btn-common mr10 fn-all-cancelbet" id="tuiOrder" @click="tuiOrder()" i18n="xiazhu.orderTuima">
+                        </div>
+                    </td>
+                </tr>
+                </thead>
+                <tbody id="tbody" class="fn-hover tc" v-show="pager.total==0 && !startPager">
+                    <tr> <td colspan="12" i18n="xiazhu.noData">{{$t('message.xiazhuMingxi.noData')}}</td> </tr>
+                </tbody>
+                <tbody class="fn-hover tc" v-show="startPager">
+                    <tr> <td colspan="12"><img src="../img/load.gif"></td> </tr>
+                </tbody>
+                <tbody class="fn-hover tc" v-show="!startPager && pager.total>0">
+                    <tr  v-for="(item,idx) in buyList" :class="[item.backCodeFlag==1?'bg4':'']">
+                        <td>福彩3D</td>
+                        <td v-if="item.huizongFlag==1"><a href="javascript:void(0)" :id="'bp-'+item.id" style="color:blue;text-decoration: underline"
+                               @click="bpcodesDetail(item)">{{item.huizongName}}</a></td><td v-else>{{item.huizongName}}</td>
+                        <td v-if="searchParam.codeWinType==0">{{item.printId}}</td><td v-else>{{item.batchNo}}</td>
+                        <td v-if="searchParam.codeWinType==0">
+                            <span v-if="item.backCodeFlag==1">{{item.createTime}}<br/><span i18n="xiazhu.tui">{{$t('message.tui')}}</span>:{{item.backCodeTime}}</span>
+                            <span v-else>{{item.createTime}}</span>
+                        </td><td v-else>{{item.printTime}}</td>
+                        <td >{{item.buyCodes}}</td><!--现-->
+                        <td >{{item.param1}}</td>
+                        <td v-if="item.huizongFlag==1">/</td><td v-else>{{item.param3}}</td>
+                        <td>{{item.drawStatus==1?item.drawMoney:'--'}}</td>
+                        <td>{{item.huishui}}</td>
+                        <td>{{item.shProfitLoss}}</td>
+                        <td v-if="item.backCodeFlag==1"><span style='color:orangered' i18n="xiazhu.yituima">{{$t('message.codeBack')}}</span></td>
+                        <td v-else><span i18n="xiazhu.success">{{$t('message.success')}}</span></td>
+                        <td v-if="item.backCodeFlag==0 && item.backCodeStatus==1 && searchParam.codeWinType==0 && openStatus==1 && !isBillDetail">
+                            <input type="checkbox" class="checkbox" :value="item.id" :checked="item.checked" @click="selectOne(item)"></td>
+                        <td v-else-if="searchParam.codeWinType==0">--</td>
+                    </tr>
+                    <tr v-if="buyList.length>0">
+                        <td colspan="3" i18n="xiazhu.heji">{{$t('message.heji')}}<!--合计--></td>
+                        <td>{{heji.amount}}</td>
+                        <td></td>
+                        <td>{{heji.money}}</td>
+                        <td></td>
+                        <td v-if="isBillDetail">{{heji.draw}}</td>
+                        <td v-else>{{heji.draw==0?'':heji.draw}}</td>
+                        <td>{{heji.huishui}}</td>
+                        <td>{{heji.earn}}</td>
+                        <td></td>
+                        <td v-if="searchParam.codeWinType==0">
+                            <div v-if="!isBillDetail && openStatus==1">
+                                <label><span i18n="xiazhu.selectAll">{{$t('message.selectAll')}}<!--全选--></span> <input type="checkbox" class="checkbox" @click="selectAll()" :checked="selectAllStatus"></label>
+                                <input type="button" :value="$t('message.tuima')" class="btn-common fn-cancelbet" @click="tuima" i18n="xiazhu.tuima"><!--退码-->
+                                <input type="button" :value="$t('message.tuiOrder')" class="btn-common mr10 fn-all-cancelbet" @click="tuiOrder" i18n="xiazhu.orderTuima"><!--整单退码-->
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div name="module" id="pager" class="pager" action="betlist" pagebody="tbody" pagecount="1">
+                <span i18n="xiazhu.page.cur">{{$t('message.page_curr')}}</span>
+                <span class="pageindex red">{{pager.currpage}}</span>
+                <span i18n="xiazhu.page">{{$t('message.page')}}</span>
+                <span i18n="xiazhu.gong">{{$t('message.gong')}}</span>
+                <span class="pagecount red">{{pager.pages}}</span>
+                <span i18n="xiazhu.page">{{$t('message.page')}}</span>
+                <span i18n="xiazhu.gong">{{$t('message.gong')}}</span>
+                <span class="recordcount red">{{pager.total<0?0:pager.total}}</span> <span i18n="xiazhu.tiao">{{$t('message.page_tiao')}}</span>
+                <a href="javascript:void(0)" class="fn-first" @click="firstPage" i18n="xiazhu.firstPage">{{$t('message.firstPage')}}</a>
+                <a href="javascript:void(0)" class="fn-prev" @click="prevPage" i18n="xiazhu.prevPage">{{$t('message.prevPage')}}</a>
+                <a href="javascript:void(0)" class="fn-next" @click="nextPage" i18n="xiazhu.nextPage">{{$t('message.nextPage')}}</a>
+                <a href="javascript:void(0)" class="fn-last" @click="lastPage" i18n="xiazhu.lastPage">{{$t('message.lastPage')}}</a>
+                <input type="text" class="input w30 fn-index" maxlength="10" digits="true" id="goTo" v-model="pager.toPage">
+                <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="goPage">
+            </div>
+        </div>
+        </template>
+    </div>
+</div>
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery/jquery.jqprint-0.3.js"></script>
+<script src="../js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/vue-i18n-messages.js"></script>
+
+
+<script>
+    var moduleName = "xiazhu";
+    var layer = layui.layer;
+    var $i18np = null;
+
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        i18n.locale=lang;
+        vm.getTypeList(); //切换语言，分类列表重新国际化
+
+        var width_screen = sessionStorage.getItem("width_screen");
+        // var height_screen = sessionStorage.getItem("height_screen");
+        if (width_screen*1 < 1537){
+            if (width_screen*1 > 1445 && lang=="zh"){
+                $("#dapingmu").css("display","block");
+                $("#xiaopingmu").css("display","none");
+            }else{
+                $("#dapingmu").css("display","none");
+                $("#xiaopingmu").css("display","block");
+            }
+        }else{
+            $("#dapingmu").css("display","block");
+            $("#xiaopingmu").css("display","none");
+        }
+    }
+
+    var $ = layui.$;
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            window.parent.frameLoad();
+
+            var width_screen = sessionStorage.getItem("width_screen");
+            console.log("2屏幕宽度："+width_screen+" 语言："+defaultLang);
+            // var height_screen = sessionStorage.getItem("height_screen");
+            if (width_screen*1 < 1537){
+                if (width_screen*1 > 1445 && defaultLang=="zh"){
+                    $("#dapingmu").css("display","block");
+                    $("#xiaopingmu").css("display","none");
+                }else{
+                    $("#dapingmu").css("display","none");
+                    $("#xiaopingmu").css("display","block");
+                }
+            }else{
+                $("#dapingmu").css("display","block");
+                $("#xiaopingmu").css("display","none");
+            }
+            //vm.init(0);
+            //getDrawInfo()
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+    //更改选中的导航菜单
+    window.parent.navSelected(0,"betlist");
+
+    function upOpenStatus(msg) {
+        vm.setOpenStatus(msg);
+    }
+</script>
+<script src="../js/projects/xiazhu_detail.js?v15"></script>
+
+</body>
+</html>

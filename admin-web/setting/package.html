@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>包牌设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/basicSetting.css" media="all">
+</head>
+<body style="overflow-y: auto">
+<div id="main" class="main" style="top: 0px;">
+    <template>
+    <div class="module package-type">
+        <div name="module" id="st_package" class="m5 mt10">
+            <div name="module" id="guide_setting" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="setting.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="setting.package.setting">  包牌设置  </span>
+                </div>
+                <div class="fr"><a href="basicSetting.html" class="" i18n="setting.basic.settings">基本设置</a> | <a
+                        href="openQuotation.html" class="" i18n="setting.opening.setting">开盘设置</a> | <a
+                        href="oddsChange.html" class="" i18n="setting.loss.rate.change.setting">赔率变动设置</a> |
+                    <!--<a href="packageOddsChange.html" class="" i18n="setting.package.odds.change.setting">包牌赔率变动设置</a> | --><a href="dingPan.html"
+                                                   class="" i18n="setting.fixed.plate">定盘</a> | <a
+                        href="notice.html" class="" i18n="setting.announcement.settings">公告设置</a> |
+                    <!--<a href="package.html" class="fb red" i18n="setting.package.setting">包牌设置</a> | --><a
+                        href="subAccount.html" class="" i18n="setting.sub.account">子账号</a> |
+                    <a href="accountSetting.html" class="" i18n="setting.basic.information">基本资料</a> | <a
+                        href="updatePassword.html" class="" i18n="setting.change.password">修改密码</a></div>
+            </div>
+            <div class="separate-main">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td class="tc f16" i18n="setting.package.setting">包牌设置</td>
+                    </tr>
+                    </thead>
+                </table>
+                <form id="form3" novalidate="novalidate">
+                    <div class="mb10 mt10 tc sep-btn">
+                        <input type="button" value="保存" class="btn fn-btnUpdate" @click="savePackage()" i18n="setting.four.save"> &nbsp;&nbsp;
+                        <a href="javascript:void(0)" onclick="G.util.reload()" class="btn fn-btnUpdate f13" i18n="setting.four.refresh">刷新</a>
+                    </div>
+                    <table class="t-1 table-pack tc border-separate">
+                        <tbody>
+                        <tr class="separate" v-for="(v, idx) in dataList">
+                            <td class="border0" v-for="(lsValue, lsIdx) in v.lotterySettingResList">
+                                <table class="table-full f14">
+                                    <thead>
+                                    <tr>
+                                        <td colspan="2" class="bg-pack">
+                                            <span class="fb">{{lang=='zh'?lsValue.bettingRule:lsValue.bettingRuleTh}}</span> <br>
+                                            <label style="float: left; margin-left: 6px;">
+                                                <input type="checkbox" :value="lsValue.id" name="cc" :checked="settingCheckStatus[v.lotteryMethodId]==lsValue.id"
+                                                     @click="changeLotterySetting(v.lotteryMethodId,lsValue.id)" class="fn-target-type-id vm1 fn-select-sync-two" >&nbsp;
+                                                <span>{{$t('copy')}}</span>
+                                            </label>
+                                            <a :href="'baopaiSetting.html?id='+lsValue.id+'&lmId='+v.lotteryMethodId">[<span>{{$t('packageBatch')}}</span>]</a>
+                                            <!--<a :href="baopaiSetting.html?id=lsValue.id&lmId=v.id">[包牌分批]</a>-->
+                                            &nbsp;<span>[<span>{{$t('fixedOdds')}}</span>:{{lsValue.peiRateUpperLimit}}]</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-pack1">
+                                        <td width="50%">{{$t('group')}}</td>
+                                        <td width="50%">{{$t('odds')}}</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="package-list" id="1" type_name="口口XX" v-for="(bsValue, bsIdx) in lsValue.bpSettingList">
+                                        <input class="sep-input" type="hidden" :value=bsValue.lotterySettingId _name="package_id" name="package_id">
+                                        <td>
+                                            <input class="sep-input" type="text" v-model=bsValue.groupCount _name="bet_count" name="bet_count_010" min="10" max="99" maxlength="7" integer="true" @blur="groupKeyUp(bsValue,idx, lsIdx, bsIdx)">
+                                        </td>
+                                        <td class="blue-text">
+                                            <input class="sep-input" type="text" v-model=bsValue.peiRate _name="odds" name="odds_010" min="50" max="101" maxlength="7" positive="true" @blur="groupKeyUp(bsValue,idx, lsIdx, bsIdx)">
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt10 tc sep-btn"><input type="button" value="保存" class="btn fn-btnUpdate" @click="savePackage()" i18n="setting.four.save"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script>
+    const messages = {
+        zh: {
+            copy:"复制",
+            fixedOdds:"定盘赔率",
+            packageBatch:"包牌分批",
+            group:"组数",
+            odds:"赔率"
+        },
+        th: {
+            copy:"คัดลอก",
+            fixedOdds:"อัตราต่อรองคงที่",
+            packageBatch:"การซื้อเดิมพันทั้งหมดในช่วงวันที่ต่างกัน",
+            group:"จำนวนกลุ่ม",
+            odds:"อัตราการจ่ายเดิมพัน"
+        }
+    }
+
+    var $ = layui.jquery;
+
+    var moduleName = "setting";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+        vm.initDataList();
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np','jquery'], function () {
+        i18np = layui.i18np;
+
+        // console.log("语言："+defaultLang)
+        reloadI18n({
+            defaultLang:defaultLang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+
+        vm.initDataList();
+    });
+
+    var layer = layui.layer;
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            dataList: [],
+            settingCheckStatus: new Map(),
+            bsList: [],
+            lang:'zh',  //语言
+        },
+        methods: {
+            changeLotterySetting(methodId,newId){
+                this.$set(this.settingCheckStatus, methodId, newId);
+                this.$forceUpdate()
+            },
+            initDataList() {
+                layer.msg(i18np.prop("setting.msg.data.loading"),{time:-1,shade:0.3,icon:16})
+                var _this = this;
+                _this.lang = defaultLang;
+                $.ajax({
+                    url: HOST + "bpSetting/getBpSettingList"
+                    , type: "get"
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            _this.dataList = res.data
+                            res.data.forEach((item,idx)=>{
+                                _this.$set(_this.settingCheckStatus, item.lotteryMethodId, "");
+                            })
+                        }else {
+                            layer.closeAll()
+                            // layer.msg("数据异常");
+                            layer.msg(i18np.prop("setting.msg.data.exception"));
+                        }
+                    }
+                });
+            },
+            groupKeyUp(bsValue, idx, lsIdx, bsIdx) {
+                this.dataList[idx].lotterySettingResList[lsIdx].bpSettingList[bsIdx].groupCount = bsValue.groupCount;
+                this.dataList[idx].lotterySettingResList[lsIdx].bpSettingList[bsIdx].peiRate = bsValue.peiRate;
+            },
+            savePackage () {
+                layer.msg(i18np.prop("setting.msg.saving"),{
+                    time:-1,
+                    shade:0.3,
+                    icon:16
+                })
+                var _this = this;
+
+                // console.log(_this.settingCheckStatus);
+
+                for(var i=0,len=_this.dataList.length;i<len;i++){
+                    _this.dataList[i].syncMap=_this.settingCheckStatus;
+                    // syncLotterySettingId = _this.settingCheckStatus[item.id];
+                    // console.log("syncLotterySettingId=======",syncLotterySettingId);
+                    // if(syncLotterySettingId!=""){
+                    //     _this.dataList[i].syncLotterySettingId=syncLotterySettingId;
+                    // }
+                }
+                // console.log(_this.dataList);
+                $.ajax({
+                    url: HOST + "bpSetting/saveBp"
+                    , type: "post"
+                    , data:JSON.stringify(_this.dataList)
+                    , contentType: 'application/json'
+                    , success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 0 || res.code == 200) {
+                            layer.msg(res.msg);
+                            _this.initDataList();
+                        }
+                    }
+                    ,error:function (e) {
+                        layer.closeAll();
+                    }
+                });
+            }
+        }
+    })
+    // vm.initDataList();
+</script>
+</body>
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>下级管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link href="../../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        /*.ew-tree-table-cell > .ew-tree-table-cell-content {*/
+        /*    padding: 5px 15px;*/
+        /*    line-height: 20px !important;*/
+        /*}*/
+
+        .mydk {
+            cursor: pointer;
+        }
+
+        .layui-table-header {
+            height: 30px;
+        }
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+
+        .layui-form-checked[lay-skin=primary] i {
+            border-color: #1b59f3 !important;
+            background-color: #1b59f3;
+            color: #fff;
+        }
+
+        .layui-table thead tr th{
+            font-weight: bold !important;
+        }
+
+        .layui-table tbody tr td{
+            padding: 1px 0 1px 0 !important;
+            color: black;
+        }
+
+        .layui-table-cell{
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main">
+    <div class="module">
+        <div name="module" id="memberadmin" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="user.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="user.top.xiajiManage">下级管理</span>
+                    <!--                    &gt;&gt;<a class="blue" href="#!memberadmin?Member_Id=74&amp;m=memberadmin" title="查看up66862">up66862(总监) </a>-->
+                </div>
+                <div class="fr">
+                    <a class="mydk" onclick="xinzeng()" i18n="user.top.addLowerAccount">新增下级</a> |
+                    <a class="mydk" onclick="leibiao()" style="color: #CC0000" i18n="user.top.accountList">账户列表</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <table class="t-1">
+                    <thead>
+                    <tr class="bg1">
+                        <td class="relative"><span i18n="user.userInfo.title">信息提示</span><span class="fn-toggle-show icon-open"></span></td>
+                    </tr>
+                    </thead>
+                    <tbody class="fn-toggle-content">
+                    <tr>
+                        <td>
+                            <div class="ml20">
+                                <span i18n="user.userInfo.totalCreditLimit">总信用额度：</span>
+                                <span id="user_quota"></span>；&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span i18n="user.userInfo.surplusCreditLimit">可分配信用额度：</span>
+                                <span id="user_assigned_quota"></span>；&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span i18n="user.userInfo.useCreditLimit">已分配信用额度：</span>
+                                <span id="user_distributable_quota"></span>；
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form novalidate="novalidate">
+                <input type="hidden" name="is_disable" id="is_disable" value="0">
+                <input type="hidden" name="m" value="memberadmin">
+                <input type="hidden" name="is_cash" id="is_cash" value="-1">
+                <div class="mt10">
+                    <input type="hidden" name="company_id" id="company_id" value="0"> <input type="hidden"
+                                                                                             name="member_id" value="">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="8" i18n="user.query.schema">模式查询</td>
+                        </tr>
+                        </thead>
+                        <tbody style="display: flex;justify-content: flex-end">
+                        <tr>
+                            <td width="120"> &nbsp;
+                                <span i18n="user.select.fundMode">资金模式：</span>
+                                <select name="sel_is_cash" id="sel_is_cash" lay-filter="sel_is_cash" lay-search >
+                                    <option value="" selected="">{{$t('all')}}</option>
+                                    <option value="1">{{$t('credit')}}</option>
+                                    <option value="0">{{$t('cash')}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            <div class="mt10" style="border: 1px solid #000000">
+                <table class="layui-hide" id="t" lay-filter="t"></table>
+            </div>
+            <div class="mt10 tc">
+                <button type="button" class="btn fn-batchdelete" lay-submit lay-filter="delete" i18n="user.table.btn.delete"> 删 除</button>
+            </div>
+        </div>
+    </div>
+    <div name="module" id="footer" class="footer">
+        <div class="bd"></div>
+    </div>
+</div>
+<script type="text/html" id="caozuo">
+    <a class="layui-btn  layui-btn-xs layui-btn-primary update" lay-event="update" style="color: #0000FF" i18n="user.table.btn.update">修改</a>
+    <a class="layui-btn  layui-btn-xs layui-btn-primary see" lay-event="see" style="color: #0000FF" i18n="user.table.btn.see">查看</a>
+    {{#  if(d.fundMode==0){ }}
+    <a class="layui-btn  layui-btn-xs layui-btn-primary cunqu" lay-event="cunqu" style="color: #0000FF" i18n="user.table.btn.access">存取</a>
+    {{#    }else{ }}
+    <a class="layui-btn  layui-btn-xs layui-btn-primary cunqu" lay-event="cunqu" style="color: #0000FF;display: none" i18n="user.table.btn.access">存取</a>
+    {{#  } }}
+<!--    <a class="layui-btn  layui-btn-xs layui-btn-primary" lay-event="bangding" style="color: #808080">未绑定</a>-->
+<!--    <a class="layui-btn  layui-btn-xs layui-btn-primary" lay-event="ziguanli" style="color: #0000FF">子管理员</a>-->
+</script>
+<script type="text/html" id="report">
+    <a class="layui-btn  layui-btn-xs month" lay-event="month" i18n="user.table.btn.monthReport">月报表</a>
+    <a class="layui-btn  layui-btn-xs week" lay-event="week" i18n="user.table.btn.weekReport">周报表</a>
+</script>
+<script type="text/html" id="checkbd">
+    <input type="checkbox" name="siam_one" disabled title="" lay-skin="primary" data-id = "{{ d.id }}">
+</script>
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/vue/vue-i18n.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    const messages = {
+        zh: {
+            selectCompany:"选择公司",
+            all:"所有",
+            credit:"信用",
+            cash:"现金",
+        },
+        th: {
+            selectCompany:"เลือกบริษัท",
+            all:"ทั้งหมด",
+            credit:"เครดิต",
+            cash:"เงินสด",
+        }
+    }
+    var moduleName = "user";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    var table = layui.table;
+    var fundModeValue = ""; //资金模式（0：现金、1：信用）
+    let thisRoleName = "";
+    function changeLang(lang){
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties('subMain-'+moduleName);
+        table.reload("tt",{
+            cols: [
+                [
+                    // {type: 'checkbox', fixed: 'left'},
+                    { templet: "#checkbd",
+                        title: "<input type='checkbox' name='siam_all' disabled title='' lay-skin='primary' lay-filter='siam_all'> ",
+                        width: 48,},
+                    {title: i18np.prop('user.table.head.serialNumber'), type: 'numbers', align: 'center'},
+                    {field: 'username', title: i18np.prop('user.table.head.account'),width: defaultLang=="zh" ? 140 : 160, templet: addLink},
+                    {field: 'nickName', title: i18np.prop('user.table.head.nickName'),width: defaultLang=="zh" ? 70 : 80},
+                    {field: 'lanHuoUpperLimit', title: i18np.prop('user.table.head.zc'),width: defaultLang=="zh" ? "" : 400, templet: function (d) {
+                            if (d.parentId == 1 || d.parentId == "1") {
+                                let parentLimit;
+                                if (d.parentLanHuoUpperLimit == null || d.parentLanHuoUpperLimit == "null" || d.parentLanHuoUpperLimit == undefined) {
+                                    parentLimit = 0;
+                                } else {
+                                    parentLimit = d.parentLanHuoUpperLimit;
+                                }
+                                let limit;
+                                if (d.lanHuoUpperLimit == null || d.lanHuoUpperLimit == "null" || d.lanHuoUpperLimit == undefined) {
+                                    limit = 0;
+                                } else {
+                                    limit = d.lanHuoUpperLimit;
+                                }
+                                return i18np.prop('user.table.highZc') + parentLimit + "/10" + i18np.prop('user.table.dgdZc') + limit + "/10";
+                            }else{
+                                let parentLimit;
+                                if (d.parentLanHuoUpperLimit == null || d.parentLanHuoUpperLimit == "null" || d.parentLanHuoUpperLimit == undefined) {
+                                    parentLimit = 0;
+                                }else {
+                                    parentLimit = d.parentLanHuoUpperLimit;
+                                }
+                                let limit;
+                                if (d.lanHuoUpperLimit == null || d.lanHuoUpperLimit == "null" || d.lanHuoUpperLimit == undefined) {
+                                    limit = 0;
+                                }else {
+                                    limit = d.lanHuoUpperLimit;
+                                }
+                                //let sum = parentLimit*1 + limit*1;
+                                let sum = selfLanhuo;
+                                if (d.roleNameId==6){
+                                    if (defaultLang=="zh"){
+                                        return d.parentRoleName + i18np.prop('user.table.occupy') + parentLimit + "/"+sum;
+                                    }
+                                    return d.parentRoleNameTh + i18np.prop('user.table.occupy') + parentLimit + "/"+sum;
+                                }else{
+                                    if (defaultLang=="zh"){
+                                        return d.parentRoleName + i18np.prop('user.table.occupy') + parentLimit + "/"+sum + " "+d.roleName+":" + limit + "/"+sum;
+                                    }
+                                    return d.parentRoleNameTh + i18np.prop('user.table.occupy') + parentLimit + "/"+sum + " "+d.roleNameTh+":" + limit + "/"+sum;
+                                }
+                            }
+                        }
+                    },
+                    {field: 'creditLimitStr',width: defaultLang=="zh" ? 150 : 210, title: i18np.prop('user.table.head.creditLimitAndCash'), templet: function (d) {
+                            if (d.roleNameId == 6) {
+                                return d.surplusCreditLimit;
+                            }
+                            return d.creditLimitStr;
+                        }},
+                    {field: 'updateTime', title: i18np.prop('user.table.head.updateTime'),width: 150},
+                    {field: 'updateRoleName', title: i18np.prop('user.table.head.updateUser'),width: 130},
+                    {field: 'updateUserIp',width: defaultLang=="zh" ? 100 : 140, title: i18np.prop('user.table.head.dgdIP'),templet:function (d) {
+                            var ip = d.updateUserIp;
+                            if (ip!=null && ip!="" && ip!=undefined){
+                                var x = ip.indexOf(".",ip.indexOf(".")+1);
+                                return ip.substring(0,x)+".*.*"
+                            }
+                            return ""
+                        }},
+                    {field: 'status',width: defaultLang=="zh" ? 100 : 120, title: i18np.prop('user.table.head.status'), templet: function (res) {
+                            if (res.status == 0) return "<span style='color:red'>"+ i18np.prop('user.table.top') +"</span>";
+                            else if (res.status == 1) return "<span style='color:green'>"+ i18np.prop('user.table.enable') +"</span>";
+                            else if (res.status == 2) return "<span style='color:orangered'>"+ i18np.prop('user.table.stopBet') +"</span>";
+                        }
+                    },
+                    {toolbar: "#caozuo", align: 'left', width:defaultLang=="zh" ? 200 :240 , title: i18np.prop('user.table.head.operation'), fixed: 'right'},
+                    {toolbar: "#report", align: 'center', width: defaultLang=="zh" ? 160 :210, title: i18np.prop('user.table.head.content'), fixed: 'right'}
+                ]
+            ],
+            text:{none: i18np.prop('user.table.noData')}
+        })
+        i18n.locale=lang;
+    }
+
+    const vm = new Vue({
+        el: '#sel_is_cash',
+        i18n,
+        data: {},
+        methods: {
+            init() {
+                console.log("初始化vue了")
+            }
+        }
+    })
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var id = "";
+    window.onload = function () {
+        id = GetQueryString("id");
+        fundModeValue = GetQueryString("fundModeValue");
+        if (id == null || id == "" || id == undefined) {
+            id = localStorage.getItem("id");
+        }
+        getProduct();
+    }
+
+    var $ = layui.jquery;
+    var form = layui.form;
+
+    var selfLanhuo = "";
+
+    function getProduct() {
+        $.ajax({
+            url: HOST + "admin/getUserById?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    $("#roleName").text(d.roleName + "：");
+                    $("#userName").text(d.userName);
+                    $("#user_quota").text(d.totalCreditLimit);
+                    $("#user_assigned_quota").text(d.surplusCreditLimit);
+                    $("#user_distributable_quota").text(d.useCreditLimit);
+                    thisRoleName = d.roleName1;
+                    if (d.roleNameId != 1){
+                        $("#sel_is_cash").attr("disabled",true);
+                        let daGuDongFundMode = localStorage.getItem("daGuDongFundMode");
+                        // console.log("资金模式："+daGuDongFundMode);
+                        $("#sel_is_cash").val(daGuDongFundMode);
+                        form.render('select');
+                    }
+
+                    selfLanhuo = d.selfLanHuo;
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use(['form', 'jquery', 'table', 'i18np'], function () {
+
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties('subMain-'+moduleName);
+            vm.init();
+
+        var $ = layui.jquery;
+        var table = layui.table;
+
+        var username = "";
+        var nick_name = "";
+        var companyId;
+        var fundMode
+        //查询
+        form.on('submit(search)', function (data) {
+            username = $("#username2").val();
+            nick_name = $("#nick_name").val();
+            table.reload('tt', {
+                where: {"username": username, "nickName": nick_name, "fundMode": fundMode, "companyId": companyId}
+                , page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+        //查询下拉列表公司
+        $("#sel_is_cash").change(function () {
+            fundMode = $(this).val();
+            companyId = $("#sel_companyid").val();
+            username = $("#username2").val();
+            nick_name = $("#nick_name").val();
+            table.reload('tt', {
+                where: {"username": username, "nickName": nick_name, "fundMode": fundMode, "companyId": companyId}
+                , page: {
+                    curr: 1
+                }
+            });
+        })
+        //查询下拉列表
+        $("#sel_companyid").change(function () {
+            fundMode = $("#sel_is_cash").val();
+            companyId = $(this).val()
+            username = $("#username2").val();
+            nick_name = $("#nick_name").val();
+            table.reload('tt', {
+                where: {"username": username, "nickName": nick_name, "fundMode": fundMode, "companyId": companyId}
+                , page: {
+                    curr: 1
+                }
+            });
+        })
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            url: HOST + 'admin/getUserByPage',
+            where: {"userId": GetQueryString("id")},
+            cols: [
+                [
+                    // {type: 'checkbox', fixed: 'left'},
+                    { templet: "#checkbd",
+                        title: "<input type='checkbox' name='siam_all' disabled title='' lay-skin='primary' lay-filter='siam_all'> ",
+                        width: 48,},
+                    {title: i18np.prop('user.table.head.serialNumber'), type: 'numbers', align: 'center'},
+                    {field: 'username', title: i18np.prop('user.table.head.account'),width: defaultLang=="zh" ? 140 : 160, templet: addLink},
+                    {field: 'nickName', title: i18np.prop('user.table.head.nickName'),width: defaultLang=="zh" ? 70 : 80},
+                    {field: 'lanHuoUpperLimit', title: i18np.prop('user.table.head.zc'),width: defaultLang=="zh" ? "" : 400, templet: function (d) {
+                            if (d.parentId == 1 || d.parentId == "1") {
+                                let parentLimit;
+                                if (d.parentLanHuoUpperLimit == null || d.parentLanHuoUpperLimit == "null" || d.parentLanHuoUpperLimit == undefined) {
+                                    parentLimit = 0;
+                                } else {
+                                    parentLimit = d.parentLanHuoUpperLimit;
+                                }
+                                let limit;
+                                if (d.lanHuoUpperLimit == null || d.lanHuoUpperLimit == "null" || d.lanHuoUpperLimit == undefined) {
+                                    limit = 0;
+                                } else {
+                                    limit = d.lanHuoUpperLimit;
+                                }
+                                return i18np.prop('user.table.highZc') + parentLimit + "/10" + i18np.prop('user.table.dgdZc') + limit + "/10";
+                            }else{
+                                let parentLimit;
+                                if (d.parentLanHuoUpperLimit == null || d.parentLanHuoUpperLimit == "null" || d.parentLanHuoUpperLimit == undefined) {
+                                    parentLimit = 0;
+                                }else {
+                                    parentLimit = d.parentLanHuoUpperLimit;
+                                }
+                                let limit;
+                                if (d.lanHuoUpperLimit == null || d.lanHuoUpperLimit == "null" || d.lanHuoUpperLimit == undefined) {
+                                    limit = 0;
+                                }else {
+                                    limit = d.lanHuoUpperLimit;
+                                }
+                                //let sum = parentLimit*1 + limit*1;
+                                let sum = selfLanhuo;
+                                if (d.roleNameId==6){
+                                    if (defaultLang=="zh"){
+                                        return d.parentRoleName + i18np.prop('user.table.occupy') + parentLimit + "/"+sum;
+                                    }
+                                    return d.parentRoleNameTh + i18np.prop('user.table.occupy') + parentLimit + "/"+sum;
+                                }else{
+                                    if (defaultLang=="zh"){
+                                        return d.parentRoleName + i18np.prop('user.table.occupy') + parentLimit + "/"+sum + " "+d.roleName+":" + limit + "/"+sum;
+                                    }
+                                    return d.parentRoleNameTh + i18np.prop('user.table.occupy') + parentLimit + "/"+sum + " "+d.roleNameTh+":" + limit + "/"+sum;
+                                }
+                            }
+                        }
+                    },
+                    {field: 'creditLimitStr',width: defaultLang=="zh" ? 150 : 210, title: i18np.prop('user.table.head.creditLimitAndCash'), templet: function (d) {
+                            if (d.roleNameId == 6) {
+                                return d.surplusCreditLimit;
+                            }
+                            return d.creditLimitStr;
+                        }},
+                    {field: 'updateTime', title: i18np.prop('user.table.head.updateTime'),width: 150},
+                    {field: 'updateRoleName', title: i18np.prop('user.table.head.updateUser'),width: 130},
+                    {field: 'updateUserIp',width: defaultLang=="zh" ? 100 : 140, title: i18np.prop('user.table.head.dgdIP'),templet:function (d) {
+                            var ip = d.updateUserIp;
+                            if (ip!=null && ip!="" && ip!=undefined){
+                                var x = ip.indexOf(".",ip.indexOf(".")+1);
+                                return ip.substring(0,x)+".*.*"
+                            }
+                            return ""
+                        }},
+                    {field: 'status',width: defaultLang=="zh" ? 100 : 120, title: i18np.prop('user.table.head.status'), templet: function (res) {
+                            if (res.status == 0) return "<span style='color:red'>"+ i18np.prop('user.table.top') +"</span>";
+                            else if (res.status == 1) return "<span style='color:green'>"+ i18np.prop('user.table.enable') +"</span>";
+                            else if (res.status == 2) return "<span style='color:orangered'>"+ i18np.prop('user.table.stopBet') +"</span>";
+                        }
+                    },
+                    {toolbar: "#caozuo", align: 'left', width:defaultLang=="zh" ? 200 :240, title: i18np.prop('user.table.head.operation'), fixed: 'right'},
+                    {toolbar: "#report", align: 'center', width: defaultLang=="zh" ? 160 :210, title: i18np.prop('user.table.head.content'), fixed: 'right'}
+                ]
+            ],
+            text:{none: i18np.prop('user.table.noData')},
+            page: true
+            , page: {
+                curr: layui.data("t_page").index
+            },
+            done: (res, curr, count) => {
+                layui.data("t_page", {
+                    key: 'index',
+                    value: curr
+                });
+
+                $(".update").html(i18np.prop('user.table.btn.update'));
+                $(".see").html(i18np.prop('user.table.btn.see'));
+                $(".cunqu").html(i18np.prop('user.table.btn.access'));
+                $(".bangding").html(i18np.prop('user.table.btn.unbound'));
+                $(".ziguanli").html(i18np.prop('user.table.btn.subAdmin'));
+                $(".month").html(i18np.prop('user.table.btn.monthReport'));
+                $(".week").html(i18np.prop('user.table.btn.weekReport'));
+            }
+        });
+
+        //全选
+        form.on("checkbox(siam_all)", function () {
+            var status = $(this).prop("checked");
+            // console.log("全选状态："+status);
+            $.each($("input[name=siam_one]"), function (i, value) {
+                $(this).prop("checked", status);
+            });
+            form.render();
+        });
+
+        //获取公司名称
+        $.ajax({
+            url: HOST + "company/selectListCompany",
+            success: function (res) {
+                if (res.code == 0) {
+                    for (var i in res.data) {
+                        $("#sel_companyid").append("<option value='" + res.data[i].id + "'>" + res.data[i].companyName + "</option>")
+                    }
+                    form.render()
+                }
+            }
+        });
+
+        //获取账号
+        function addLink(d) {
+            var rolename = "";
+            if (defaultLang=='th'){
+                rolename = d.roleNameTh;
+            }else{
+                rolename = d.roleName;
+            }
+            var addLink = d.username;
+            if ('' == addLink || null == addLink || undefined == addLink) {
+                return '';
+            }
+            if (addLink.length > 0) {
+                return '<a class="layui-table-link" href="javascript:void(0);" lay-event="link" style="color: blue">' + d.username + '(' + rolename + ')' + '</a>'
+            }
+        }
+
+        window.addLink = function(d) {
+            var rolename = "";
+            if (defaultLang=='th'){
+                rolename = d.roleNameTh;
+            }else{
+                rolename = d.roleName;
+            }
+            var addLink = d.username;
+            if ('' == addLink || null == addLink || undefined == addLink) {
+                return '';
+            }
+            if (addLink.length > 0) {
+                return '<a class="layui-table-link" href="javascript:void(0);" lay-event="link" style="color: blue">' + d.username +'('+rolename+')'+ '</a>'
+            }
+        }
+
+        table.on('tool(t)', function (obj) {
+            var data = obj.data
+            if (obj.event === 'update') {
+                window.location.href = "editUser2.html?id=" + data.id;
+            } else if (obj.event === 'link') {
+                window.location.href = "editUser2.html?id=" + data.id;
+            } else if (obj.event === 'ziguanli') {
+                var uri = encodeURI("ziguanli.html?id=" + data.id);
+                layer.open({
+                    type: 2
+                    , title: i18np.prop('user.msg.title.subAdminList')
+                    , area: ['600px', '220px']
+                    , content: (uri)  //js获取url参数
+                    , end: function () {
+                        // layer.closeAll();
+                    }
+                });
+            } else if (obj.event === 'cunqu') {
+                var uri = encodeURI("cunqu.html?id=" + data.id);
+                layer.open({
+                    type: 2
+                    , title: i18np.prop('user.msg.title.accessCash')
+                    , area: ['600px', '220px']
+                    , content: (uri)  //js获取url参数
+                    , end: function () {
+                        // layer.closeAll();
+                    }
+                });
+            } else if (obj.event === 'see') {
+                // window.location.href = "see.html?id=" + data.id;
+                layui.data('t_page', null);
+                //判断是否为会员
+                if (data.roleNameId == 6) {
+                    //window.location.href = "vip_user_detail.html?parentId="+data.id + "&userDetail=1";
+                    window.location.href = "../../admin/vip/user_info.html?vipId="+data.id + "&userDetail=1";
+                }else{
+                    window.location.href = "userDetail.html?parentId="+data.id + "&userDetail=1";
+                }
+            }else if(obj.event === 'month'){
+                layui.data('t_page', null);
+                window.location.href = "../../baobiao/yuebaobiao.html?parentId="+data.id + "&all=1";
+            }else if(obj.event === 'week'){
+                layui.data('t_page', null);
+                //判断是否为会员
+                window.location.href = "../../baobiao/zhoubaobiao.html?userId="+data.id;
+            }
+        });
+        xinzeng = function () {
+            window.location.href = 'addUser2.html?id=' + id;
+        }
+        leibiao = function () {
+            window.location.href = 'xiaJiList.html';
+        }
+        //删除
+        form.on('submit(delete)', function (data) {
+
+            var userIds = "";
+            var ids = [];
+            $.each($("input[name=siam_one]:checked"), function (i, value) {
+                ids[i] = $(this).attr("data-id");  // 如果需要获取其他的值 需要在模板中把值放到属性中 然后这里就可以拿到了
+            });
+            // console.log("选中的数据："+ids);
+            userIds = ids.toString();
+
+            // var check = table.checkStatus('tt');
+            // var userIds = "";
+            // $(check.data).each(function (i, o) {// o 即为表格中一行的数据
+            //     if (userIds == "") {
+            //         userIds = o.id;
+            //     } else {
+            //         userIds = userIds + "," + o.id;
+            //     }
+            // });
+            // console.log("选中的："+userIds);
+            if (userIds == "") {
+                layer.msg(i18np.prop('user.msg.no.item.select'));
+                return false
+            }
+            layer.confirm(i18np.prop('user.msg.title.want.delete'), {
+                icon: 3,
+                title: i18np.prop('user.edit.tips'),
+                btn: [i18np.prop("user.add.msg.btn.ok"),i18np.prop("user.add.msg.btn.cancel")] //可以无限个按钮
+            }, function (index) {
+                $.ajax({
+                    type: "get",
+                    url: HOST + "admin/delete?ids=" + userIds,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            layer.msg(res.msg, {icon: 1, time: 1000});
+                            table.reload("tt");
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                })
+            })
+        });
+    });
+</script>
+</body>
+</html>

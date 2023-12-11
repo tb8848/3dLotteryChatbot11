@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>期数操作日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9 !important;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .layui-table, .layui-table-view {
+            margin: 0px 0;
+        }
+        .layui-table-header {
+            height: 30px;
+        }
+
+        .layui-table thead tr th{
+            font-weight: bold !important;
+        }
+
+        .layui-table tbody tr td{
+            padding: 2px 0 2px 0 !important;
+            color: black;
+        }
+
+        .layui-table-cell{
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main" >
+    <div class="module">
+        <div name="module" id="log_lottery_activity" class="m5 mt10">
+            <div name="module" id="guide_log" class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="log.top.position">位置 </a>&gt;&gt;
+                    <span class="red" i18n="log.top.periods.operation">   期数操作日志  </span>
+                </div>
+                <div class="fr">
+                    <a href="qishuLog.html" class="fb red" i18n="log.top.periods.operation">期数操作日志</a>|
+                    <a href="yeujiLog.html" class="" i18n="log.top.skip.operation">越级操作日志</a> |
+                    <a href="zijiCaozuoLog.html" class="" i18n="log.top.oneself.operation">自己操作日志</a>|
+                    <a href="dingpanLog.html" i18n="log.top.odds">赔率日志</a> |
+                    <a href="huiyuanLog.html" class="" i18n="log.top.member.select">会员快选日志</a>|
+                    <a href="huiyuanUpdateLog.html" class="" i18n="log.top.member.data.update">会员资料修改日志</a>
+                </div>
+            </div>
+            <div class="mt10">
+                <form novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="16" i18n="log.top.periods.operation">期数操作日志</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="test6">
+                                <td>
+                                    <label for="start_date" i18n="log.table.start.time">起始日期</label>
+                                </td>
+                                <td>
+                                    <input class="w120" type="text" id="start_date" name="start_date" autocomplete="off" value="">
+                                </td>
+                                <td><label for="end_date" i18n="log.table.end.time">结束日期</label></td>
+                                <td>
+                                    <input class="w120" type="text" id="end_date" name="end_date" autocomplete="off" value="">
+                                </td>
+                            </td>
+                            <td><label for="start_period_no" i18n="log.table.start.issue">起始期数</label></td>
+                            <td><input class="w120" type="text" id="start_period_no" name="start_period_no" autocomplete="off" value="">
+                            </td>
+                            <td><label for="end_period_no" i18n="log.table.end.issue">结束期数</label></td>
+                            <td>
+                                <input class="w120" type="text" id="end_period_no" name="end_period_no" autocomplete="off" value="">
+                            </td>
+                            <td><label for="period_operate_type" i18n="log.table.operation.type">操作类型</label></td>
+                            <td><select name="period_operate_type" id="period_operate_type">
+                                <option value="">{{$t('all')}}</option>
+                                <option value="0">{{$t('issueAdd')}}</option>
+                                <option value="1">{{$t('open')}}</option>
+                                <option value="2">{{$t('close')}}</option>
+                                <option value="3">{{$t('oneClick')}}</option>
+                                <option value="4">{{$t('frontDisplay')}}</option>
+                                <option value="5">{{$t('quick')}}</option>
+                            </select></td>
+                            <td><label for="account" i18n="log.table.accounts">帐号</label></td>
+                            <td>
+                                <input class="w120" type="text" id="account" name="account" autocomplete="off" value="">
+                            </td>
+                            <td><label for="ip">IP</label></td>
+                            <td>
+                                <input class="w120" type="text" id="ip_address" name="ip" autocomplete="off" value="">
+                            </td>
+                            <td><input type="submit" value="提交" lay-submit lay-filter="search" class="btn" id="btn_query" i18n="log.table.submit"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="mt10" style="border: 1px solid #000000">
+                <table class="layui-hide" id="t" lay-filter="t" ></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    //window.parent.document.getElementsByClassName("layui-body")[0].style.top = "45px";
+
+    const messages = {
+        zh: {
+            all:"全部",
+            issueAdd:"期号添加",
+            open:"开盘",
+            close:"关盘",
+            oneClick:"一键结账",
+            frontDisplay:"前台显示",
+            quick:"快速初始化",
+        },
+        th: {
+            all:"ทั้งหมด",
+            issueAdd:"การเพิ่มหมายเลขงวด",
+            open:"เปิดตลาด",
+            close:"ปิดตลาด",
+            oneClick:"ชำระเงินด้วยคลิกเดียว",
+            frontDisplay:"แสดงผลด้านหน้า",
+            quick:"เริ่มต้นใหม่อย่างรวดเร็ว",
+        }
+    }
+
+    var $ = layui.jquery;
+    var table = layui.table;
+
+    var moduleName = "log";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+
+        // layui刷新表头
+        table.reload("tt",{
+            cols: [
+                [
+                    {field: 'opTime',title: i18np.prop('log.table.time'), width: "15%"},
+                    {field: 'userName',title: i18np.prop('log.table.accounts'), width: "15%"},
+                    {field: 'drawId',title: i18np.prop('log.table.issue'),width: "15%"},
+                    {field: 'content',title: i18np.prop('log.table.content')},
+                    {field: 'opType',title: i18np.prop('log.table.types'),width: "15%",templet:function (d) {
+                            if(d.opType == 0){
+                                return i18np.prop('log.table.issue.add')
+                            }else if(d.opType == 1){
+                                return i18np.prop('log.table.opening.quotation')
+                            }else if(d.opType == 2){
+                                return i18np.prop('log.table.close.disc')
+                            }else if(d.opType == 3){
+                                return i18np.prop('log.table.oneClick.checkout')
+                            }else if(d.opType == 4){
+                                return i18np.prop('log.table.front.display')
+                            }else if(d.opType == 5){
+                                return i18np.prop('log.table.quick.initialization')
+                            }else{
+                                return ""
+                            }
+                        }},
+                    {field: 'ip',title: 'IP',width: "8%"},
+                ]
+            ],
+            text:{none: i18np.prop('user.table.noData')},
+        })
+    }
+
+    const vm = new Vue({
+        el: '#period_operate_type',
+        i18n,
+        data: {},
+        methods: {
+            init() {
+                console.log("初始化vue了")
+            }
+        }
+    })
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use([ 'i18np', 'form' , 'jquery','table','laydate'], function(){
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+        vm.init();
+
+        var startTime = ""
+        var endTime = ""
+
+        table.render({
+            elem: '#t',
+            id: 'tt',
+            url: HOST+'periodOperationLog/selectPeriodOperationLogPage',
+            limit: 40,
+            cols: [
+                [
+                    {field: 'opTime',title: i18np.prop('log.table.time'), width: "15%"},
+                    {field: 'userName',title: i18np.prop('log.table.accounts'), width: "15%"},
+                    {field: 'drawId',title: i18np.prop('log.table.issue'),width: "15%"},
+                    {field: 'content',title: i18np.prop('log.table.content')},
+                    {field: 'opType',title: i18np.prop('log.table.types'),width: "15%",templet:function (d) {
+                            if(d.opType == 0){
+                                return i18np.prop('log.table.issue.add')
+                            }else if(d.opType == 1){
+                                return i18np.prop('log.table.opening.quotation')
+                            }else if(d.opType == 2){
+                                return i18np.prop('log.table.close.disc')
+                            }else if(d.opType == 3){
+                                return i18np.prop('log.table.oneClick.checkout')
+                            }else if(d.opType == 4){
+                                return i18np.prop('log.table.front.display')
+                            }else if(d.opType == 5){
+                                return i18np.prop('log.table.quick.initialization')
+                            }else{
+                                return ""
+                            }
+                        }},
+                    {field: 'ip',title: 'IP',width: "8%"},
+                ]
+            ],
+            page: true
+            ,page: {
+                curr: layui.data("t_page").index
+            },
+            text:{none: i18np.prop('user.table.noData')},
+            done: (res, curr, count) => {
+                form.render();
+                layui.data("t_page", {
+                    key: 'index',
+                    value: curr
+                });
+            }
+        });
+
+        // 搜索查询
+        form.on('submit(search)',function(data){
+            startTime = $("#start_date").val();
+            endTime = $("#end_date").val();
+            startDraw = $("#start_period_no").val();
+            endDraw = $("#end_period_no").val();
+            opType = $("#period_operate_type").val();
+            userName = $("#account").val();
+            ip = $("#ip_address").val();
+            // console.log("开始日期："+startTime)
+            // console.log("结束日期："+endTime)
+            // console.log("开始期数："+startDraw)
+            // console.log("结束期数："+endDraw)
+            // console.log("类型："+opType)
+            // console.log("账号："+userName)
+            // console.log("IP："+ip)
+            table.reload('tt', {
+                where: {"userName":userName, "startTime":startTime,"endTime":endTime,"startDraw":startDraw,"endDraw":endDraw,"opType":opType,"ip":ip}
+                , page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+        //日期范围
+        var endDate= laydate.render({
+            elem: '#end_date',//选择器结束时间
+            type: 'date',
+            min:"1970-1-1",//设置min默认最小值
+            done: function(value,date){
+                startDate.config.max={
+                    year:date.year,
+                    month:date.month-1,//关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                }
+            }
+        });
+        //日期范围
+        var startDate=laydate.render({
+            elem: '#start_date',//开始日期
+            type: 'date',
+            max:"2099-12-31",//设置一个默认最大值
+            done: function(value, date){
+                endDate.config.min ={
+                    year:date.year,
+                    month:date.month-1, //关键
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+                };
+            }
+        });
+    });
+</script>
+</body>
+</html>

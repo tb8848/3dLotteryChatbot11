@@ -1,0 +1,1417 @@
+<html><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="Keywords" content="">
+    <title>聊天室</title>
+    <link rel="stylesheet" href="css/chat/msgbase.css">
+    <link rel="stylesheet" href="css/chat/chat.css">
+    <link rel="stylesheet" href="css/chat/mand-mobile.css">
+    <link rel="stylesheet" href="js/layui/css/layui.css">
+    <link rel="stylesheet" href="js/layui/css/layui.mobile.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mand-mobile@2.6.1/lib-vw/mand-mobile.css"> -->
+    <script src="js/vue/vue.js"></script>
+    <script src="js/chat/less.min.js?v=202012122198"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/mand-mobile@2.6.1/lib-vw/mand-mobile.umd.min.js"></script> -->
+    <script src="js/chat/mand-mobile.umd.js"></script><style type="text/css">a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0}li,ol,ul{list-style:none}body{font-family:var(--font-family-normal);-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}</style>
+    <script src="js/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="js/chat/fingerprint2.min.js?v=202006041010"></script>
+    <script src="js/chat/clipboard.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script> -->
+    <!-- <script src="https://unpkg.com/http-vue-loader"></script> -->
+    <script src="js/chat/httpVueLoader.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.2/src/httpVueLoader.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/less@4.1.1/dist/less.min.js"></script> -->
+
+    <style type="text/css">
+        .dingtouItem{
+            background-color:#fff;
+            margin-bottom:10px;
+            padding:10px;
+            border-radius: 5px;
+        }
+
+        .startBtn{
+            background-color: orangered;
+            color:#fff;
+            width: 90%;
+            height: 40px;
+            line-height: 40px;
+            margin:10px auto;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .inputBox{
+            height: 30px;
+            border-radius: 5px;
+            padding:5px;
+            border: none;
+        }
+
+        .inputArea{
+            height: 60px;
+            border-radius: 5px;
+            padding:5px;
+            border: none;
+        }
+
+        .inputBorder{
+            display: inline-block;
+            border:1px solid #ddd;
+            margin-left: 15px;
+            width: 60%
+        }
+
+        .btnKuaixuan{
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            width: 50px;
+            background-color: orangered;
+            color:#fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .tips{
+            font-size: 12px;
+            color:#888;
+        }
+
+
+        .msgHide{
+            display: none;
+        }
+    </style>
+
+</head>
+<body class="font_small">
+<div id="my-app"><!---->
+    <div id="chatBox" style="height: 100%;">
+
+        <div class="aotuheight" style="height: 416px;"></div>
+
+        <div class="msgcontent" style="top: 4px; height: 362px;" id="msgcontent">
+            <div style="text-align: center;padding:10px;display: none" id="loadHisMsg">-->点击加载更多<--</div>
+<!--            <div class="msglayer msgleft">-->
+<!--                <div class="fpop">-->
+<!--                    <div class="headimg"><img src="img/android.png"></div>-->
+<!--                    <h5 class="uname">机器人</h5>-->
+<!--                    <pre class="msgpre_nocopy">-->
+<!--                        @蜜糖<br>[课号]117-->
+<!--                        6729倒二定各3-->
+<!--                        6184倒二定各3-->
+<!--                        【交作业成功】√√-->
+<!--                        【份数】：144-->
+<!--                        【扣面】：432.0-->
+<!--                        【盛鱼】：1356.80<br>-->
+<!--                        <br><span style="color:orange;cursor:pointer;" class="tuima" data="311886">点击退码</span>-->
+<!--                    </pre>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="msglayer msgleft"><div class="fpop"><div class="headimg"><img src="img/android.png"></div><h5 class="uname">机器人</h5><pre class="msgpre">^^★★★停止-上课★★★</pre></div></div>-->
+
+<!--            <div id="debugout">autoMsgOldData:undefined,autoMsgOldIndex:1048496</div>-->
+<!--            <div class="msgload throbber-loader">Loading…</div>-->
+<!--            <div id="msgout"></div>-->
+
+<!--            <div class="msglayer msgleft"><div class="fpop"><div class="headimg"><img src="img/android.png"></div><h5 class="uname">机器人</h5><pre class="msgpre">^^★★★停止-上课★★★</pre></div></div>-->
+
+<!--            <div class="msglayer msgright">-->
+<!--                <div class="fpop">-->
+<!--                    <div class="headimg">-->
+<!--                        <img src="https://wx.qlogo.cn/mmhead/ver_1/rUVhiasqmAgFUOGXRrW47d5Dlvjw8W41Wd5Cv7EZtPUrBOd86ubYCbMZx36JPoGiaFT57o535jDvOayibKpicTodJxBdoyZUglMNCpA5BRewaRk/132"></div>-->
+<!--                    <h5 class="uname">沉淀</h5>-->
+<!--                    <pre class="msgpre">上分1000</pre>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        -->
+        </div>
+
+        <form id="formsendmsg" onsubmit="return false">
+            <div class="divBottom msgdown" style="top: 366px;">
+                <div style="background: rgb(218, 218, 220); width: 100%; height: 1px; position: absolute; top: 0px;"></div>
+                <div style="background: rgb(218, 218, 220); width: 100%; height: 1px; position: absolute; bottom: 0px;"></div>
+                <div class="btndown" style="display: none;"><b>0条新消息</b></div>
+                <div class="divBottom_top">
+                    <div class="vkb" id="vkb">
+                        <ul><li></li> <li></li> <li></li> <li></li></ul>
+                    </div>
+                    <textarea id="txtMsg" rows="1" autocomplete="off" class="nostart" style="top: 4px; visibility: visible;"></textarea>
+                    <span type="button" class="bg-red beitou" style="right: 100px;">倍投</span>
+                    <span type="button" class="fastSelect bg-green" style="right: 40px;">快选</span>
+                    <span type="submit" class="send nostart" style="right: 40px; display: none;">发送</span>
+                    <a href="javascript:void(0);" id="hisbuy"><span class="add"></span></a>
+                </div>
+                <div class="inpvkb" style="height: 300px">
+                    <ul class="fh">
+                        <li>上</li>
+                        <li>下</li>
+                        <li>分</li>
+                        <li>单</li>
+                        <li>直</li>
+                        <li>包</li>
+                        <li>选</li>
+                        <li>复</li>
+                        <li>式</li>
+
+                    </ul>
+                    <ul class="dw">
+                        <li>组</li>
+                        <li>三</li>
+                        <li>六</li>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>独</li>
+                        <li>胆</li>
+                        <li>拖</li>
+
+                    </ul>
+
+                    <ul class="nb">
+                        <li>大</li>
+                        <li>同</li>
+                        <li>和</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>值</li>
+                        <li>拉</li>
+                        <li class="cl">清除</li>
+                    </ul>
+                    <ul class="fh">
+                        <li>小</li>
+                        <li>号</li>
+                        <li>奇</li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>,</li>
+                        <li>机</li>
+                        <li class="nline">换行</li>
+                    </ul>
+                    <ul class="wz">
+                        <li>数</li>
+                        <li>猜</li>
+                        <li>偶</li>
+                        <li>0</li>
+                        <li>-</li>
+                        <li>.</li>
+                        <li>D</li>
+                        <li>P</li>
+                        <li>跨</li>
+                    </ul>
+                    <ul class="wz">
+                        <li>流</li>
+                        <li>水</li>
+                        <li>盛</li>
+                        <li>鱼</li>
+                        <li>作</li>
+                        <li>业</li>
+                        <li>格</li>
+                        <li>式</li>
+                        <li>度</li>
+                    </ul>
+                    <ul class="wz">
+                        <li>各</li>
+                        <li>百</li>
+                        <li>十</li>
+                        <li>个</li>
+                        <li>返</li>
+                        <li>查</li>
+                        <li>盈</li>
+                        <li>亏</li>
+                        <li class="del">←</li>
+
+                    </ul>
+                    <ul class="wz">
+                        <li>双</li>
+                        <li>飞</li>
+                    </ul>
+                </div>
+                <div class="his" style="height: 240px">
+                    <ul id="order-list">
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+<!--                        <li>四定取千十合4各0.1</li>-->
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+    <button class="btndown1"></button>
+</div>
+
+<div id="selectionBox" style="display: none; height: 100vh;z-index:100000000;top:0;left:0;position:fixed;width: 100%;">
+    <iframe id="iframe2" name="selectFrame" src="" width="99%" height="100%" border="0" frameborder="0"></iframe>
+</div>
+
+<div id="dingtou" style="display: none; background-color: #e0e0e0;padding:10px 0px">
+    <div style="margin:0px 15px">
+        <div class="dingtouItem"><span>账户余额：<span id="leftPoints"></span></span></div>
+        <div class="dingtouItem tips">
+            <p>设置快选并开启,每期可自动提交投注</p>
+            <p>开启后退出游戏，退出大厅，关闭游戏均不影响投注计划</p>
+        </div>
+    </div>
+
+    <div class="layui-tab layui-tab-brief" lay-filter="dt-plan-tab" style="background-color: #fff">
+        <ul class="layui-tab-title" >
+            <li class="layui-this" lay-id="dtPlan1">定投计划一</li>
+            <li lay-id="dtPlan2">定投计划二</li>
+            <li lay-id="dtPlan3">定投计划三</li>
+        </ul>
+        <div class="layui-tab-content" style="padding:10px 0px 0px 0px">
+            <input type="hidden" id="taskId1" />
+            <div id="dtPlan1" class="layui-tab-item layui-show">
+                <div class="dingtouItem">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 10%"><label>内容</label></td>
+                            <td style="width: 70%;text-align: left">
+                                <div class="inputBorder" style="width: 90%;">
+                                    <textarea class="inputArea" placeholder="请输入快译内容或者快选内容" style="width: 100%" id="followContent1"></textarea>
+                                </div>
+                            </td>
+                            <td  style="width: 20%"><span class="btnKuaixuan">快选+</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="dingtouItem">
+                    <label>金额</label>
+                    <div class="inputBorder" style="width: 80%">
+                        <input class="inputBox" type="text" placeholder="请输入金额" style="width: 100%" id="followMoney1">
+                    </div>
+                </div>
+
+                <div class="tips" style="text-align: center;margin:10px 0px">支持翻倍投注，如1-2-3-4-8-10(用-号分割)</div>
+
+                <div class="dingtouItem">
+                    <label>期数</label>
+                    <div class="inputBorder" style="width: 80%">
+                        <input class="inputBox" type="text" placeholder="可不填，跟10期就填10" style="width: 100%" id="followDraws1">
+                    </div>
+                </div>
+
+                <div class="dingtouItem">
+                    <div style="width: 100px;margin:0 auto">
+                        <p>
+                            <input type="radio" value="0" name="followType1" >&nbsp;&nbsp;中奖后停止</p>
+                        <p>
+                            <input type="radio" value="1" name="followType1">&nbsp;&nbsp;继续跟码</p>
+                        <p>
+                            <input type="radio" value="2" name="followType1" >&nbsp;&nbsp;从头开始</p>
+                    </div>
+                </div>
+                <div class="dingtouItem">
+                    <label>状态</label>
+                    <input class="inputBox"
+                           style=" margin-left: 15px;background-color: #e0e0e0;border-radius: 0px;width: 80%;text-align: center" type="text"
+                           value="已停止" disabled id="taskStatus1" >
+
+                </div>
+            </div>
+            <div id="dtPlan2" class="layui-tab-item">
+                <input type="hidden" id="taskId2" />
+                <div class="dingtouItem">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 10%"><label>内容</label></td>
+                            <td style="width: 70%;text-align: left">
+                                <div class="inputBorder" style="width: 90%;">
+                                    <textarea class="inputArea" placeholder="请输入快译内容或者快选内容" style="width: 100%" id="followContent2"></textarea>
+                                </div>
+                            </td>
+                            <td  style="width: 20%"><span class="btnKuaixuan">快选+</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="dingtouItem">
+                    <label>金额</label>
+                    <div class="inputBorder" style="width: 80%">
+                        <input class="inputBox" type="text" placeholder="请输入金额" style="width: 100%" id="followMoney2">
+                    </div>
+                </div>
+
+                <div class="tips" style="text-align: center;margin:10px 0px">支持翻倍投注，如1-2-3-4-8-10(用-号分割)</div>
+
+                <div class="dingtouItem">
+                    <label>期数</label>
+                    <div class="inputBorder" style="width: 80%">
+                        <input class="inputBox" type="text" placeholder="可不填，跟10期就填10" style="width: 100%" id="followDraws2">
+                    </div>
+                </div>
+
+                <div class="dingtouItem">
+                    <div style="width: 100px;margin:0 auto">
+                        <p>
+                            <input type="radio" value="0" name="followType2" >&nbsp;&nbsp;中奖后停止</p>
+                        <p>
+                            <input type="radio" value="1" name="followType2">&nbsp;&nbsp;继续跟码</p>
+                        <p>
+                            <input type="radio" value="2" name="followType2" >&nbsp;&nbsp;从头开始</p>
+                    </div>
+                </div>
+
+                <div class="dingtouItem">
+                    <label>状态</label>
+                    <input class="inputBox"
+                           style=" margin-left: 15px;background-color: #e0e0e0;border-radius: 0px;width: 80%;text-align: center" type="text"
+                           value="已停止" disabled id="taskStatus2" >
+
+                </div>
+            </div>
+            <div id="dtPlan3" class="layui-tab-item">
+                <input type="hidden" id="taskId3" />
+                <div class="dingtouItem">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 10%"><label>内容</label></td>
+                            <td style="width: 70%;text-align: left">
+                                <div class="inputBorder" style="width: 90%;">
+                                    <textarea class="inputArea" placeholder="请输入快译内容或者快选内容" style="width: 100%" id="followContent3"></textarea>
+                                </div>
+                            </td>
+                            <td  style="width: 20%"><span class="btnKuaixuan">快选+</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="dingtouItem">
+                    <label>金额</label>
+                    <div class="inputBorder" style="width: 80%">
+                        <input class="inputBox" type="text" placeholder="请输入金额" style="width: 100%" id="followMoney3">
+                    </div>
+                </div>
+
+                <div class="tips" style="text-align: center;margin:10px 0px">支持翻倍投注，如1-2-3-4-8-10(用-号分割)</div>
+
+                <div class="dingtouItem">
+                    <label>期数</label>
+                    <div class="inputBorder" style="width: 80%">
+                        <input class="inputBox" type="text" placeholder="可不填，跟10期就填10" style="width: 100%" id="followDraws3">
+                    </div>
+                </div>
+
+                <div class="dingtouItem">
+                    <div style="width: 100px;margin:0 auto">
+                        <p>
+                            <input type="radio" value="0" name="followType3" >&nbsp;&nbsp;中奖后停止</p>
+                        <p>
+                            <input type="radio" value="1" name="followType3">&nbsp;&nbsp;继续跟码</p>
+                        <p>
+                            <input type="radio" value="2" name="followType3" >&nbsp;&nbsp;从头开始</p>
+                    </div>
+                </div>
+
+                <div class="dingtouItem">
+                    <label>状态</label>
+                    <input class="inputBox"
+                           style=" margin-left: 15px;background-color: #e0e0e0;border-radius: 0px;width: 80%;text-align: center" type="text"
+                           value="已停止" disabled id="taskStatus3" >
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="startBtn" id="startBtn" style="display: none">启动</div>
+    <div class="startBtn" id="stopBtn" style="display: none">停止</div>
+</div>
+
+
+<script src="js/layui/layui.all.js"></script>
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/socket/sockjs.min.js"></script>
+<script src="js/socket/stomp.js?v1"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+
+<script type="text/javascript">
+    window.onload = function () {
+        // var winHeigth = window.screen.height;
+        dynamicSize(60);
+    }
+    window.onresize = function () {
+        dynamicSize(60);
+    }
+    function dynamicSize(bottomHeight) {
+        var winHeigth = document.body.clientHeight;
+        var winWidth = document.body.clientWidth;
+        // console.log("屏幕高度："+winHeigth+" 屏幕宽度："+winWidth);
+        $("#msgcontent").css("height",(winHeigth-bottomHeight)+"px");
+        $(".msgdown").css("top",(winHeigth-bottomHeight)+"px");
+        $("#txtMsg").css("width",(winWidth-210)+"px");
+    }
+</script>
+
+<script type="text/javascript">
+    httpVueLoader.langProcessor.less = function(lessText) {
+        return new Promise(function(resolve, reject) {
+            less.render(lessText, {}, function(err, css) {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(css.css);
+                }
+
+            })
+        })
+    }
+</script>
+<script type="text/javascript">
+    var layer = layui.layer;
+    var tabElement = layui.element
+    var stomp = null;
+    var isInitiative = false; //是否主动断开
+    function enterRoom(params){//监听开盘
+        var sock = new SockJS(SOCKET_HOST);
+        stomp = Stomp.over(sock);
+        isInitiative = false;
+        stomp.connect( {Authorization:params.openId},function (e) {
+            //console.log("连接成功");
+            stomp.subscribe(params.chatTopic,params.chatMsgHandler);
+            stomp.subscribe(params.drawTopic,params.drawStatusHandler);
+        }, function (err){
+            //console.log("连接失败");
+            if (isInitiative==false)
+            {
+                $("#msgcontent").html("");
+                enterRoom(params);
+            }
+        });
+    }
+</script>
+
+
+<script type="text/javascript" charset="utf-8">
+
+
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+        return null;
+    }
+
+    var isSmartBet = false;
+    var isAutoMsg = true;
+    var openId = getQueryVariable("openId");
+    var playerId = "";
+    var nickname = '';
+    var headimg = '';
+    var roomId = "";
+    var leftPoints = 0;
+    var kxrules = "";
+    var dtPlan = null;
+    var planIndex = 1;
+    var dtPlanList = [];
+    var hisEndTime = null;
+    var scrollDown = true;
+    var hisMsgId = null;
+    var hasNew = false;
+    var newMsgCount = 0;
+    var lottype = 1;
+    var selectLotType=0;
+
+    var lastMsgTime = null;
+    var lastHisMsgTime = null;
+    var fastBuyFlag = 0;
+
+    if(null!=openId){
+        checkInfo()
+    }else{
+        $("#formsendmsg").hide();
+        $("#msgcontent").html('<div style="padding:15px;text-align: center;font-size: 24px;font-weight: bold;color:orangered">缺少openid</div>');
+    }
+
+    $("#txtMsg").focus(function (){
+        $(".inpvkb").hide();
+        dynamicSize(60)
+    })
+
+    function checkInfo(){
+        $.ajax({
+            url:HOST+"/player/checkOpenId?openId="+openId,
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    $("#formsendmsg").show();
+                    roomId = res.data.userId;
+                    playerId = res.data.playerId;
+                    headimg = res.data.headimg;
+                    nickname = res.data.nickname;
+                    leftPoints = res.data.points;
+                    lottype = res.data.lotteryType;
+                    if(null==lottype){
+                        lottype = 1;
+                    }
+                    var kxOpen = res.data.kxOpen;
+                    if(kxOpen==1){
+                       $(".fastSelect").show();
+                    }else{
+                        $(".fastSelect").hide();
+                    }
+                    enterRoom({
+                        "drawTopic":'/topic/drawOpenStatus',
+                        "drawStatusHandler":handleDrawStatus,
+                        "chatMsgHandler":handleChatMsg,
+                        "chatTopic":'/topic/room/'+roomId,
+                        "openId":openId
+                    })
+                }else{
+                    $("#formsendmsg").hide();
+                    $("#msgcontent").html('<div style="padding:15px;text-align: center;font-size: 24px;font-weight: bold;color:orangered">'+res.msg+'</div>');
+                }
+            }
+        })
+    }
+    var interval = null;
+    var lastDrawNo = '';
+
+    tabElement.render('tab', 'dt-plan-tab');
+    tabElement.on('tab(dt-plan-tab)', function(data){
+        //console.log(this); // 当前 tab 标题所在的原始 DOM 元素
+        //console.log(data.index); // 得到当前 tab 项的所在下标
+        planIndex = data.index+1;
+        if(dtPlanList.length>=planIndex){
+            dtPlan = dtPlanList[data.index];
+            initPlanInfo(dtPlan,planIndex);
+        }else{
+            dtPlan = null;
+            $("#dtPlan"+planIndex).find(":radio").eq(1).attr('checked','true');
+            $("#startBtn").show();
+            $("#stopBtn").hide();
+        }
+        //console.log(data.elem); // 得到当前的 tab 容器
+    });
+    //虚拟键盘
+    $("#vkb").on("click","",function (){
+        $(".his").hide();
+        if($(".inpvkb").is(":hidden")){
+            $(".inpvkb").show();
+            dynamicSize(340)
+            $(".fastSelect").hide();
+            $(".send").show();
+        }else{
+            $(".inpvkb").hide();
+            dynamicSize(60)
+            $(".fastSelect").show();
+            $(".send").hide();
+        }
+    })
+
+    function getNewRecordsTop10(){
+        $("#order-list").html("");
+        $.ajax({
+            url:HOST+"/player/buy/today/topN?pageNo=1&pageSize=10&playerId="+playerId,
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+                    var hisBuyList = res.data;
+                    if(null!=hisBuyList && hisBuyList.length>0){
+                        hisBuyList.forEach((item,idx)=>{
+                            $("#order-list").append("<li>"+item.buyDesc+"</li>")
+                        })
+                    }
+                }
+            }
+        })
+    }
+
+
+    $("#order-list").on("click","li",function (){
+        var text = $(this).html();
+        $("#txtMsg").val(text);
+    });
+
+    $("#hisbuy").on("click","",function (){
+        getNewRecordsTop10();
+        $(".inpvkb").hide();
+        if($(".his").is(":hidden")){
+            $(".his").show();
+            dynamicSize(280)
+            $(".fastSelect").hide();
+            $(".send").show();
+        }else{
+            $(".his").hide();
+            dynamicSize(60)
+            $(".fastSelect").show();
+            $(".send").hide();
+        }
+    })
+
+    $(".inpvkb").on("click","ul>li",function (){
+        var txtMsg = $("#txtMsg").val();
+        var text = $(this).html();
+        if(text=="清除"){
+            txtMsg = "";
+        }else if(text=="换行"){
+            txtMsg+="\r\n"
+        }else if(text=="换行"){
+            txtMsg+="\r\n"
+        }else if($(this).hasClass("del")){
+            if(txtMsg.length>0){
+                txtMsg = txtMsg.substring(0,txtMsg.length-1);
+            }
+        }else{
+            txtMsg+=text;
+        }
+        $("#txtMsg").val(txtMsg);
+        return;
+    })
+
+    function handleDrawStatus(message) {
+        var msgBody = JSON.parse(message.body);
+        if(msgBody.type==0){
+            var msg = msgBody.data;
+            lastDrawNo = msgBody.drawNo;
+            showOneChatMsg(msg);
+        }
+    }
+
+    function getUrl(str) {
+        const reg = /(https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/g;
+        const strValue = str.match(reg);
+        if (strValue && strValue.length > 0) {
+            return strValue[0];
+        }
+        return null;
+    }
+
+    function showOneChatMsg(chatMsg,isNew){
+        var msgType = chatMsg.msgType;
+        var optType = chatMsg.optType;
+        if(chatMsg.isShow==0){
+            return;
+        }
+        var msgtext = chatMsg.msg;
+        var alink = getUrl(msgtext);
+        if(alink!=null){
+            var newAlink = "<a href='"+alink+"'>"+alink+"</a>"
+            msgtext = msgtext.replace(alink,newAlink);
+        }
+
+        var showArr = [];
+        var more = [];
+        var showMore = false
+        var lines = msgtext.split("\r\n");
+        if(lines.length>10){
+            lines.forEach((line,idx)=>{
+                if(idx<10){
+                    showArr.push(line);
+                }else{
+                    more.push(line);
+                }
+            })
+            showMore = true;
+            msgtext = showArr.join("\r\n")+'\r\n<span id="msgmore-'+chatMsg.id+'" class="msgHide">'+more.join('\r\n')+'</span><br>'
+        }
+        if(showMore){
+            msgtext += '<a href="javascript:void(0)" id="btnMore-'+chatMsg.id+'" class="msgShow" style="color:orangered">查看更多</a>';
+        }
+
+        if(chatMsg.fromUserId == playerId){
+            newmsg = '<div class="msglayer msgright" id="m-'+chatMsg.id+'">'+
+                '<div class="fpop">'+
+                '<div class="headimg">'+
+                '<img src="'+chatMsg.fromUserImg+'"></div>'+
+                '<h5 class="uname">'+chatMsg.fromUserNick+'</h5>'+
+                '<pre class="msgpre">'+msgtext+'</pre>'+
+                '</div>'+'</div>';
+            //$("#msgcontent").append(newmsg);
+        }else{
+            if(chatMsg.fromUserType==0){
+                newmsg = '<div class="msglayer msgleft" id="m-'+chatMsg.id+'">'+
+                    '<div class="fpop">'+
+                    '<div class="headimg">'+
+                    '<img src="'+chatMsg.fromUserImg+'"></div>'+
+                    '<h5 class="uname">'+chatMsg.fromUserNick+'</h5>'+
+                    '<pre class="msgpre">'+msgtext+'</pre>'+
+                    '</div>'+'</div>';
+                //$("#msgcontent").append(newmsg);
+            }else {
+                var uname = '机器人';
+                var newmsg = '';
+                if (msgType == 0) {
+                    switch (optType) {
+                        case -1:
+                            newmsg = '<div class="msglayer msgleft" id="m-' + chatMsg.id + '"><div class="fpop"><div class="headimg"><img src="img/android.png"/></div><h5 class="uname">' + uname + '</h5>'
+                                + '<pre class="msgpre">' + msgtext + '</pre></div></div>';
+                            //$("#msgcontent").append(newmsg);
+                            break;
+                        case 0:
+                        case 10:
+                        case 11:
+                            if (chatMsg.toUserType == 0) { //指定人的回复
+                                newmsg = '<div class="msglayer msgleft" id="m-' + chatMsg.id + '"><div class="fpop"><div class="headimg"><img src="img/android.png"/></div><h5 class="uname">' + uname + '</h5>'
+                                    + '<pre class="msgpre">' + '@' + chatMsg.toUserNick + "<br>" +  msgtext + '</pre></div></div>';
+                            } else { //所有人可见
+                                newmsg = '<div class="msglayer msgleft" id="m-' + chatMsg.id + '"><div class="fpop"><div class="headimg"><img src="img/android.png"/></div><h5 class="uname">' + uname + '</h5>'
+                                    + '<pre class="msgpre">' + msgtext + '</pre></div></div>';
+                            }
+
+                            //$("#msgcontent").append(newmsg);
+                            break;
+                        case 1:
+                        case 3:
+                            newmsg = '<div class="msglayer msgleft" id="m-' + chatMsg.id + '">' +
+                                '<div class="fpop">' + '<div class="headimg"><img src="img/android.png"/></div>' +
+                                '<h5 class="uname">机器人</h5>'
+                                + '<pre class="msgpre_nocopy">@' + chatMsg.toUserNick + "<br>" + msgtext + "<br><br>";
+                            if (optType == 3 && chatMsg.toUserId == playerId) {
+                                newmsg += '<span style="color:orange;cursor:pointer;" class="tuima" data="' + chatMsg.playerBuyId + '">点击退米</span>';
+                            }
+                            newmsg += '</pre></div></div>';
+                            //$("#msgcontent").append(newmsg);
+                            break;
+                        case 2:
+                            break;
+                    }
+
+                } else {
+                    // <div class="msgimg"><a><img src="http://128.1.32.34/betImages/WCX/20230529119.png"></a></div>
+                    var imgUrl = chatMsg.msg;
+                    newmsg = '<div class="msglayer msgleft" id="m-' + chatMsg.id + '"><div class="fpop"><div class="headimg"><img src="img/android.png"/></div><h5 class="uname">' + uname + '</h5>'
+                        + '<div class="msgimg"><a href="'+imgUrl+'" target="_blank"><img src="' + imgUrl + '" style="width: 100%;min-height:0px"></a></div></div></div>';
+                    //$("#msgcontent").append(newmsg);
+                }
+            }
+        }
+
+        if(isNew){
+            $("#msgcontent").append(newmsg);
+            //滚动到底部
+            var contentDiv = document.getElementById("msgcontent");
+            contentDiv.scrollTop = contentDiv.scrollHeight;
+        }else{
+            var $firstChild = $("#loadHisMsg")
+            $(newmsg).insertAfter($firstChild);
+            hisMsgId = chatMsg.id;
+        }
+
+    }
+
+    function loadHistoryMsg(){
+        $.ajax({
+            url:HOST+"/chatmsg/listHistory?roomId="+roomId+"&endTime="+hisEndTime,
+            type:'get',
+            success:function(res){
+                if(res.code==0){
+
+                    var msglist = res.data;
+                    var nextMsgTime = null;
+                    var prevMsgTime = null;
+                    if(null!=msglist && msglist.length>0){
+                        hisEndTime = msglist[0].createTime;
+                        console.log("2==========历史消息截止时间："+hisEndTime)
+                        msglist.forEach((hismsg,idx)=>{
+                            if(idx==0) {
+                                nextMsgTime = hismsg.createTime;
+                            }else {
+                                prevMsgTime = nextMsgTime;
+                                nextMsgTime = hismsg.createTime
+                            }
+                            createTimeMsg(nextMsgTime,prevMsgTime,false);
+                            showOneChatMsg(hismsg,false)
+                        })
+                        createTimeMsg(null,hisEndTime,false);
+                        $("#loadHisMsg").hide().html("-->点击加载更多<--");
+                        setTimeout(function (){
+                            $("#msgcontent").animate({"scrollTop": $("#msgcontent").scrollTop() + 10});
+                        },500)
+                    }else{
+                        $("#loadHisMsg").html("-->仅展示近一个月的历史消息<--");
+                    }
+                }else{
+                    $("#loadHisMsg").hide();
+                }
+            }
+        })
+    }
+
+    $("#loadHisMsg").on("click","",function (){
+        $(this).html("正在加载中...")
+        loadHistoryMsg();
+
+    })
+
+    $("#msgcontent").scroll(function () {
+        if (this.scrollTop==0) {
+            $("#loadHisMsg").show();
+            scrollDown = false;
+        }else{
+            $("#loadHisMsg").hide();
+            scrollDown = true;
+        }
+        if( this.scrollTop === (this.scrollHeight - this.offsetHeight)){
+            hasNew = false
+        }
+    });
+
+    function createTimeMsg(prevTime,nextTime,isNew){
+        var diff = 0;
+        if(prevTime){
+            if(nextTime){
+                diff = new Date(nextTime) - new Date(prevTime);
+            }else{
+                diff = new Date().getTime() - new Date(prevTime);
+            }
+        }else{
+            if(nextTime){
+                diff = new Date().getTime() - new Date(nextTime);
+            }
+        }
+        //两条消息间隔30分钟以上，进行时间显示
+        if(nextTime && (diff-60000*30)>0){
+            var time = new Date(nextTime);
+            var timeStr = '';
+
+            var hour = time.getHours();
+            var minuts = time.getMinutes();
+            timeStr = hour+":"+(minuts<10?'0'+minuts:minuts);
+
+            var today = new Date();
+            var yearNow = today.getFullYear();
+            var monthNow = today.getMonth()+1;
+            var dayNow = today.getDate();
+
+            var year = time.getFullYear();
+            var month = time.getMonth()+1;
+            var day = time.getDate();
+
+            var desc = diff/1000;
+
+            var d = parseInt(desc / 60 / 60 / 24);
+            if (d < 0) {
+                d = 0;
+            }
+            if(year==yearNow && month ==monthNow && day==dayNow){
+                //今天
+            }else{
+                if(year==yearNow && month ==monthNow && day==dayNow-1){
+                    timeStr = "昨天 "+timeStr;
+                }else if(year==yearNow && month ==monthNow && day==dayNow-2){
+                    timeStr = "前天 "+timeStr;
+                }else{
+                    timeStr = year+"-"+(month<10?'0'+month:month)+"-"+(day<10?'0'+day:day)+" "+timeStr
+                }
+            }
+            var timeMsg = "<div style='text-align: center;padding:10px 10px'>"+timeStr+"</div>"
+            if(isNew){
+                $("#msgcontent").append(timeMsg)
+            }else{
+                var $firstChild = $("#loadHisMsg")
+                $(timeMsg).insertAfter($firstChild);
+            }
+        }
+
+    }
+
+    //处理msg
+    function handleChatMsg(message) {
+        var chatMsg = JSON.parse(message.body);
+        console.log("=====收到msg==",chatMsg);
+        if(Array.isArray(chatMsg) && chatMsg.length>0){
+            hisEndTime = chatMsg[0].createTime;
+            hisMsgId = chatMsg[0].id
+            var prevMsgTime = null;
+            var nextMsgTime = null;
+            chatMsg.forEach((item,idx)=>{
+                if(idx==0) {
+                    nextMsgTime = item.createTime;
+                }else {
+                    prevMsgTime = nextMsgTime;
+                    nextMsgTime = item.createTime
+                }
+                createTimeMsg(prevMsgTime,nextMsgTime,true);
+                showOneChatMsg(item,true);
+            })
+            lastMsgTime = nextMsgTime;
+
+        }else{
+            createTimeMsg(lastMsgTime,chatMsg.createTime,true);
+            showOneChatMsg(chatMsg,true)
+            lastMsgTime = chatMsg.createTime;
+            hasNew = true;
+            newMsgCount++;
+            if(hasNew){
+
+            }
+        }
+    }
+
+
+    $("#msgcontent").on("click",".msgShow",function (cc){
+        var $this = $(this);
+        var id = this.id;
+        var msgId = id.split("-")[1];
+        var $msgmore = $("#msgmore-"+msgId);
+        if($msgmore.is(".msgHide")){
+            $this.html("隐藏更多");
+            $msgmore.removeClass("msgHide");
+        }else{
+            $this.html("查看更多")
+            $msgmore.addClass("msgHide");
+        }
+    })
+
+    //发送msg
+    function sendMsg(chatMsg){
+        stomp.send("/send/"+chatMsg.toUserId,{},JSON.stringify(chatMsg))
+    }
+
+    $("#txtMsg").keyup(function(){
+        if(this.value==''){
+            $(".fastSelect").show();
+            $(".send").hide();
+        }else{
+            $(".fastSelect").hide();
+            $(".send").show();
+        }
+    })
+
+    //退米
+    $("#msgcontent").on("click",".tuima",function (e) {
+        var buyId = $(this).attr("data");
+        if(""!=buyId){
+            layer.confirm("是否确定退米？",function(ok){
+                sendMsg({
+                    toUserId:roomId,
+                    fromUserImg:headimg,
+                    fromUserNick:nickname,
+                    fromUserId:playerId,
+                    fromUserType:0,
+                    msg:buyId,
+                    optType:4,
+                    kuaixuanRule:'',
+                    isShow:0
+                });
+                layer.closeAll();
+            },function(no){
+                layer.closeAll();
+            })
+        }
+    })
+
+
+    $(".send").click(function() {
+       var txtmsg = $("#txtMsg").val();
+       if(txtmsg!=""){
+           sendMsg({
+               toUserId:roomId,
+               fromUserImg:headimg,
+               fromUserNick:nickname,
+               fromUserId:playerId,
+               fromUserType:0,
+               msg:txtmsg,
+               optType:0,
+               kuaixuanRule:''
+           })
+           $("#txtMsg").val("");
+           $(".fastSelect").show();
+           $(".send").hide();
+           $(".inpvkb").hide();
+           $(".his").hide();
+           dynamicSize(60)
+       }
+    })
+
+
+    $(".fastSelect").click(function() {
+        if(lottype==3){
+            layer.open({
+                content:'请选择作业类型',
+                btn:['3D','P3'],
+                yes:function (index,layero){
+                    selectLotType = 1;
+                    isAutoMsg = false;
+                    $("#chatBox").css("display", "none");
+                    $("#selectionBox").css("display", "block");
+                    $("#iframe2").attr('src', 'quickSelect-v2.html?openId='+openId+"&dt=0&lt=1")
+                    layer.closeAll()
+                },
+                btn2:function (index,layero){
+                    selectLotType = 2;
+                    isAutoMsg = false;
+                    $("#chatBox").css("display", "none");
+                    $("#selectionBox").css("display", "block");
+                    $("#iframe2").attr('src', 'quickSelect-v2.html?openId='+openId+"&dt=0&lt=2")
+                    layer.closeAll()
+                }
+            })
+        }else{
+            selectLotType = lottype;
+            isAutoMsg = false;
+            $("#chatBox").css("display", "none");
+            $("#selectionBox").css("display", "block");
+            $("#iframe2").attr('src', 'quickSelect-v2.html?openId='+openId+"&dt=0&lt="+lottype)
+        }
+
+    })
+
+    $(".btnKuaixuan").click(function() {
+        isAutoMsg = false;
+        $("#chatBox").css("display", "none");
+        $("#selectionBox").css("display", "block");
+        $("#iframe2").attr('src', 'quickSelect-v2.html?openId='+openId+"&dt=1&lt="+selectLotType)
+    })
+
+
+    function clearPlanInfo(planNo){
+        console.log("===================="+planNo);
+        $("#dtPlan"+planNo).find(":radio").attr("disabled",false).eq(1).prop('checked','true');
+        $("#dtPlan"+planNo).find(".btnKuaixuan").show();
+        $("#dtPlan"+planNo).find(".inputBox").val("");
+        $("#dtPlan"+planNo).find(".inputArea").val("");
+    }
+
+    //初始化定投任务
+    function initPlanInfo(dtPlan,planNo){
+        var canEdit = dtPlan.taskStatus!=-1;
+        $("#taskId"+planNo).val(dtPlan.id);
+        $("#followContent"+planNo).val(dtPlan.buyDesc).attr("disabled",canEdit);
+        $("#followMoney"+planNo).val(dtPlan.buyPoints).attr("disabled",canEdit);
+        $("#followDraws"+planNo).val(dtPlan.followDraws).attr("disabled",canEdit);
+        $("input[name=followType"+planNo+"]").val(dtPlan.circleType).attr("disabled",canEdit);
+        $("#dtPlan"+planNo).find(":radio").eq(dtPlan.circleType).prop('checked','true');
+        if(dtPlan.taskStatus==1 || dtPlan.taskStatus==0){
+            $("#dtPlan"+planNo).find(".btnKuaixuan").hide();
+            if(dtPlan.taskStatus==0){
+                $("#taskStatus"+planNo).val("等待执行");
+            }else{
+                $("#taskStatus"+planNo).val("运行中").css("color","green")
+            }
+        }else{
+            if(dtPlan.taskStatus==-1){
+                $("#dtPlan"+planNo).find(".btnKuaixuan").show();
+                $("#taskStatus"+planNo).val("已停止");
+            }
+        }
+        if(planNo==planIndex){
+            if(dtPlan.taskStatus==0 || dtPlan.taskStatus==1){
+                $("#startBtn").hide();
+                $("#stopBtn").show();
+            }else{
+                $("#startBtn").show();
+                $("#stopBtn").hide();
+            }
+        }
+    }
+
+    function getDtPlan(){
+        dtPlanList = [];
+        planIndex = 1;
+        $.ajax({
+            url:HOST+"/player/dingtou/getList",
+            type:'post',
+            data:JSON.stringify({
+                playerId:playerId,
+                userId:roomId,
+                lotteryType: selectLotType
+            }),
+            success:function(res){
+                if(res.code==0){
+                    leftPoints = res.data.leftPoints;
+                    dtPlanList = res.data.planList;
+                    $("#leftPoints").html(leftPoints);
+                    if(null!=dtPlanList && dtPlanList.length>0){
+                        var initIdx = 0;
+                        for(var i=0;i<dtPlanList.length;i++){
+                            var dtPlan=dtPlanList[i];
+                            initIdx = i+1;
+                            initPlanInfo(dtPlan,initIdx);
+                        }
+                        if(initIdx<3){
+                            clearPlanInfo(initIdx+1);
+                        }
+                    }else{
+                        $("#startBtn").show();
+                        $("#stopBtn").hide();
+                        clearPlanInfo(1);
+                        clearPlanInfo(2);
+                        clearPlanInfo(3);
+                    }
+                }
+            }
+        })
+    }
+
+    $(".beitou").click(function(){
+        isSmartBet = true;
+        if(lottype==3){
+            layer.open({
+                content:'请选择作业类型',
+                btn:['3D','P3'],
+                yes:function (index,layero){
+                    selectLotType = 1;
+                    layer.closeAll();
+                    toDtPlanSet();
+                },
+                btn2:function (index,layero){
+                    selectLotType = 2;
+                    layer.closeAll()
+                    toDtPlanSet();
+                }
+            })
+        }else{
+            selectLotType = lottype;
+            toDtPlanSet();
+        }
+    });
+
+
+    function toDtPlanSet(){
+        var lotName = selectLotType==2?"P3":"3D"
+        getDtPlan();
+        layer.open({
+            type:1,
+            content:$('#dingtou'),
+            title:"定投"+"("+lotName+")",
+            area:['100%','90%'],
+            end: function(){
+                isSmartBet = false;
+                $("#chatBox").show();
+                $("#selectionBox").hide();
+                $("#txtMsg").focus();
+            },
+        })
+    }
+
+
+    //启动定投计划
+    $("#startBtn").click(function(){
+
+        var followContent = $("#followContent"+planIndex).val();
+        var followMoney = $("#followMoney"+planIndex).val();
+        var followDraws = $("#followDraws"+planIndex).val();
+        var followType = $("input[name=followType"+planIndex+"]:checked").val();
+        console.log("===============followType===",followType);
+        var taskId = $("#taskId"+planIndex).val();
+        if(followContent==""){
+            layer.msg("请输入快译内容或者快选内容");
+            return;
+        }
+        if(followMoney==""){
+            layer.msg("请输入金额");
+            return;
+        }
+
+        //http://localhost:63342/3dLotteryChatbot/vip-web/23007-result.jpg
+
+        var params = {
+            playerId:playerId,
+            buyPoints:followMoney,
+            buyDesc:followContent,
+            followDraws:followDraws,
+            circleType:followType,
+            kuaixuanRule:kxrules,
+            userId:roomId,
+            planNo:planIndex,
+            id:taskId,
+            lotteryType:selectLotType,
+            fastBuyFlag:fastBuyFlag
+        }
+
+        $.ajax({
+            url:HOST+"/player/dingtou/add",
+            type:'post',
+            data:JSON.stringify(params),
+            success:function(res){
+                if(res.code==0){
+                    //layer.closeAll();
+                    isSmartBet = true;
+                    layer.msg("启动成功")
+                    getDtPlan()
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        })
+    });
+
+    //停止定投
+    $("#stopBtn").click(function(){
+        var taskId = $("#taskId"+planIndex).val();
+        if(taskId!=""){
+            var dtPlan  = dtPlanList[planIndex-1];
+            dtPlan.userId = roomId;
+            var idx = layer.confirm("是否确定终止定投？",function(ok){
+                layer.close(idx);
+                $.ajax({
+                    url:HOST+"/player/dingtou/stop",
+                    type:'post',
+                    data:JSON.stringify(dtPlan),
+                    success:function(res){
+                        if(res.code==0){
+                            layer.msg("停止成功")
+                            getDtPlan();
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    }
+                })
+            },function(no){
+                layer.closeAll();
+            })
+        }
+    });
+
+    window.addEventListener(
+        'message',
+        event => {
+            let data = event.data;
+            console.log(data)
+            if (data == 'selectionHide') {
+                $("#selectionBox").hide();
+                clearInterval(interval);
+                isAutoMsg = true;
+                $("#iframe2").attr('src', '')
+                $("#chatBox").show();
+                $("#txtMsg").focus();
+                // $(".btndown1").trigger("click");
+                // $("#txtMsg").blur();
+            } else if (data == 'selectionInput') {
+                var lastContext = localStorage.getItem('lastContext');
+                var lastMoney = localStorage.getItem('lastMoney');
+                clearInterval(interval);
+                $(".btndown1").trigger("click");
+                isAutoMsg = true;
+                $("#chatBox").show();
+                $("#selectionBox").hide();
+                $("#txtMsg").val('快选:' + lastContext + '各' + lastMoney);
+                $(".send").trigger("click")
+                $("#txtMsg").blur();
+                localStorage.setItem('lastContext', '');
+                localStorage.setItem('lastMoney', '');
+                // $("#txtMsg").focus();
+            }
+            // this.scrollToBottom = trues
+        },
+        false
+    );
+    /*=====快选=====*/
+    function close() {
+        clearInterval(interval);
+        msgconf.isAutoMsg = true;
+        $(".btndown1").trigger("click");
+        $("#chatBox").show();
+        $("#selectionBox").hide();
+        $("#txtMsg").focus();
+    }
+
+    function dingtou(selectList){
+        var lotName = selectLotType==2?'P3':'3D';
+        var msg = lotName+selectList[0].buyDesc;
+        // selectList.forEach((item,idx)=>{
+        //     msg += item.huizongName+item.value+'\r\n';
+        // })
+        kxrules = JSON.stringify(selectList);
+        fastBuyFlag = 0;
+        $("#chatBox").show();
+        $("#selectionBox").hide();
+        if(isSmartBet){
+            $("#followContent"+planIndex).val(msg);
+        }
+    }
+
+    function dingtouFast(selectList,buyDescList){
+        var lotName = selectLotType==2?'P3':'3D';
+        var msg = lotName+buyDescList[0];
+        // selectList.forEach((item,idx)=>{
+        //     msg += item.huizongName+item.value+'\r\n';
+        // })
+        kxrules = JSON.stringify(selectList);
+        fastBuyFlag = 1;
+        $("#chatBox").show();
+        $("#selectionBox").hide();
+        if(isSmartBet){
+            $("#followContent"+planIndex).val(msg);
+        }
+    }
+
+    /*====下单======*/
+    function bet(selectList,buyDescArr,buyMoney) {
+        var lotName = selectLotType==2?'P3':'3D';
+        var msg  = "";
+        buyDescArr.forEach((item,idx)=>{
+            msg += lotName+item;
+        })
+        // selectList.forEach((item,idx)=>{
+        //     //msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
+        //     msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
+        // })
+        kxrules = JSON.stringify(selectList);
+        clearInterval(interval);
+        $(".btndown1").trigger("click");
+        isAutoMsg = true;
+        $("#chatBox").show();
+        $("#selectionBox").hide();
+        sendMsg({
+            toUserId:roomId,
+            fromUserImg:headimg,
+            fromUserNick:nickname,
+            fromUserId:playerId,
+            fromUserType:0,
+            msg:msg,
+            optType:1,
+            kuaixuanRule:kxrules
+        })
+        kxrules = "";
+    }
+
+
+    function betFast(selectList,buyDescArr) {
+
+        var lotName = selectLotType==2?'P3':'3D';
+        var msg  = "";
+        buyDescArr.forEach((item,idx)=>{
+            msg += lotName+item;
+        })
+        // selectList.forEach((item,idx)=>{
+        //     //msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
+        //     msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
+        // })
+        kxrules = JSON.stringify(selectList);
+        clearInterval(interval);
+        $(".btndown1").trigger("click");
+        isAutoMsg = true;
+        $("#chatBox").show();
+        $("#selectionBox").hide();
+        sendMsg({
+            toUserId:roomId,
+            fromUserImg:headimg,
+            fromUserNick:nickname,
+            fromUserId:playerId,
+            fromUserType:0,
+            msg:msg,
+            optType:90,
+            kuaixuanRule:kxrules
+        })
+        kxrules = "";
+    }
+
+
+
+
+</script>
+
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!--    <link href="/Images/Permutation5/favicon.ico" rel="shortcut icon" type="image/x-icon" />-->
+    <title>PL</title>
+    <title>协议</title>
+    <style type="text/css">
+        body {
+            font-size: 20px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .protocol {
+            border: 1px solid #000;
+            margin: 20px;
+        }
+
+        .protocol .title {
+            background: #ccccd4;
+            line-height: 32px;
+            font-size: 20px;
+            text-align: center;
+            margin: 0;
+            border-bottom: 1px solid #000;
+        }
+
+        .protocol .content {
+            line-height: 27px;
+        }
+
+        .protocol .content li {
+            margin: 0 0 10px;
+        }
+
+        .protocol .ft {
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .protocol .btn {
+            width: 80px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .protocol .red {
+            color: red;
+        }
+    </style>
+    <script>
+        var VERSION = "20230112142824000";
+        var SESSIONID = "/(S(0zy1go0t225mephv5njqcsgx))";
+    </script>
+</head>
+
+<body class="body-protocol">
+<div class="protocol">
+    <div class="hd"></div>
+    <div class="bd">
+        <h1 class="title" i18n="agreenment.title">责任声明</h1>
+        <div class="content">
+            <ol>
+                <li class="red" i18n="agreenment.line1">
+                    用户明确同意本系统的使用由用户个人承担风险。
+                </li>
+                <li>
+                    <span i18n="agreenment.line2">本系统不作任何类型的担保，不担保服务一定能满足用户的要求，也不担保服务不会受中断，对服务的及时性，安全性，出错发生都不作担保。
+                    用户理解并接受，任何通过本系统服务取得的信息资料的可靠性取决于用户自己，</span>
+                    <b class="red" i18n="agreenment.line2.strong">用户自己承担所有风险和责任</b>。
+                </li>
+                <li i18n="agreenment.line3">
+                    本声明的最终解释权归本系统所有。
+                </li>
+                <li class="red">
+                    <b i18n="agreenment.line3.strong">特别提醒：</b><br />
+                    ①&nbsp;<span i18n="agreenment.line4">本公司如果输入开奖结果错误，有权利更正开奖结果，最终以官方最后公布结果来结账，不得异议。</span><br />
+                    ②&nbsp;<span i18n="agreenment.line5">为了避免出现争议，请各会员到第二天早上才开始兑奖。不要当天晚上知道结果后，马上就兑奖给客人，出现当天晚上兑奖造成的损失，会员自负，不得异议。</span>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="ft">
+        <input type="button" id="agree" value="同意" onclick="agree()" class="btn" i18n="agreenment.agree" />&nbsp;&nbsp;
+        <input type="button" id="disagree" value="不同意" onclick="disagree()" class="btn btn-gray" i18n="agreenment.disagree" />
+    </div>
+</div>
+
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/layui/layui.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script>
+    var $ = layui.jquery;
+
+    var moduleName = "onlineAgreement";
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"js/"
+    })
+    var i18np = null;
+    function changeLang(lang) {
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    layui.config({base: '../js/'})
+        // 继承treetable.js插件
+        .extend({i18np: 'i18n'}).use(['i18np'], function() {
+
+        i18np = layui.i18np;
+        i18np.loadProperties(moduleName);
+    });
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    //同意
+    function agree() {
+        let loginRole = GetQueryString("loginRole");
+        if (loginRole*1 == 1){//总监
+            window.location.href="main.html";
+        }else if (loginRole*1 == 2){//子账号
+            window.location.href="subAccountMain.html";
+        }else{//总监和会员之外的其他角色
+            let initPwd = GetQueryString("initPwd");
+            if (initPwd == 1) {
+                window.location.href="subMain.html";
+            }else {
+                window.location.href="updatePassword.html";
+            }
+
+        }
+    }
+
+    //不同意
+    function disagree() {
+        window.location.href="index.html";
+    }
+
+</script>
+</body>
+
+</html>

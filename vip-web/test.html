@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="music">
+    <!--<audio id="player" class='music-audio' controls style="display: none">
+        <source src="hands.mp3" type="audio/mpeg" >
+    </audio>-->
+</div>
+
+<button id="play">播放</button>
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/canvas/html2canvas.js"></script>
+<script src="js/projects/main.js?10"></script>
+<script src="js/web_bluetooth_print.js?V1"></script>
+<script>
+
+
+
+
+
+
+    var $ = layui.jquery;
+    $('#play').on('click', function() {
+        $.ajax({
+            url: HOST + "/player/points/upScore",
+            success: function (res) {
+                if (res.code == 200) {
+                    var player = $("#player")[0]; /*jquery对象转换成js对象*/
+                    player.play(); /*播放*/
+                }
+            }
+        });
+    })
+
+    window.onload = function () {
+        $.ajax({
+            url: HOST + "/player/points/upScore",
+            success: function (res) {
+                if (res.code == 200) {
+                    $('#music').html('<audio autoplay="autoplay" id="player"><source src="hands.mp3" type="audio/mpeg"/></audio>');
+                    const player = $("#player")[0];
+                    player.play();
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

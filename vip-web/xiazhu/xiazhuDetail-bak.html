@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+            /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body>
+<blockquote class="layui-elem-quote quoteBox mod_default_box">
+    <form class="layui-form">
+        <div class="layui-inline">
+            <span>查号码:</span>
+            <div class="layui-input-inline">
+                <input type="text" name="buyCodes" autocomplete="off" class="layui-input" id="buyCodes" />
+            </div>
+            <span style="margin-right: 5px">现</span><input type="checkbox" name="xian" lay-skin="primary" value="1" id="xianFlag" lay-filter="changeXian">
+            <span>列出:</span>
+            <select name="colType" id="colType">
+                <option value="0">赔率</option>
+                <option value="1">金额</option>
+                <option value="2">退码</option>
+            </select>
+            <div class="layui-input-inline">
+                <input type="text" name="minValue" autocomplete="off" class="layui-input" id="minValue" />
+            </div>
+            <span>至:</span>
+            <div class="layui-input-inline">
+                <input type="text" name="maxValue" autocomplete="off" class="layui-input" id="maxValue"/>
+            </div>
+            <span>分类:</span>
+            <select id="dataType" name="dataType" lay-filter="changeDataType">
+                <option value="0">全部</option>
+            </select>
+            <span>类型:</span>
+            <select id="buyType" name="buyType" lay-filter="changeBuyType">
+                <option value="0">全部</option>
+                <option value="1">下注</option>
+                <option value="2">包牌</option>
+            </select>
+            <span>打印编号:</span>
+            <div class="layui-input-inline">
+                <input type="text" name="printNo" autocomplete="off" class="layui-input" id="printNo" />
+            </div>
+            <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="search-stu-submit">
+                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索
+            </button>
+        </div>
+    </form>
+</blockquote>
+
+<div style="display: none" id="batchAdd"></div>
+<!--数据列表-->
+<div class="layui-form" id="tform">
+    <div class="layui-card">
+        <div class="layui-card-header" id="dataHeader">本期下注明细</div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="test" lay-filter="stu-table"></table>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/html" id="tb">
+    <div class="layui-container" style="margin-left:0px;">
+        <a class="layui-btn layui-btn-xs caozuo" lay-event="mingxi">中奖明细</a>
+        <a class="layui-btn layui-btn-xs caozuo" lay-event="tuima">退码</a>
+        <a class="layui-btn layui-btn-xs caozuo" lay-event="wholeOrderTuima">整单退码</a>
+        <!--<a class="layui-btn layui-btn-xs caozuo" lay-event="daying">打印</a>-->
+    </div>
+</script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script>
+    var $ = layui.$;
+    var backCodeList=[];
+    var orderList = [];
+    var drawId = null;
+    var isXian = null;
+    var lotterySettingId = null;
+    var dataType = null;
+    var detailType = 1;
+    var buyType = 0;
+    //遍历分类下选框
+    $.ajax({
+        url: HOST+"lotterySettingPC/getAllLotterySetting"
+        , type: "GET"
+        , contentType: 'application/json'
+        , success: function (data) {
+            $.each(data.data, function (index, item) {
+                $('#dataType').append(new Option(item.bettingRule, item.id+"-00"));// 下拉菜单里添加元素
+                // <option value="2">快打</option><option value="3">快选</option><option value="1">退码</option>
+            });
+            $("#dataType").append(new Option('快打',2));
+            $("#dataType").append(new Option('快选',3));
+            $("#dataType").append(new Option('txt导入',5));
+            $("#dataType").append(new Option('二定',6));
+            $("#dataType").append(new Option('汇总表',7));
+            layui.form.render("select");
+        }
+    });
+
+
+    function bpcodesDetail(rid){
+        var html = $("#bp-"+rid).html();
+        console.log(html);
+        var title = html.substr(html.lastIndexOf(",")+1);
+        localStorage.setItem("bptitle",title);
+        localStorage.setItem("bprid",rid);
+        window.parent.open("baopaiDetail.html");
+    }
+
+
+
+    layui.use(['table','upload'], function(){
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        table.render({
+            elem: '#test'
+            ,id:'stu-table-id'//重载需要
+            ,totalRow: true
+            ,url: HOST+'drawBuyRecordPC/drawBuyRecordByPage'
+            ,title:'下注详情'
+            ,toolbar: '#tb'
+            ,cols: [
+                [
+                    // {type: '',width: 50, totalRowText: '合计'},
+                    {title: '注单编号',field: 'printId',align: 'center',width:200,totalRowText: '合计'}
+                    ,{title: '下单时间',field:'createTime',align : 'center',width : 190,templet:function (res) {
+                        if(res.backCodeFlag==1){
+                            return res.createTime+"<br/>退:"+res.backCodeTime;
+                        }else{
+                            return res.createTime;
+                        }
+                    }}
+                    ,{title: '号码',field:'buyCodes',width: 110,align: 'center',templet:function (d) {
+
+                        if(d.buyType==2){
+                            return '<a href="javascript:void(0)" id="bp-\'+d.id+\'" style="color:blue;text-decoration: underline" onclick="bpcodesDetail(\''+d.id+'\')">'+d.buyCodes+'</a>'
+                        }else{
+                            if(d.hasOneFlag==1){
+                                return '<span>'+d.buyCodes+'<span style="color: orangered;">现</span></span>'
+                            }else{
+                                return d.buyCodes;
+                            }
+                        }
+                    }}
+                    ,{title: '金额',field:'buyMoney',width: 110,align: 'center', totalRow: true,templet:function (d) {
+                        if(d.buyType==2){
+                            return '<a href="javascript:void(0)" style="color:red;text-decoration: underline" onclick="bpcodesDetail(\''+d.id+'\')">'+d.buyMoney+'</a>'
+                        }
+                        return d.buyMoney;
+                    }}
+                    ,{title: '赔率',field:'peiRate',width: 110,align: 'center',templet:function(d){
+                        if(d.buyType==2){
+                            return '<a href="javascript:void(0)" style="color:red;text-decoration: underline" onclick="bpcodesDetail(\''+d.id+'\')">'+d.peiRate+'</a>'
+                        }
+                        return "1:"+d.peiRate;
+                    }}
+                    ,{title: '中奖',width: 110,align: 'center',templet:function (res) {
+                        if (res.drawStatus==0){
+                            return "否";
+                        }else if(res.drawStatus==1){
+                            return "是";
+                        }else{
+                            return "未出结果";
+                        }
+                        }}
+                    ,{title: '回水',field:'',width: 110,align: 'center'}
+                    ,{title: '盈亏',field:'',width: 110,align: 'center'}
+                    ,{title: '状态',width: 110,align: 'center',templet:function (res) {
+                            if (res.backCodeFlag==0){
+                                return "成功";
+                            }else if(res.backCodeFlag==1){
+                                return "<span style='color:orangered'>已退码</span>";
+                            }else{
+                                return "--";
+                            }
+                        }}
+                    ,{title: '<input type="checkbox" value="checkAll" lay-skin="primary" lay-filter="checkAll"/>',align : 'center',width:130,templet(res){
+                            if(res.backCodeStatus==1 && res.backCodeFlag==0){
+                                return '<input type="checkbox" value="'+res.id+'" lay-skin="primary" lay-filter="checkOne" name="'+res.printId+'"/>';
+                            }else{
+                                return "--";
+                            }
+                    }}
+                ]
+            ]
+            ,page: true
+            ,page: {
+                curr: layui.data("xiazhuDetail_page").index
+            }
+            ,limit:50
+            ,done: (res, curr, count) => {
+                res.data.forEach(function (item, index) {
+                    if (item.backCodeFlag == 1) {//退码状态的记录变色
+                        $("#tform tbody tr").eq(index).css("background-color","darksalmon");
+                        $("#tform tbody tr").eq(index).css("color","white");
+                    }
+                });
+                drawId = res.msg;
+                layui.data("xiazhuDetail_page", {
+                    key: 'index',
+                    value: curr
+                });
+
+            },
+
+        });
+
+        form.on('checkbox(changeXian)',function (data) {
+            if(data.elem.checked){
+                isXian = 1;
+            }else{
+                isXian = null;
+            }
+        })
+
+        form.on('select(changeDataType)',function (data) {
+            var v = data.value;
+            if(v.indexOf("-")>-1){
+                lotterySettingId = v.split("-")[0];
+                if(v.split("-")[1]=='00'){
+                    dataType = -1;
+                }
+            }else{
+                dataType = v;
+                lotterySettingId = null;
+            }
+        })
+
+        form.on('select(changeBuyType)',function (data) {
+            buyType = data.value;
+        })
+
+
+        //搜索操作
+        form.on('submit(search-stu-submit)',function (data) {
+            if(detailType==2 && data.field.colType!=2){
+                $("#dataHeader").html("本期下注明细");
+            }else{
+                $("#dataHeader").html("本期中奖明细");
+            }
+            table.reload('stu-table-id',{
+                where:{
+                    "buyCodes":data.field.buyCodes,
+                    "dataType":dataType,
+                    "colType":data.field.colType,
+                    "isXian":isXian,
+                    "minValue":data.field.minValue,
+                    "maxValue":data.field.maxValue,
+                    "lotterySettingsId":lotterySettingId,
+                    "buyType":data.field.buyType,
+                    "printNo":data.field.printNo
+                }
+                ,page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+
+        table.on('toolbar(stu-table)', function (obj) {
+            if (obj.event === 'mingxi') {
+                detailType = 2;
+                $("#dataHeader").html("本期中奖明细");
+                $("#colType").val("2");
+                form.render();
+                table.reload('stu-table-id',{
+                    where:{
+                        "colType":2,
+                    }
+                    ,page:{
+                        curr:1
+                    }
+                });
+
+                // layer.open({
+                //     type: 2,
+                //     title: "中奖明细",
+                //     skin: 'layui-layer-molv',
+                //     area: ['70%', '60%'],
+                //     content: 'prizeDetail.html', //这里content是一个普通的String
+                //     end: function(){
+                //         //location.reload();
+                //     }
+                // });
+                // console.log("111")
+                // table.render({
+                //     elem: '#test'
+                //     , id: 'stu-table-id'//重载需要
+                //     , totalRow: true
+                //     , url: HOST + 'drawBuyRecordPC/drawBuyRecordByPage'
+                //     , where:{
+                //         dataType:
+                //     }
+                //     , title: '下注详情'
+                //     , toolbar: '#tb'
+                //     , cols: [
+                //         [
+                //             {title: '本期中奖明细', width: '100%', align: 'center', colspan: 10},
+                //         ],
+                //         [
+                //             {type: 'checkbox', fixed: 'left', width: 50, totalRowText: '合计'}
+                //             , {title: '注单编号', field: 'id', align: 'center', width: 200}
+                //             , {title: '下单时间', field: 'createTime', align: 'center', width: 190}
+                //             , {title: '号码', field: 'buyCodes', width: 110, align: 'center'}
+                //             , {title: '金额', field: 'buyMoney', width: 110, align: 'center', totalRow: true}
+                //             , {title: '赔率', field: 'peiRate', width: 110, align: 'center'}
+                //             , {title: '中奖', width: 110, align: 'center', templet: function (res) {
+                //                     if (res.drawStatus == 0) {
+                //                         return "否";
+                //                     } else if (res.drawStatus == 1) {
+                //                         return "是";
+                //                     } else {
+                //                         return "未出结果";
+                //                     }
+                //                 }
+                //             }
+                //             , {title: '回水', field: '', width: 110, align: 'center'}
+                //             , {title: '盈亏', field: '', width: 110, align: 'center'}
+                //             , {title: '状态', width: 110, align: 'center', templet: function (res) {
+                //                     if (res.backCodeFlag == 0) {
+                //                         return "成功";
+                //                     } else if (res.backCodeFlag == 1) {
+                //                         return "退码";
+                //                     } else {
+                //                         return "未知状态";
+                //                     }
+                //                 }
+                //             }
+                //         ]
+                //     ]
+                //     , page: true
+                //     , page: {
+                //         curr: layui.data("xiazhuDetail_win_page").index
+                //     }
+                //     , limit: 0
+                //     , done: (res, curr, count) => {
+                //         layui.data("xiazhuDetail_win_page", {
+                //             key: 'index',
+                //             value: curr
+                //         });
+                //     }
+                // });
+                //
+                // title = "本期中奖明细";
+                // table.reload('stu-table-id',{
+                //     url:HOST+'drawBuyRecordPC/drawBuyRecordByPage',
+                //     where:{
+                //         name:"text"
+                //     },
+                //     page:{
+                //         curr:1
+                //     },
+                //     limit:0
+                // })
+            }
+
+            else if(obj.event === 'tuima'){
+                console.log("点击退码了")
+                if(backCodeList.length<1){
+                    layer.msg("未选择号码");
+                    return;
+                }
+                layer.msg('正在处理...', {
+                    icon: 16
+                    ,shade: 0.3
+                    ,time:-1
+                });
+                $.ajax({
+                    url:HOST+"draw/delUnbuyCode",
+                    type:'post',
+                    data:JSON.stringify({
+                        idArr:backCodeList,
+                        drawId:drawId
+                    }),
+                    success:function(res){
+                        layer.closeAll();
+                        if(res.code==0){
+                            layer.msg("操作完成");
+                            table.reload("stu-table-id",{
+                                page:{
+                                    curr:1
+                                }
+                            })
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    },
+                    fail:function (res) {
+                        layer.closeAll();
+                    }
+                })
+            }else if(obj.event === 'daying'){
+                console.log("点击打印了")
+            }else if(obj.event === 'wholeOrderTuima'){
+                if(backCodeList.length<1){
+                    layer.msg("请选择单号");
+                    return;
+                }
+                $.ajax({
+                    url:HOST+"codes/getOrderInfo",
+                    type:'post',
+                    data:JSON.stringify(orderList),
+                    success:function(res){
+                        layer.closeAll();
+                        if(res.code==0){
+                            if(res.count>0){
+                                var popContent = '';
+                                res.data.forEach((item,idx)=>{
+                                    popContent = popContent +'<p>'+item.orderNo+',共['+item.size+']个号码</p>';
+                                });
+                                popContent = popContent+'是否确定退码？'
+                                layer.confirm(popContent, {icon: 3, title:'整单退码'}, function(index){
+                                    layer.close(index);
+                                    orderTuima();
+                                });
+                            }
+
+                        }
+                    },
+                    fail:function (res) {
+                        layer.closeAll();
+                    }
+                })
+            }
+        });
+
+
+        function orderTuima(){
+            if(orderList.length<1){
+                layer.msg("未选择号码");
+                return;
+            }
+            layer.msg('正在处理...', {
+                icon: 16
+                ,shade: 0.3
+                ,time:-1
+            });
+            $.ajax({
+                url:HOST+"codes/delOrder",
+                type:'post',
+                data:JSON.stringify(orderList),
+                success:function(res){
+                    layer.closeAll();
+                    if(res.code==0){
+                        layer.msg("操作完成");
+                        table.reload("stu-table-id",{
+                            page:{
+                                curr:1
+                            }
+                        })
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                },
+                fail:function (res) {
+                    layer.closeAll();
+                }
+            })
+
+        }
+
+        form.on('checkbox(checkOne)',function (data) {
+            if(data.elem.checked){
+                if(!backCodeList.includes(data.elem.value)){
+                    backCodeList.push(data.elem.value);
+                }
+                if(!orderList.includes(data.elem.name)){
+                    orderList.push(data.elem.name);
+                }
+            }else{
+                if(backCodeList.includes(data.elem.value)){
+                    backCodeList.splice(backCodeList.indexOf(data.elem.value),1);
+                }
+                if(orderList.includes(data.elem.data-key)){
+                    orderList.splice(orderList.indexOf(data.elem.name),1);
+                }
+            }
+            console.log("backCodeList ======",JSON.stringify(backCodeList));
+            console.log("orderList ======",JSON.stringify(orderList));
+
+            form.render();
+        })
+
+        form.on('checkbox(checkAll)',function (data) {
+            if(data.elem.checked){
+                $("#tform").find(":checkbox").each(function(){
+                    if(this.value!="checkAll"){
+                        this.checked=true;
+                        if(!backCodeList.includes(this.value)){
+                            backCodeList.push(this.value);
+                        }
+                        if(!orderList.includes(this.name)){
+                            orderList.push(this.name);
+                        }
+                    }
+
+                })
+            }else{
+                $("#tform").find(":checkbox").each(function(){
+                    this.checked=false;
+                })
+                backCodeList = [];
+                orderList = [];
+            }
+            console.log("backCodeList ======",JSON.stringify(backCodeList));
+            console.log("orderList ======",JSON.stringify(orderList));
+
+            form.render();
+        })
+    });
+
+
+</script>
+
+</body>
+</html>

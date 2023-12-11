@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.BotUserDAO">
+
+    <select id="getUserRoleByPage"  resultType="com.beans.Admin">
+        SELECT r3.role_name as updateRoleName,r2.role_name as parentRoleName,r.role_name as roleName,r.role_id as roleNameId,a.*,a.create_time as createTime,
+        a2.username as updateUserName ,a.update_time as updateTime,a.updateUserIp as updateUserIp, r3.role_name_th as updateRoleNameTh,r2.role_name_th as parentRoleNameTh, r.role_name_th as roleNameTh
+        FROM admin a
+        left join admin_role ar on a.id = ar.admin_id
+        LEFT JOIN role r on ar.role_id = r.role_id
+        left join admin a2 on a.updateUserId = a2.id
+        left join admin_role ar2 on a.parentId = ar2.admin_id
+        left join role r2 on ar2.role_id = r2.role_id
+        left join admin_role ar3 on a.updateUserId = ar3.admin_id
+        left join role r3 on ar3.role_id = r3.role_id
+        WHERE a.parentId = #{userId}
+        <if test="username != null">
+            and a.username like concat("%" , #{username} , "%")
+        </if>
+<!--        <if test="username == null">-->
+<!--            and a.status!=0-->
+<!--        </if>-->
+        <if test="status == -1">
+            and a.status!=0
+        </if>
+        <if test="status == 1">
+            and a.status = 1
+        </if>
+        <if test="status == 0">
+            and a.status = 0
+        </if>
+        <if test="nickName != null">
+            and a.nickName like concat("%" , #{nickName} , "%")
+        </if>
+        <if test="fundMode != null">
+            and a.fundMode = #{fundMode}
+        </if>
+        <if test="companyId != null">
+            and a.companyId = #{companyId}
+        </if>
+        order by a.username
+    </select>
+
+
+</mapper>

@@ -1,0 +1,22 @@
+.layui-table-view .layui-table td, .layui-table-view .layui-table th{
+    font-size: 11px;
+}
+.layui-table-cell {
+    padding: 0;
+}
+.layui-form-label{
+    padding: 9px 10px;
+    width: 30px;
+}
+.layui-form-select .layui-input{
+    padding-right: 0px;
+}
+.layui-form-item .layui-inline{
+    margin-right: 0px;
+}
+.layui-table-tool{
+    padding: 10px 0px;
+}
+.layui-form-item ,.layui-table-page{
+    text-align: center;
+}

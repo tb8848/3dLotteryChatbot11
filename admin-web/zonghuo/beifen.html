@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>备份记录</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../js/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link href="../css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <link href="../css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+    </style>
+</head>
+<body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
+<div id="main" style="top: 0px;">
+    <template>
+    <div class="module">
+        <input type="hidden" value="1" id="backup_type">
+        <div name="module" id="backups_detail" class="m5 mt10">
+            <div class="guide">
+                <div class="fl">
+                    <a href="#!online_account" i18n="zh.top.location">位置 </a>&gt;&gt;
+                    <span class="red" i18n="zh.beifen.records">   备份记录  </span>
+                </div>
+                <div class="fr">
+                    <a href="beifen.html" class="fb red" i18n="zh.beifen.records">备份记录</a> |
+                    <a href="shihuobaidan.html" class="" i18n="subAccount.download.top.shWhiteData">实货白单数据</a></div>
+            </div>
+            <div class="mt10">
+                <form action="" novalidate="novalidate">
+                    <div class="mt10" id="bd_period_no">
+                        <table class="t-1">
+                            <thead>
+                            <tr class="bg1">
+                                <td colspan="16" align="center"><span id="drawId">{{drawId}}</span> <span i18n="zh.beifen.qsjbf">期数据备份</span></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="tc">
+                                    <input type="button" id="btnBackupCheckData" value="备份" class="btn" :disabled="!disableBtn" @click="backup" i18n="zh.beifen">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="mt10">
+                <form action="" novalidate="novalidate">
+                    <table class="t-1">
+                        <thead>
+                        <tr class="bg1">
+                            <td colspan="6" i18n="zh.beifen.records"> 备份记录</td>
+                        </tr>
+                        <tr class="bg2">
+                            <td width="10%" i18n="subAccount.download.table.delete">删除</td>
+                            <td width="20%" i18n="subAccount.download.table.fileName">文件名</td>
+                            <td width="10%" i18n="subAccount.download.table.version">版本</td>
+                            <td width="20%" i18n="subAccount.download.table.time">时间</td>
+                            <td width="20%" i18n="subAccount.download.table.type">类型</td>
+                            <td width="20%" i18n="subAccount.download.table.size">尺寸</td>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody" class="fn-hover" v-if="dataList.length > 0">
+                            <tr title="下载请点击：鼠标右键另存为!" v-for="(item,idx) in dataList">
+                                <td align="center">
+                                    <input type="checkbox" :checked="item.checked" @click="selectOne(item)"></td>
+                                <td>
+                                    <!--<a :href="host+'upload/' + item.filePath"
+                                       target="_blank" title="下载请点击：鼠标右键另存为！">{{item.fileName}}</a>-->
+                                    <a href="javascript:void(0)" @click="download(item)" title="下载请点击：鼠标右键另存为！">{{item.fileName}}</a>
+                                </td>
+                                <td>{{item.version}}</td>
+                                <td>{{item.createTime}}</td>
+                                <td>{{$t('yasuo')}}</td>
+                                <td>{{item.fileSize}}Bytes</td>
+                            </tr>
+                            <tr class="tfoot">
+                                <td align="center">
+                                    <input type="checkbox" id="chk_select" @click="selectAll" :checked="isSelectAll">
+                                    <span>{{$t('delete')}}</span>?
+                                </td>
+                                <td colspan="5">
+                                    <button type="button" class="btn" id="btnDelete" @click="del">{{$t('submit')}}</button>
+<!--                                    <input type="button" value="提交" class="btn" id="btnDelete" @click="del" i18n="zh.btn.submit">-->
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                        <tr>
+                            <td colspan="6" i18n="zh.table.noData">暂无数据!</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/vue/vue.js"></script>
+<script src="../js/vue/vue-i18n.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script  type="text/javascript" language="javascript">
+    const messages = {
+        zh: {
+            delete:"删",
+            submit:"提交",
+            yasuo:"压缩备份",
+        },
+        th: {
+            delete:"ลบ",
+            submit:"ส่ง",
+            yasuo:"บีบอัดการสำรองข้อมูล",
+        }
+    }
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    var layer = layui.layer;
+    var $ = layui.jquery;
+
+    var moduleName = "zongHuo";
+    var defaultLang = layui.data('langTab').langType;
+    const i18n = new VueI18n({
+        locale: defaultLang, // set locale
+        messages, // set locale messages
+    });
+    var i18np=null
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.initData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+        i18n.locale=lang;
+    }
+
+    const vm = new Vue({
+        el: '#main',
+        i18n,
+        data: {
+            isSelectAll:false,
+            drawId: "",
+            disableBtn: false,
+            dataList: [],
+            delList:[],
+        },
+        methods: {
+            initData () {
+                const _this = this;
+                $.ajax({
+                    url:HOST+"databaseBackup/getDrawInfo" ,
+                    success:function(res){
+                        if(res.code == 200) {
+                            _this.drawId = res.data.drawId
+                            _this.disableBtn = res.data.disableFlag
+                            _this.initDataList();
+                        }
+                    }
+                });
+            },
+            initDataList () {
+                const _this = this;
+                $.ajax({
+                    url:HOST+"databaseBackup/getDatabaseBackupList" ,
+                    success:function(res){
+                        if(res.code == 200) {
+                            _this.dataList = res.data
+                            _this.dataList.forEach((item,idx)=>{
+                                item.checked = false;
+                            })
+                        }
+                    }
+                });
+            },
+            backup() {
+                const _this = this;
+                layer.confirm(i18np.prop("zh.beifen.msg.define"),{
+                    icon: 3,
+                    title:i18np.prop("zh.beifen.msg.tip"),
+                    btn: [i18np.prop("zh.beifen.confirm"),i18np.prop("zh.beifen.cancel")] //可以无限个按钮
+                },function (index) {
+                    layer.msg(i18np.prop("zh.beifen.backing"),{icon:16,time:-1,shade:0.3});
+                    $.ajax({
+                        url:HOST+"databaseBackup/backupDatabase?drawId=" + _this.drawId,
+                        success:function(res){
+                            layer.closeAll();
+                            if(res.code == 200) {
+                                layer.msg(i18np.prop("zh.beifen.success"),{icon:1,time:1000});
+                                _this.initDataList();
+                            }else {
+                                layer.msg(i18np.prop("zh.beifen.fail"));
+                            }
+                        }
+                    });
+                })
+            },
+            selectOne(checkItem){
+                var that = this;
+                checkItem.checked = !checkItem.checked;
+                that.dataList.forEach((item,idx)=>{
+                    if(item.id == checkItem.id){
+                        item.checked = checkItem.checked;
+                        if(item.checked){
+                            if(!that.delList.includes(item.id)){
+                                that.delList.push(item.id)
+                            }
+                        }else{
+                            if(that.delList.includes(item.id)){
+                                that.delList.splice(that.delList.indexOf(item.id),1);
+                            }
+                        }
+                    }
+                })
+                if(that.delList.length==that.dataList.length){
+                    that.isSelectAll = true;
+                }else{
+                    that.isSelectAll = false;
+                }
+            },
+            selectAll(){
+                var that = this;
+                that.isSelectAll = !that.isSelectAll;
+                that.dataList.forEach((item,idx)=>{
+                    item.checked = that.isSelectAll;
+                    if(item.checked){
+                        if(!that.delList.includes(item.id)){
+                            that.delList.push(item.id)
+                        }
+                    }else{
+                        if(that.delList.includes(item.id)){
+                            that.delList.splice(that.delList.indexOf(item.id),1);
+                        }
+                    }
+                })
+            },
+            del(){
+                var that = this;
+                if(that.delList.length<1){
+                    layer.msg(i18np.prop("zh.beifen.noSelectData"));
+                    return;
+                }
+                layer.confirm(i18np.prop("zh.beifen.define.delete"),{
+                    icon: 3,
+                    title:i18np.prop("zh.beifen.msg.tip"),
+                    btn: [i18np.prop("zh.beifen.confirm"),i18np.prop("zh.beifen.cancel")] //可以无限个按钮
+                },function (index) {
+                    layer.msg(i18np.prop("zh.beifen.processing"),{icon:16,time:-1,shade:0.3});
+                    $.ajax({
+                        url:HOST+"databaseBackup/del",
+                        contentType:"application/json",
+                        type:'post',
+                        data:JSON.stringify(that.delList),
+                        success:function(res){
+                            layer.closeAll();
+                            if(res.code==0){
+                                layer.msg(i18np.prop("zh.beifen.delete.success"),{icon:1,time:1000}, function () {
+                                    location.reload()
+                                });
+                            }else{
+                                layer.msg(res.msg,{title:$i18np.prop("layer.alert.title"),btn:[$i18np.prop("layer.btn.confirm")]});
+                            }
+                        }
+                    })
+                })
+            },
+            download(item) {
+                $.ajax({
+                    url: HOST + "databaseBackup/download?id=" + item.id,
+                    type: 'get',
+                    success: function (res) {
+                        layer.closeAll();
+                        if (res.code == 200) {
+                            window.open(res.data);
+                        } else {
+                            layer.msg(res.msg, {
+                                title: $i18np.prop("layer.alert.title"),
+                                btn: [$i18np.prop("layer.btn.confirm")]
+                            });
+                        }
+                    }
+                })
+            }
+        }
+    })
+    // vm.initData();
+</script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/common.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../css/style-Permutation5.css" media="all">
+    <link rel="stylesheet" href="../css/A-P5.css" media="all">
+
+    <style>
+        .mulu{
+            background-image: url(../img/title7.jpg);
+            color: white;
+            width: 96%;
+            margin: 0 auto;
+            padding: 5px 0 5px 5px;
+            /*border: 1px solid black;*/
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .mulu span{
+            padding-left: 10px;
+        }
+        .active{
+            color: #ffff00;
+        }
+        .biaoge{
+            width: 96%;
+            margin: 0 auto;
+            /*border: 1px solid black;*/
+        }
+        .shou{
+            cursor:pointer;
+        }
+
+        .t-1 td{
+            border:1px solid #e2e2e2;
+        }
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div class="module">
+    <div name="module" id="sub" class="m5 mt5">
+        <div id="log_main">
+            <table class="t-1">
+                <thead> <tr class="title-bar"> <td colspan="10"><span i18n="logs.title">日志</span>&nbsp;
+                <span id="filter_kuaixuan">
+                    <!--<span data-type="20" class="fn_type_filter" style="cursor:pointer;">二定位</span>&nbsp;-->
+                    <!--<span data-type="30" class="fn_type_filter" style="cursor:pointer;">三定位</span>&nbsp;-->
+                    <!--<span data-type="40" class="fn_type_filter" style="cursor:pointer;">四定位</span>&nbsp;-->
+                    <!--<span data-type="21" class="fn_type_filter" style="cursor:pointer;">二字现</span>&nbsp;-->
+                    <!--<span data-type="31" class="fn_type_filter" style="cursor:pointer;">三字现</span>&nbsp;-->
+                    <!--<span data-type="41" class="fn_type_filter" style="cursor:pointer;">四字现</span>&nbsp;-->
+                    <!--<span data-type="" class="fn_type_filter red" style="cursor:pointer;">全部</span>-->
+                </span>
+            </td>
+            </tr>
+
+                <tr class="bg2">
+                    <td width="120" i18n="logs.bishu">笔数</td>
+                    <td width="120" i18n="logs.buyMoney">金额</td>
+                    <td id="contentCol"><span i18n="logs.caozuo.content">操作内容</span>
+                        <span class="blue" i18n="logs.tip1">&nbsp;(注：此日志内容以及“生成”还原号码功能，仅供参考和方便下单之用，不作为历史注单的凭证。)</span></td>
+                    <td width="120" i18n="logs.type">类型</td>
+                    <td width="130" i18n="logs.caozuo.time">操作时间</td>
+                    <td width="100" class="type_102" i18n="logs.recreate">再次生成</td>
+<!--                    <td width="100" class="type_102">-->
+<!--                        <button type="button" class="fn_top btn-common" id="setCommon" i18n="logs.commonuse">常用</button>-->
+<!--                    </td>-->
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                    <!--<tr> <td class="tc">63</td> <td class="tc">63</td> <td><span class="red">二定位</span>，定位置“<span class="red">取</span>”：千=<span class="red">123456789</span>，百=<span class="red">1234567</span></td>-->
+                        <!--<td class="tc">包牌</td>-->
+                        <!--<td class="tc">12-27 14:39:43</td>-->
+                        <!--<td class="tc">  </td>-->
+                        <!--<td class="tc"><input type="checkbox" name="" id="" value="159" class="fn_totop"></td> </tr>-->
+
+
+                </tbody>
+
+            </table>
+
+            <div name="module" id="pager" class="pager" action="log" pagebody="tbody">
+                <span i18n="logs.page.cur">第</span>
+                <span class="pageindex red">1</span>
+                <span i18n="logs.page">页</span>
+                <span i18n="logs.gong">共</span>
+                <span class="pagecount red">1</span>
+                <span i18n="logs.page">页</span>
+                <span i18n="logs.gong">共</span>
+                <span class="recordcount red">67</span>
+                <span i18n="logs.tiao">条</span>
+                <a href="javascript:void(0)" class="fn-first" i18n="logs.firstPage">首页</a>
+                <a href="javascript:void(0)" class="fn-prev" i18n="logs.prevPage">上一页</a>
+                <a href="javascript:void(0)" class="fn-next" i18n="logs.nextPage">下一页</a>
+                <a href="javascript:void(0)" class="fn-last" i18n="logs.lastPage">尾页</a>
+                <input type="text" class="input w30 fn-index" maxlength="10" digits="true" id="goTo">
+                <input type="button" class="btn btn-gray w30 fn-go" value="GO" > </div>
+        </div> </div> </div>
+
+
+
+<div id="xiazhu-dialog" style="display: none;width: 100%" class="g-dialog g-confirm">
+    <div class="dialog-bd">
+        <div name="module" id="erdPackageConfirm" class="confirm-wrapper">
+            <table class="tc history-table" cellspacing="0" cellpadding="0" style="width: 100%">
+                <tbody id="buyTable"></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dialog-ft">
+        <div style="margin-bottom: 10px;font-weight: bolder;font-size: 14px">
+            <span>总笔数：<span id="tobishu"></span></span> &nbsp;&nbsp;&nbsp;<span >总金额：<span id="tomoney"></span></span>
+        </div>
+        <div>
+            <input type="button" value="确定" class="btn-common" id="confirmBuy">
+            <input type="button" value="取消" class="btn-common btn-gray" id="cancelBuy">
+        </div>
+    </div>
+</div>
+
+
+<!--<div>-->
+    <!--<div class="mulu"></div>-->
+    <!--<div class="biaoge">-->
+        <!--<table class="layui-hide" id="logTable" lay-filter="t"></table>-->
+    <!--</div>-->
+<!--</div>-->
+
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+
+
+<script type="text/javascript">
+    var baseUrl = "";
+    var pageBaseUrl = sessionStorage.getItem("pageBaseUrl");
+    if(pageBaseUrl) {
+        var lastPathIdx = pageBaseUrl.lastIndexOf("/");
+        baseUrl = pageBaseUrl.substring(0, lastPathIdx + 1);
+    }
+
+    var defaultLang = layui.data('langTab').langType;
+    var moduleName = "logs";
+    var $i18np = null;
+
+    layui.config(
+        {base: baseUrl+'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            $i18np = layui.i18np;
+            $i18np.loadProperties(baseUrl,moduleName);
+            getData();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: baseUrl+"js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:baseUrl+"js/"
+    })
+
+    function changeLang(lang){
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: baseUrl+"js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(baseUrl,moduleName);
+        getData();
+    }
+
+</script>
+
+
+<script>
+
+    var lotteryMethodId = -1;
+    var commomIdArr = [];
+    var currpage = 1;
+    var totals = 0;
+    var pages = 1;
+    var limit=50;
+    var dataList = [];
+    var pageData=[];
+    var selectList=[];
+
+    var $ = layui.$;
+
+    function getData(){
+        getLotterySettingList();
+        getTableData();
+    }
+
+    //取消下注
+    $("#cancelBuy").on("click","",function(e){
+        layer.closeAll();
+        return false;
+    });
+
+
+    //确定下注
+    $("#confirmBuy").on("click","",function(e){
+        layer.closeAll();
+        if(selectList.length>0){
+            var loading = layer.msg("正在提交...",{icon:16,time:-1,shade:0.3})
+            let reqUrl = HOST+"draw/pc/buy3d";
+            if(lotteryMethodId=="5" || lotteryMethodId==5){
+                reqUrl = HOST+"draw/pc/buy3d/hs";
+            }
+            $.ajax({
+                url:reqUrl,
+                type:'post',
+                data:JSON.stringify(selectList),
+                success:function (res) {
+                    layer.close(loading);
+                    layer.closeAll();
+                    selectList = [];
+                    if(res.code==0){
+                        layer.msg("下注成功");
+                        window.parent.getCredit();
+                        window.parent.reloadPrintTable();
+                    }else{
+                        layer.alert(res.msg)
+                    }
+                }
+            })
+        }
+        return false;
+    });
+
+    function getLotteryMethodI18nName(lmId){
+        var betMethodName = "";
+        switch(lmId){
+            case "1":
+                betMethodName = '<span i18n="logs.yiding">'+$i18np.prop("logs.yiding")+'</span>';
+                break;
+            case "2":
+                betMethodName = '<span i18n="logs.erding">'+$i18np.prop("logs.erding")+'</span>';
+                break;
+            case "3":
+                betMethodName = '<span i18n="logs.sanding">'+$i18np.prop("logs.sanding")+'</span>';
+                break;
+            case "4":
+                betMethodName = '<span i18n="logs.siding">'+$i18np.prop("logs.siding")+'</span>';
+                break;
+            case "5":
+                betMethodName = '<span i18n="logs.erxian">'+$i18np.prop("logs.erxian")+'</span>';
+                break;
+            case "6":
+                betMethodName = '<span i18n="logs.sanxian">'+$i18np.prop("logs.sanxian")+'</span>';
+                break;
+            case "7":
+                betMethodName = '<span i18n="logs.sixian">'+$i18np.prop("logs.sixian")+'</span>';
+                break;
+        }
+        return betMethodName;
+    }
+
+    function getLotterySettingList(){
+        $.ajax({
+            url:HOST+"logsPC/getLotterySettings"
+            ,type:"get"
+            ,success:function (data) {
+                // console.log(data)
+                if (data.code == 200){
+                    var str = "";
+                    for (var i=0;i<data.data.length;i++){
+                        var dd = data.data[i];
+                       // var betName = getLotteryMethodI18nName(dd.id);
+                        var betName = dd.bettingMethod;
+                        var item = '<span data-type="20" id="log-'+dd.id+'" class="fn_type_filter" style="cursor:pointer;margin-left:5px">'+betName+'</span>&nbsp;'
+                        str = str + item;
+                    }
+                    str = str + '<span data-type="" class="fn_type_filter yellow" id="log-0" style="cursor:pointer;margin-left:5px" i18n="logs.all">'+$i18np.prop("logs.all")+'</span>';
+                    $("#filter_kuaixuan").html(str);
+                }
+            }
+            ,error:function () {
+                console.log("ajax error");
+            }
+        });
+    }
+
+
+    $("#filter_kuaixuan").on("click",".fn_type_filter",function(ele){
+        console.log(ele);
+        var eleId = this.id;
+        var id = eleId.split("-")[1];
+        $(this).addClass("yellow");
+        $(this).siblings().removeClass("yellow");
+        lotteryMethodId = id;
+        getTableData();
+    })
+
+
+    function getTableData(){
+        $.ajax({
+            url:HOST + 'logsPC/getLogsByOpType?page='+currpage+"&limit="+limit+"&opType="+lotteryMethodId,
+            type:'get',
+            success:function (res) {
+                if(res.code==0){
+                    totals = res.data.totals;
+                    pages = res.data.pages;
+                    dataList = res.data.dataList;
+                    __initTableData();
+                    __initPager();
+                }
+            }
+        })
+    }
+
+    function __initTableData() {
+        var bodydata = "";
+        if(dataList.length==0){
+            $("#tbody").html('<tr><td colspan="7" style="text-align: center">'+$i18np.prop("logs.noData")+'</td>');
+            return;
+        }
+        dataList.forEach((item,idx)=>{
+            var dataFrom = "";
+            if(item.dataFrom==1){
+                dataFrom = $i18np.prop("logs.baopai")
+            }else if(item.dataFrom==2){
+                dataFrom = $i18np.prop("logs.sanhuo") + $i18np.prop("logs.baopai")
+            }else if(item.dataFrom==3) {
+                dataFrom = $i18np.prop("logs.huizongbiao")
+            }
+
+            var createBtn = '';
+            if(item.dataFrom==1 || item.dataFrom==0){
+                createBtn = '<button id="btn-'+item.id+'" class="btn-common fn_recur" style="background-color: red" onclick="createAgain(\''+item.id+'\',\''+item.lotteryMethodId+'\')" i18n="logs.create">'+$i18np.prop("logs.create")+'</button>';
+            }
+
+            // var chk=item.isCommon==1 ?' checked':'';
+            // var commonChk = '<input type="checkbox" class="fn_totop" name="ids" value="'+item.id+'" '+chk+' onclick="selectOne(this)">';
+
+            var content = item.content;
+            if(defaultLang=='th'){
+                content = item.contentTh;
+            }
+
+            var cwidth = $("#contentCol").width();
+            console.log("cwidth====",cwidth)
+
+            var tr = '<tr> <td class="tc">'+item.buyAmount+'</td>\n' +
+                '<td class="tc">'+item.buyMoney+'</td>\n' +
+                '<td><div style="width: '+(cwidth-10)+'px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis" title="'+content+'">'+content+'</div></td>' +
+                '<td class="tc">'+dataFrom+'</td>\n' +
+                '<td class="tc">'+item.operationTime+'</td>\n' +
+                '<td class="tc">'+createBtn+'</td>\n' +
+                // '<td class="tc">'+commonChk+'' +
+                '</tr>';
+            bodydata = bodydata + tr;
+        });
+        $("#tbody").html(bodydata);
+    }
+
+
+    function __initPager(){
+        $(".pageindex").html(currpage);
+        $(".pagecount").html(pages);
+        $(".recordcount").html(totals);
+
+    }
+
+    function selectOne(obj){
+        var v = data.value;
+        if(obj.checked){
+            //选中
+            if(!commomIdArr.includes(v)){
+                commomIdArr.push(v);
+            }
+        }else{
+            if(commomIdArr.includes(v)){
+                var idx = commomIdArr.indexOf(v);
+                if(idx>-1){
+                    commomIdArr.splice(idx,1)
+                }
+            }
+        }
+    }
+
+    //再次生成
+    function createAgain(logId,lmId){
+        let logInfo = null;
+        for(var i=0,len=dataList.length;i<len;i++){
+            let item = dataList[i];
+            if(item.id == logId){
+                logInfo = item;
+                break;
+            }
+        }
+        if(null!=logInfo){
+            let contentJson = logInfo.contentJson;
+            selectList = JSON.parse(contentJson);
+            let totalAmount = logInfo.buyAmount;
+            let totalMoney = logInfo.buyMoney;
+            if(selectList.length>0){
+                var html = "";
+                selectList.forEach((item,idx)=>{
+                    //totalAmount = accAdd(totalAmount,item.buyAmount);
+                    //totalMoney = accAdd(totalMoney,item.buyMoney);
+                    var na = item.huizongName;
+                    var codes = item.value;
+                    var buyAmount = item.buyAmount;
+                    var tr = '<tr><td class="">'+
+                        '<div class="code">'+
+                        '<b>'+na+'</b>&nbsp;&nbsp;<b class="em">'+codes+'</b>  ['+buyAmount+'注]</div>'+
+                        '</td></tr>'
+                    html+=tr;
+                })
+                $("#tobishu").html(totalAmount)
+                $("#tomoney").html(totalMoney)
+                $("#buyTable").html(html);
+                layer.open({
+                    type:1,
+                    content:$('#xiazhu-dialog'),
+                    area:['450px','470px'],
+                    title:"号码列表"
+                })
+            }
+        }
+
+    }
+
+
+    $("#setCommon").on("click","",function () {
+        this.disabled = true;
+        $.ajax({
+            url:HOST+"betlog/setCommonUse"
+            ,type:"post"
+            ,data:JSON.stringify({
+                idList:commomIdArr
+            })
+            ,contentType:"application/json"
+            ,success:function (data) {
+                layer.closeAll();
+                if (data.code == 0){
+                    layer.msg($i18np.prop("logs.setSuccess"));
+                }else{
+                    layer.msg(data.msg);
+                }
+            }
+            ,error:function () {
+                layer.closeAll();
+                layer.msg($i18np.prop("logs.reqError"));
+
+            }
+        });
+
+    })
+
+    $("#pager").on("click",".fn-first",function (e) {
+        if(currpage!=1){
+            currpage = 1;
+            getTableData();
+        }
+    })
+
+    $("#pager").on("click",".fn-next",function (e) {
+        if(currpage<pages){
+            currpage++;
+            getTableData();
+        }
+    })
+
+    $("#pager").on("click",".fn-prev",function (e) {
+        if(currpage>1){
+            currpage--;
+            getTableData();
+        }
+    })
+
+    $("#pager").on("click",".fn-last",function (e) {
+        if(currpage!=pages){
+            currpage=pages
+            getTableData();
+        }
+    })
+    $("#pager").on("click",".fn-go",function(e){
+        var goValue = $("#goTo").val();
+        if(parseInt(goValue)>=1 && parseInt(goValue)<=pages && parseInt(goValue)!=currpage){
+            currpage  = parseInt(goValue);
+            getTableData();
+        }else{
+
+        }
+    })
+
+    function  transRules() {
+
+    }
+
+</script>
+</body>
+</html>

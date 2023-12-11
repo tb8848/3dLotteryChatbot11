@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>子账号后台管理</title><!-- 总监之下会员之上后台管理 -->
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/common.css" media="all">
+    <link href="css/style-Permutation5.css?" type="text/css" rel="stylesheet">
+    <link href="css/A-P5.css" type="text/css" rel="stylesheet">
+    <script src="js/jquery/jquery.min.js"></script>
+    <script src="js/jquery/jquery.qrcode.min.js"></script>
+</head>
+<style type="text/css">
+    #textfield {
+        border: 1px solid rgba(152, 166, 173, 0.15);
+        font-size: 13px;
+        height: 34px;
+        padding-left: 20px;
+        padding-right: 40px;
+        margin: 13px 15px 0px 25px;
+        background: rgba(152, 166, 173, 0.1);
+        box-shadow: none;
+        border-radius: 30px;
+        width: 200px;
+        cursor: text;
+        float: left;
+    }
+
+    #shusearch {
+        cursor: pointer;
+        width: 30px;
+        float: left;
+        margin-top: 20px;
+        margin-left: -40px;
+    }
+
+    .layui-layer-title {
+        /* padding: 0 80px 0 20px; */
+        text-align: center;
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #F0F0F0;
+        font-size: 14px;
+        color: #333;
+        overflow: hidden;
+        border-radius: 2px 2px 0 0;
+    }
+    .layui-layer-molv .layui-layer-title{
+        background: #159ED4 !important;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .layui-layer-molv .layui-layer-btn a {
+        background: #159ED4 !important;
+        border-color: #159ED4;
+    }
+
+    .main {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 54px;
+        right: 0;
+        bottom: 0px;
+        _position: relative;
+        _height: 100%;
+        _top: 0px;
+        _bottom: 0;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        background: #e1f2ff;
+        *zoom: 1;
+        min-width: 1280px;
+    }
+
+    .layui-layer-btn {
+        text-align: center !important;
+        padding: 0 15px 12px;
+        pointer-events: auto;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+</style>
+<body>
+
+<div name="module" id="header" class="header">
+    <script type="text/javascript">
+        var LEVEL = 6;
+        var IS_SUB_ACCOUNT = 0;
+        var LOGIN_ACCOUNT="";
+        var LOTTERY_TYPE = "1";
+        var LOTTERY_TYPE_NAME = "福彩3D";
+        var LOTTERY_FUNCTION = 1;
+        var LOTTERY_FUNCTION_PACKAGE = 1;
+        var USER_SELL_TYPE = 0;    //用户的出货功能类型 0：只有普通出货功能 1：拥有负值出货功能
+        var IS_SUB_ACCOUNT_CAN_DOWNDATA = 1;
+        var OPEN_STATUS = 1;        // -2：表示期数不存在 -1：表示开盘中 0： 表示已开盘 1： 表示已关盘（封盘）
+        var LAST_TIME = 0;
+        var SERVER_TIME =  1672795724903.48;
+        var FLAG_ENABLED_RANDOM = 0;
+        var FLAG_ENABLED_MANUAL_BATCHODDS = 0;
+        var IS_INTEGRATION_LOGIN = "false";
+        var IS_SUB_CAN_SELL = 1;
+        var IS_SUB_CAN_HANDICAP_REALITY = 1;
+        var IS_SUB_CAN_HANDICAP_INVENTED = 1;
+        var CAPTCHA_URL = "https://f1.safelogin.cc/";
+        var CAPTCHA_VALUE = "";
+
+    </script>
+    <div class="left">
+        <span class="company-name" ></span><br>
+        <span id="userRole" >总监 ：</span>
+    </div>
+    <div class="middle">
+        <strong class="yellow f16" i18n="sub.arrange.five">福彩3D</strong>
+        <marquee scrollamount="2" class="marquee">
+            <span id="paomadeng">欢迎光临! 管理【b1.pnc93687.xyz】【b2.pnc93687.xyz】【b3.pnc93687.xyz】【b4.pnc93687.xyz】【b5.pnc93687.xyz】【b6.pnc93687.xyz】【b7.pnc93687.xyz】【b8.pnc93687.xyz】【b9.pnc93687.xyz:8443】 会员【f1.pnc93687.xyz】【f2.pnc93687.xyz】【f3.pnc93687.xyz】【f4.pnc93687.xyz】【f5.pnc93687.xyz】【f6.pnc93687.xyz】【f7.pnc93687.xyz】【f8.pnc93687.xyz】【f9.pnc93687.xyz:8443】 会员手机版【m1.pnc93687.xyz】【m2.pnc93687.xyz】【m3.pnc93687.xyz】【m4.pnc93687.xyz】【m5.pnc93687.xyz】【m6.pnc93687.xyz】【m7.pnc93687.xyz】【m8.pnc93687.xyz】【m9.pnc93687.xyz:8443】 本公司每天上午12:00开盘。开奖日当天20:20分封盘！
+                                            【提示】本公司提供转换赔率功能,请各会员在【会员资料】里设置使用。●●●【温馨提示】各位会员在下注确定后请到“下注明细”里确认注单，一切注单结算以下注明细里资料为准！
+            </span>
+        </marquee>
+    </div>
+    <!--    <script type="text/html" id="notice">-->
+    <!--        <div class="notice-title">{{Data.Rows[0].notice_title}}</div>-->
+    <!--        <div class="notice-body">{{#Data.Rows[0].notice_content}}</div>-->
+    <!--    </script>-->
+<!--    <div class="right speed" id="testNetwork" style="margin-right: 200px;">-->
+<!--        <a href="javascript:void(0)" class="fn-speed f16 fb" i18n="sub.network.test">网络测速</a>-->
+<!--    </div>-->
+
+    <div class="right white" id="systime" style="margin-right: 10px;">已封盘</div>
+
+    <ul class="nav" id="nav" style="top: 24px;">
+        <li name="awardreadadmin" id="nav-awardreadadmin">
+            <a href="#!awardreadadmin" name="awardreadadmin" class="clearStorage">
+                <span i18n="sub.top.zhDetail">总货明细</span>
+            </a>
+        </li>
+        <li name="report" id="nav-reportgxd">
+            <a href="#!reportgxd" name="reportgxd" class="clearStorage">
+                <span i18n="sub.top.contribution">贡献度</span>
+            </a>
+        </li>
+        <li name="reportclass" id="nav-reportclass">
+            <a href="#!reportclass?level=6" name="reportclass" class="clearStorage">
+                <span i18n="sub.top.ledger">分类账</span>
+            </a>
+        </li>
+        <li name="report" id="nav-report">
+            <a href="#!report?level=6" name="report" class="clearStorage">
+                <span i18n="sub.top.report">报表</span>
+            </a>
+        </li>
+        <li name="drawno_detail" id="nav-drawno_detail">
+            <a href="#!drawno_detail" name="drawno_detail" class="clearStorage">
+                <span i18n="sub.top.lotteryNumber">开奖号码</span>
+            </a>
+        </li>
+        <li name="rules" id="nav-rules">
+            <a href="#!rules" name="rules">
+                <span i18n="sub.top.rules">规则说明</span>
+            </a>
+        </li>
+        <li name="setting" id="nav-setting" class="on">
+            <a href="#!setting" name="setting">
+                <span i18n="sub.top.setting">设置</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" class="fn-logout" onclick="tuichu()">
+                <span i18n="sub.top.logout">退出</span>
+            </a>
+        </li>
+        <li style="margin-left:20px;" id="nav-downLastApp">
+            <a href="#!downLastApp" name="downLastApp">
+                <span i18n="sub.top.download.vipApp">下载会员APP</span>
+            </a>
+        </li>
+        <!--<li style="margin-top: 5px;">
+            <span style="color: white;" i18n="sub.switch.language">切换语言：</span>
+            <select id="langSelect">
+                <option value="zh">简体中文</option>
+                &lt;!&ndash;<option value="en">English</option>&ndash;&gt;
+                <option value="th">ภาษาไทย</option>
+            </select>
+        </li>-->
+        <!--        <li style="margin-left:5px;"><a href="https://www.qxfiles.com/dzzs/setup.exe" target="_blank"><span>下载抄数助手</span></a></li>-->
+    </ul>
+</div>
+
+<div id="main" class="main">
+    <iframe name="mainframe" id="mainframe" src="subAccount/setting/accountSetting.html"
+            frameborder="0" style="width: 100%;height: 100%" scrolling="no"></iframe>
+</div>
+
+<div class="layui-form" id="notice" style="display:none;position:absolute;margin: 0 auto;padding-top: 3%;width: 100%;">
+    <div class="layui-form-item layui-form-text" id="title"
+         style="text-align: center;font-size: 16px;"></div>
+    <div class="layui-form-item layui-form-text" id="content"
+         style="margin-left: 20px;margin-top: 20px;font-size: 13px;">
+    </div>
+</div>
+
+<div class="layui-form" id="qrcode" style="display:none;padding-top: 5%;width: 100%;margin: 0 auto;">
+    <div>
+        <div class="layui-form-item" id="code" style="display: flex;justify-content: center;margin-bottom: 20px;"></div>
+        <div class="layui-form-item" style="font-size: 13px;color: white;background-color: #159ED4;padding: 5px 10px;
+        width: 100px;border-radius: 6px;text-align: center;margin: 0 auto;cursor: pointer;" onclick="downAPP()" i18n="sub.top.download.vipApp">
+            下载会员APP
+        </div>
+    </div>
+</div>
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/qrCode.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script>
+    var $ = layui.$;
+    var layer = layui.layer;
+    var drawId = "";
+    var drawNo = "";
+
+    var moduleName = "subAccount_main";
+    var $$ = jQuery;
+    var $i18np = null;
+
+    var width_screen = screen.width;     //屏幕宽度
+
+    layui.config(
+        {base: 'js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+
+            var language = $("#langSelect").val();
+            if (language==null || language=="" || language==undefined){
+                $("#langSelect").val("zh");
+                reloadI18n({
+                    defaultLang:"zh",
+                    filePath: "js/i18n/"+moduleName+"/",
+                    module:moduleName,
+                })
+            }
+
+            $i18np = layui.i18np;
+            $i18np.loadProperties(moduleName);
+
+            if (width_screen*1 < 500){
+                $("body").css("min-width",1235);
+                $("#header").css("min-width",1235);
+                $("#main").css("min-width",1235);
+            }else{
+                $("body").css("min-width",width_screen);
+                $("#header").css("min-width",width_screen);
+                $("#main").css("min-width",width_screen);
+            }
+
+            if (defaultLang == "th" || (width_screen*1 > 500 && width_screen*1 < 1235)) {
+                $("#header").css("height", "82px");
+                $("#main").css("top", "83px");
+                $(".left").css("margin-top", "30px");
+                // $("#testNetwork").css("margin-right", "255px")
+            }
+
+            getInfo();
+        })
+
+    $$("#langSelect").on("change","",function (e){//选择语言
+        var lang = this.value;
+        defaultLang = lang;
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        $i18np.loadProperties(moduleName);
+        window.frames[0].changeLang(lang);
+        getInfo();
+
+        if (lang == "th" || (width_screen*1 > 500 && width_screen*1 < 1235)) {
+            $("#header").css("height", "82px");
+            $("#main").css("top", "83px");
+            $(".left").css("margin-top", "30px");
+            //$("#testNetwork").css("margin-right", "255px")
+        }else {
+            $("#header").css("height", "53px");
+            $("#main").css("top", "54px");
+            $(".left").css("margin-top", "0px");
+            //$("#testNetwork").css("margin-right", "200px")
+        }
+        // checkDrawStatus();
+    })
+
+    var defaultLang = layui.data('langTab').langType;
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"js/"
+    })
+
+    $$("#langSelect").val(defaultLang);
+
+    function getInfo() {
+        var notice = localStorage.getItem("notice");
+        if (notice == 1){
+            localStorage.setItem("notice",0);
+            getNotice();
+        }
+        getUserInfo();
+        getMarquee();
+        denglu();
+        window.setInterval(denglu,5000);
+        checkDrawStatus();
+    }
+    // window.onload = function () {
+    //     var notice = localStorage.getItem("notice");
+    //     if (notice == 1){
+    //         localStorage.setItem("notice",0);
+    //         getNotice();
+    //     }
+    // }
+
+    // layui.config({
+    //     base: 'viewstyle/' //主页样式的嵌入地址
+    // }).extend({
+    //     index: 'lib/index' //主入口模块
+    // }).use(['index'], function () {
+    //     var $ = layui.$
+    //         , admin = layui.admin
+    //         , element = layui.element
+    //         , router = layui.router();
+    //
+    //     //解决刷新问题
+    //     element.render();
+    //     element.on('tab(layadmin-layout-tabs)', function (data) {
+    //         setTimeout(function () {
+    //             var e = document.createEvent("MouseEvents");
+    //             e.initEvent("click", true, true);
+    //             document.getElementById("sx").dispatchEvent(e);
+    //         }, 20)
+    //     });
+    // });
+
+    function navSelect(navname){
+        $("#nav-"+navname).addClass('on');
+        $("#nav-"+navname).siblings().removeClass('on');
+        sessionStorage.setItem("yueji_nav","");
+    }
+
+    let appId = "";
+    let appDownUrl = "";
+    $("#nav").on("click","li>a",function (e) {
+        sessionStorage.setItem("yueji_nav","");
+        $(this).parent('li').addClass('on');
+        $(this).parent('li').siblings().removeClass('on');
+        var pname = this.name;
+        var targetUrl = "";
+        switch(pname){
+            case 'awardreadadmin': //总货明细
+                targetUrl = 'subAccount/zonghuo/zonghuoList.html';
+                break;
+            case 'reportgxd': //贡献度
+                targetUrl = 'gongxiandu/gongXianDu.html?drawFlag=0';
+                break;
+            case 'reportclass'://分类帐
+                targetUrl = 'feleizhang/dayfelei.html';//subAccount/feleizhang/dayfelei.html
+                break;
+            case 'report'://报表
+                targetUrl = 'baobiao/daybaobiao.html';
+                break;
+            case 'drawno_detail'://开奖号码
+                targetUrl = 'subMain/drawList.html';
+                break;
+            case 'rules': //规则说明
+                targetUrl = 'subMain/guizeExplain.html';
+                break;
+            case 'setting'://设置
+                targetUrl = 'subAccount/setting/accountSetting.html';
+                break;
+            case 'downLastApp': //下载会员APP
+                //生成二维码
+                $.ajax({
+                    url:HOST+"apk/getNewestApk"
+                    ,type:"get"
+                    ,success:function (data) {
+                        if (data.code == 200){
+                            $("#code").empty();
+                            appDownUrl = HOST+"apk/download?id="+data.data.id;
+                            appId = data.data.id;
+                            // appDownUrl = HOST.substring(0,HOST.length-1)+data.data.targetUrl;
+                            // let url = HOST+"apk/download?id=" +appId;
+                            // console.log("下载地址："+appDownUrl+" appId："+appId);
+                            $("#code").qrcode({
+                                render: "canvas", //table方式
+                                width: 200, //宽度
+                                height:200, //高度
+                                text: appDownUrl //任意内容
+                            });
+                            layer.open({
+                                type: 1,
+                                skin: 'layui-layer-molv', //样式类名
+                                // title: '下载会员APP',
+                                title: $i18np.prop("sub.top.download.vipApp"),
+                                anim: 2,
+                                area: ['600px', '400px'],
+                                shadeClose: true, //开启遮罩关闭
+                                content:$("#qrcode"),
+                            });
+                        }else{
+                            if (data.msg==null || data.msg=="" || data.msg==undefined){
+                                layer.msg($i18np.prop("sub.api.msg.apk.not.found"));
+                            }else{
+                                layer.msg(data.msg);
+                            }
+                        }
+                    }
+                    ,error:function () {
+                        console.log("ajax error");
+                    }
+                });
+                return false;
+        }
+        $("#mainframe").attr('src',targetUrl);
+    })
+
+    //点击弹窗里面的下载会员APP
+    function downAPP(){
+        // console.log("下载会员APP地址："+appDownUrl+" appId："+appId);
+        window.open(appDownUrl);
+        // window.open(HOST+"apk/download?id=" +appId);
+    }
+
+    $('.clearStorage').on('click',function () {
+        layui.data('t_page', null);
+    })
+
+    function denglu() {
+        $.ajax({
+            type: "get",
+            url: HOST+"admin/isLogin",
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 0) {
+                    $("#uname").html(res.data);
+                } else {
+                    $("#uname").css('display', 'none');
+                    $("#deng").css('display', 'block');
+                }
+            }
+        });
+    }
+
+    //弹出公告
+    function getNotice(){
+        $.ajax({
+            type: "get",
+            url: HOST+"notice/getNewNotice?type=1",
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 200) {
+                    $("#title").html(res.data.title);
+                    $("#content").html(res.data.content);
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-molv', //样式类名
+                        title: $i18np.prop("sub.notice"),
+                        anim: 2,
+                        btn: [$i18np.prop("sub.btn.define")],
+                        area: ['600px', '400px'],
+                        shadeClose: true, //开启遮罩关闭
+                        content:$("#notice"),
+                    });
+                }
+            }
+        })
+    }
+
+    function getMarquee () {
+        $.ajax({
+            type: "get",
+            url: HOST+"notice/getMarquee",
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 200) {
+                    $("#paomadeng").html(res.data);
+                }
+            }
+        })
+    }
+
+    function getUserInfo() {
+        $.ajax({
+            type: "get",
+            url: HOST+"admin/getUserInfo",
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 200) {
+                    if (defaultLang == "zh"){
+                        $("#userRole").html(res.data.roleName + $i18np.prop("sub.account") + res.data.userName);
+                    }else{
+                        $("#userRole").html(res.data.roleNameTh + $i18np.prop("sub.account") + res.data.userName);
+                    }
+                }
+            }
+        })
+    }
+
+    //window.setInterval(checkDrawStatus,1000);
+    // 返回按钮事件
+    $(".layui-icon-prev").click(function(){
+        history.back(); // 后退一次
+    });
+    $(".layui-icon-next").click(function(){
+        history.forward();// 前进一次
+    });
+
+    function init() {
+        $.ajax({
+            url: HOST+"shop/admin/verifyLogin",
+            success: function (res) {
+                // console.log(res);
+                if(res.code == 200){
+
+                }else if(res.code == 500){
+                    alert(res.msg);
+                    window.location.href = "index.html"
+                }else{
+                    window.location.href = "index.html"
+                }
+            }
+        })
+    }
+
+    //获取开盘状态
+    function checkDrawStatus(){
+        $.ajax({
+            url:HOST+'draw/lastInfo',
+            type:'get',
+            success:function(res){
+                if(res.code==200){
+                    drawId = res.data.draw.id;
+                    drawNo = res.data.draw.drawId
+                    localStorage.setItem("drawNo",drawNo);
+                    localStorage.setItem("drawOpenStatus",res.data.draw.openStatus);
+                    if(res.data.draw.openStatus==0){
+                        $("#systime").html($i18np.prop("sub.system.stop"))
+                    }else if(res.data.draw.openStatus==3){
+                        $("#systime").html($i18np.prop("sub.system.starting"))
+                    }else if(res.data.draw.openStatus==2){
+                        $("#systime").html($i18np.prop("sub.system.noStart"))
+                    }else{
+                        var leftSeconds = res.data.leftMillSeconds;
+                        showLeftTimes(leftSeconds);
+                    }
+                }
+            }
+        });
+    }
+
+    //退出登录
+    function tuichu(){
+        $.ajax({
+            url:HOST+'admin/logout',
+            type:'get',
+            success:function(res){
+                if(res.code==200){
+                    layui.data('local_store',{key:'token',value:""});
+                }
+            }
+        });
+        parent.location = "index.html";
+    }
+
+    function logout() {
+        parent.location = "index.html";
+    }
+
+    function showLeftTimes(leftSeconds){
+        //获取从1970年1月1日到现在的时间的毫秒数
+        if(leftSeconds>0){
+            var nowTime = new Date();
+            //获取输入时间的毫秒数
+            var putTime = new Date(leftSeconds);
+            //剩余时间总的毫秒数 除以 1000 变为总秒数
+            var dec =(putTime-nowTime)/ 1000;
+            //得到天 格式化成前缀加零的样式
+            var d =  parseInt(dec/60/60/24);
+            if(d<0){
+                d = 0;
+            }
+            d = d<10 ? '0'+ d : d;
+            //得到小时 格式化成前缀加零的样式
+            var h = parseInt(dec/60/60%24);
+            if(h<0){
+                h = 0;
+            }
+            h = h<10 ? '0'+ h : h;
+            //得到分钟 格式化成前缀加零的样式
+            var m= parseInt(dec/60%60);
+            if(m<0){
+                m = 0;
+            }
+            m = m<10 ? '0'+ m: m;
+            //得到秒 格式化成前缀加零的样式
+            var s= parseInt(dec%60);
+            if(s<0){
+                s = 0;
+            }
+            s = s<10 ? '0'+ s : s;
+            var timeStr = d+$i18np.prop("sub.day")+h+$i18np.prop("sub.time")+m+$i18np.prop("sub.divide")+s+$i18np.prop("sub.second");
+            $("#systime").html(timeStr)
+        }else{
+            $("#systime").html($i18np.prop("sub.system.stop"))
+        }
+
+    }
+</script>
+</body>
+</html>
+
+

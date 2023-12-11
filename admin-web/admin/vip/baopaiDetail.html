@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../css/common.css" media="all">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+
+    <link rel="stylesheet" href="../../css/style-Permutation5.css" media="all">
+
+    <link rel="stylesheet" href="../../css/A-P5.css" media="all">
+    <style type="text/css">
+        /*.layui-table-cell{height:40px;line-height:40px;}*/
+        .caozuo{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .layui-form-label{
+            width: 50px;
+        }
+        .layui-form-select{
+            display: inherit;
+        }
+        .layui-input{
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .layui-table-cell{
+            height:auto;
+            line-height:inherit;
+        }
+
+        td{
+            vertical-align: center;
+        }
+        /*.layui-table-fixed{*/
+            /*position:relative;*/
+        /*}*/
+
+    </style>
+</head>
+<body style="overflow-y: auto">
+
+<div id="main" >
+    <template>
+    <div class="module">
+        <div name="module" id="betprint" class="m5 mt10">
+            <input type="hidden" value="23008" name="period_number" id="period_number">
+            <input type="hidden" value="0" name="Is_Winning" id="Is_Winning">
+            <input type="hidden" value="322017089570004108" name="serial_no" id="serial_no">
+            <input type="hidden" value="300050" name="package_id" id="package_id">
+            <div class="mt10">
+                <div id="print-area">
+                    <div class="bold mt10 tc f16" id="title">  <!-- 本期包牌[50组] 下注明细> -->  </div>
+                    <table class="t-1 mt10 td-nopadding">
+                        <thead>
+                        <tr class="bg2 tc">
+                            <td width="8%" i18n="xiazhu.lotteryType">彩种</td>
+                            <td width="20%">方案名称</td>
+                            <td width="10%" i18n="xiazhu.billNO">注单编号</td>
+                            <td width="10%" i18n="xiazhu.buyTime">下单时间</td>
+                            <td width="8%" i18n="detail.buyCode">号码</td>
+                            <td width="8%" i18n="detail.buyMoney">金额</td>
+                            <td width="8%" i18n="detail.odds">赔率</td>
+                            <td width="8%"  i18n="bills.zhongjiang">中奖</td>
+                            <td width="8%" i18n="bills.huishui">回水</td>
+                            <td width="8%" i18n="bills.yingkui">盈亏</td>
+                            <td class="betprint-last" width="8%" i18n="xiazhu.status">状态</td>
+                        </tr>
+                        </thead>
+                        <tbody class="fn-hover tc" v-if="pager.total==-1">
+                            <tr > <td colspan="11" align="center" i18n="dataLoading">数据加载中...</td> </tr>
+                        </tbody>
+                        <tbody class="fn-hover tc" v-if="pager.total==0">
+                            <tr > <td colspan="11" align="center" i18n="noData">暂无数据!</td> </tr>
+                        </tbody>
+                        <tbody id="tbody" class="fn-hover tc" v-if="pager.total>0">
+                            <tr class=" " v-for="(item,idx) in dataList">
+                                <td class="">  <span>&nbsp;&nbsp;</span> 福彩3D </td>
+                                <td>{{item.huizongName}}</td>
+                                <td>{{item.printId}}</td>
+                                <td v-if="item.backCodeFlag==1">{{item.createTime}}<br/><span i18n="xiazhu.tui">退</span>:{{item.backCodeTime}}</td>
+                                <td v-else>{{item.createTime}}</td>
+                                <td class="fb">{{item.buyCodes}}</td>
+                                <td class="fb">{{item.buyMoney}}</td>
+                                <td>{{item.param3}}</td>
+                                <td>{{item.drawStatus==1?item.drawMoney:0}}</td>
+                                <td>{{item.huishui}}</td>
+                                <td>{{item.huishui-item.buyMoney+(item.drawStatus==1?item.drawMoney:0)}}</td>
+                                <td v-if="item.backCodeFlag==1"><span style='color:orangered' i18n="xiazhu.yituima">已退码</span></td>
+                                <td v-else i18n="xiazhu.success">成功</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="tc" i18n="bills.heji">合计</td>
+                                <td>{{heji.amount}}</td>
+                                <td></td>
+                                <td></td>
+
+                                <td>{{heji.money}}</td>
+                                <td></td>
+                                <td> {{heji.drawMoney}} </td>
+                                <td>{{heji.huishui}} </td>
+                                <td>{{heji.earn}} </td>
+                                <td class="betprint-last"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="pagesetshow" class="no-print">
+                        <div name="module" id="pager" class="pager"
+                             pagecount="2"> <span i18n="xiazhu.page.cur">第</span>
+                            <span class="pageindex red">{{pager.currpage}}</span>
+                            <span i18n="xiazhu.page">页</span>
+                            <span i18n="xiazhu.gong">共</span> <span class="pagecount red">{{pager.pages}}</span>
+                            <span i18n="xiazhu.page">页</span>
+                            <span i18n="xiazhu.gong">共</span>
+                            <span class="recordcount red">{{pager.total<0?0:pager.total}}</span>
+                            <span i18n="xiazhu.tiao">条</span>
+                            <a href="javascript:void(0)" class="fn-first" @click="firstPage()" i18n="xiazhu.firstPage">首页</a>
+                            <a href="javascript:void(0)" class="fn-prev" @click="prevPage()" i18n="xiazhu.prevPage">上一页</a>
+                            <a href="javascript:void(0)" class="fn-next" @click="nextPage()" i18n="xiazhu.nextPage">下一页</a>
+                            <a href="javascript:void(0)" class="fn-last" @click="lastPage()" i18n="xiazhu.lastPage">尾页</a>
+                            <input type="text" class="input w30 fn-index" maxlength="10" digits="true" v-model="pager.toPage">
+                            <input type="button" class="btn btn-gray w30 fn-go" value="GO" @click="goPage()">
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </template>
+</div>
+
+<!--数据列表-->
+<!--<div class="layui-form" id="tform">-->
+<!--    <div class="layui-card">-->
+<!--        <div class="layui-card-header" id="dataHeader" style="text-align: center"></div>-->
+<!--        <div class="layui-card-body">-->
+<!--            <table class="layui-hide" id="test" lay-filter="stu-table"></table>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script src="../../js/jquery/jquery.min.js"></script>
+<script src="../../js/layui/layui.all.js"></script>
+<script src="../../js/token.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/vue/vue.js"></script>
+<script src="../../js/jquery.i18n.min.js"></script>
+<script src="../../js/multi_lang_config.js"></script>
+<script>
+    var moduleName = "admin_vip";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+    var $ = layui.jquery;
+    const vm = new Vue({
+        el: '#main',
+        data:{
+            rid:'',
+            drawNo:'',
+            vipId:'',
+            dataList:[],
+            pager:{
+                total:-1,
+                pages:0,
+                limit:50,
+                currpage:1,
+                toPage:""
+            },
+            heji:{
+                amount:0,
+                money:0,
+                drawMoney:0,
+                huishui:0,
+                earn:0
+            }
+        },
+        methods:{
+            init(){
+                var bptitle = sessionStorage.getItem("bptitle");
+                this.rid = sessionStorage.getItem("bprid");
+                this.drawNo = sessionStorage.getItem("drawNo");
+                this.vipId = sessionStorage.getItem("vipId");
+                $("#title").html(bptitle);
+                this.getDatas();
+            },
+            getDatas(){
+                var _this = this;
+                var qs = 'rid='+this.rid+'&drawNo='+this.drawNo+"&vipId="+this.vipId
+                    +"&page="+this.pager.currpage+"&limit="+this.pager.limit;
+
+                $.ajax({
+                    url: HOST+'admin/drawbuy/bpcodes?'+qs,
+                    type:'get',
+                    success:function(res){
+                        if(res.code==0){
+                            _this.heji={
+                                amount:0,
+                                money:0,
+                                drawMoney:0,
+                                huishui:0,
+                                earn:0
+                            };
+                            _this.pager.total = res.count;
+                            _this.pager.pages = res.count%_this.pager.limit==0?parseInt(res.count/_this.pager.limit):parseInt(res.count/_this.pager.limit)+1;
+                            _this.dataList = res.data.dataList;
+                            _this.heji.amount = res.data.totalAmount;
+                            _this.heji.money = res.data.totalMoney;
+                            _this.heji.drawMoney = res.data.totalDraw==null?'':res.data.totalDraw;
+                            _this.heji.huishui = res.data.totalHs;
+                            _this.heji.earn = res.data.totalEarn;
+                        }
+                    }
+                })
+            },
+            firstPage() {
+                if (this.pager.currpage != 1) {
+                    this.pager.currpage = 1;
+                    this.getDatas();
+                }
+            },
+            nextPage() {
+                if (this.pager.currpage < this.pager.pages) {
+                    this.pager.currpage++;
+                    this.getDatas();
+                }
+            },
+            prevPage() {
+                if (this.pager.currpage > 1) {
+                    this.pager.currpage--;
+                    this.getDatas();
+                }
+            },
+            lastPage() {
+                if (this.pager.currpage < this.pager.pages) {
+                    this.pager.currpage = this.pager.pages;
+                    this.getDatas();
+                }
+            },
+            goPage() {
+                if(this.pager.toPage!=""){
+                    const toPage = parseInt(this.pager.toPage);
+                    if (toPage>=1 && toPage<= this.pager.pages && toPage!=this.pager.currpage) {
+                        this.pager.currpage = toPage;
+                        this.getDatas();
+                    }
+                }
+            },
+        }
+    })
+    //vm.init();
+</script>
+<script type="text/javascript">
+
+
+    layui.config(
+        {base: '../../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            vm.init();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+    //vm.init();
+    //vm.init(0);
+</script>
+
+
+</body>
+</html>
