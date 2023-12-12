@@ -1,11 +1,13 @@
 package com.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.beans.Admin;
 import com.beans.BotUser;
 import com.dao.AdminDAO;
 import com.dao.BotUserDAO;
+import com.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +30,30 @@ public class AdminService extends ServiceImpl<AdminDAO, Admin> {
         query.last("limit 1");
         Admin admin = adminDAO.selectOne(query);
         return admin;
+    }
+
+    /**
+     * 修改超级管理员密码
+     * @param uid           用户ID
+     * @param newPassword   新密码
+     * @return
+     */
+    public String adminChangePassword(String uid, String password, String newPassword) {
+
+        Admin admin = adminDAO.selectById(uid);
+        if (admin == null){
+            return "admin.changePwd.unLogin";
+        }
+        if (!admin.getPassword().equals(PasswordUtil.jiami(password))){
+            return "updatePwd.oldPwdWrong";
+        }
+        long count = adminDAO.selectCount(new QueryWrapper<Admin>().eq("username",admin.getUsername()).eq("password",newPassword));
+        if(count > 0){
+            return "newPasswordNotOldPassword";
+        }
+        admin.setPassword(newPassword);
+        admin.setInitPwdUpdate(1);
+        adminDAO.updateById(admin);
+        return "";
     }
 }

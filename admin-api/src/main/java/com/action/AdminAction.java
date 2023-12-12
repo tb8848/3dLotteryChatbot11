@@ -37,7 +37,6 @@ public class AdminAction {
     @Autowired
     private AuthContext authContext;
 
-
     /**
      * 超级管理员登录(权限)
      * @param username  用户名
@@ -173,5 +172,35 @@ public class AdminAction {
             }
         }
         return new ResponseBean(1,"获取失败", "", true);
+    }
+
+    /**
+     * 修改管理员密码
+     * @param password
+     * @param newPassword
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "管理员修改密码")
+    @RequestMapping("/adminChangePassword")
+    public ResponseBean adminChangePassword(String password, String newPassword, @RequestHeader(value = "token" , required = false) String token) {
+
+//        System.out.println("旧密码："+password+" 新密码："+newPassword+" token："+token);
+        if(StringUtil.isNull(token)){
+            return ResponseBean.error("admin.changePwd.unLogin");
+        }
+        try{
+            JwtUtil.verifyToken(token) ;
+        }catch(Exception e) {
+            return ResponseBean.error("admin.changePwd.unLogin");
+        }
+        String uid = JwtUtil.getUsername(token);
+        String pwd = PasswordUtil.jiami(newPassword);
+        String res = adminService.adminChangePassword(uid, password, pwd);
+        if (StringUtil.isNotNull(res)) {
+            return ResponseBean.error(res);
+        } else {
+            return ResponseBean.ok("成功");
+        }
     }
 }

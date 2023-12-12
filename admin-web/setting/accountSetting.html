@@ -157,25 +157,26 @@
             error: function () {
             }
         });
+        return false;
     }
 
     let dialog = document.querySelector('#dialog')
     var title = document.querySelector('#title');
     // 拖动模态框
-    title.addEventListener('mousedown',function(e){
-        var x=e.pageX-dialog.offsetLeft;
-        var y=e.pageY-dialog.offsetTop;
-        //(2) 鼠标移动的时候，把鼠标在页面中的坐标，减去 鼠标在盒子内的坐标就是模态框的left和top值
-        document.addEventListener('mousemove',move)
-        function move(e){
-            dialog.style.left=e.pageX-x+'px';
-            dialog.style.top=e.pageY-y+'px';
-        }
-        //(3) 鼠标弹起，就让鼠标移动时间解除
-        document.addEventListener('mouseup',function(){
-            document.removeEventListener('mousemove',move)
-        })
-    })
+    // title.addEventListener('mousedown',function(e){
+    //     var x=e.pageX-dialog.offsetLeft;
+    //     var y=e.pageY-dialog.offsetTop;
+    //     //(2) 鼠标移动的时候，把鼠标在页面中的坐标，减去 鼠标在盒子内的坐标就是模态框的left和top值
+    //     document.addEventListener('mousemove',move)
+    //     function move(e){
+    //         dialog.style.left=e.pageX-x+'px';
+    //         dialog.style.top=e.pageY-y+'px';
+    //     }
+    //     //(3) 鼠标弹起，就让鼠标移动时间解除
+    //     document.addEventListener('mouseup',function(){
+    //         document.removeEventListener('mousemove',move)
+    //     })
+    // })
 
     $("#ga_edit").on('click', function () {
         gaInit();
@@ -215,7 +216,6 @@
                 console.log("ajax error");
             }
         });
-        return false;
     });
 </script>
 </body>
