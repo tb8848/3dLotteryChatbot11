@@ -48,13 +48,13 @@ public class BotUserPanAction {
      * @return
      */
     @PostMapping("/loginUserPan")
-    public ResponseBean loginUserPan(@RequestHeader(value = "token")String token,@RequestBody String id){
+    public ResponseBean loginUserPan(@RequestHeader(value = "token")String token,@RequestBody BotUserPan pan){
         String uid = JwtUtil.getUsername(token);
         if(StringUtil.isNull(uid)){
             return new ResponseBean(403,0,"请重新登录",null,true);
         }
         BotUser user = botUserService.getById(uid);
-        BotUserPan botUserPan = botUserPanService.getById(id);
+        BotUserPan botUserPan = botUserPanService.getById(pan.getId());
         if(null == user || null == botUserPan) {
             return new ResponseBean(-1,0,"数据错误",null,true);
         }
@@ -64,7 +64,7 @@ public class BotUserPanAction {
         paramMap.put("pwd", botUserPan.getLottery3dPwd());
 
         String url = botUserPan.getLottery3dUrl();
-        if(url.indexOf("aa.3d11aa.com")>-1 || url.indexOf("aa.pai3aa11.com")>-1) {
+        if(url.indexOf("aa.3d11bb.com")>-1 || url.indexOf("aa.pai3bb11.com")>-1) {//aa.3d11aa.com  aa.pai3aa11.com
             if ("/".equals(url.substring(url.length() - 1))) {
                 url = url.substring(0, url.length() - 1);
             }
@@ -72,9 +72,9 @@ public class BotUserPanAction {
                 url = url.substring(0, url.length() - 1);
             }
             if (botUserPan.getLotteryType() == 1) {
-                url = url + ":9092/";
+                url = url + ":9992/";   //9092
             } else if (botUserPan.getLotteryType() == 2) {
-                url = url + ":9292/";
+                url = url + ":9892/";   //9292
             }
         }
 
@@ -275,7 +275,7 @@ public class BotUserPanAction {
             }
             int lotteryType = botUserPan.getLotteryType();
             String url = botUserPan.getLottery3dUrl();
-            if(url.indexOf("aa.3d11aa.com")>-1 || url.indexOf("aa.pai3aa11.com")>-1){
+            if(url.indexOf("aa.3d11bb.com")>-1 || url.indexOf("aa.pai3bb11.com")>-1){//aa.3d11aa.com   aa.pai3aa11.com
                 if ("/".equals(url.substring(url.length() - 1))) {
                     url = url.substring(0, url.length() - 1);
                 }
@@ -283,9 +283,9 @@ public class BotUserPanAction {
                     url = url.substring(0, url.length() - 1);
                 }
                 if (lotteryType == 1) {
-                    url = url + ":9092/";
+                    url = url + ":9992/";   //9092
                 } else if (lotteryType == 2) {
-                    url = url + ":9292/";
+                    url = url + ":9892/";   //9292
                 }
             }
             HttpResponse execute = HttpRequest.post(url + "robot/getDrawInfo")

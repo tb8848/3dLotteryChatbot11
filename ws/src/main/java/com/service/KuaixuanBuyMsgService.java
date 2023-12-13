@@ -194,10 +194,10 @@ public class KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomM
         if(reportToPanUrl.endsWith("/")){
             reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
         }
-        if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
-            reportToPanUrl+=":9092";
-        }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){
-            reportToPanUrl+=":9292";
+        if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){//aa.3d11aa.com
+            reportToPanUrl+=":9992";//9092
+        }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){//aa.pai3aa11.com
+            reportToPanUrl+=":9892";//9292
         }
         Draw draw = drawService.getLastDrawInfo();
         BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
