@@ -1,8 +1,6 @@
 package com.util;
 
-import com.beans.LotterySetting;
 import com.google.common.collect.Lists;
-
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1393,7 +1391,23 @@ public class Code3DCreateUtils {
         return codeList;
     }
 
-
+    public static List<String> z6Code(String nums) {
+        Set<String> codeSet = new HashSet<>();
+        String[] codeArr = nums.split("");
+        Arrays.sort(codeArr);
+        int len = nums.length();
+        for(int i=0;i<len-2;i++){
+            for(int j=i+1;j<len-1;j++){
+                for(int k=j+1;k<len;k++){
+                    String code = String.format("%s%s%s",codeArr[i],codeArr[j],codeArr[k]);
+                    codeSet.add(code);
+                }
+            }
+        }
+        List<String> codeList = codeSet.stream().collect(Collectors.toList());
+        Collections.sort(codeList);
+        return codeList;
+    }
 
     /**
      * 猜2D 号码

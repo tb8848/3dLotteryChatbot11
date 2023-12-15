@@ -3,6 +3,7 @@ package com.util;
 import org.assertj.core.util.Lists;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -405,6 +406,26 @@ public class CodeUtils {
             }
         }
         return sb.toString();
+    }
+
+    public static void z3Combine(char[] str, int start, int end, List<String> list){
+        if (start == end){
+            list.add(Arrays.toString(str).replaceAll(", ", "").replaceAll("\\[", "").replaceAll("]", ""));
+        }else {
+            for(int j=start;j<end;j++){
+                if (str[start] == str[j] && start!=j) continue;  //不同位置的相同字符不交换，避免重复
+                swap(str,start,j);
+                z3Combine(str,start+1,end, list);//递归
+                swap(str,start,j);  //还原字符串，为下一for循环准备
+            }
+        }
+
+    }
+
+    public static void swap(char[] str, int i, int j){
+        char tmp = str[i];
+        str[i] = str[j];
+        str[j] = tmp;
     }
 
 }
