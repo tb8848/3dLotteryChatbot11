@@ -64,7 +64,7 @@ public class BotUserPanAction {
         paramMap.put("pwd", botUserPan.getLottery3dPwd());
 
         String url = botUserPan.getLottery3dUrl();
-        if(url.indexOf("aa.3d11bb.com")>-1 || url.indexOf("aa.pai3bb11.com")>-1) {//aa.3d11aa.com  aa.pai3aa11.com
+        if(url.indexOf("aa.3d11bb.com")>-1 || url.indexOf("aa.pai3bb11.com")>-1 || url.indexOf("aa.3d11aa.com")>-1 || url.indexOf("aa.pai3aa11.com")>-1 ) {
             if ("/".equals(url.substring(url.length() - 1))) {
                 url = url.substring(0, url.length() - 1);
             }
@@ -72,9 +72,17 @@ public class BotUserPanAction {
                 url = url.substring(0, url.length() - 1);
             }
             if (botUserPan.getLotteryType() == 1) {
-                url = url + ":9992/";   //9092
+                if (url.indexOf("bb")>-1){
+                    url = url + ":9992/";
+                }else{
+                    url = url + ":9092/";
+                }
             } else if (botUserPan.getLotteryType() == 2) {
-                url = url + ":9892/";   //9292
+                if (url.indexOf("bb")>-1){
+                    url = url + ":9892/";
+                }else{
+                    url = url + ":9292/";
+                }
             }
         }
 
@@ -275,7 +283,7 @@ public class BotUserPanAction {
             }
             int lotteryType = botUserPan.getLotteryType();
             String url = botUserPan.getLottery3dUrl();
-            if(url.indexOf("aa.3d11bb.com")>-1 || url.indexOf("aa.pai3bb11.com")>-1){//aa.3d11aa.com   aa.pai3aa11.com
+            if(url.indexOf("aa.3d11bb.com")>-1 || url.indexOf("aa.pai3bb11.com")>-1 || url.indexOf("aa.3d11aa.com")>-1 || url.indexOf("aa.pai3aa11.com")>-1){
                 if ("/".equals(url.substring(url.length() - 1))) {
                     url = url.substring(0, url.length() - 1);
                 }
@@ -283,9 +291,17 @@ public class BotUserPanAction {
                     url = url.substring(0, url.length() - 1);
                 }
                 if (lotteryType == 1) {
-                    url = url + ":9992/";   //9092
+                    if (url.indexOf("bb")>-1){
+                        url = url + ":9992/";
+                    }else{
+                        url = url + ":9092/";
+                    }
                 } else if (lotteryType == 2) {
-                    url = url + ":9892/";   //9292
+                    if (url.indexOf("bb")>-1){
+                        url = url + ":9892/";
+                    }else{
+                        url = url + ":9292/";
+                    }
                 }
             }
             HttpResponse execute = HttpRequest.post(url + "robot/getDrawInfo")
