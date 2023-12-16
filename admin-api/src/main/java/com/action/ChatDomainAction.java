@@ -196,7 +196,7 @@ public class ChatDomainAction {
         httpRequest.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        System.out.println(DateUtil.now()+">>>>>>Msg/SendTxt>>>>>>"+result);
+//        System.out.println(DateUtil.now()+">>>>>>Msg/SendTxt>>>>>>"+result);
 
     }
 }

@@ -154,7 +154,7 @@ public class PlayerFixedBuyService extends ServiceImpl<PlayerFixedBuyDAO, Player
             }
 
             String info = String.format("玩家：%s>>>定投：%s>>>期数:%s>>>开始执行", player.getNickname(), dtTask.getBuyDesc(), draw.getDrawId());
-            System.out.println(info);
+//            System.out.println(info);
             List<BuyRecord3DVO> buyList = null;
             String kuaixuanRule = dtTask.getKuaixuanRule();
             if (StringUtil.isNotNull(kuaixuanRule)) {

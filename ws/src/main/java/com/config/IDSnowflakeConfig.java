@@ -23,12 +23,12 @@ public class IDSnowflakeConfig {
         try {
             workerId   = NetUtil.ipv4ToLong(NetUtil.getLocalhostStr());
             workerId = workerId%31;
-            System.out.println("当前机器的workerId:{}" + workerId);
+//            System.out.println("当前机器的workerId:{}" + workerId);
         } catch (Exception e) {
-            System.out.println("当前机器的workerId获取失败" + e);
+//            System.out.println("当前机器的workerId获取失败" + e);
             workerId = NetUtil.getLocalhostStr().hashCode();
             workerId = workerId%31;
-            System.out.println("当前机器 workId:{}" + workerId);
+//            System.out.println("当前机器 workId:{}" + workerId);
         }
     }
 

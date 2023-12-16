@@ -289,7 +289,7 @@ public class LoginAction {
             //原理就是截取最后一个"/"后面的部分，“\\”是进行了转义
             String filename = "";
             filename = URLEncoder.encode(imgName, "UTF-8");//对文件名进行编码，否则中文名可能出现乱码问题
-            System.out.print(filename);
+//            System.out.print(filename);
             //3.设置浏览器支持下载
             resp.setHeader("Content-Disposition", "attachment;filename=" + filename);
             //4.获取文件的输入流
@@ -327,7 +327,7 @@ public class LoginAction {
             //原理就是截取最后一个"/"后面的部分，“\\”是进行了转义
             String filename = "";
             filename = URLEncoder.encode(imgName, "UTF-8");//对文件名进行编码，否则中文名可能出现乱码问题
-            System.out.print(filename);
+//            System.out.print(filename);
             //3.设置浏览器支持下载
             resp.setHeader("Content-Disposition", "attachment;filename=" + filename);
             //4.获取文件的输入流

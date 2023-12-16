@@ -8,7 +8,7 @@ public class GooGleAuthenticatorTest {
         secret = GoogleAuthenticator.generateSecretKey();
         // 把这个qrcode生成二维码，用google身份验证器扫描二维码就能添加成功
         String qrcode = GoogleAuthenticator.getQRBarcode("133080077@qq.com", secret);
-        System.out.println("qrcode:" + qrcode + ",key:" + secret);
+//        System.out.println("qrcode:" + qrcode + ",key:" + secret);
     }
 
     /**
@@ -20,7 +20,7 @@ public class GooGleAuthenticatorTest {
         GoogleAuthenticator ga = new GoogleAuthenticator();
         ga.setWindowSize(5);
         boolean r = ga.check_code("HSCYUJ3VBPP5P754", code, t);
-        System.out.println("检查code是否正确？" + r);
+//        System.out.println("检查code是否正确？" + r);
     }
 
     public static void main(String[] args) {

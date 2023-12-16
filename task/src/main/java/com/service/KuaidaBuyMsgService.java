@@ -127,10 +127,10 @@ public class KuaidaBuyMsgService {
                 ChatRoomMsg toMsg = createMsg(botUser, player,"交作业功能已关闭");
                 toMsg.setSource(1);
                 chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
-                System.out.println(DateUtil.now() + ">>>>>>>>>>>>>>机器人已关闭私聊下注功能!!!!!!");
+//                System.out.println(DateUtil.now() + ">>>>>>>>>>>>>>机器人已关闭私聊下注功能!!!!!!");
                 return;
             }
-            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
+//            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
             String content = fromMsg.getMsg().substring(2);
             String[] arr = content.split("各");
             List<BuyRecord3DVO> buyList = Lists.newArrayList();

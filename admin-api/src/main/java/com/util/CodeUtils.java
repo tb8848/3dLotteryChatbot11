@@ -167,51 +167,51 @@ public class CodeUtils {
         Integer hz = Integer.valueOf(b) + Integer.valueOf(s) + Integer.valueOf(g);
         // 和值-开奖号码三数和加起来等于和值则中奖
         if (hzCode.equals(hz.toString())) {
-            System.out.println("和值中奖");
+//            System.out.println("和值中奖");
         }
 
         String code = b + s + g;
         // 通选号码-匹配任意两位则中奖
         int txCount = countSameStr(code, "145");
         if (txCount > 1) {
-            System.out.println("通选中奖");
+//            System.out.println("通选中奖");
         }
 
         // 判断号码是组3(有重复号码组合)还是组6(没有重复号码组合)
         int groupCount = getCountByCode(code);
         if (groupCount > 1) {
-            System.out.println("组3号码");
+//            System.out.println("组3号码");
             int z3Count = countSameStr(code, "144");
             // 组3-任意位置3个号码相同则中奖
             if (z3Count >= 2) {
-                System.out.println("组3中奖");
+//                System.out.println("组3中奖");
             }
         }else {
-            System.out.println("组6号码");
+//            System.out.println("组6号码");
             int z3Count = countSameStr(code, "514");
             // 组6-任意位置3个号码相同则中奖
             if (z3Count >= 2) {
-                System.out.println("组6中奖");
+//                System.out.println("组6中奖");
             }
         }
 
         // 1D中奖-百十个位某一个位置数字正确且位置相同则中奖
         String d1 = "4";
         if (s.equals(d1)) {
-            System.out.println("1D中奖");
+//            System.out.println("1D中奖");
         }
 
         // 猜1D中奖-根据购买的1个号码和开奖号码判断中奖号码个数
         if (s.contains(d1)) {
             int count = sameCount(code, d1);
-            System.out.println("猜1D中奖号码个数：" + count);
+//            System.out.println("猜1D中奖号码个数：" + count);
         }
 
         // 2D中奖-百十个位某2个位置数字正确且位置相同则中奖
         String d2 = "45";
         String d = s + g;
         if (d.equals(d2)) {
-            System.out.println("2D中奖");
+//            System.out.println("2D中奖");
         }
 
         // 猜2D中奖-根据购买的2个号码和开奖号码判断中奖号码个数
@@ -219,16 +219,16 @@ public class CodeUtils {
             int d2Count = getCountByCode(d2);
             int count = countSameStr(code, d2);
             if (d2Count > 1) {
-                System.out.println("2同号中奖：" + count);
+//                System.out.println("2同号中奖：" + count);
             }else {
-                System.out.println("2不同号中奖：" + count);
+//                System.out.println("2不同号中奖：" + count);
             }
         }
 
         // 包选中奖
         // 1. 包选三全中
         if (code.equals("144")) {
-            System.out.println("包选3全中");
+//            System.out.println("包选3全中");
         }
         // 2. 包选三组中
         int bGroupCount = getCountByCode(code);
@@ -236,35 +236,35 @@ public class CodeUtils {
             int bz3Count = countSameStr(code, "144");
             // 组3-任意位置3个号码相同则中奖
             if (bz3Count == 3) {
-                System.out.println("包选三组中");
+//                System.out.println("包选三组中");
             }
         }else {
             int bz3Count = countSameStr(code, "514");
             // 组6-任意位置3个号码相同则中奖
             if (bz3Count == 3) {
-                System.out.println("包选六组中");
+//                System.out.println("包选六组中");
             }
         }
 
         if (hz >= 0 && hz <= 8) {
-            System.out.println("猜大小：小");
+//            System.out.println("猜大小：小");
         }else if (hz >= 19 && hz <= 27){
-            System.out.println("猜大小：大");
+//            System.out.println("猜大小：大");
         }
 
         Integer bai = Integer.valueOf(b);
         Integer shi = Integer.valueOf(s);
         Integer ge = Integer.valueOf(g);
         if (bai % 2 == 0 && shi % 2 == 0 && ge % 2 == 0) {
-            System.out.println("猜奇偶：偶");
+//            System.out.println("猜奇偶：偶");
         }else if (bai % 2 != 0 && shi % 2 != 0 && ge % 2 != 0) {
-            System.out.println("猜奇偶：奇");
+//            System.out.println("猜奇偶：奇");
         }else {
-            System.out.println("不是奇偶");
+//            System.out.println("不是奇偶");
         }
 
         if (bai == shi && bai == ge) {
-            System.out.println("三同号码");
+//            System.out.println("三同号码");
         }
 
         int[] arrays = {bai, shi, ge};
@@ -293,7 +293,7 @@ public class CodeUtils {
         }
 
         if (flag || flag2) {
-            System.out.println("是拖拉机");
+//            System.out.println("是拖拉机");
         }
     }
 

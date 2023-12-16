@@ -20,7 +20,7 @@ public class ApkUtil {
             resMap.put("versioncode", apkMeta.getVersionCode());
             resMap.put("versionname", apkMeta.getVersionName());
             for (UseFeature feature : apkMeta.getUsesFeatures()) {
-                System.out.println(feature.getName());
+//                System.out.println(feature.getName());
             }
         } catch (IOException e) {
             e.printStackTrace();

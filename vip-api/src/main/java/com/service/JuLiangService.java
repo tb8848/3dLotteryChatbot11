@@ -66,7 +66,7 @@ public class JuLiangService {
         try {
 
             String res = JuLiangUtil.dynamicGetIps(dynamicGetIps);
-            System.out.println("========================res ----"+res);
+//            System.out.println("========================res ----"+res);
             ResponseBean responseBean = JSONObject.parseObject(res,ResponseBean.class);
             if(responseBean.getCode()==200){
                 JSONObject datas = (JSONObject)responseBean.getData();
@@ -98,7 +98,7 @@ public class JuLiangService {
         httpRequest.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        System.out.println(DateUtil.now()+">>>>>>Msg/SendTxt>>>>>>"+result);
+//        System.out.println(DateUtil.now()+">>>>>>Msg/SendTxt>>>>>>"+result);
         RespData respData = JSONObject.parseObject(result, RespData.class);
 
     }

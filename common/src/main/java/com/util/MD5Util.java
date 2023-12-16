@@ -39,7 +39,7 @@ public class MD5Util {
         String b = "[\"0\",\"0\"]";
         int xy = b.length();
         String c = b.substring(1,xy-1).replaceAll("\"","");
-        System.out.println(c);
+//        System.out.println(c);
 //        System.out.println(jiami("06CEE4F200000000" , "FFFFFFFFFFFFFFFF"));
 	}
 	

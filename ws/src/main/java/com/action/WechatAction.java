@@ -220,7 +220,7 @@ public class WechatAction {
     public ResponseBean logout(@RequestBody Map<String,Object> params,HttpServletRequest request){
         String uid = (String)params.get("userId");
         String from = (String)params.get("from");
-        System.out.println("===============退出登录>>>>> userId:"+uid+",from:"+from);
+//        System.out.println("===============退出登录>>>>> userId:"+uid+",from:"+from);
         if(StringUtil.isNull(uid)){
             ResponseBean responseBean = new ResponseBean(-1,0,"参数错误",null,true);
             return responseBean;
@@ -291,7 +291,7 @@ public class WechatAction {
     public ResponseBean logstatus(@RequestBody Map<String,Object> params,HttpServletRequest request){
         String uid = (String)params.get("userId");
         Integer isLogin = (Integer)params.get("isLogin");
-        System.out.println("===============更新登录状态>>>>> userId:"+uid+"====login:"+isLogin);
+//        System.out.println("===============更新登录状态>>>>> userId:"+uid+"====login:"+isLogin);
         if(StringUtil.isNull(uid)){
             ResponseBean responseBean = new ResponseBean(-1,0,"参数错误",null,true);
             return responseBean;

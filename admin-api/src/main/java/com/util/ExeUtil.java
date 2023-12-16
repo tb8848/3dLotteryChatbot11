@@ -29,9 +29,9 @@ public class ExeUtil {
         String filePath = "C:\\Users\\Admin\\Desktop\\对账软件.exe";
 
         JSONObject tmp = getExeProductInfo(filePath);
-        System.out.println("详细信息：" + tmp);
-        System.out.println("产品名称：" + tmp.getString("ProductName"));
-        System.out.println("产品版本：" + tmp.getString("ProductVersion"));
+//        System.out.println("详细信息：" + tmp);
+//        System.out.println("产品名称：" + tmp.getString("ProductName"));
+//        System.out.println("产品版本：" + tmp.getString("ProductVersion"));
     }
 
     /**
@@ -149,7 +149,7 @@ public class ExeUtil {
             int version2 = unpack(new byte[]{buffer[dataOff+48+2], buffer[dataOff+48+3]});
             int version3 = unpack(new byte[]{buffer[dataOff+48+4], buffer[dataOff+48+5]});
             int version4 = unpack(new byte[]{buffer[dataOff+48+6], buffer[dataOff+48+7]});
-            System.out.println("文件版本："+version2 + "." + version1 + "." + version4 + "." + version3);
+//            System.out.println("文件版本："+version2 + "." + version1 + "." + version4 + "." + version3);
             return true;
 
         } catch (FileNotFoundException e) {

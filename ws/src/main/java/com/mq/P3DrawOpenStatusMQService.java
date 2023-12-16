@@ -227,7 +227,7 @@ public class P3DrawOpenStatusMQService {
 
                                 //每个玩家的成功订单，单独发送给微信终端
                                 if(player.getUserType()==2 && StringUtil.isNotNull(botUser.getWxId())){
-                                    System.out.println(String.format("%s 玩家成功订单 %s",player.getNickname(),msgBuffer1.toString()));
+//                                    System.out.println(String.format("%s 玩家成功订单 %s",player.getNickname(),msgBuffer1.toString()));
                                     wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString());
                                 }
 
@@ -258,7 +258,7 @@ public class P3DrawOpenStatusMQService {
                                     }else{
                                         playerReturnPointsService.addOne(returnPoints);
                                     }
-                                    System.out.println(DateUtil.now()+">>>>>>>>>>"+String.format("玩家%s : 第%s期返水%s",player.getNickname(),drawNo,totalHs));
+//                                    System.out.println(DateUtil.now()+">>>>>>>>>>"+String.format("玩家%s : 第%s期返水%s",player.getNickname(),drawNo,totalHs));
 
                                 }
                             }

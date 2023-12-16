@@ -108,7 +108,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         @Override
         public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
-            System.out.println("================");
+//            System.out.println("================");
 
             StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
             //1、判断是否首次连接
@@ -126,7 +126,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                     openId = nativeHeader.get(0);
                     source =    Source.pc.name();
                 }
-                System.out.println("====================openId="+openId);
+//                System.out.println("====================openId="+openId);
                 if( openId!=null) {
                     String loginUser = openId;
                     Principal principal = new Principal() {

@@ -18,7 +18,7 @@ public class RandomNameUtil {
         System.out.println("昵称："+nick);*/
         for (int i = 0; i < 20; i ++) {
             String nick2 = generateNickname(2);
-            System.out.println("昵称2："+nick2);
+//            System.out.println("昵称2："+nick2);
         }
 
     }

@@ -128,7 +128,7 @@ public class DrawOpenStatusAction {
     @SubscribeMapping("/user/queue/relogin")
     public String subscribeReLogin(Principal principal) throws Exception {
         //Thread.sleep(1000); // simulated delay
-        System.out.println("有人订阅了[重登消息]:"+principal.getName());
+//        System.out.println("有人订阅了[重登消息]:"+principal.getName());
         return "订阅成功";
     }
 

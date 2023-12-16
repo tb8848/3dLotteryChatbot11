@@ -44,7 +44,7 @@ public class BillsAction {
                     prov = (String) addr.get("country");
                 }
             }
-            System.out.println(String.format("ip：%s,省份：%s,城市:%s", ip, prov, city));
+//            System.out.println(String.format("ip：%s,省份：%s,城市:%s", ip, prov, city));
         }
 
         return ResponseBean.OK;

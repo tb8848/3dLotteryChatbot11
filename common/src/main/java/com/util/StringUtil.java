@@ -26,19 +26,19 @@ public class StringUtil {
         Pattern pattern = Pattern.compile(reg1);
         Matcher ma = pattern.matcher(codeDesc);
         if(ma.matches()){
-            System.out.println(String.format("%s>>满足规则1>>>%s",codeDesc,reg1));
+//            System.out.println(String.format("%s>>满足规则1>>>%s",codeDesc,reg1));
             return true;
         }
         pattern = Pattern.compile(reg2);
         ma = pattern.matcher(codeDesc);
         if(ma.matches()){
-            System.out.println(String.format("%s>>满足规则2>>>%s",codeDesc,reg2));
+//            System.out.println(String.format("%s>>满足规则2>>>%s",codeDesc,reg2));
             return true;
         }
         pattern = Pattern.compile(reg3);
         ma = pattern.matcher(codeDesc);
         if(ma.matches()){
-            System.out.println(String.format("%s>>满足规则3>>>%s",codeDesc,reg3));
+//            System.out.println(String.format("%s>>满足规则3>>>%s",codeDesc,reg3));
             return true;
         }
         return false;

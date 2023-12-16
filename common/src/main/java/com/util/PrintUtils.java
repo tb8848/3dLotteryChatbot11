@@ -10,16 +10,16 @@ public class PrintUtils {
     public static String createPrintNo(String uid){
         SecureRandom random = new SecureRandom();
         String times = DateUtil.format(DateUtil.date(),"yyMMddHHmmss");
-        System.out.println("times="+times);
+//        System.out.println("times="+times);
         String prefix = String.valueOf(random.nextInt(999));
         if(prefix.length()<3){
             for(int i=0,len=3-prefix.length();i<len;i++){
                 prefix = prefix+"0";
             }
         }
-        System.out.println("prefix="+prefix);
+//        System.out.println("prefix="+prefix);
         String subfix = String.valueOf(random.nextInt(99999));
-        System.out.println("subfix="+subfix);
+//        System.out.println("subfix="+subfix);
         if(subfix.length()<5){
             for(int i=0,len=5-subfix.length();i<len;i++){
                 subfix = "0"+subfix;
@@ -32,9 +32,9 @@ public class PrintUtils {
     public static String createPrintNo(){
         SecureRandom random = new SecureRandom();
         String times = DateUtil.format(DateUtil.date(),"yyMMdd");
-        System.out.println("times="+times);
+//        System.out.println("times="+times);
         String subfix = String.valueOf(random.nextInt(9999));
-        System.out.println("subfix="+subfix);
+//        System.out.println("subfix="+subfix);
         return times+subfix;
     }
 

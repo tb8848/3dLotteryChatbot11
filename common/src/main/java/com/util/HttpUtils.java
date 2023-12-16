@@ -165,14 +165,14 @@ public class HttpUtils {
 //        for (Object map : maps.entrySet()){
 //            System.out.println(((Map.Entry)map).getKey()+"     " + ((Map.Entry)map).getValue());
 //        }
-        System.out.println("请求状态："+maps.get("code"));
-        System.out.println("返回结果："+data);
+//        System.out.println("请求状态："+maps.get("code"));
+//        System.out.println("返回结果："+data);
 
         Map dataMaps = (Map) JSON.parse(data.toString());
 //        for (Object map : dataMaps.entrySet()){
 //            System.out.println(((Map.Entry)map).getKey()+"     " + ((Map.Entry)map).getValue());
 //        }
-        System.out.println("去水印链接："+dataMaps.get("url"));
+//        System.out.println("去水印链接："+dataMaps.get("url"));
     }
 
 }

@@ -200,7 +200,7 @@ public class Wechat2Action {
             //System.out.println("result>>>>>>"+result);
             RespData respData = JSONObject.parseObject(result, RespData.class);
             if(respData.getCode()==1){
-                System.out.println("===========二维码获取成功");
+//                System.out.println("===========二维码获取成功");
                 Map<String,Object> datas = respData.getData();
                 String qrUrl = (String)datas.get("QrUrl");
                 String Uuid = (String)datas.get("Uuid");

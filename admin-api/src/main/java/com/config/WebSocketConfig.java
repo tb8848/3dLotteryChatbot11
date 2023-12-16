@@ -127,7 +127,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                         //   pc_username
                         //   app_username
                         String loginUser = source + "_" + JwtUtil.getUsername(token);; //---------------------这里要改
-                        System.out.println(loginUser);
+//                        System.out.println(loginUser);
                         if (loginUser != null) {
                             //如果存在用户信息，将用户名赋值，后期发送时，可以指定用户名即可发送到对应用户
                             Principal principal = new Principal() {
@@ -162,28 +162,28 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
             {
                 // 首次连接
                 case CONNECT:
-                    System.out.println("首次连接成功");
+//                    System.out.println("首次连接成功");
                     if(principal!=null){
                         // webSocketManager.deleteUser(principal.getName());
                         //LOGOUT="/queue/logout";
                         simpMessagingTemplate.convertAndSendToUser(principal.getName(), Subscribles.LOGOUT,"强制下线");
-                        System.out.println(principal.getName());
+//                        System.out.println(principal.getName());
                     }
                     break;
                 // 连接中
                 case CONNECTED:
-                    System.out.println("连接成功");
+//                    System.out.println("连接成功");
                     if(principal!=null){
                         // webSocketManager.deleteUser(principal.getName());
-                        System.out.println(principal.getName());
+//                        System.out.println(principal.getName());
                     }
                     break;
                 // 下线
                 case DISCONNECT:
-                    System.out.println("下线了");
+//                    System.out.println("下线了");
                     if(principal!=null){
                        // webSocketManager.deleteUser(principal.getName());
-                        System.out.println(principal.getName());
+//                        System.out.println(principal.getName());
                     }
                     break;
                 default:

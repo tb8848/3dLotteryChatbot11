@@ -410,7 +410,7 @@ public class ESCUtil{
         {
             checkCode = 10 - (sum%10);
         }
-        System.out.println(TAG+"checkCode:"+checkCode);
+//        System.out.println(TAG+"checkCode:"+checkCode);
         return checkCode;
     }
     /**
@@ -430,7 +430,7 @@ public class ESCUtil{
             case 2:
             case 3:
                 checkCode = barcodeCheckCode(barcodeData);
-                System.out.println(TAG+"barcodeData:"+barcodeData+"  ***String.valueOf(checkCode):"+String.valueOf(checkCode));
+//                System.out.println(TAG+"barcodeData:"+barcodeData+"  ***String.valueOf(checkCode):"+String.valueOf(checkCode));
                 barcodeData += String.valueOf(checkCode);
             case 4:
             case 5:
@@ -452,7 +452,7 @@ public class ESCUtil{
                 break;
             default:
         }
-        System.out.println(TAG+"modetype:"+modetype[0]+"## barcodeData:"+barcodeData+"  **codePackageFlage:"+codePackageFlage[0]);
+//        System.out.println(TAG+"modetype:"+modetype[0]+"## barcodeData:"+barcodeData+"  **codePackageFlage:"+codePackageFlage[0]);
         byte[] mBarcodeData = new byte[barcodeData.length()];
 
         try {

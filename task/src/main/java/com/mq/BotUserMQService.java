@@ -51,7 +51,7 @@ public class BotUserMQService {
     @RabbitListener(queues = "bot_user_queue_3d")
     public void recvMessage(Message msg, final Channel channel) throws IOException {
         String body = new String(msg.getBody());
-        System.out.println(DateUtil.now()+">>>>>>>>>"+body);
+//        System.out.println(DateUtil.now()+">>>>>>>>>"+body);
         JSONObject data = JSON.parseObject(body);
         String lockKey = "3dbot:user:login";
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,3600000);
@@ -80,7 +80,7 @@ public class BotUserMQService {
         }catch (Exception e){
             e.printStackTrace();
             if (msg.getMessageProperties().getRedelivered()) {
-                System.out.println("重复失败丢弃消息 plan:{}" + msg.getBody());
+//                System.out.println("重复失败丢弃消息 plan:{}" + msg.getBody());
                 channel.basicReject(msg.getMessageProperties().getDeliveryTag(), false);
             } else {
                 channel.basicNack(msg.getMessageProperties().getDeliveryTag(), false, true);

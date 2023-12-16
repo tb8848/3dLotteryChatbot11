@@ -353,7 +353,7 @@ public class BuyRecord3DServiceV2 extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
 
         if(singleCodesVOList.size()>0){
 
-            System.out.println("==============singleCodesVOList=====");
+//            System.out.println("==============singleCodesVOList=====");
             Map<String,List<CodesVO>> codeGroup = singleCodesVOList.stream().collect(Collectors.groupingBy(CodesVO::getBuyCode));
             List<String> codeList = codeGroup.keySet().stream().collect(Collectors.toList());
 
@@ -430,7 +430,7 @@ public class BuyRecord3DServiceV2 extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
 
         if(multiCodesVOList.size()>0) {
 
-            System.out.println("==============multiCodesVOList=====");
+//            System.out.println("==============multiCodesVOList=====");
             for (CodesVO cvo : multiCodesVOList) {
 
                 List<DrawBuyRecord> buyList1 = new ArrayList<>();

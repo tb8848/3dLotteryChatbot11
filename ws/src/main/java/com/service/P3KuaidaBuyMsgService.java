@@ -114,7 +114,7 @@ public class P3KuaidaBuyMsgService {
                 return;
             }
             String userId = botUser.getId();
-            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
+//            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
 
             String content = fromMsg.getMsg().substring(2);
             String[] arr = content.split("各");
@@ -405,7 +405,7 @@ public class P3KuaidaBuyMsgService {
         buyList.forEach(item->{
             item.setPlayerBuyId(playerBuyId);
         });
-        System.out.println("=========P3报网====》"+JSON.toJSONString(buyList));
+//        System.out.println("=========P3报网====》"+JSON.toJSONString(buyList));
         if("5".equals(lmId) || "13".equals(lmId)){
             reportRespData = reportToPanService.buyHs(reportToPanUrl,buyList,botUserPan.getLogin3dToken());
         }else{
@@ -519,7 +519,7 @@ public class P3KuaidaBuyMsgService {
             BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
             String lmId = buyList.get(0).getLmId();
             Map<String,Object> buyResult = null;
-            System.out.println("=========本地下注====》"+JSON.toJSONString(buyList));
+//            System.out.println("=========本地下注====》"+JSON.toJSONString(buyList));
             if("5".equals(lmId) || "13".equals(lmId)){
                 buyResult = buyRecord3DService.buy3dHs(player,buyList,draw,-2,null,msg,2);
             }else{
