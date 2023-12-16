@@ -178,7 +178,7 @@ public class P3DrawOpenStatusMQService {
         //System.out.println(String.format("开盘后设置定投执行时间为：%s,影响记录数量：%s",DateUtil.format(startTime,"yyyy-MM-dd HH:mm:ss"),rows));
 
         String info = String.format("开盘后设置定投执行时间为：%s,影响记录数量：%s",DateUtil.format(startTime,"yyyy-MM-dd HH:mm:ss"),rows);
-        logger.info(">>>>>>>>>>>>"+info);
+//        logger.info(">>>>>>>>>>>>"+info);
     }
 
 
@@ -300,7 +300,7 @@ public class P3DrawOpenStatusMQService {
         Map<String, Object> resultMap = p3DrawService.settleAccounts(draw,2);
 
         Integer totalDrawCount = (Integer)resultMap.get("drawCount");
-        logger.info(">>>>>>>>>>>>【P3】["+drawNo+"]期中奖注数："+totalDrawCount);
+//        logger.info(">>>>>>>>>>>>【P3】["+drawNo+"]期中奖注数："+totalDrawCount);
         //System.out.println("================["+drawNo+"]==中奖注数："+totalDrawCount);
 
         if(null!=totalDrawCount && totalDrawCount>0){
@@ -383,7 +383,7 @@ public class P3DrawOpenStatusMQService {
         //获取中奖记录列表
         List<DrawBuyRecord> drawBuyRecords = drawBuyRecordService.getDrawPrizeList(drawNo,2);
         if(null == drawBuyRecords || drawBuyRecords.size()<1){
-            logger.info("[P3]第"+drawNo+"期==============>无中奖记录");
+//            logger.info("[P3]第"+drawNo+"期==============>无中奖记录");
             return;
         }
 
@@ -396,7 +396,7 @@ public class P3DrawOpenStatusMQService {
             List<DrawBuyRecord> drawList = playerGroup.get(player.getId());
             List<String> buyIdList = drawList.stream().map(item->item.getId()).collect(Collectors.toList());
             int rows = drawBuyRecordService.clearDrawPrizeList(drawNo,buyIdList);
-            logger.info("[P3]第"+drawNo+"期==============>清除中奖记录："+rows);
+//            logger.info("[P3]第"+drawNo+"期==============>清除中奖记录："+rows);
 
             Map<String,List<DrawBuyRecord>> playerRecordIdGroup = drawList.stream().collect(Collectors.groupingBy(DrawBuyRecord::getBaopaiId));
 
@@ -416,7 +416,7 @@ public class P3DrawOpenStatusMQService {
                             playerFixedBuy.setEndTime(null);
                             playerFixedBuy.setStopReason("");
                             playerFixedBuyService.updateById(playerFixedBuy);
-                            logger.info("[3D]第"+drawNo+"期==============>清除定投结束状态："+playerFixedBuy.getBuyDesc());
+//                            logger.info("[3D]第"+drawNo+"期==============>清除定投结束状态："+playerFixedBuy.getBuyDesc());
                         }
                     }
                     playerService.updatePoint(player.getId(),totalDrawMoney,false);
@@ -478,7 +478,7 @@ public class P3DrawOpenStatusMQService {
             }
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("===============【P3】"+drawNo+"期推送【开奖结果】异常");
+//            logger.error("===============【P3】"+drawNo+"期推送【开奖结果】异常");
             //System.out.println("===============推送【开奖结果】异常");
         }
 

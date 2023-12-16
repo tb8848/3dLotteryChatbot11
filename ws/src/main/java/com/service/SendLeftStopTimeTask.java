@@ -37,7 +37,7 @@ public class SendLeftStopTimeTask implements ApplicationRunner {
 //    private BasicSettingService basicSettingService;
 
     private void init() {
-        logger.info("【3D】开盘/停盘剩余时间推送任务开启=================");
+//        logger.info("【3D】开盘/停盘剩余时间推送任务开启=================");
         redisTemplate.boundValueOps("3dchatbot-pushLeftTime").set(0);
         while(true){
             long sleepTime = 1000;
@@ -61,7 +61,7 @@ public class SendLeftStopTimeTask implements ApplicationRunner {
                     Thread.sleep(sleepTime);
                 }
             }catch (Exception e){
-                logger.error("停盘剩余时间推送任务-----------error");
+//                logger.error("停盘剩余时间推送任务-----------error");
                 e.printStackTrace();
             }
         }
@@ -69,7 +69,7 @@ public class SendLeftStopTimeTask implements ApplicationRunner {
 
 
     private void initP3() {
-        logger.info("【P3】开盘/停盘剩余时间推送任务开启=================");
+//        logger.info("【P3】开盘/停盘剩余时间推送任务开启=================");
         redisTemplate.boundValueOps("p3chatbot-pushLeftTime").set(0);
         while(true){
             long sleepTime = 1000;
@@ -93,7 +93,7 @@ public class SendLeftStopTimeTask implements ApplicationRunner {
                     Thread.sleep(sleepTime);
                 }
             }catch (Exception e){
-                logger.error("停盘剩余时间推送任务-----------error");
+//                logger.error("停盘剩余时间推送任务-----------error");
                 e.printStackTrace();
             }
         }

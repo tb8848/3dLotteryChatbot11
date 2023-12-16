@@ -61,7 +61,7 @@ public class WechatApiService {
         httpRequest.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        logger.info(">>>>>>Msg/SendTxt>>>>>>"+result);
+//        logger.info(">>>>>>Msg/SendTxt>>>>>>"+result);
 
     }
 
@@ -83,7 +83,7 @@ public class WechatApiService {
                 httpRequest.body(JSON.toJSONString(reqData));
                 HttpResponse httpResponse = httpRequest.execute();
                 String result = httpResponse.body();
-                logger.info(">>>>>>Msg/UploadImg>>>>>>"+result);
+//                logger.info(">>>>>>Msg/UploadImg>>>>>>"+result);
                 if(result.startsWith("{") && result.endsWith("}")){
                     RespData respData = JSON.parseObject(result,RespData.class);
                     if(respData.getCode()==0){
@@ -125,7 +125,7 @@ public class WechatApiService {
             httpRequest.body(JSON.toJSONString(reqData));
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
-            logger.info(">>>>>>Tools/setproxy>>>>>>"+result);
+//            logger.info(">>>>>>Tools/setproxy>>>>>>"+result);
             respData = JSON.parseObject(result,RespData.class);
 
         }catch (Exception e){

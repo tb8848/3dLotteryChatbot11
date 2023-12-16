@@ -68,7 +68,7 @@ public class WechatApiService{
             httpRequest.body(JSON.toJSONString(reqData));
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
-            logger.info(">>>>>>Tools/setproxy>>>>>>"+result);
+//            logger.info(">>>>>>Tools/setproxy>>>>>>"+result);
             respData = JSON.parseObject(result,RespData.class);
 
         }catch (Exception e){
@@ -92,7 +92,7 @@ public class WechatApiService{
             httpRequest.contentType("application/json");
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
-            logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
+//            logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
             //System.out.println(DateUtil.now()+">>>>>>Login/CheckQR>>>>>>"+result);
             if(result.startsWith("{") && result.endsWith("}")){
                 try {
@@ -186,7 +186,7 @@ public class WechatApiService{
             vo.setBotUserId(botUserId);
             vo.setResponseBean(responseBean);
             rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
-            logger.info(">>>>>>【"+botUser.getLoginName()+"】二维码检测结束");
+//            logger.info(">>>>>>【"+botUser.getLoginName()+"】二维码检测结束");
             //System.out.println("===========二维码检测结束");
             //stringRedisTemplate.boundValueOps("3d:chatbot:wxStatus:"+botUserId).set("1");
             //stringRedisTemplate.boundSetOps("3d:chatbot:newWxLogin").add(botUserId);
@@ -221,7 +221,7 @@ public class WechatApiService{
         httpRequest.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        logger.info(">>>>>>Msg/SendTxt>>>>>>"+result);
+//        logger.info(">>>>>>Msg/SendTxt>>>>>>"+result);
         //System.out.println(DateUtil.now()+">>>>>>Msg/SendTxt>>>>>>"+result);
 
     }

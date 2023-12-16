@@ -46,7 +46,7 @@ public class DummyService {
     private Logger logger = LoggerFactory.getLogger(DummyService.class);
 
     public void dummyBuy(BotUser botUser,List<LotteryMethod> lmList,List<LotterySetting> lsList){
-        logger.info(">>>>>>>>>>"+botUser.getLoginName()+":执行假人投注");
+//        logger.info(">>>>>>>>>>"+botUser.getLoginName()+":执行假人投注");
         Random random = new Random();
         try {
             List<Player> dummyList = playerService.dummyList(botUser.getId());
@@ -57,7 +57,7 @@ public class DummyService {
 
                 //BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
                 if (player.getPoints().compareTo(BigDecimal.valueOf(1000)) < 0) {//上分
-                    logger.info(">>>>>>>>>>>>>>>>>>>>>"+String.format("%s的假人玩家:%s 上分1000....",botUser.getLoginName(),player.getNickname()));
+//                    logger.info(">>>>>>>>>>>>>>>>>>>>>"+String.format("%s的假人玩家:%s 上分1000....",botUser.getLoginName(),player.getNickname()));
                     int points = 1000;
                     ChatRoomMsg fromMsg = chatRoomMsgService.createFromWxMsg(botUser,player,"上分1000");
                     fromMsg.setSource(0);
@@ -76,7 +76,7 @@ public class DummyService {
                     rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(toMsg));
 
                 } else if (player.getPoints().compareTo(BigDecimal.valueOf(10000)) > 0) { //下分
-                    logger.info(">>>>>>>>>>>>>>>>>>>>>"+String.format("%s的假人玩家:%s 下分5000....",botUser.getLoginName(),player.getNickname()));
+//                    logger.info(">>>>>>>>>>>>>>>>>>>>>"+String.format("%s的假人玩家:%s 下分5000....",botUser.getLoginName(),player.getNickname()));
                     int points = 5000;
                     ChatRoomMsg fromMsg = chatRoomMsgService.createFromWxMsg(botUser,player,"下分5000");
                     fromMsg.setSource(0);
@@ -173,7 +173,7 @@ public class DummyService {
 
                         if (list.size() > 0) {
                             String info = String.format("[%s]的假人玩家:%s 购买[%s][%s][%s]",botUser.getLoginName(),player.getNickname(),lotteryName,lm.getBettingMethod(),ls.getBettingRule());
-                            logger.info(">>>>>>>>>>>>>>>>>>>>>"+info);
+//                            logger.info(">>>>>>>>>>>>>>>>>>>>>"+info);
 
                             String buyDesc = (lottype==2?"P3":"3D") + list.get(0).getBuyDesc()+"各"+list.get(0).getBuyMoney();
 
@@ -243,12 +243,12 @@ public class DummyService {
                             }
                         }else{
                             String info = String.format("[%s]的假人玩家:%s 未找到号码[%s][%s][%s]",botUser.getLoginName(),player.getNickname(),lotteryName,lm.getBettingMethod(),ls.getBettingRule());
-                            logger.info(">>>>>>>>>>"+info);
+//                            logger.info(">>>>>>>>>>"+info);
                         }
 
                     }else{
                         String info = String.format("[%s]的假人玩家:%s 已停止购买",botUser.getLoginName(),player.getNickname());
-                        logger.info(">>>>>>>>>>"+info);
+//                        logger.info(">>>>>>>>>>"+info);
                     }
 
                 }

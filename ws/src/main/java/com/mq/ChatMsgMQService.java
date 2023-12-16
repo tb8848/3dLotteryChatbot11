@@ -42,7 +42,7 @@ public class ChatMsgMQService {
     @RabbitListener(queues = "bot_chatmsg_queue_3d")
     public void recvMessage(Message msg, final Channel channel) throws IOException {
         String body = new String(msg.getBody());
-        logger.info("收到聊天消息>>>>>>>>"+body);
+//        logger.info("收到聊天消息>>>>>>>>"+body);
         //System.out.println("【3D】收到消息>>>>>>>>"+body);
         String lockKey = "3d:chatbot:chatmsg:mq";
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,30000);
@@ -57,7 +57,7 @@ public class ChatMsgMQService {
         } catch (IOException e) {
             e.printStackTrace();
             if(msg.getMessageProperties().getRedelivered()){
-                logger.info("重复失败丢弃消息>>>>>>>>"+body);
+//                logger.info("重复失败丢弃消息>>>>>>>>"+body);
                 //System.out.println("重复失败丢弃消息 plan:{}"+msg.getBody());
                 channel.basicReject(msg.getMessageProperties().getDeliveryTag(), false);
             }else{

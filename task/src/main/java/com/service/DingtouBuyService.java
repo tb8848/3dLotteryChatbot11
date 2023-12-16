@@ -91,7 +91,7 @@ public class DingtouBuyService {
     }
 
     public void runTask(PlayerFixedBuy dtTask,ChatRoomMsg fromMsg, BotUser botUser, Player player,List<BuyRecord3DVO> buyList){
-        logger.info(String.format("执行定投任务：%s的玩家%s定投%s",botUser.getLoginName(),player.getNickname(),dtTask.getBuyDesc()));
+//        logger.info(String.format("执行定投任务：%s的玩家%s定投%s",botUser.getLoginName(),player.getNickname(),dtTask.getBuyDesc()));
         dataDao.insert(fromMsg);
         rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(fromMsg));
         xiazhu(dtTask,botUser,player,fromMsg,buyList);

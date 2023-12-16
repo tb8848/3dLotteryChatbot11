@@ -72,7 +72,7 @@ public class ChatRoomMsgAction {
     @SubscribeMapping("/topic/room/{userId}")
     public String subscribeRoomMsg(@DestinationVariable(value = "userId")String userId, Principal principal) throws Exception {
         //Thread.sleep(1000); // simulated delay
-        logger.info("[topic/room]有人订阅了:"+userId);
+//        logger.info("[topic/room]有人订阅了:"+userId);
 
         BotUser user = botUserService.getById(userId);
         if(null == user){
@@ -128,7 +128,7 @@ public class ChatRoomMsgAction {
     public String sendMsg(@DestinationVariable(value = "userId")String userId, String value){
         // 客户端发送消息到服务端
 
-        logger.info("收到客户端["+userId+"]的消息："+value);
+//        logger.info("收到客户端["+userId+"]的消息："+value);
         //System.out.println("["+userId+"]"+"receive message from client:"+value);
 
         ChatRoomMsg msg = JSON.parseObject(value,ChatRoomMsg.class);

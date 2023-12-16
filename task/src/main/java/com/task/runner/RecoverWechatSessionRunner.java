@@ -55,13 +55,13 @@ public class RecoverWechatSessionRunner{
     }
 
     public void initData(){
-        logger.info("=========程序重启，初始化kotlin协程执行");
+//        logger.info("=========程序重启，初始化kotlin协程执行");
         //System.out.println("=========程序重启，初始化kotlin协程执行");
         List<BotUser> botUserList = botUserService.listBy();
         if(null!=botUserList && botUserList.size()>0){
             List<BotUser> wxList = botUserList.stream().filter(item-> StringUtil.isNotNull(item.getWxId())).collect(Collectors.toList());
             if(null!=wxList && wxList.size()>0){
-                logger.info(">>>>>>>>>>微信消息监听启动："+wxList.size());
+//                logger.info(">>>>>>>>>>微信消息监听启动："+wxList.size());
                 //System.out.println(DateUtil.now()+">>>>>>>>>>微信消息监听启动："+wxList.size());
                 for(BotUser botUser : wxList){
                     if(botUser.getWxStatus()==1){
@@ -73,7 +73,7 @@ public class RecoverWechatSessionRunner{
 
             List<BotUser> onlineList = botUserList.stream().filter(item-> null!=item.getOnlineStatus() && item.getOnlineStatus()==1).collect(Collectors.toList());
             if(null!=onlineList && onlineList.size()>0){
-                logger.info(">>>>>>>>>>在线机器人假人下注启动："+onlineList.size());
+//                logger.info(">>>>>>>>>>在线机器人假人下注启动："+onlineList.size());
                 //System.out.println(DateUtil.now()+">>>>>>>>>>在线机器人假人下注启动："+onlineList.size());
                 for(BotUser botUser : onlineList){
                     dummyBuyService.dummyBuy(botUser);
@@ -85,7 +85,7 @@ public class RecoverWechatSessionRunner{
         //启动未开始和运行中两种状态的定投任务
         List<PlayerFixedBuy> runningList = playerFixedBuyService.getRunningList();
         if(null!=runningList && runningList.size()>0){
-            logger.info(">>>>>>>>>>玩家定投任务启动："+runningList.size());
+//            logger.info(">>>>>>>>>>玩家定投任务启动："+runningList.size());
             //System.out.println(DateUtil.now()+">>>>>>>>>>玩家定投任务启动："+runningList.size());
             for(PlayerFixedBuy dtTask : runningList){
                 dingTouTaskService.startDingTou(dtTask);

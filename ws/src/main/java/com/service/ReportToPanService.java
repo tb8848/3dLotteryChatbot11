@@ -35,7 +35,7 @@ public class ReportToPanService {
         httpRequest.header("token",token);
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        logger.info("=============>"+url+"返回："+result);
+//        logger.info("=============>"+url+"返回："+result);
         return JSON.parseObject(result,ResponseBean.class);
 
     }
@@ -49,7 +49,7 @@ public class ReportToPanService {
         httpRequest.header("token",token);
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        logger.info("=============>"+url+"返回："+result);
+//        logger.info("=============>"+url+"返回："+result);
         return JSON.parseObject(result,ResponseBean.class);
 
     }
@@ -63,7 +63,7 @@ public class ReportToPanService {
         httpRequest.header("token",token);
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        logger.info("=============>"+url+"返回："+result);
+//        logger.info("=============>"+url+"返回："+result);
         return JSON.parseObject(result,ResponseBean.class);
 
     }
@@ -77,7 +77,7 @@ public class ReportToPanService {
         httpRequest.header("token",token);
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        logger.info("=============>"+url+"返回："+result);
+//        logger.info("=============>"+url+"返回："+result);
         return JSON.parseObject(result,ResponseBean.class);
 
     }

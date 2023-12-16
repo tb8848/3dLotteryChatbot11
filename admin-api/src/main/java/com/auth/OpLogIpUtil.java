@@ -32,7 +32,7 @@ public class OpLogIpUtil {
             // 创建 DatabaseReader对象
             databaseReader = new DatabaseReader.Builder(database).build();
         } catch (Exception e) {
-            log.error("启动加载IP库异常,执行退出", e);
+//            log.error("启动加载IP库异常,执行退出", e);
             System.exit(0);
         }
     }
@@ -105,7 +105,7 @@ public class OpLogIpUtil {
         } catch (AddressNotFoundException ex) {
             return "内网IP";
         } catch (Exception e) {
-            log.error("IP转换地址发生异常:{}", ip, e);
+//            log.error("IP转换地址发生异常:{}", ip, e);
         }
         return null;
     }
@@ -119,7 +119,7 @@ public class OpLogIpUtil {
      */
     public String getCityInfo(String ip) {
         if (StringUtils.isEmpty(ip)) {
-            log.info("IP转地址,IP为空:{}", ip);
+//            log.info("IP转地址,IP为空:{}", ip);
             return null;
         }
         return ipToCityInfo(ip);

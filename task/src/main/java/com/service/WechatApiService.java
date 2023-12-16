@@ -184,7 +184,7 @@ public class WechatApiService{
     public void addNewPlayer(String text,BotUser user,String fromUserName,String wxId){
         String txt = text.toUpperCase();
         if (txt.equals("3D") || txt.equals("P3")) {
-            logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", user.getLoginName(), fromUserName, text));
+//            logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", user.getLoginName(), fromUserName, text));
             int lottype = txt.equals("P3")?2:1;
             if(lottype>0){
                 BotUserSetting botUserSetting = botUserSettingService.getByUserId(user.getId());
@@ -267,7 +267,7 @@ public class WechatApiService{
         httpRequest.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-        logger.info(">>>>>>Friend/GetContractDetail100>>>>>>"+result);
+//        logger.info(">>>>>>Friend/GetContractDetail100>>>>>>"+result);
         RespData respData = JSONObject.parseObject(result,RespData.class);
         if(respData.getCode()==0){
             Map<String,Object> datas =  respData.getData();
@@ -447,12 +447,12 @@ public class WechatApiService{
             }
         }
         if(isCommonCmd){
-            logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
+//            logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
             handleCommonMsg(botUser,text,player);
         }else{
             String text1 = text.toUpperCase();
             if(text1.startsWith("P3") || text1.startsWith("3D")){
-                logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
+//                logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
                 ChatRoomMsg fromMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text);
                 chatRoomMsgService.save(fromMsg);
                 rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(fromMsg));

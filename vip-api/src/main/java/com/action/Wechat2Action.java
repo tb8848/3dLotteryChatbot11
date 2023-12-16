@@ -162,7 +162,7 @@ public class Wechat2Action {
                             prov = (String)addr.get("country");
                         }
                     }
-                    logger.info("["+botUser.getLoginName()+"]扫码登录省市："+String.format("ip：%s,省份：%s,城市:%s",IpUtil.getIpAddr(request), prov,city));
+//                    logger.info("["+botUser.getLoginName()+"]扫码登录省市："+String.format("ip：%s,省份：%s,城市:%s",IpUtil.getIpAddr(request), prov,city));
                     proxyInfo = proxyService.getProxyByArea(prov,city);
                     if(null == proxyInfo){
                         proxyInfo = proxyService.getUnuseProxy();
@@ -175,9 +175,9 @@ public class Wechat2Action {
                     proxy.put("ProxyIp",defaultProxyIp);
                     proxy.put("ProxyUser",defaultProxyUser);
                     proxy.put("ProxyPassword",defaultProxyPwd);
-                    logger.info("["+botUser.getLoginName()+"]使用临时代理："+JSON.toJSONString(proxy));
+//                    logger.info("["+botUser.getLoginName()+"]使用临时代理："+JSON.toJSONString(proxy));
                 }else{
-                    logger.info("["+botUser.getLoginName()+"]使用动态代理："+JSON.toJSONString(proxyInfo));
+//                    logger.info("["+botUser.getLoginName()+"]使用动态代理："+JSON.toJSONString(proxyInfo));
                     proxy.put("ProxyIp",proxyInfo.getIp());
                     proxy.put("ProxyUser",proxyInfo.getUsername());
                     proxy.put("ProxyPassword",proxyInfo.getPassword());
@@ -196,7 +196,7 @@ public class Wechat2Action {
             httpRequest.contentType("application/json");
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
-            logger.info("["+botUser.getLoginName()+"]获取二维码结果："+result);
+//            logger.info("["+botUser.getLoginName()+"]获取二维码结果："+result);
             //System.out.println("result>>>>>>"+result);
             RespData respData = JSONObject.parseObject(result, RespData.class);
             if(respData.getCode()==1){
@@ -248,7 +248,7 @@ public class Wechat2Action {
                 httpRequest.contentType("application/json");
                 HttpResponse httpResponse = httpRequest.execute();
                 String respResult = httpResponse.body();
-                logger.info(">>>>>>Login/LogOut>>>>>>"+respResult);
+//                logger.info(">>>>>>Login/LogOut>>>>>>"+respResult);
                 //System.out.println(DateUtil.now()+">>>>>>Login/LogOut>>>>>>"+respResult);
                 RespData respData = JSONObject.parseObject(respResult, RespData.class);
                 if(respData.getCode()==0 || respData.getCode()==-13){
@@ -301,7 +301,7 @@ public class Wechat2Action {
                 httpRequest.body(JSON.toJSONString(reqData));
                 HttpResponse httpResponse = httpRequest.execute();
                 String respResult = httpResponse.body();
-                logger.info(">>>>>>Login/Awaken>>>>>>"+respResult);
+//                logger.info(">>>>>>Login/Awaken>>>>>>"+respResult);
                 RespData respData = JSONObject.parseObject(respResult, RespData.class);
                 if(respData.getCode()==0){
                     Map<String,Object> datas = respData.getData();
@@ -358,7 +358,7 @@ public class Wechat2Action {
                     httpRequest.body(JSON.toJSONString(reqData));
                     HttpResponse httpResponse = httpRequest.execute();
                     String respResult = httpResponse.body();
-                    logger.info(">>>>>>Login/LogOut>>>>>>"+respResult);
+//                    logger.info(">>>>>>Login/LogOut>>>>>>"+respResult);
                     RespData respData = JSONObject.parseObject(respResult, RespData.class);
                     if(respData.getCode()==0){
                         canDel = true;

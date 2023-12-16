@@ -38,7 +38,7 @@ public class BotWechatMQService {
     @RabbitListener(queues = "bot_wechat_queue_3d")
     public void recvMessage(Message msg, final Channel channel) throws IOException {
         String body = new String(msg.getBody());
-        logger.info("收到微信状态消息>>>>>>>>"+body);
+//        logger.info("收到微信状态消息>>>>>>>>"+body);
         String lockKey = "3d:chatbot:wechat:mq";
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,30000);
         if (null == lockInfo) {
@@ -54,7 +54,7 @@ public class BotWechatMQService {
         } catch (IOException e) {
             e.printStackTrace();
             if(msg.getMessageProperties().getRedelivered()){
-                logger.info("重复失败丢弃消息>>>>>>>>"+body);
+//                logger.info("重复失败丢弃消息>>>>>>>>"+body);
                 //System.out.println("重复失败丢弃消息 plan:{}"+msg.getBody());
                 channel.basicReject(msg.getMessageProperties().getDeliveryTag(), false);
             }else{

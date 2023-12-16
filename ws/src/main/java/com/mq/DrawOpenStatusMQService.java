@@ -109,7 +109,7 @@ public class DrawOpenStatusMQService {
     public void recvP3Message(Message msg, final Channel channel) throws IOException {
         String body = new String(msg.getBody());
         //System.out.println(DateUtil.now() + ">>>>>>>>>>>>[排列三]收到[开关盘]消息:"+body);
-        logger.info(">>>>>>>>>>>>[排列三]收到[开关盘]消息:"+body);
+//        logger.info(">>>>>>>>>>>>[排列三]收到[开关盘]消息:"+body);
         String lockKey = "p3:chatbot:draw:mq";
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,30000);
         if (null == lockInfo) {
@@ -159,7 +159,7 @@ public class DrawOpenStatusMQService {
         } catch (Exception e) {
             e.printStackTrace();
             if(msg.getMessageProperties().getRedelivered()){
-                logger.info(">>>>>>>>>>>>[排列三]重复失败丢弃消息:"+body);
+//                logger.info(">>>>>>>>>>>>[排列三]重复失败丢弃消息:"+body);
                 //System.out.println("重复失败丢弃消息 plan:{}"+msg.getBody());
                 channel.basicReject(msg.getMessageProperties().getDeliveryTag(), false);
             }else{
@@ -179,7 +179,7 @@ public class DrawOpenStatusMQService {
     @RabbitListener(queues = "botQueue_3d")
     public void recv3DMessage(Message msg, final Channel channel) throws IOException {
         String body = new String(msg.getBody());
-        logger.info(">>>>>>>>>>>>[3D]收到开关盘消息:"+body);
+//        logger.info(">>>>>>>>>>>>[3D]收到开关盘消息:"+body);
 
         String lockKey = "3d:chatbot:draw:mq";
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,30000);
@@ -231,7 +231,7 @@ public class DrawOpenStatusMQService {
         } catch (Exception e) {
             e.printStackTrace();
             if(msg.getMessageProperties().getRedelivered()){
-                logger.info(">>>>>>>>>>>>[3D]重复失败丢弃消息:"+body);
+//                logger.info(">>>>>>>>>>>>[3D]重复失败丢弃消息:"+body);
                 //System.out.println("重复失败丢弃消息 plan:{}"+msg.getBody());
                 channel.basicReject(msg.getMessageProperties().getDeliveryTag(), false);
             }else{
@@ -250,7 +250,7 @@ public class DrawOpenStatusMQService {
         Date startTime =  DateUtil.offsetMinute(new Date(),5);
         int rows = playerFixedBuyService.updateStartTime(startTime,1);
         String info = String.format("开盘后设置定投执行时间为：%s,影响记录数量：%s",DateUtil.format(startTime,"yyyy-MM-dd HH:mm:ss"),rows);
-        logger.info(">>>>>>>>>>>>"+info);
+//        logger.info(">>>>>>>>>>>>"+info);
         //System.out.println(String.format("开盘后设置定投执行时间为：%s,影响记录数量：%s",DateUtil.format(startTime,"yyyy-MM-dd HH:mm:ss"),rows));
     }
 
@@ -371,7 +371,7 @@ public class DrawOpenStatusMQService {
         Map<String, Object> resultMap = drawService.settleAccounts(draw,lotteryType);
 
         Integer totalDrawCount = (Integer)resultMap.get("drawCount");
-        logger.info(">>>>>>>>>>>>【"+lotteryName+"】["+drawNo+"]期中奖注数："+totalDrawCount);
+//        logger.info(">>>>>>>>>>>>【"+lotteryName+"】["+drawNo+"]期中奖注数："+totalDrawCount);
 
         if(null!=totalDrawCount && totalDrawCount>0){
 
@@ -449,7 +449,7 @@ public class DrawOpenStatusMQService {
         //获取中奖记录列表
         List<DrawBuyRecord> drawBuyRecords = drawBuyRecordService.getDrawPrizeList(drawNo,lotteryType);
         if(null == drawBuyRecords || drawBuyRecords.size()<1){
-            logger.info("["+lotteryName+"]第"+drawNo+"期==============>无中奖记录");
+//            logger.info("["+lotteryName+"]第"+drawNo+"期==============>无中奖记录");
             return;
         }
 
@@ -462,7 +462,7 @@ public class DrawOpenStatusMQService {
             List<DrawBuyRecord> drawList = playerGroup.get(player.getId());
             List<String> buyIdList = drawList.stream().map(item->item.getId()).collect(Collectors.toList());
             int rows = drawBuyRecordService.clearDrawPrizeList(drawNo,buyIdList);
-            logger.info("["+lotteryName+"]第"+drawNo+"期==============>清除中奖记录："+rows);
+//            logger.info("["+lotteryName+"]第"+drawNo+"期==============>清除中奖记录："+rows);
 
             Map<String,List<DrawBuyRecord>> playerRecordIdGroup = drawList.stream().collect(Collectors.groupingBy(DrawBuyRecord::getBaopaiId));
 
@@ -482,7 +482,7 @@ public class DrawOpenStatusMQService {
                             playerFixedBuy.setEndTime(null);
                             playerFixedBuy.setStopReason("");
                             playerFixedBuyService.updateById(playerFixedBuy);
-                            logger.info("["+lotteryName+"]第"+drawNo+"期==============>清除定投结束状态："+playerFixedBuy.getBuyDesc());
+//                            logger.info("["+lotteryName+"]第"+drawNo+"期==============>清除定投结束状态："+playerFixedBuy.getBuyDesc());
                         }
                     }
                     playerService.updatePoint(player.getId(),totalDrawMoney,false);
@@ -549,7 +549,7 @@ public class DrawOpenStatusMQService {
             }
         }catch (Exception e){
             e.printStackTrace();
-            logger.error("===============【"+lotteryName+"】"+drawNo+"期推送【开奖结果】异常");
+//            logger.error("===============【"+lotteryName+"】"+drawNo+"期推送【开奖结果】异常");
             //System.out.println("===============【3D】"+drawNo+"期推送【开奖结果】异常");
         }
 
