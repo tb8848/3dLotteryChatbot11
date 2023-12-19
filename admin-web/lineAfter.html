@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>线路</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+</head>
+<style>
+	body{
+        background-color: white;
+        height: 100%;
+    }
+    html{
+        height: 100%;
+        overflow: hidden;
+    }
+    #main{
+        width: 100%;
+        height: 100%;
+        display: flex;justify-content: center;align-items: center;
+        font-size: 15px;
+    }
+    .zwc{
+        border: 1px solid black;width: 400px;margin-bottom: 50px;
+    }
+    .redWeight{
+        color: red;
+        font-weight: 800;
+    }
+    .xiaokuang{
+        padding: 2px;margin: 1px;border: 1px solid black;
+    }
+    .line{
+        width: 100%;display: flex;
+    }
+</style>
+
+<body style="overflow:auto;">
+<div id="main">
+    <div class="zwc" style="display: none;">
+        <div class="xiaokuang">
+            <span>当前IP：</span><span class="redWeight">{{ip}}</span>
+        </div>
+        <div class="xiaokuang">
+            <span>当前时间：</span><span class="redWeight">{{currentTime}}</span>
+        </div>
+        <div class="xiaokuang">
+            <span>线路选择：</span><span style="color: red;">数据越小表示线路越快</span>
+        </div>
+<!--        <div class="xiaokuang">-->
+<!--            <span>域名：</span><span style="color: blue;">zz.3d11aa.com</span>-->
+<!--        </div>-->
+        <div class="xiaokuang">
+            <div class="line" v-for="(item,idx) in line">
+                <div style="width: 60%;color: #00b7ee;">
+                    <span>{{item.name}}</span>
+                    <a style="padding-left: 10px;color: #00b7ee;text-decoration: none;cursor: pointer;" href="index.html">点击进入</a>
+                </div>
+                <div style="width: 40%;">
+                    {{item.status==0?'测速中...':(item.status==1 ? item.speed : (item.status==2 ? '等待测速' : '超时'))}}
+                    <span :id="idx" style="display: none;color: red;padding-left: 15px;">最快</span>
+                </div>
+            </div>
+        </div>
+        <div class="xiaokuang">
+            <span>参考站点测试</span>
+        </div>
+        <div class="xiaokuang">
+            <div class="line">
+                <div style="width: 60%;">https://www.google.com/</div>
+                <div style="width: 40%;">225</div>
+            </div>
+            <div class="line">
+                <div style="width: 60%;">https://www.baidu.com</div>
+                <div style="width: 40%;">356</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/layui/layui.js"></script>
+<script src="js/layui/layui.all.js"></script>
+<script src="js/token.js"></script>
+<script src="js/config.js"></script>
+<script src="js/vue/vue.js"></script>
+<script src="js/jquery.i18n.min.js"></script>
+<script src="js/multi_lang_config.js"></script>
+<script>
+
+    var $ = layui.$;
+    var layer = layui.layer;
+
+    const vipInfoVm = new Vue({
+        el: '#main',
+        data: {
+            line:[
+                {"name":"线路1","url":"https://zz.3d11aa.com","csStatus":2,"speed":98},
+                {"name":"线路2","url":"https://zz.3d11aa.com","csStatus":2,"speed":569},
+                {"name":"线路3","url":"https://zz.3d11aa.com","csStatus":2,"speed":358},
+                {"name":"线路4","url":"https://zz.3d11aa.com","csStatus":2,"speed":337},
+                {"name":"线路5","url":"https://zz.3d11aa.com","csStatus":2,"speed":900},
+                {"name":"线路6","url":"https://zz.3d11aa.com","csStatus":2,"speed":600},
+                {"name":"线路7","url":"https://zz.3d11aa.com","csStatus":2,"speed":568},
+                {"name":"线路8","url":"https://zz.3d11aa.com","csStatus":2,"speed":521},
+                {"name":"线路9","url":"https://zz.3d11aa.com","csStatus":2,"speed":895}
+            ],//状态（0：测速中...  1：已测速  2：等待测速  3：超时）
+            currentTime:"",
+            time:"",
+            ip:"127.0.0.1",
+            minSpeed:1000,
+            ids:0,
+            x:0
+        },
+        methods: {
+            init() {
+                this.getIP();
+                let that = this;
+                $.ajax({
+                    type:"get",
+                    url: zhtHOST+"multiLine/getAllMultiLine",
+                    success:function (res) {
+                        if(res.code == 200){
+                            if (res.data.length > 0){
+                                that.line = res.data;
+                                $(".zwc").css("display","black");
+                                that.time = setInterval(function () {
+                                    that.getData();
+                                },1000);
+                            }else{
+                                window.location.href = "index.html";
+                            }
+                        }else{
+                            window.location.href = "index.html";
+                        }
+                    },error:function (res) {
+                        window.location.href = "index.html";
+                    }
+                })
+            },
+            getData(){
+                const count = this.line.length;
+                const myDate = new Date();
+                this.currentTime = myDate.toLocaleString();
+                let that = this;
+                let num = Math.floor(Math.random() * count);
+                for (let i = 0; i < count+6; i++) {
+                    let j = Math.floor(Math.random() * count);
+                    let sta = this.line[j].csStatus;
+                    let csSta = sta;
+                    if (sta == 2){
+                        csSta = 0;
+                    }else if (sta == 0){
+                        this.x = this.x + 1;
+                        if (j==num){
+                            csSta = 3;
+                        }else{
+                            csSta = 1;
+                        }
+                    }
+                    this.line[j].csStatus = csSta;
+                    if (sta == 0){
+                        $.ajax({
+                            type:"get",
+                            url: zhtHOST+"multiLine/getRandomNumber",
+                            success:function (res) {
+                                if(res.code == 200){
+                                    that.line[j].speed = res.data;
+                                }else{
+                                    // let speed = Math.floor(Math.random() * 700) + 1;//获取随机数
+                                    that.line[j].csStatus = 3;
+                                }
+                            },error:function (res) {
+                                that.line[j].csStatus = 3;
+                            }
+                        })
+                    }
+                }
+                if (this.x == count){
+                    clearInterval(that.time);
+                    setTimeout(function () {
+                        for (let i = 0; i < that.line.length; i++) {
+                            let xx = that.line[i].csStatus;
+                            let yy = that.minSpeed;
+                            let zz = that.line[i].speed;
+                            if (xx == 1 && yy >= zz){
+                                that.minSpeed = zz;
+                                that.ids = i;
+                            }
+                        }
+                        $("#"+that.ids).css("display","black");
+                    },1500);
+                }
+            },
+            getIP(){
+                let that = this;
+                $.ajax({
+                    url: zhtHOST+'multiLine/getIPAddress',
+                    type: 'post',
+                    success:function (res) {
+                        if(res.code == 200){
+                            that.ip = res.data;
+                        }
+                    }
+                });
+                return false;
+            },
+        }
+    })
+    vipInfoVm.init();
+
+</script>
+</body>
+</html>

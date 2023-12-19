@@ -4,6 +4,9 @@ const HOST='http://127.0.0.1:9191/'
 const WS_HOST = 'http://127.0.0.1:9194/ws';
 // const WS_HOST="https://vip.colourswin.com:9194/ws";
 
+// const zhtHOST = 'http://127.0.0.1:8888/';
+const zhtHOST = 'https://hn3dhn01hk.com:8888/';
+
 function checkpwd(value){ //value：表单的值、item：表单的DOM对象
     value = value.toLowerCase();
 
