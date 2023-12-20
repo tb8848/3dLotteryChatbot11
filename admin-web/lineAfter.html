@@ -50,9 +50,9 @@
         <div class="xiaokuang">
             <span>线路选择：</span><span style="color: red;">数据越小表示线路越快</span>
         </div>
-<!--        <div class="xiaokuang">-->
-<!--            <span>域名：</span><span style="color: blue;">zz.3d11aa.com</span>-->
-<!--        </div>-->
+        <div class="xiaokuang">
+            <span>域名：</span><span style="color: blue;">admin.colourswin.com</span>
+        </div>
         <div class="xiaokuang">
             <div class="line" v-for="(item,idx) in line">
                 <div style="width: 60%;color: #00b7ee;">
@@ -120,7 +120,23 @@
                 let that = this;
                 $.ajax({
                     type:"get",
-                    url: zhtHOST+"multiLine/getAllMultiLine",
+                    url: HOST+"dictionary/selectMultiLineIp",
+                    success:function (res) {
+                        if(res.code == 200){
+                            that.getLine(res.data);
+                        }else{
+                            window.location.href = "index.html";
+                        }
+                    },error:function (res) {
+                        window.location.href = "index.html";
+                    }
+                })
+            },
+            getLine(ip){
+                let that = this;
+                $.ajax({
+                    type:"get",
+                    url: zhtHOST+"line/getAllLine?ip="+ip,
                     success:function (res) {
                         if(res.code == 200){
                             if (res.data.length > 0){
@@ -161,12 +177,13 @@
                         }
                     }
                     this.line[j].csStatus = csSta;
-                    if (sta == 0){
+                    if (csSta == 0){
                         $.ajax({
                             type:"get",
                             url: zhtHOST+"multiLine/getRandomNumber",
                             success:function (res) {
                                 if(res.code == 200){
+                                    that.line[j].csStatus = 1;
                                     that.line[j].speed = res.data;
                                 }else{
                                     // let speed = Math.floor(Math.random() * 700) + 1;//获取随机数
@@ -181,18 +198,26 @@
                 if (this.x == count){
                     clearInterval(that.time);
                     setTimeout(function () {
-                        for (let i = 0; i < that.line.length; i++) {
-                            let xx = that.line[i].csStatus;
-                            let yy = that.minSpeed;
-                            let zz = that.line[i].speed;
-                            if (xx == 1 && yy >= zz){
-                                that.minSpeed = zz;
-                                that.ids = i;
-                            }
-                        }
-                        $("#"+that.ids).css("display","black");
-                    },1500);
+                        that.zuikuai();
+                    },2000);
                 }
+            },
+            zuikuai(){
+                let that = this;
+                let min = 999;
+                for (let i = 0; i < this.line.length; i++) {
+                    let xx = that.line[i].csStatus;
+                    let yy = min*1;
+                    let zz = that.line[i].speed*1;
+                    if (xx == 1 && yy >= zz){
+                        min = zz;
+                        that.ids = i;
+                    }
+                }
+                $("#"+this.ids).css("display","black");
+                setTimeout(function () {
+                    window.location.href = "index.html";
+                },1000)
             },
             getIP(){
                 let that = this;
