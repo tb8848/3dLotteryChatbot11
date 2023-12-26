@@ -4431,6 +4431,7 @@
                     var msg = msgBody.data;
                     var drno = msg.drawNo;
                     this.openStatus = msg.openStatus;
+                    w_open_status = msg.openStatus;
                     if(this.drawNo!=drno){ //是否是新一期数据
                         //getPrintInfo();
                         this.drawNo = drno;
