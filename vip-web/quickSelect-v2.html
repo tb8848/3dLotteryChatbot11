@@ -1607,6 +1607,8 @@
 </script>
 <script type="text/javascript">
 
+    var w_open_status = 0;
+
     const vm = new Vue({
         el:'#kuaixuan',
         data:{
@@ -4550,12 +4552,13 @@
 
     function fastBuy(data,buyDesc,fastNew){
         $("#selectionBox1").hide();
+        console.log("========openStatus====",w_open_status==1);
         if(vm.getDtValue()==1){
             fastNew? window.parent.dingtouFast(data,buyDesc):window.parent.dingtou(data);
-        }else if(this.openStatus==1){
+        }else if(w_open_status==1){
             fastNew?  window.parent.betFast(data,buyDesc) : window.parent.bet(data,buyDesc,0);
         }else{
-
+            console.log("=========0000")
         }
     }
 

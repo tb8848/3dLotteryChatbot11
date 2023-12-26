@@ -481,7 +481,7 @@
         stomp = Stomp.over(sock);
         isInitiative = false;
         stomp.connect( {Authorization:params.openId},function (e) {
-            //console.log("连接成功");
+            console.log("连接成功");
             stomp.subscribe(params.chatTopic,params.chatMsgHandler);
             stomp.subscribe(params.drawTopic,params.drawStatusHandler);
         }, function (err){
