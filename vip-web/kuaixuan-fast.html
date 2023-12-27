@@ -279,7 +279,7 @@
                     <table class="tb-kuaixuan" width="100%" cellspacing="0" cellpadding="0">
                         <tbody id="xiaopingmu">
                         <tr class="title-bar" id="lotteryMethodsContainer">
-                            <td v-for="(item,idx) in lotteryMethodList.slice(0,5)"
+                            <td v-for="(item,idx) in lotteryMethodList"
                                 :class="item.id==lotteryMethodId?'on':'off'"  style="width:16.6%;">
                                 <input type="button" :value="item.bettingMethod" class="fn-module btn-large erd-btn" @click="changeLotteryMethod(item)">
                             </td>
@@ -523,7 +523,7 @@
                                                       @click="showdis(this,'__shuang_qu','doubleNum','',0);" :checked="rules.doubleNum.excluded==1"><span>除</span></label>
                                         <label><input type="checkbox" class="even-number-filter checkbox" evennumberfilter="0" NAME="__shuang_qu" ID="__shuang_qu"
                                                       @click="showdis(this,'__shuang_chu','doubleNum','',1);" :checked="rules.doubleNum.included==1">
-                                            <span i18n="kuaixuan.rules.qu">取}</span></label> (<strong class="red2">双</strong>)
+                                            <span i18n="kuaixuan.rules.qu">取</span></label> (<strong class="red2">双</strong>)
                                         <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[0]==1" id="__shuang_1" value="1" @click="showChkResult(this,'doubleNum',0)">
                                         <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[1]==1" id="__shuang_2" value="1" @click="showChkResult(this,'doubleNum',1)">
                                         <input type="checkbox" class="even-number-item checkbox" :checked="rules.doubleNum.locArr[2]==1" id="__shuang_3" value="1" @click="showChkResult(this,'doubleNum',2)">

@@ -1637,7 +1637,7 @@
                 {id:'14',bettingMethod:'独胆'},
                 {id:'6',bettingMethod:'1D'},
                 {id:'7',bettingMethod:'2D'},
-                {id:'8',bettingMethod:'包选'},
+                // {id:'8',bettingMethod:'包选'},
                 {id:'9',bettingMethod:'大小'},
                 {id:'10',bettingMethod:'奇偶'},
                 {id:'11',bettingMethod:'猜三同'},
@@ -1651,7 +1651,7 @@
                         isShow:1,
                     },
                     hz:{
-                        isShow:1,
+                        isShow:0,
                     }
                 },
                 tx:{
@@ -1665,7 +1665,7 @@
                     },
                     "hz":{
 
-                        isShow:1,
+                        isShow:0,
                     },
                     "dt":{
 
@@ -1684,7 +1684,7 @@
                     },
                     "hz":{
 
-                        isShow:1,
+                        isShow:0,
                     },
                     "dt":{
 
@@ -1710,11 +1710,11 @@
                 bx:{
                     "b3":{
 
-                        isShow:1,
+                        isShow:0,
                     },
                     "b6":{
 
-                        isShow:1,
+                        isShow:0,
                     }
                 },
                 tlj:{
@@ -1740,7 +1740,7 @@
                     },
                     "c1d":{
 
-                        isShow:1,
+                        isShow:0,
                     }
                 },
                 d2:{
@@ -1750,7 +1750,7 @@
                     },
                     "c2d":{
 
-                        isShow:1,
+                        isShow:0,
                     }
                 }
             },
@@ -2216,12 +2216,12 @@
                 }
 
                 var dsArr = [];
-                pasteCode = pasteCode.replace(/[^[0-9,，|]/g,"");
+                pasteCode = pasteCode.replace(/[^[0-9.,，|]/g,"");
                 if(pasteCode == ""){
                     layer.alert("请确认号码是否输入正确");
                     return;
                 }
-                var arr = pasteCode.split(/[,，\\|]/);
+                var arr = pasteCode.split(/[.,，\\|]/);
                 switch(this.lotteryMethodId){
                     case "1":
                         this.zxFastPaste(arr);
@@ -2230,7 +2230,7 @@
                         this.z3FastPaste(arr);
                         break;
                     case "4":
-                        this.z3FastPaste(arr);
+                        this.z6FastPaste(arr);
                         break;
                 }
 
@@ -3276,7 +3276,7 @@
 
             selectOk(){
                 const that = this;
-                this.selectList = [];
+                //this.selectList = [];
                 switch(this.lotteryMethodId){
                     case '1':
                         if(this.lsTypeId==1){
