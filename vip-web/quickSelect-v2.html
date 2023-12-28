@@ -2028,49 +2028,55 @@
                         layer.alert("请检查号码是否输入正确");
                         return;
                     }
-                    for(var i=0;i<len;i=i+3){
-                        var num = codeArr[0].substring(i,i+3);
-                        if(num.length==3){
-                            var nar = num.split("")
-                            var hzname ="直选单式";
-                            buyList.push({
-                                uuid:that.guid(),
-                                huizongName:hzname,
-                                bai:nar[0],
-                                shi:nar[1],
-                                ge:nar[2],
-                                value:nar[0]+","+nar[1]+","+nar[2],
-                                buyAmount:1,
-                                lmId:that.lotteryMethodId,
-                                lsTypeId:1,
-                                buyDesc:hzname+":"+num,
-                                buyMoney:""
-                            })
-                            totalCount += 1;
+                    var hzname ="单选";
+                    var codeList = [];
+                    for(var i=0;i<len;i=i+3) {
+                        var num = codeArr[0].substring(i, i + 3);
+                        if (num.length == 3) {
+                            !codeList.includes(num) && codeList.push(num);
                         }
                     }
+
+                    if(codeList.length==0){
+                        layer.alert("未检测到号码");
+                        return;
+                    }
+
+                    buyList.push({
+                        uuid:that.guid(),
+                        huizongName:hzname,
+                        value:codeList.join(","),
+                        buyAmount:codeList.length,
+                        lmId:that.lotteryMethodId,
+                        codeList:codeList,
+                        lsTypeId:1,
+                        buyDesc:hzname+codeList.join(","),
+                        buyMoney:""
+                    })
+                    totalCount += codeList.length;
                 }else{
+                    var hzname ="单选";
+                    var codeList = [];
                     codeArr.forEach((code,idx)=>{
                         code = delRepeatNum(code);
                         if(code.length==3){
-                            var nar = code.split("")
-                            var hzname ="直选单式";
-                            buyList.push({
-                                uuid:that.guid(),
-                                huizongName:hzname,
-                                bai:nar[0],
-                                shi:nar[1],
-                                ge:nar[2],
-                                value:nar[0]+","+nar[1]+","+nar[2],
-                                buyAmount:1,
-                                lmId:that.lotteryMethodId,
-                                lsTypeId:1,
-                                buyDesc:hzname+":"+code,
-                                buyMoney:""
-                            })
-                            totalCount += 1;
+                            !codeList.includes(code) && codeList.push(code);
                         }
                     })
+
+                    var hzname ="单选";
+                    buyList.push({
+                        uuid:that.guid(),
+                        huizongName:hzname,
+                        value:codeList.join(","),
+                        codeList:codeList,
+                        buyAmount:codeList.length,
+                        lmId:that.lotteryMethodId,
+                        lsTypeId:1,
+                        buyDesc:hzname+codeList.join(","),
+                        buyMoney:""
+                    })
+                    totalCount += codeList.length;
                 }
                 if(totalCount>0){
                     that.checkKuaiYi(buyList,totalCount);
@@ -2292,11 +2298,13 @@
                     item.buyMoney = that.buyMoney;
                     if(lastDesc==null){
                         lastDesc = item.buyDesc;
-                        buyDesc.push(lastDesc+"各"+that.buyMoney+"\r\n")
+                        buyDesc.push(lastDesc+"各"+that.buyMoney+"\r\n");
+                        item.cmd = lastDesc+"各"+that.buyMoney;
                         //buyDesc+=lastDesc+"各"+that.buyMoney+"\r\n";
                     }
                     if(lastDesc != item.buyDesc){
                         buyDesc.push(item.buyDesc+"各"+that.buyMoney+"\r\n")
+                        item.cmd = item.buyDesc+"各"+that.buyMoney;
                         //buyDesc+=item.buyDesc+"各"+that.buyMoney+"\r\n";
                     }
                     lastDesc = item.buyDesc;
@@ -3486,7 +3494,8 @@
                                     lmId:that.lotteryMethodId,
                                     lsTypeId:that.lsTypeId,
                                     buyMoney: "",
-                                    buyDesc:buyDesc
+                                    buyDesc:buyDesc,
+                                    cmd:"",
                                 })
                             }
 
@@ -3538,7 +3547,8 @@
                                     lmId:that.lotteryMethodId,
                                     lsTypeId:that.lsTypeId,
                                     buyMoney:"",
-                                    buyDesc:hzName
+                                    buyDesc:hzName,
+                                    cmd:""
                                 })
 
                                 // if(this.rules.bx.b3.codeList.length>0){
@@ -3595,7 +3605,8 @@
                                         lmId:that.lotteryMethodId,
                                         lsTypeId:that.lsTypeId,
                                         buyMoney:"",
-                                        buyDesc:hzName
+                                        buyDesc:hzName,
+                                        cmd:""
                                     })
 
                                     // this.codesList = this.rules.bx.b6.codeList;
@@ -3666,7 +3677,8 @@
                         lmId: that.lotteryMethodId,
                         lsTypeId: that.lsTypeId,
                         buyDesc:buyDesc,
-                        buyMoney: ""
+                        buyMoney: "",
+                        cmd:""
                     })
 
                     // this.codesList = this.rules.d2.d2.codeList;
@@ -3725,7 +3737,8 @@
                         lmId: that.lotteryMethodId,
                         lsTypeId: that.lsTypeId,
                         buyDesc:buyDesc,
-                        buyMoney: ""
+                        buyMoney: "",
+                        cmd:""
                     })
                 }
                 // this.codesList = this.rules.d1.d1.codeList;
@@ -3988,7 +4001,8 @@
                         buyMoney:"",
                         codeList:that.rules.z3.pt.codeList,
                         buyDesc:buyDesc,
-                        typeFlag:1
+                        typeFlag:1,
+                        cmd:""
                     })
                 }else{
                     buyDesc = "组三"+cdig+"(组):"+value;
@@ -4006,7 +4020,8 @@
                         buyMoney:"",
                         codeList:[value],
                         buyDesc:buyDesc,
-                        typeFlag:1
+                        typeFlag:1,
+                        cmd:""
                     })
                 }
 
@@ -4039,7 +4054,8 @@
                     lsTypeId:typeId,
                     buyMoney:"",
                     buyDesc:buyDesc,
-                    typeFlag:2
+                    typeFlag:2,
+                    cmd:""
                 })
                 //
                 // if(this.rules.z3.dt.totals>0){
@@ -4087,7 +4103,8 @@
                     lsTypeId:typeId,
                     buyMoney:"",
                     buyDesc:buyDesc,
-                    typeFlag:4
+                    typeFlag:4,
+                    cmd:""
                 })
                 //
                 // if(this.rules.z3.dt.totals>0){
@@ -4160,7 +4177,8 @@
                         buyMoney:"",
                         codeList:[value],
                         buyDesc:buyDesc,
-                        typeFlag:1
+                        typeFlag:1,
+                        cmd:""
                     })
                 }
 
@@ -4229,7 +4247,8 @@
                     lsTypeId:typeId,
                     buyMoney:"",
                     buyDesc:buyDesc,
-                    typeFlag:2
+                    typeFlag:2,
+                    cmd:""
                 })
                 //var buyDesc = "组六胆拖"+dm+","+tm;
                 // if(this.rules.z6.dt.totals>0){
@@ -4277,7 +4296,8 @@
                     lsTypeId:typeId,
                     buyMoney:"",
                     buyDesc:buyDesc,
-                    typeFlag:4
+                    typeFlag:4,
+                    cmd:""
                 })
                 //
                 // if(this.rules.z3.dt.totals>0){

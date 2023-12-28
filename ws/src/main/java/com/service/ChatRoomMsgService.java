@@ -79,6 +79,9 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
     private KuaidaBuyMsgServiceV2 kuaidaBuyMsgServiceV2;
 
     @Autowired
+    private KuaidaMultiBuyMsgServiceV2 kuaidaMultiBuyMsgServiceV2;
+
+    @Autowired
     private P3KuaidaBuyMsgService p3KuaidaBuyMsgService;
 
     @Autowired
@@ -242,23 +245,17 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
             String content = msg.getMsg();
             msg.setCreateTime(new Date());
             msg.setBotUserId(botUser.getId());
-
-
-
-
+            System.out.println("========"+msg.getKuaixuanRule());
             if (msg.getFromUserType() == 0) {
                 dataDao.insert(msg);
                 simpMessagingTemplate.convertAndSend("/topic/room/" + userId, msg);
-                //将websocket发送的消息转发给微信端
-//                if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-//                    wechatApiService.sendMsg(botUser.getWxId(), player.getWxFriendId(), msg.getMsg());
-//                }
-
                 int lottype = -1;
+
+
                 String text1 = msg.getMsg().toUpperCase();
                 if(text1.startsWith("P3") || text1.startsWith("3D")) {
 
-                    if(null == player.getLotteryType()){
+                    if (null == player.getLotteryType()) {
                         ChatRoomMsg toMsg = createMsg(botUser, player, "请先开通排列三或福彩3D服务");
                         dataDao.insert(toMsg);
                         simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
@@ -319,11 +316,17 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                             kuaixuanBuyMsgServiceV2.handleMsg(msg,botUser,player,lottype);
                         }
                         break;
+                    case 91: //多组下注，不进行文本解析
+                        if(lottype>0){
+                            kuaidaMultiBuyMsgServiceV2.kuaidaBuyForMultiGroup(msg,botUser,player,lottype);
+                        }
+                        break;
                     case 4:
                         if (draw.getOpenStatus() == 1 || p3Draw.getOpenStatus()==1) {
                             tuima(msg, botUser, player);
                         }
                         break;
+
                 }
             }
         }catch (Exception e){

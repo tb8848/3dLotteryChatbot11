@@ -1357,7 +1357,7 @@
         })
         // selectList.forEach((item,idx)=>{
         //     //msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
-        //     msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
+        //     msg += item.buyDesc+'各'+item.buyMoney+'\r\n';
         // })
         kxrules = JSON.stringify(selectList);
         clearInterval(interval);
@@ -1372,7 +1372,7 @@
             fromUserId:playerId,
             fromUserType:0,
             msg:msg,
-            optType:1,
+            optType:91,
             kuaixuanRule:kxrules
         })
         kxrules = "";

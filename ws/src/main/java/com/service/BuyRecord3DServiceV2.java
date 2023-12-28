@@ -305,20 +305,28 @@ public class BuyRecord3DServiceV2 extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                         value = String.format("%s,%s,%s", (StringUtil.isNotNull(bai) ? bai : '-'), (StringUtil.isNotNull(shi) ? shi : '-'), (StringUtil.isNotNull(ge) ? ge : '-'));
                     }
                     break;
-                default:
+                case "2":
                     codeList = Code3DCreateUtils.zxFushi(bai, shi, ge);
                     break;
+                case "1":
+                    codeList = cvo.getCodeList();
+                    break;
+                default:
+                    break;
             }
-
-            String hzname = "";
-            if (codeList.size() == 1) {
-                hzname = huizongName + "单式 ";
-            } else {
-                hzname = huizongName + "复式 ";
-            }
-            hzname = hzname + value + " [" + codeList.size() + "注]";
-            if(lmId.equals("2")){
-                hzname = cvo.getHuizongName();
+            String hzname = cvo.getHuizongName();
+            codeList = cvo.getCodeList();
+            if((null == codeList || codeList.size()==0) && "1".equals(lmId)){
+                codeList = Code3DCreateUtils.zxFushi(bai, shi, ge);
+                if (codeList.size() == 1) {
+                    hzname = huizongName + "单式 ";
+                } else {
+                    hzname = huizongName + "复式 ";
+                }
+                hzname = hzname + value + " [" + codeList.size() + "注]";
+                if(lmId.equals("2")){
+                    hzname = cvo.getHuizongName();
+                }
             }
 
             if(codeList.size()==1){
@@ -903,6 +911,7 @@ public class BuyRecord3DServiceV2 extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         Map<String,List<BuyRecord3DVO>> lmGroup = codeList.stream().collect(Collectors.groupingBy(BuyRecord3DVO::getLmId));
 
         Set<String> lmIdSet = lmGroup.keySet();
+
 
         for(String lmId:lmIdSet) {
 

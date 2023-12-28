@@ -374,6 +374,73 @@ public class KuaidaBuyMsgServiceV2 {
     }
 
 
+    //快打下注，多组
+    public void kuaidaBuyForMultiGroup(ChatRoomMsg fromMsg, BotUser botUser, Player player,Integer lotteryType){
+        try {
+            Draw draw = null;
+            ChatRoomMsg toMsg = null;
+            String lotteryName = "3D";
+            if(lotteryType == 2){
+                lotteryName = "P3";
+                draw = p3DrawService.getLastDrawInfo();
+            }else{
+                lotteryName = "3D";
+                draw = drawService.getLastDrawInfo();
+            }
+            if(draw.getOpenStatus()!=1){
+                toMsg = createMsg(botUser, player, "【"+lotteryName+"】^^★★★停止-上课★★★");
+                toMsg.setSource(1);
+                dataDao.insert(toMsg);
+                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+                    //wechatIpadTokenService.sendMsgToFriend(toMsg);
+                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                }
+                return;
+            }
+            String userId = botUser.getId();
+//            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
+            String errmsg = null;
+
+            List<BuyRecord3DVO> buyList = JSONArray.parseArray(fromMsg.getKuaixuanRule(),BuyRecord3DVO.class);
+
+            BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
+            if(totalPoints.compareTo(player.getPoints())>0){
+                //玩家积分不够
+                toMsg = createMsg(botUser,player,"面上不足");
+                toMsg.setSource(0);
+                dataDao.insert(toMsg);
+                simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
+                if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                }
+                return;
+            }
+
+            if (null != buyList && buyList.size()>0) {
+                xiazhu(botUser, player, fromMsg, buyList,lotteryType,draw);
+            }else{
+                toMsg = createMsg(botUser, player, "未指定号码");
+                dataDao.insert(toMsg);
+                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            ChatRoomMsg toMsg = createMsg(botUser, player, "系统繁忙，请稍后重试");
+            toMsg.setSource(0);
+            dataDao.insert(toMsg);
+            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+            if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+            }
+        }
+    }
+
+
+
     //单选
     private Map<String,Object> codeBuy(BotUser botUser, Player player, BigDecimal buyMoney, String codeRule, String lmId) {
         Map<String,Object> resMap = Maps.newHashMap();

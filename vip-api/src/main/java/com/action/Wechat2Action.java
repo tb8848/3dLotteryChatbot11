@@ -190,13 +190,14 @@ public class Wechat2Action {
             reqData.put("OSModel","");
             reqData.put("Proxy",proxy);
 
+            System.out.println("=========="+wechatApiUrl);
             String url = wechatApiUrl+"Login/GetQR";
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.body(JSON.toJSONString(reqData));
             httpRequest.contentType("application/json");
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
-//            logger.info("["+botUser.getLoginName()+"]获取二维码结果："+result);
+            logger.info("["+botUser.getLoginName()+"]获取二维码结果："+result);
             //System.out.println("result>>>>>>"+result);
             RespData respData = JSONObject.parseObject(result, RespData.class);
             if(respData.getCode()==1){

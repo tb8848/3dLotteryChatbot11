@@ -68,4 +68,6 @@ public class BuyRecord3DVO extends SearchVO{
 
     @TableField(exist = false)
     private Integer typeFlag;
+
+    private String cmd;
 }
