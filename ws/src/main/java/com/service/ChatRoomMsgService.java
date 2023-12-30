@@ -12,6 +12,7 @@ import com.config.RequestDataHelper;
 import com.dao.ChatRoomMsgDAO;
 import com.dao.DrawBuyRecordDAO;
 import com.dao.PlayerDAO;
+import com.mysql.jdbc.StringUtils;
 import com.util.Code3DCreateUtils;
 import com.util.StringUtil;
 import com.util.Tools;
@@ -245,89 +246,124 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
             String content = msg.getMsg();
             msg.setCreateTime(new Date());
             msg.setBotUserId(botUser.getId());
-            System.out.println("========"+msg.getKuaixuanRule());
             if (msg.getFromUserType() == 0) {
                 dataDao.insert(msg);
                 simpMessagingTemplate.convertAndSend("/topic/room/" + userId, msg);
                 int lottype = -1;
 
-
-                String text1 = msg.getMsg().toUpperCase();
-                if(text1.startsWith("P3") || text1.startsWith("3D")) {
-
-                    if (null == player.getLotteryType()) {
-                        ChatRoomMsg toMsg = createMsg(botUser, player, "请先开通排列三或福彩3D服务");
-                        dataDao.insert(toMsg);
-                        simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                Integer optType = msg.getOptType();
+                if(optType==0){
+                    boolean isCommonCmd = false;
+                    for(String cmd : GlobalConst.commonCmd){ //判断是否为通用指令，如上分
+                        if(content.startsWith(cmd)){
+                            isCommonCmd = true;
+                            break;
+                        }
+                    }
+                    if (isCommonCmd) {
+                        handleCommonMsg(botUser,msg,player);
                         return;
                     }
+                }
 
-                    lottype = text1.startsWith("P3") ? 2 : 1;
-                    if (player.getLotteryType() != 3) {
-                        if (player.getLotteryType() != lottype) {
-                            ChatRoomMsg toMsg = createMsg(botUser, player, "哦噢，您无提交" + (lottype == 2 ? "P3" : "3D") + "作业的权限");
-                            dataDao.insert(toMsg);
-                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
-                            if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-                            }
-                            return;
-                        }
+                if(optType==4){
+                    if (draw.getOpenStatus() == 1 || p3Draw.getOpenStatus()==1) {
+                        tuima(msg, botUser, player);
+                        return;
                     }
                 }
 
-                Integer optType = msg.getOptType();
-                switch (optType) {
-                    case 0:
-                        boolean isCommonCmd = false;
-                        for(String cmd : GlobalConst.commonCmd){ //判断是否为通用指令，如上分
-                            if(content.startsWith(cmd)){
-                                isCommonCmd = true;
-                                break;
+                String text = msg.getMsg().toUpperCase();
+                Boolean checkTxtResult = true;
+                String[] multiArr = text.split("\n|\r");
+                for(String cmdText : multiArr){
+                    if(StringUtils.isNullOrEmpty(cmdText)){
+                        continue;
+                    }
+                    if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")){
+                        if (null == player.getLotteryType()) {
+                            ChatRoomMsg toMsg = createMsg(botUser, player, "请先开通排列三或福彩3D服务");
+                            dataDao.insert(toMsg);
+                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                            return;
+                        }
+                        lottype = cmdText.startsWith("P3") ? 2 : 1;
+                        if (player.getLotteryType() != 3) {
+                            if (player.getLotteryType() != lottype) {
+                                ChatRoomMsg toMsg = createMsg(botUser, player, "哦噢，您无提交" + (lottype == 2 ? "P3" : "3D") + "作业的权限");
+                                dataDao.insert(toMsg);
+                                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                }
+                                return;
                             }
                         }
-                        if (isCommonCmd) {
-                            handleCommonMsg(botUser,msg,player);
-                        } else {
-                            boolean isBuy = false;
-                            if(lottype>0){
-                                String buyDesc = text1.substring(2);
-                                for (String word : GlobalConst.keywords1) {
-                                    if (buyDesc.startsWith(word)) {
-                                        kuaidaBuyMsgServiceV2.kuaidaBuy(msg, botUser, player,lottype);
-                                        isBuy = true;
-                                        break;
-                                    }
-                                }
-                                if (!isBuy) {
-                                    ChatRoomMsg toMsg = createMsg(botUser, player, "格式错误");
-                                    dataDao.insert(toMsg);
-                                    simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
-                                    if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-                                    }
-                                }
-                            }
-                        }
+                    }else{
+                        checkTxtResult = false;
                         break;
-                    case 1:
-                    case 90:
-                        if(lottype>0){
-                            kuaixuanBuyMsgServiceV2.handleMsg(msg,botUser,player,lottype);
-                        }
-                        break;
-                    case 91: //多组下注，不进行文本解析
-                        if(lottype>0){
-                            kuaidaMultiBuyMsgServiceV2.kuaidaBuyForMultiGroup(msg,botUser,player,lottype);
-                        }
-                        break;
-                    case 4:
-                        if (draw.getOpenStatus() == 1 || p3Draw.getOpenStatus()==1) {
-                            tuima(msg, botUser, player);
-                        }
-                        break;
-
+                    }
                 }
+
+                if(checkTxtResult){
+
+                    switch (optType) {
+                        case 0:
+                            for(String cmdText : multiArr){
+                                String text1 = cmdText.toUpperCase();
+                                if(text1.startsWith("P3") || text1.startsWith("3D")){
+                                    ChatRoomMsg childMsg = createMsg(botUser,player,text1);
+                                    lottype = text1.startsWith("P3")?2:1;
+                                    String lotName = lottype==2?"P3":"3D";
+                                    if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
+
+                                        String txt = text1.substring(2);
+                                        boolean isBuy = false;
+                                        for(String word : GlobalConst.keywords1){
+                                            if(txt.startsWith(word)){
+                                                kuaidaBuyMsgServiceV2.kuaidaBuy(childMsg,botUser,player,lottype);
+                                                isBuy = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!isBuy) {
+                                            ChatRoomMsg toMsg = createMsg(botUser, player, "格式错误");
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+                                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                            }
+                                        }
+                                    }else{
+                                        ChatRoomMsg toMsg = createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
+                                        dataDao.insert(toMsg);
+                                        if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+                                            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case 1:
+                        case 90:
+                            if(lottype>0){
+                                kuaixuanBuyMsgServiceV2.handleMsg(msg,botUser,player,lottype);
+                            }
+                            break;
+                        case 91: //多组下注，不进行文本解析
+                            if(lottype>0){
+                                kuaidaMultiBuyMsgServiceV2.kuaidaBuyForMultiGroup(msg,botUser,player,lottype);
+                            }
+                            break;
+
+
+                    }
+                }
+
+
+
+
+
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -365,7 +401,13 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
         }
 
         if (content.startsWith("作业格式")) {
-            String url = player.getChaturl() + "/sendFormat.html";
+            String url = player.getChaturl();
+            if(url.endsWith("/")){
+                url = player.getChaturl() + "sendFormat.html";
+            }else{
+                url = player.getChaturl() + "/sendFormat.html";
+            }
+
             String text = "点此查看\n\r" + url;
             ChatRoomMsg toMsg = createMsg(botUser, player, text);
             dataDao.insert(toMsg);

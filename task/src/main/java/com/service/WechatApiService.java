@@ -12,6 +12,7 @@ import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import com.baomidou.lock.exception.LockException;
 import com.beans.*;
+import com.mysql.jdbc.StringUtils;
 import com.util.Code3DCreateUtils;
 import com.util.StringUtil;
 import com.util.Tools;
@@ -251,7 +252,8 @@ public class WechatApiService{
         } else {
             Player player = playerService.getOneBy(user.getId(), fromUserName);
             if (null != player) {
-                handleMsg(text, user, player);
+                //handleMsg(text, user, player);
+                handleMultiMsg(text,user,player);
             }
         }
     }
@@ -486,6 +488,76 @@ public class WechatApiService{
             }
         }
     }
+
+    /**
+     * 处理多组下注
+     * @param text
+     * @param botUser
+     * @param player
+     */
+    public void handleMultiMsg(String text,BotUser botUser, Player player){
+        boolean isCommonCmd = false;
+        for(String cmd : GlobalConst.commonCmd){
+            if(text.startsWith(cmd)){
+                isCommonCmd = true;
+                break;
+            }
+        }
+        if(isCommonCmd){
+//            logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
+            handleCommonMsg(botUser,text,player);
+        }else{
+
+            Boolean checkTxtResult = true;
+            String[] multiArr = text.split("\n");
+            for(String cmdText : multiArr){
+                if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")){
+
+                }else{
+                    checkTxtResult = false;
+                    break;
+                }
+            }
+
+            if(checkTxtResult){
+                logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
+                ChatRoomMsg fromMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text);
+                chatRoomMsgService.save(fromMsg);
+                rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(fromMsg));
+
+                for(String cmdText : multiArr){
+                    String text1 = cmdText.toUpperCase();
+                    if(text1.startsWith("P3") || text1.startsWith("3D")){
+                        ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
+                        int lottype = text1.startsWith("P3")?2:1;
+                        String lotName = lottype==2?"P3":"3D";
+                        if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
+
+                            String txt = text1.substring(2);
+                            boolean isBuy = false;
+                            for(String word : GlobalConst.keywords1){
+                                if(txt.startsWith(word)){
+                                    kuaidaBuyMsgServiceV2.handleMsg(childMsg,botUser,player,lottype);
+                                    isBuy = true;
+                                    break;
+                                }
+                            }
+                            if(!isBuy){
+                                ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"作业格式有误:"+cmdText);
+                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                            }
+                        }else{
+                            ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
+                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                        }
+                    }
+                }
+            }
+
+
+        }
+    }
+
 
     public void upDownPoints(ChatRoomMsg fromMsg, BotUser botUser, Player player){
 

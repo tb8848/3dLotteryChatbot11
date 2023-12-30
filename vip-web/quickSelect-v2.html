@@ -3854,6 +3854,7 @@
                         lmId:this.lotteryMethodId,
                         buyDesc:buyDesc,
                         lsTypeId:typeId,
+                        codeList:this.rules.tx.codeList,
                         buyMoney:""
                     })
                 }else{
@@ -3928,12 +3929,12 @@
                     this.rules.jo.ou = false;
                 }
 
-                if(this.selectList.length==2){
-                    buyDesc = "奇偶";
-                    this.selectList.forEach((item,idx)=>{
-                        item.buyDesc = buyDesc;
-                    })
-                }
+                // if(this.selectList.length==2){
+                //     buyDesc = "奇偶";
+                //     this.selectList.forEach((item,idx)=>{
+                //         item.buyDesc = buyDesc;
+                //     })
+                // }
             },
             dxSelect(){
                 var buyDesc = this.rules.dx.da?"大":""+this.rules.dx.xiao?"小":""
@@ -3965,12 +3966,12 @@
                     this.rules.dx.totals-=1;
                     this.rules.dx.xiao = false;
                 }
-                if(this.selectList.length==2){
-                    buyDesc = "大小";
-                    this.selectList.forEach((item,idx)=>{
-                        item.buyDesc = buyDesc;
-                    })
-                }
+                // if(this.selectList.length==2){
+                //     buyDesc = "大小";
+                //     this.selectList.forEach((item,idx)=>{
+                //         item.buyDesc = buyDesc;
+                //     })
+                // }
             },
 
             z3ptSelect(){

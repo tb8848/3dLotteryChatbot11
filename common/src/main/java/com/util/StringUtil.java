@@ -23,7 +23,7 @@ public class StringUtil {
         String reg1 = "[0-9]{1,2}拖[0-9]{2,9}"; //脱码
         String reg2 = "([0-9]([.,，-])?){1,}";
         String reg3 = "(百[0-9]{1,10})?(十[0-9]{1,10})?(个[0-9]{1,10})?";
-        String reg5 = "([0-9](,|，)?){1,}";
+        String reg5 = "([0-9](\\.|,|，)?){1,}";
         Pattern pattern = Pattern.compile(reg1);
         Matcher ma = pattern.matcher(codeDesc);
         if(ma.matches()){

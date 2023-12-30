@@ -26,6 +26,21 @@ public class ReportToPanService {
 
     private Logger logger = LoggerFactory.getLogger(ReportToPanService.class);
 
+
+    //发送消息
+    public ResponseBean buyForText(String reportNetUrl,List<BuyRecord3DVO> buyRecord3DVOList, String token){
+        String url = reportNetUrl+"/vip/draw/bot/buy3d/text";
+        HttpRequest httpRequest = HttpUtil.createPost(url);
+        httpRequest.contentType("application/json");
+        httpRequest.body(JSON.toJSONString(buyRecord3DVOList));
+        httpRequest.header("token",token);
+        HttpResponse httpResponse = httpRequest.execute();
+        String result = httpResponse.body();
+//        logger.info("=============>"+url+"返回："+result);
+        return JSON.parseObject(result,ResponseBean.class);
+
+    }
+
     //发送消息
     public ResponseBean buy(String reportNetUrl,List<BuyRecord3DVO> buyRecord3DVOList, String token){
         String url = reportNetUrl+"/vip/draw/bot/buy3d";

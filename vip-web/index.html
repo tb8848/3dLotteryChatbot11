@@ -230,6 +230,7 @@
                     <ul class="wz">
                         <li>双</li>
                         <li>飞</li>
+                        <li>笔</li>
                     </ul>
                 </div>
                 <div class="his" style="height: 240px">
@@ -664,10 +665,8 @@
         var text = $(this).html();
         if(text=="清除"){
             txtMsg = "";
-        }else if(text=="换行"){
-            txtMsg+="\r\n"
-        }else if(text=="换行"){
-            txtMsg+="\r\n"
+        }else if(text=="换行") {
+            txtMsg += "\n";
         }else if($(this).hasClass("del")){
             if(txtMsg.length>0){
                 txtMsg = txtMsg.substring(0,txtMsg.length-1);
@@ -706,7 +705,7 @@
         var msgtext = chatMsg.msg;
         var alink = getUrl(msgtext);
         if(alink!=null){
-            var newAlink = "<a href='"+alink+"'>"+alink+"</a>"
+            var newAlink = "<a href='"+alink+"' target='_blank'>"+alink+"</a>"
             msgtext = msgtext.replace(alink,newAlink);
         }
 

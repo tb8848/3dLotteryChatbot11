@@ -523,22 +523,20 @@ public class KuaidaBuyMsgServiceV2 {
                 return resMap;
             }
         }
+
+        List<String> codeList = Arrays.stream(codeArr).collect(Collectors.toList());
+        String value = codeList.stream().collect(Collectors.joining(","));
         String hzname = "直选";
-        for(String code : codeArr) {
-            String[] arr = code.split("");
-            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
-            oneRecord.setHuizongName(hzname);
-            oneRecord.setBai(arr[0]);
-            oneRecord.setShi(arr[1]);
-            oneRecord.setGe(arr[2]);
-            oneRecord.setBuyAmount(1);
-            oneRecord.setValue(arr[0] + "," + arr[1] + "," + arr[2]);
-            oneRecord.setLmId(lmId);
-            oneRecord.setLsTypeId("1");
-            oneRecord.setBuyMoney(buyMoney);
-            oneRecord.setBuyDesc("直选："+code);
-            list.add(oneRecord);
-        }
+        BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+        oneRecord.setHuizongName(hzname);
+        oneRecord.setBuyAmount(codeList.size());
+        oneRecord.setValue(value);
+        oneRecord.setLmId(lmId);
+        oneRecord.setLsTypeId("1");
+        oneRecord.setBuyMoney(buyMoney);
+        oneRecord.setBuyDesc("直选："+value);
+        oneRecord.setCodeList(codeList);
+        list.add(oneRecord);
         resMap.put("list",list);
         return resMap;
     }
@@ -1235,7 +1233,7 @@ public class KuaidaBuyMsgServiceV2 {
     public Map<String,Object> hsBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] numArr = codeRule.split(",|，");
+        String[] numArr = codeRule.split("\\.|,|，");
         if(numArr.length==0){
             resMap.put("errmsg","号码格式错误："+codeRule);
             return resMap;

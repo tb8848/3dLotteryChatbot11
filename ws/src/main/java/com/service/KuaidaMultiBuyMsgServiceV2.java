@@ -258,11 +258,13 @@ public class KuaidaMultiBuyMsgServiceV2 {
                     dynamicPrama.put("qihao", String.valueOf(draw.getDrawId()));
                     RequestDataHelper.setRequestData(dynamicPrama);
 
+                    String cmdTxt = buyList.stream().map(item->item.getCmd()).collect(Collectors.joining("\n"));
+
                     if(drawBuyRecordDAO.batchAddBuyCode(dataList)>0){
                         playerBuyRecordService.save(playerBuyRecord);
                         playerService.updatePoint(player.getId(),totalPoints,false);
                         BigDecimal points = playerService.getPoints(player.getId());
-                        String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+msg.getMsg()+"\r\n交作业成功√√\r\n【份数】："+buyAmount+"\r\n"
+                        String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+cmdTxt+"\r\n交作业成功√√\r\n【份数】："+buyAmount+"\r\n"
                                 +"【扣面】："+totalPoints.stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
 
                         toMsg = new ChatRoomMsg();
@@ -341,9 +343,9 @@ public class KuaidaMultiBuyMsgServiceV2 {
                 BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
                 Map<String,Object> buyResult = null;
                 if("5".equals(lmId) || "13".equals(lmId)){
-                    buyResult = buyRecord3DServiceV2.buy3dHs(player,dlist,draw,-2,null,msg,lotteryType);
+                    buyResult = buyRecord3DServiceV2.buy3dHs(player,dlist,draw,-2,null,one.getBuyDesc(),lotteryType);
                 }else{
-                    buyResult = buyRecord3DServiceV2.codesBatchBuy(player,dlist,draw,-2,null,msg,lotteryType);
+                    buyResult = buyRecord3DServiceV2.codesBatchBuy(player,dlist,draw,-2,null,one.getBuyDesc(),lotteryType);
                 }
                 if(buyResult.containsKey("playerBuyId")){
                     String playerBuyId = (String)buyResult.get("playerBuyId");
