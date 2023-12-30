@@ -294,8 +294,12 @@ public class WechatApiService{
         //System.out.println(">>>>>>>>>>>>>>有消息来了");
         //chatRoomMsgService.save(fromMsg);
         //rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(fromMsg));
-
-        String url = player.getChaturl()+"/sendFormat.html";
+        String url = player.getChaturl();
+        if(url.endsWith("/")){
+            url = player.getChaturl()+"sendFormat.html";
+        }else{
+            url = player.getChaturl()+"/sendFormat.html";
+        }
         String msg = "点此查看\r\n"+url;
 
 //        StringBuffer buffer = new StringBuffer();
