@@ -759,7 +759,6 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             }else{
                 randomCodes = zxCode();
             }
-            randomCodes = zxCode();
             break;
         case "6":
         case 6:
@@ -774,6 +773,8 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             randomCodes = d2Code();
             break;
     }
+
+    console.log("====codes",randomCodes);
 
     var othersRule = rules.others;
     if(lmId=="1" || lmId=="3" || lmId=="4" || lmId == "7" || lmId=="2"){

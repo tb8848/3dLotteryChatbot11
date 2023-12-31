@@ -264,9 +264,9 @@ public class KuaidaBuyMsgServiceV2 {
                             case "直选普通":
                                 resMap = zxtxBuy(botUser, player, buyMoney, code, "1");
                                 break;
-                            case "直选和值":
-                                resMap = zxhzBuy(botUser, player, buyMoney, code, "1");
-                                break;
+//                            case "直选和值":
+//                                resMap = zxhzBuy(botUser, player, buyMoney, code, "1");
+//                                break;
                             case "通选":
                             case "复式":
                                 resMap = fsBaozuBuy(buyMoney, code, "300");
@@ -292,9 +292,9 @@ public class KuaidaBuyMsgServiceV2 {
                             case "双飞组三":
                                 resMap = z3SFBuy(botUser, player, buyMoney, code, "3");
                                 break;
-                            case "组三和值":
-                                resMap = z3hzBuy(botUser, player, buyMoney, code, "3");
-                                break;
+//                            case "组三和值":
+//                                resMap = z3hzBuy(botUser, player, buyMoney, code, "3");
+//                                break;
                             case "分笔组六":
                                 resMap = z3Buy(botUser, player, buyMoney, code, "4");
                                 break;
@@ -313,9 +313,9 @@ public class KuaidaBuyMsgServiceV2 {
                             case "双飞组六":
                                 resMap = z6SFBuy(botUser, player, buyMoney, code, "4");
                                 break;
-                            case "组六和值":
-                                resMap = z6hzBuy(botUser, player, buyMoney, code, "4");
-                                break;
+//                            case "组六和值":
+//                                resMap = z6hzBuy(botUser, player, buyMoney, code, "4");
+//                                break;
                             case "和数":
                                 resMap = hsBuy(botUser, player, buyMoney, code, "5");
                                 break;
@@ -328,23 +328,23 @@ public class KuaidaBuyMsgServiceV2 {
                             case "1D":
                                 resMap = ding1Buy(botUser, player, buyMoney, code, "6");
                                 break;
-                            case "猜1D":
-                                resMap = c1dBuy(botUser, player, buyMoney, code, "6");
-                                break;
+//                            case "猜1D":
+//                                resMap = c1dBuy(botUser, player, buyMoney, code, "6");
+//                                break;
                             case "2D":
                                 resMap = ding2Buy(botUser, player, buyMoney, code, "7");
                                 break;
-                            case "猜2D":
-                                resMap = c2dBuy(botUser, player, buyMoney, code, "7");
-                                break;
-                            case "包选三":
-                                resMap = b3Buy(botUser, player, buyMoney, code, "8");
-                                break;
-                            case "包选六":
-                                resMap = b6Buy(botUser, player, buyMoney, code, "8");
-                                break;
+//                            case "猜2D":
+//                                resMap = c2dBuy(botUser, player, buyMoney, code, "7");
+//                                break;
+//                            case "包选三":
+//                                resMap = b3Buy(botUser, player, buyMoney, code, "8");
+//                                break;
+//                            case "包选六":
+//                                resMap = b6Buy(botUser, player, buyMoney, code, "8");
+//                                break;
                             default:
-                                toMsg = createMsg(botUser, player, "类别格式错误");
+                                toMsg = createMsg(botUser, player, "没有此玩法类别："+type);
                                 toMsg.setSource(0);
                                 dataDao.insert(toMsg);
                                 simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);

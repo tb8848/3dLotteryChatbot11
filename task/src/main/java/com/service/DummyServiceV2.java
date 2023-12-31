@@ -1100,11 +1100,21 @@ public class DummyServiceV2 {
 
 
     public List<BuyRecord3DVO> createDummyBuyRecords(LotteryMethod lm ,List<LotterySetting> lsList){
+        List<String> excludeLs = new ArrayList<>();
+        excludeLs.add("直选和值");
+        excludeLs.add("组三和值");
+        excludeLs.add("组六和值");
+        excludeLs.add("猜1D");
+        excludeLs.add("猜2D");
+
+
+
         LotterySetting ls = null;
         if(lsList.size()>0){
             if(lsList.size()==1){
                 ls = lsList.get(0);
             }else{
+                lsList = lsList.stream().filter(item->!excludeLs.contains(item.getBettingRule())).collect(Collectors.toList());
                 Collections.shuffle(lsList);
                 ls = lsList.get(0);
             }

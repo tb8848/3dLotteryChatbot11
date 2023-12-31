@@ -319,7 +319,7 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
 
                                         String txt = text1.substring(2);
                                         boolean isBuy = false;
-                                        for(String word : GlobalConst.keywords1){
+                                        for(String word : GlobalConst.keywords2){
                                             if(txt.startsWith(word)){
                                                 kuaidaBuyMsgServiceV2.kuaidaBuy(childMsg,botUser,player,lottype);
                                                 isBuy = true;

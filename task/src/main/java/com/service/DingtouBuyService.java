@@ -245,7 +245,7 @@ public class DingtouBuyService {
 
     public void xiazhu(PlayerFixedBuy dtTask,BotUser botUser, Player player,ChatRoomMsg fromMsg, List<BuyRecord3DVO> buyList) {
         Draw draw = null;
-        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney()).reduce(BigDecimal.ZERO,BigDecimal::add);
+        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
         int buyAmount = buyList.stream().mapToInt(item->item.getBuyAmount()).sum();
         String lotName = "3D";
         if(dtTask.getLotteryType()==2){

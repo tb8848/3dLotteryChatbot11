@@ -1608,6 +1608,7 @@
 <script type="text/javascript">
 
     var w_open_status = 0;
+    var w_lottype = 1;
 
     const vm = new Vue({
         el:'#kuaixuan',
@@ -4357,6 +4358,7 @@
                 this.emptyRules = JSON.stringify(this.rules)
                 this.allCodesList = create3DCodes();
                 var lotName = this.lottype ==2?"p3":"3d";
+                w_lottype = this.lottype;
                 this.subscribeDrawOpen({
                     "drawTopic":'/topic/drawOpenStatus/'+lotName,
                     "drawStatusHandler":this.handleDrawStatus,
@@ -4580,7 +4582,7 @@
         }else if(w_open_status==1){
             fastNew?  window.parent.betFast(data,buyDesc) : window.parent.bet(data,buyDesc,0);
         }else{
-            console.log("=========0000")
+            layer.msg(w_lottype==2?"P3已停止下注":"3D已停止下注")
         }
     }
 
