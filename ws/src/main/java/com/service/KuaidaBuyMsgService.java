@@ -505,7 +505,7 @@ public class KuaidaBuyMsgService{
 
 
     private void xiazhu(BotUser botUser, Player player,ChatRoomMsg fromMsg, List<BuyRecord3DVO> buyList) {
-        BigDecimal totalBuyPoints = buyList.stream().map(item->item.getBuyMoney()).reduce(BigDecimal.ZERO,BigDecimal::add);
+        BigDecimal totalBuyPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
         if(totalBuyPoints.compareTo(player.getPoints())>0){
             //玩家积分不够
             ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");

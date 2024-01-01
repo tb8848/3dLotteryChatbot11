@@ -112,6 +112,21 @@ public class KuaixuanBuyMsgServiceV2 extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
             }
             return;
         }
+        List<BuyRecord3DVO> buyList = JSONArray.parseArray(msg.getKuaixuanRule(),BuyRecord3DVO.class);
+        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
+        if(totalPoints.compareTo(player.getPoints())>0){
+            //玩家积分不够
+            ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");
+            toMsg.setSource(0);
+            dataDao.insert(toMsg);
+            simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
+            if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
+                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+            }
+            return;
+        }
+
+
 
         try {
             if(player.getPretexting()==1 || player.getEatPrize()==1){
@@ -148,7 +163,7 @@ public class KuaixuanBuyMsgServiceV2 extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
         BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
         List<BuyRecord3DVO> buyList = JSONArray.parseArray(msg.getKuaixuanRule(),BuyRecord3DVO.class);
 
-        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney()).reduce(BigDecimal.ZERO,BigDecimal::add);
+        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
         if(totalPoints.compareTo(player.getPoints())>0){
             //玩家积分不够
             ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");
@@ -238,20 +253,6 @@ public class KuaixuanBuyMsgServiceV2 extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
         }
         BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
         List<BuyRecord3DVO> buyList = JSONArray.parseArray(msg.getKuaixuanRule(),BuyRecord3DVO.class);
-
-        BigDecimal totalBuyPoints = buyList.stream().map(item->item.getBuyMoney()).reduce(BigDecimal.ZERO,BigDecimal::add);
-        if(totalBuyPoints.compareTo(player.getPoints())>0){
-            //玩家积分不够
-            ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");
-            toMsg.setSource(0);
-            dataDao.insert(toMsg);
-            simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
-            if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
-            }
-            return;
-        }
-
 
         String playerBuyId = snowflake.nextIdStr();
         PlayerBuyRecord playerBuyRecord = new PlayerBuyRecord();

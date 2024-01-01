@@ -120,7 +120,7 @@ public class KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomM
         BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
         List<BuyRecord3DVO> buyList = JSONArray.parseArray(msg.getKuaixuanRule(),BuyRecord3DVO.class);
 
-        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney()).reduce(BigDecimal.ZERO,BigDecimal::add);
+        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
         if(totalPoints.compareTo(player.getPoints())>0){
             //玩家积分不够
             ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");

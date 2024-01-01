@@ -83,15 +83,6 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
     private KuaidaMultiBuyMsgServiceV2 kuaidaMultiBuyMsgServiceV2;
 
     @Autowired
-    private P3KuaidaBuyMsgService p3KuaidaBuyMsgService;
-
-    @Autowired
-    private P3KuaixuanBuyMsgService p3KuaixuanBuyMsgService;
-
-    @Autowired
-    private KuaixuanBuyMsgService kuaixuanBuyMsgService;
-
-    @Autowired
     private KuaixuanBuyMsgServiceV2 kuaixuanBuyMsgServiceV2;
 
     @Autowired
@@ -116,36 +107,6 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                 if(null!=wxPlayerList && wxPlayerList.size()>0){
                     for(Player player : wxPlayerList){
                         if(null!=player.getLotteryType() && (player.getLotteryType()==3 || player.getLotteryType()==1)){
-                            threadPool.execute(()->{
-                                ChatRoomMsg msg1 = toMsg;
-                                msg1.setToUserNick(player.getNickname());
-                                if(msg1.getMsgType()==0){
-                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),msg1.getMsg());
-                                }else{
-                                    wechatApiService.sendImage(player.getWxFriendId(),botUser.getWxId(),msg1.getMsg());
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-    public void sendbackMsgOfP3(String userId,ChatRoomMsg toMsg){
-
-        simpMessagingTemplate.convertAndSend("/topic/room/"+userId,toMsg);
-        BotUser botUser = botUserService.getById(userId);
-        //列表中设置的类型对应的消息，是不会推送给微信玩家的。
-        List<Integer> excludeTypes = Lists.newArrayList(10,11);
-        if(!excludeTypes.contains(toMsg.getOptType())){
-            if(toMsg.getToUserType()==1 && StringUtil.isNotNull(botUser.getWxId())){
-                //发给所有人的消息
-                List<Player> wxPlayerList = playerService.getWxPlayerListBy(userId);
-                if(null!=wxPlayerList && wxPlayerList.size()>0){
-                    for(Player player : wxPlayerList){
-                        if(null!=player.getLotteryType() && (player.getLotteryType()==3 || player.getLotteryType()==2)){
                             threadPool.execute(()->{
                                 ChatRoomMsg msg1 = toMsg;
                                 msg1.setToUserNick(player.getNickname());

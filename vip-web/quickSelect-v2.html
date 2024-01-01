@@ -2059,7 +2059,7 @@
                     var hzname ="单选";
                     var codeList = [];
                     codeArr.forEach((code,idx)=>{
-                        code = delRepeatNum(code);
+                        //code = delRepeatNum(code);
                         if(code.length==3){
                             !codeList.includes(code) && codeList.push(code);
                         }
@@ -2228,7 +2228,7 @@
                     layer.alert("请确认号码是否输入正确");
                     return;
                 }
-                var arr = pasteCode.split(/[.,，\\|]/);
+                var arr = pasteCode.split(/[.,，]/);
                 switch(this.lotteryMethodId){
                     case "1":
                         this.zxFastPaste(arr);
@@ -2315,6 +2315,8 @@
                     window.parent.dingtou(this.selectList)
                 }else if(this.openStatus==1){
                     window.parent.bet(this.selectList,buyDesc,that.buyMoney);
+                }else{
+                    layer.msg("已停止下注");
                 }
 
             },
@@ -2486,7 +2488,11 @@
                         if(bai!="" && shi!="" && ge!="" && bai.length>=3){
                             if(this.rules.tx.buyMethod==0){
                                 var matchCodesList = createCodesBy(bai,shi,ge);
-                                this.rules.tx.codeList = matchCodesList;
+                                var codeList = [];
+                                matchCodesList.forEach((item,idx)=>{
+                                    codeList.push(item.code)
+                                })
+                                this.rules.tx.codeList = codeList;
                             }else{
                                 this.rules.tx.codeList = [{
                                     code:bai,
@@ -3842,6 +3848,7 @@
                 var geNums = baiNums;
 
                 var buyDesc = "复式"+cdig+":"+baiNums;
+
                 if(this.rules.tx.buyMethod==0){
                     var sum = baiNums.length * shiNums.length * geNums.length;
                     this.selectList.push({
