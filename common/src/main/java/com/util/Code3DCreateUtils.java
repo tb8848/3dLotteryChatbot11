@@ -49,6 +49,17 @@ public class Code3DCreateUtils {
             case 8:
                 lmShortName = "BX";
                 break;
+            case 14:
+                lmShortName = "DD";
+            case 100:
+                lmShortName = "Z3N";
+                break;
+            case 200:
+                lmShortName = "Z6N";
+                break;
+            case 300:
+                lmShortName = "FSN";
+                break;
             default:
                 break;
         }

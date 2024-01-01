@@ -172,7 +172,7 @@ public class KuaidaMultiBuyMsgServiceV2 {
 
 
     public void reportToPan(BotUser botUser,Player player,ChatRoomMsg msg,List<BuyRecord3DVO> buyList,
-                            BotUserPan botUserPan,Draw draw,Integer lotteryType,String lotteryName){
+                            BotUserPan botUserPan,Draw draw,Integer lotteryType,String lotteryName,String buyDesc){
         String reportToPanUrl = botUserPan.getLottery3dUrl();
         if(reportToPanUrl.endsWith("/")){
             reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
@@ -245,9 +245,9 @@ public class KuaidaMultiBuyMsgServiceV2 {
                     playerBuyRecord.setBuyTime(new Date());
                     playerBuyRecord.setDrawNo(draw.getDrawId());
                     playerBuyRecord.setBotUserId(botUser.getId());
-                    playerBuyRecord.setBuyDesc(msg.getMsg());
+                    playerBuyRecord.setBuyDesc(buyDesc);
                     playerBuyRecord.setBuyFrom(0);
-                    playerBuyRecord.setKuaixuanRule(msg.getKuaixuanRule());
+                    playerBuyRecord.setKuaixuanRule(JSON.toJSONString(buyList));
                     playerBuyRecord.setEarnPoints(BigDecimal.ZERO.subtract(totalPoints));
                     dataList.forEach(item->{
                         item.setBaopaiId(playerBuyRecord.getId());
@@ -395,7 +395,7 @@ public class KuaidaMultiBuyMsgServiceV2 {
                     BotUserPan botUserPan = botUserPanService.getOneBy(botUser.getId(),lotteryType);
                     if(null!=botUserPan && StringUtil.isNotNull(botUserPan.getLogin3dToken())){
                         //报网
-                        reportToPan(botUser,player,fromMsg,dlist,botUserPan,draw,lotteryType,lotteryName);
+                        reportToPan(botUser,player,fromMsg,dlist,botUserPan,draw,lotteryType,lotteryName,one.getBuyDesc());
                     }else{
                         ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                         toMsg.setSource(0);
