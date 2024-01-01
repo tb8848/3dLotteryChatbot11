@@ -109,7 +109,7 @@ public class DrawOpenStatusMQService {
     public void recvP3Message(Message msg, final Channel channel) throws IOException {
         String body = new String(msg.getBody());
         //System.out.println(DateUtil.now() + ">>>>>>>>>>>>[排列三]收到[开关盘]消息:"+body);
-//        logger.info(">>>>>>>>>>>>[排列三]收到[开关盘]消息:"+body);
+        logger.info(">>>>>>>>>>>>[排列三]收到[开关盘]消息:"+body);
         String lockKey = "p3:chatbot:draw:mq";
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,30000);
         if (null == lockInfo) {
@@ -134,8 +134,10 @@ public class DrawOpenStatusMQService {
             int lotteryType = 2;
             String lotteryName = "P3";
             if(null!=drawStatus && drawStatus == 4){
+                logger.info(">>>>>>>>>>>>[排列三]快速初始化:"+body);
                 clearDrawPrizeResult(draw,lotteryType,lotteryName);
             }else if(null!=drawStatus && drawStatus==3){
+                logger.info(">>>>>>>>>>>>[排列三]3d网已结算:"+body);
                 //3D网已结账
                 pushDrawPrizeResult(draw,lotteryType,lotteryName);
                 pushDrawCode(draw,lotteryType,lotteryName);
@@ -261,6 +263,7 @@ public class DrawOpenStatusMQService {
      */
     public void pushSuccessOrder(Integer drawNo,Integer lotteryType,String lotteryName){
 
+        logger.info(">>>>>>>>>>>>[排列三]推送下注订单:");
         //1：从购买记录中提取玩家ID列表
         List<String> playerIdList = playerBuyRecordService.getPlayerIdsBy(drawNo,lotteryType);
 
@@ -365,13 +368,15 @@ public class DrawOpenStatusMQService {
      * @param draw
      */
     public void pushDrawPrizeResult(Draw draw,Integer lotteryType,String lotteryName){
+
+        logger.info(">>>>>>>>>>>>[排列三]推送中奖情况:");
         Integer drawNo = draw.getDrawId();
 
         playerBuyRecordService.updateStatus(drawNo,1,lotteryType);
         Map<String, Object> resultMap = drawService.settleAccounts(draw,lotteryType);
 
         Integer totalDrawCount = (Integer)resultMap.get("drawCount");
-//        logger.info(">>>>>>>>>>>>【"+lotteryName+"】["+drawNo+"]期中奖注数："+totalDrawCount);
+        logger.info(">>>>>>>>>>>>【"+lotteryName+"】["+drawNo+"]期中奖注数："+totalDrawCount);
 
         if(null!=totalDrawCount && totalDrawCount>0){
 
@@ -498,6 +503,8 @@ public class DrawOpenStatusMQService {
      * @param draw
      */
     public void pushDrawCode(Draw draw,Integer lotteryType,String lotteryName){
+
+        logger.info(">>>>>>>>>>>>[排列三]推送开奖号码和图片:");
         Integer drawNo = draw.getDrawId();
         String msg1 = "【"+lotteryName+"】^^--|  "+drawNo+"集-"+draw.getDrawResult2T()+"|"+draw.getDrawResult3T()+"|"+draw.getDrawResult4T();
 
