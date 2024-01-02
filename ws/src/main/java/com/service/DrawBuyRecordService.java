@@ -611,56 +611,22 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         drawCount = drawCount + ddList.size();
         totalDrawMoney = totalDrawMoney.add(drawMoney15);
 
-        // 按组下注组三组码
-        BigDecimal drawMoney16 = BigDecimal.ZERO;
-        LambdaQueryWrapper<DrawBuyRecord> query16 = new LambdaQueryWrapper<>();
-        query16.eq(DrawBuyRecord::getBackCodeFlag, 0);
-        query16.eq(DrawBuyRecord::getDrawId, drawId);
-        query16.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("1000", "1001", "1002", "1003",
-                "1004", "1005", "1006", "1007", "1008"));
-        query16.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
-        List<DrawBuyRecord> z3zxList = drawBuyRecordDAO.selectList(query16);
-        if (!z3zxList.isEmpty()) {
-            for (DrawBuyRecord drawBuyRecord : z3zxList) {
-                List<String> z3CodeList = Code3DCreateUtils.z3Code(drawBuyRecord.getBuyCodes());
-                List<String> codeList = new ArrayList<>();
-                CodeUtils.z3Combine(draw.getDrawResult().toCharArray(), 0, draw.getDrawResult().length(), codeList);
-                if (!z3CodeList.isEmpty() && !codeList.isEmpty()) {
-                    if (CollectionUtils.containsAny(z3CodeList, codeList)) {
-                        LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
-                        uw.set(DrawBuyRecord::getDrawStatus,1);
-                        uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
-                        BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
-                        BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
-                        uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
-                        uw.set(DrawBuyRecord::getDrawMoney,dm);
-                        drawMoney16 = drawMoney16.add(dm);
-                        uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
-                        uw.eq(DrawBuyRecord::getDrawId,drawId);
-                        drawBuyRecordDAO.update(drawBuyRecord, uw);
-                        drawCount ++;
-                    }
-                }
-            }
-        }
-        totalDrawMoney = totalDrawMoney.add(drawMoney16);
-
-        // 按组下注组六组码
-        BigDecimal drawMoney17 = BigDecimal.ZERO;
-        LambdaQueryWrapper<DrawBuyRecord> query17 = new LambdaQueryWrapper<>();
-        query17.eq(DrawBuyRecord::getBackCodeFlag, 0);
-        query17.eq(DrawBuyRecord::getDrawId, drawId);
-        query17.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("2001", "2002", "2003",
-                "2004", "2005", "2006", "2007", "2008"));
-        query17.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
-        List<DrawBuyRecord> z6zxList = drawBuyRecordDAO.selectList(query17);
-        if (!z6zxList.isEmpty()) {
-            for (DrawBuyRecord drawBuyRecord : z6zxList) {
-                List<String> z6CodeList = Code3DCreateUtils.z6Code(drawBuyRecord.getBuyCodes());
-                if (!z6CodeList.isEmpty()) {
-                    for (String z6Code : z6CodeList) {
-                        int countSame = CodeUtils.countSameStr(draw.getDrawResult(), z6Code);
-                        if (countSame == 3) {
+        if (count == 2) {
+            BigDecimal drawMoney16 = BigDecimal.ZERO;
+            LambdaQueryWrapper<DrawBuyRecord> query16 = new LambdaQueryWrapper<>();
+            query16.eq(DrawBuyRecord::getBackCodeFlag, 0);
+            query16.eq(DrawBuyRecord::getDrawId, drawId);
+            query16.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("1000", "1001", "1002", "1003",
+                    "1004", "1005", "1006", "1007", "1008"));
+            query16.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+            List<DrawBuyRecord> z3zxList = drawBuyRecordDAO.selectList(query16);
+            if (!z3zxList.isEmpty()) {
+                for (DrawBuyRecord drawBuyRecord : z3zxList) {
+                    List<String> z3CodeList = Code3DCreateUtils.z3Code(drawBuyRecord.getBuyCodes());
+                    List<String> codeList = new ArrayList<>();
+                    CodeUtils.z3Combine(draw.getDrawResult().toCharArray(), 0, draw.getDrawResult().length(), codeList);
+                    if (!z3CodeList.isEmpty() && !codeList.isEmpty()) {
+                        if (CollectionUtils.containsAny(z3CodeList, codeList)) {
                             LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
                             uw.set(DrawBuyRecord::getDrawStatus,1);
                             uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
@@ -668,18 +634,53 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                             BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
                             uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
                             uw.set(DrawBuyRecord::getDrawMoney,dm);
-                            drawMoney17 = drawMoney17.add(dm);
+                            drawMoney16 = drawMoney16.add(dm);
                             uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
                             uw.eq(DrawBuyRecord::getDrawId,drawId);
                             drawBuyRecordDAO.update(drawBuyRecord, uw);
                             drawCount ++;
-                            break;
                         }
                     }
                 }
             }
+            totalDrawMoney = totalDrawMoney.add(drawMoney16);
+        }else if (count == 1) {
+            // 按组下注组六组码
+            BigDecimal drawMoney17 = BigDecimal.ZERO;
+            LambdaQueryWrapper<DrawBuyRecord> query17 = new LambdaQueryWrapper<>();
+            query17.eq(DrawBuyRecord::getBackCodeFlag, 0);
+            query17.eq(DrawBuyRecord::getDrawId, drawId);
+            query17.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("2001", "2002", "2003",
+                    "2004", "2005", "2006", "2007", "2008"));
+            query17.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+            List<DrawBuyRecord> z6zxList = drawBuyRecordDAO.selectList(query17);
+            if (!z6zxList.isEmpty()) {
+                for (DrawBuyRecord drawBuyRecord : z6zxList) {
+                    List<String> z6CodeList = Code3DCreateUtils.z6Code(drawBuyRecord.getBuyCodes());
+                    if (!z6CodeList.isEmpty()) {
+                        for (String z6Code : z6CodeList) {
+                            int countSame = CodeUtils.countSameStr(draw.getDrawResult(), z6Code);
+                            if (countSame == 3) {
+                                LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
+                                uw.set(DrawBuyRecord::getDrawStatus,1);
+                                uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
+                                BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
+                                BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
+                                uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
+                                uw.set(DrawBuyRecord::getDrawMoney,dm);
+                                drawMoney17 = drawMoney17.add(dm);
+                                uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
+                                uw.eq(DrawBuyRecord::getDrawId,drawId);
+                                drawBuyRecordDAO.update(drawBuyRecord, uw);
+                                drawCount ++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            totalDrawMoney = totalDrawMoney.add(drawMoney17);
         }
-        totalDrawMoney = totalDrawMoney.add(drawMoney17);
 
         // 按组下注组六组码
         BigDecimal drawMoney18 = BigDecimal.ZERO;
@@ -702,7 +703,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                         BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
                         uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
                         uw.set(DrawBuyRecord::getDrawMoney,dm);
-                        drawMoney17 = drawMoney17.add(dm);
+                        drawMoney18 = drawMoney18.add(dm);
                         uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
                         uw.eq(DrawBuyRecord::getDrawId,drawId);
                         drawBuyRecordDAO.update(drawBuyRecord, uw);
@@ -712,7 +713,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                 }
             }
         }
-        totalDrawMoney = totalDrawMoney.add(drawMoney17);
+        totalDrawMoney = totalDrawMoney.add(drawMoney18);
         result.put("drawCount", drawCount);
         result.put("totalDrawAmount", totalDrawMoney);
         return result;
