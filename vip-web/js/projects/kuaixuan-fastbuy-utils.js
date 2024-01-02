@@ -733,6 +733,8 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             lotteryType=1;
             count=3;
             if(rules.codes.length>0){
+                var qu = "分笔号码："+rules.codes;
+                buyDesc.push(qu);
                 randomCodes = zxCodeBy(rules.codes);
             }else{
                 randomCodes = zxCode();
@@ -745,7 +747,9 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             lotteryType=1;
             count=3;
             if(rules.codes.length>0){
-                randomCodes = z3CodeBy(rules.codes);
+                var qu = "分笔号码："+rules.codes;
+                buyDesc.push(qu);
+                randomCodes = z3CodeByFast(rules.codes);
             }else{
                 randomCodes = zxCode();
             }
@@ -755,7 +759,9 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             lotteryType=1;
             count=3;
             if(rules.codes.length>0){
-                randomCodes = z6CodeBy(rules.codes);
+                var qu = "分笔号码："+rules.codes;
+                buyDesc.push(qu);
+                randomCodes = z6CodeByFast(rules.codes);
             }else{
                 randomCodes = zxCode();
             }
@@ -774,8 +780,6 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             break;
     }
 
-    console.log("====codes",randomCodes);
-
     var othersRule = rules.others;
     if(lmId=="1" || lmId=="3" || lmId=="4" || lmId == "7" || lmId=="2"){
         if(othersRule!=null && othersRule.fullChange!=null && othersRule.fullChange!=""){
@@ -784,7 +788,10 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             //全转
             randomCodes = fullRotateMatch(randomCodes,othersRule,count);
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
         //上奖
@@ -792,7 +799,10 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             buyDesc.push("上奖："+othersRule.shangJiang);
             randomCodes = shangJiangRuleMatch(randomCodes,othersRule,count);
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
 
@@ -804,7 +814,11 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
                 buyDesc.push(ss);
                 randomCodes = valueRangeRuleMatch(randomCodes,othersRule);
                 if(randomCodes.length==0){
-                    return plvSettingList;
+                    return {
+                        "data":plvSettingList,
+                        "buyDesc":buyDesc
+                    }
+                    //return plvSettingList;
                 }
             }
         }
@@ -815,7 +829,11 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             buyDesc.push("排除："+othersRule.excludes);
             randomCodes = excludeCodes(randomCodes,othersRule.excludes);
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
+                //return plvSettingList;
             }
         }
 
@@ -831,7 +849,11 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
         buyDesc.push(qu+han+fs);
         randomCodes = fushiMatch(randomCodes,fushiRule,count);
         if(randomCodes.length==0){
-            return plvSettingList;
+            return {
+                "data":plvSettingList,
+                "buyDesc":buyDesc
+            }
+            //return plvSettingList;
         }
     }
 
@@ -855,7 +877,11 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             }
         }
         if(null==randomCodes || randomCodes.length==0){
-            return plvSettingList;
+            return {
+                "data":plvSettingList,
+                "buyDesc":buyDesc
+            }
+            //return plvSettingList;
         }
     }
 
@@ -893,7 +919,11 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             buyDesc.push(qu+"对数："+pair1+pair2+pair3);
             randomCodes = pairsRuleMatch(randomCodes,pairsRule);
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
+                //return plvSettingList;
             }
         //}
     }
@@ -902,10 +932,17 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
     var sum2Rule = rules.sum2;
     if(null!=sum2Rule && (sum2Rule.included==1)){
         randomCodes = sum2RuleMatch(randomCodes,sum2Rule);
-        var qu = "取";
-        buyDesc.push(qu+(sum2Rule.sumType==2?"两数和：":"三数和：")+sum2Rule.sum);
+        if(sum2Rule.sum.length>0){
+            var qu = "取";
+            buyDesc.push(qu+(sum2Rule.sumType==2?"两数和：":"三数和：")+sum2Rule.sum);
+        }
+
         if(randomCodes.length==0){
-            return plvSettingList;
+            return {
+                "data":plvSettingList,
+                "buyDesc":buyDesc
+            }
+            //return plvSettingList;
         }
     }
 
@@ -934,8 +971,29 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
         var fixCodeRule = rules.fixCode;
         if(null !=fixCodeRule && (fixCodeRule.included==1 || fixCodeRule.excluded==1)){
             randomCodes = fixCodeMatch(randomCodes,fixCodeRule);
+            var ss = "";
+
+            if(fixCodeRule.loc1.length>0){
+                ss+="百"+fixCodeRule.loc1;
+            }
+            if(fixCodeRule.loc2.length>0){
+                ss+="十"+fixCodeRule.loc2;
+            }
+            if(fixCodeRule.loc3.length>0){
+                ss+="个"+fixCodeRule.loc3;
+            }
+            if(ss.length>0){
+                ss = "定位置"+(fixCodeRule.included==1?"取":"除")+ss;
+                buyDesc.push(ss);
+            }
+
+
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
+                //return plvSettingList;
             }
         }
 
@@ -944,9 +1002,23 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
             if (othersRule != null && null != othersRule.locArr) {
                 var needCheck = othersRule.locArr[0] == 1 || othersRule.locArr[1] == 1 || othersRule.locArr[2] == 1
                 if (needCheck) {
+
                     randomCodes = xLocationRuleMatch(randomCodes, othersRule);
+                    var ss = "乘号位置";
+                    for(var kk=0;kk<othersRule.locArr.length;kk++){
+                        if(othersRule.locArr[kk]==1){
+                            othersRule.locArr[kk]="X"
+                        }else{
+                            othersRule.locArr[kk]="-"
+                        }
+                    }
+                    ss+=othersRule.locArr.join("")
+                    buyDesc.push(ss);
                     if (randomCodes.length == 0) {
-                        return plvSettingList;
+                        return {
+                            "data":plvSettingList,
+                            "buyDesc":buyDesc
+                        }
                     }
                 }
             }
@@ -956,8 +1028,35 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
         var hefenRule = rules.hefen;
         if(null!=hefenRule && (hefenRule.included==1 || hefenRule.excluded==1)){
             randomCodes = hefenRuleMatch(randomCodes,hefenRule);
+            var ss="";
+            for(var k=0;k<hefenRule.binds.length;k++){
+
+                var binds = hefenRule.binds[k];
+                var checkArr = [];
+                var dd = binds.locArr;
+                var needCheck = dd.includes(1);
+                if(needCheck){
+                    for(var i=0;i<dd.length;i++){
+                        if(dd[i] == 1){
+                            checkArr.push("["+(i+1)+"]");
+                        }
+                    }
+                    if(checkArr.length>0){
+                        ss+=checkArr.join("+")+"="+binds.value;
+                    }
+                }
+
+            }
+            if(ss!=""){
+                ss = "合分"+(hefenRule.included==1?"取":"除")+ss;
+                buyDesc.push(ss);
+            }
+
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
 
@@ -965,29 +1064,108 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
         var singleNumRule = rules.singleNum;
         if(null !=singleNumRule && (singleNumRule.included==1 || singleNumRule.excluded==1)){
             randomCodes = singleNumRuleMatch(randomCodes,singleNumRule);
+            var ss = "";
+            var dd = singleNumRule.locArr;
+            var checkArr = [];
+            var needCheck = dd.includes(1);
+            if(needCheck){
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("单");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=(singleNumRule.included==1?"取":"除") + checkArr.join("");
+                buyDesc.push(ss);
+            }
+
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
         var doubleNumRule = rules.doubleNum;
         if(null !=doubleNumRule && (doubleNumRule.included==1 || doubleNumRule.excluded==1)){
             randomCodes = doubleNumRuleMatch(randomCodes,doubleNumRule);
+
+            var dd = doubleNumRule.locArr;
+            var checkArr = [];
+            var needCheck = dd.includes(1);
+            if(needCheck){
+                var ss = (doubleNumRule.included==1?"取":"除");
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("双");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=checkArr.join("");
+                buyDesc.push(ss);
+            }
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
         var smallNumRule = rules.smallNum;
         if(null !=smallNumRule && (smallNumRule.included==1 || smallNumRule.excluded==1)){
             randomCodes = smallNumRuleMatch(randomCodes,smallNumRule);
+
+            var dd = smallNumRule.locArr;
+            var checkArr = [];
+            var needCheck = dd.includes(1);
+            if(needCheck){
+                var ss = (smallNumRule.included==1?"取":"除");
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("小");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=checkArr.join("");
+                buyDesc.push(ss);
+            }
+
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
         var bigNumRule = rules.bigNum;
         if(null !=bigNumRule && (bigNumRule.included==1 || bigNumRule.excluded==1)){
             randomCodes = bigNumRuleMatch(randomCodes,bigNumRule);
+
+            var dd = bigNumRule.locArr;
+            var needCheck = dd.includes(1);
+            var checkArr = [];
+            if(needCheck){
+                var ss = (bigNumRule.included==1?"取":"除");
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("大");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=checkArr.join("");
+                buyDesc.push(ss);
+            }
+
+
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
 
@@ -1008,30 +1186,114 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
         var singleNumRule = rules.singleNum;
         if(null !=singleNumRule && (singleNumRule.included==1 || singleNumRule.excluded==1)){
             randomCodes = singleNumRuleMatch(randomCodes,singleNumRule);
+
+
+            var dd = singleNumRule.locArr;
+            var needCheck = dd.includes(1);
+            var checkArr = [];
+            if(needCheck){
+                var ss = (singleNumRule.included==1?"取":"除");
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("单");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=checkArr.join("");
+                buyDesc.push(ss);
+            }
+
             if(randomCodes.length==0){
-                return plvSettingList;
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
             }
         }
         var doubleNumRule = rules.doubleNum;
         if(null !=doubleNumRule && (doubleNumRule.included==1 || doubleNumRule.excluded==1)){
             randomCodes = doubleNumRuleMatch(randomCodes,doubleNumRule);
-            if(randomCodes.length==0){
-                return plvSettingList;
+
+            var dd = doubleNumRule.locArr;
+            var needCheck = dd.includes(1);
+            var checkArr = [];
+            if(needCheck){
+                var ss = (doubleNumRule.included==1?"取":"除");
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("双");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=checkArr.join("");
+                buyDesc.push(ss);
             }
+
+            if(randomCodes.length==0){
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
+            }
+
         }
         var smallNumRule = rules.smallNum;
         if(null !=smallNumRule && (smallNumRule.included==1 || smallNumRule.excluded==1)){
             randomCodes = smallNumRuleMatch(randomCodes,smallNumRule);
-            if(randomCodes.length==0){
-                return plvSettingList;
+
+            var dd = smallNumRule.locArr;
+            var checkArr = [];
+            var needCheck = dd.includes(1);
+            if(needCheck){
+                var ss = (smallNumRule.included==1?"取":"除");
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("小");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=checkArr.join("");
+                buyDesc.push(ss);
             }
+
+            if(randomCodes.length==0){
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
+            }
+
         }
         var bigNumRule = rules.bigNum;
         if(null !=bigNumRule && (bigNumRule.included==1 || bigNumRule.excluded==1)){
             randomCodes = bigNumRuleMatch(randomCodes,bigNumRule);
-            if(randomCodes.length==0){
-                return plvSettingList;
+
+            var dd = bigNumRule.locArr;
+            var needCheck = dd.includes(1);
+            var checkArr = [];
+            if(needCheck){
+                var ss = (bigNumRule.included==1?"取":"除");
+                for(var i=0;i<dd.length;i++){
+                    if(dd[i] == 1){
+                        checkArr.push("大");
+                    }else{
+                        checkArr.push("X");
+                    }
+                }
+                ss+=checkArr.join("");
+                buyDesc.push(ss);
             }
+
+            if(randomCodes.length==0){
+                return {
+                    "data":plvSettingList,
+                    "buyDesc":buyDesc
+                }
+            }
+
         }
         var setArr = [];
         var validCodes = [];
@@ -1218,7 +1480,7 @@ function fixCodeMatch(oriNums,fixCodeRule){
  * 排除3重
  * @return
  */
-function z3CodeBy(nums){
+function z3CodeByFast(nums){
     var arr = nums.split("");
     arr.sort();
     var len = arr.length;
@@ -1249,7 +1511,7 @@ function z3CodeBy(nums){
  * 三个数字各不相同
  * @return
  */
-function z6CodeBy(nums){
+function z6CodeByFast(nums){
     var arr = nums.split("");
     arr.sort();
     var len = arr.length;
