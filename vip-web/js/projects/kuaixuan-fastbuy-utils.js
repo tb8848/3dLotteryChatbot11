@@ -810,7 +810,8 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
         if(null!=othersRule && null!=othersRule.valueRange){
             var needCheck = othersRule.valueRange[0]!="" || othersRule.valueRange[1]!="";
             if(needCheck){
-                var ss ="值范围：["+(othersRule.valueRange[0]!=""?othersRule.valueRange[0]:"")+","+(othersRule.valueRange[1]!=""?othersRule.valueRange[1]:"")+"]";
+                var ss ="值范围：["+(othersRule.valueRange[0]!=""?othersRule.valueRange[0]:"")
+                    +","+(othersRule.valueRange[1]!=""?othersRule.valueRange[1]:"")+"]";
                 buyDesc.push(ss);
                 randomCodes = valueRangeRuleMatch(randomCodes,othersRule);
                 if(randomCodes.length==0){
@@ -1005,14 +1006,15 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
 
                     randomCodes = xLocationRuleMatch(randomCodes, othersRule);
                     var ss = "乘号位置";
+                    var checkArr = new Array(othersRule.locArr.length);
                     for(var kk=0;kk<othersRule.locArr.length;kk++){
                         if(othersRule.locArr[kk]==1){
-                            othersRule.locArr[kk]="X"
+                            checkArr[kk]="X"
                         }else{
-                            othersRule.locArr[kk]="-"
+                            checkArr[kk]="-"
                         }
                     }
-                    ss+=othersRule.locArr.join("")
+                    ss+=checkArr.join("")
                     buyDesc.push(ss);
                     if (randomCodes.length == 0) {
                         return {
@@ -1302,7 +1304,10 @@ function createPeirateSettingCode(rules, lmId,lotteryType){
         }else if(lmId=="4"){
             validCodes = z6Code();
         }else{
-            return plvSettingList;
+            return {
+                "data":plvSettingList,
+                "buyDesc":buyDesc
+            }
         }
         for(var i=0,len=randomCodes.length;i<len;i++){
             var codes = randomCodes[i];
