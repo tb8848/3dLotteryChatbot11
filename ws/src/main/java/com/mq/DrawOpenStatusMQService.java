@@ -137,7 +137,7 @@ public class DrawOpenStatusMQService {
                 logger.info(">>>>>>>>>>>>[排列三]快速初始化:"+body);
                 clearDrawPrizeResult(draw,lotteryType,lotteryName);
             }else if(null!=drawStatus && drawStatus==3){
-                logger.info(">>>>>>>>>>>>[排列三]3d网已结算:"+body);
+                logger.info(">>>>>>>>>>>>[排列三]已结算:"+body);
                 //3D网已结账
                 pushDrawPrizeResult(draw,lotteryType,lotteryName);
                 pushDrawCode(draw,lotteryType,lotteryName);
@@ -209,9 +209,11 @@ public class DrawOpenStatusMQService {
             String lotteryName = "3D";
 
             if(null!=drawStatus && drawStatus==4){
+                logger.info(">>>>>>>>>>>>[3D]快速初始化:"+body);
                clearDrawPrizeResult(draw,lotteryType,lotteryName);
             }else if(null!=drawStatus && drawStatus==3){
                 //3D网已结账
+                logger.info(">>>>>>>>>>>>[3D]已结算:"+body);
                 pushDrawPrizeResult(draw,lotteryType,lotteryName);
                 pushDrawCode(draw,lotteryType,lotteryName);
             }else{
@@ -263,7 +265,7 @@ public class DrawOpenStatusMQService {
      */
     public void pushSuccessOrder(Integer drawNo,Integer lotteryType,String lotteryName){
 
-        logger.info(">>>>>>>>>>>>[排列三]推送下注订单:");
+        logger.info(">>>>>>>>>>>>["+lotteryName+"]推送下注订单:");
         //1：从购买记录中提取玩家ID列表
         List<String> playerIdList = playerBuyRecordService.getPlayerIdsBy(drawNo,lotteryType);
 
@@ -354,10 +356,14 @@ public class DrawOpenStatusMQService {
                         toMsg.setOptType(10);
                         chatRoomMsgService.save(toMsg);
                         rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg",JSON.toJSONString(toMsg));
+                    }else{
+                        logger.info(">>>>>>>>>>>>["+lotteryName+"]无成功订单:");
                     }
 
                 }
             }
+        }else{
+            logger.info(">>>>>>>>>>>>["+lotteryName+"]无下注玩家:");
         }
 
     }
@@ -369,7 +375,7 @@ public class DrawOpenStatusMQService {
      */
     public void pushDrawPrizeResult(Draw draw,Integer lotteryType,String lotteryName){
 
-        logger.info(">>>>>>>>>>>>[排列三]推送中奖情况:");
+        logger.info(">>>>>>>>>>>>["+lotteryName+"]推送中奖情况:");
         Integer drawNo = draw.getDrawId();
 
         playerBuyRecordService.updateStatus(drawNo,1,lotteryType);
@@ -504,7 +510,7 @@ public class DrawOpenStatusMQService {
      */
     public void pushDrawCode(Draw draw,Integer lotteryType,String lotteryName){
 
-        logger.info(">>>>>>>>>>>>[排列三]推送开奖号码和图片:");
+        logger.info(">>>>>>>>>>>>["+lotteryName+"]推送开奖号码和图片:");
         Integer drawNo = draw.getDrawId();
         String msg1 = "【"+lotteryName+"】^^--|  "+drawNo+"集-"+draw.getDrawResult2T()+"|"+draw.getDrawResult3T()+"|"+draw.getDrawResult4T();
 
@@ -535,6 +541,8 @@ public class DrawOpenStatusMQService {
             }
 
             minioUtils.putObject(bucketName,fileName,filePath+fileName);
+
+            logger.info(">>>>>>>>>>>>["+lotteryName+"]推送开奖号码和图片:"+filePath+fileName);
 
             List<BotUser> botUserList = botUserService.list();
             for (BotUser botUser : botUserList) {
@@ -568,6 +576,8 @@ public class DrawOpenStatusMQService {
      * @param openStatus 开关盘状态
      */
     public void pushDrawStatus(Integer openStatus,Integer lotteryType,String lotteryName){
+        logger.info(">>>>>>>>>>>>["+lotteryName+"]推送开关盘状态:");
+
         String msg = openStatus==1?"【"+lotteryName+"】^^★★★开始-上课★★★":"【"+lotteryName+"】^^★★★停止-上课★★★";
         List<BotUser> botUserList = botUserService.list();
         if(null!=botUserList){
