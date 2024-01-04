@@ -95,4 +95,15 @@ public class CheckWechatUrlTask {
         }
         return  true;
     }
+
+    public static void main(String[] args) {
+        String curl = String.format(CHECK_URL,"http://3dp3.3dp3jian5.xyz");
+        HttpRequest request = new HttpRequest(UrlBuilder.of(curl));
+        request.header("User-Agent","Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
+        request.method(Method.GET);
+        request.setFollowRedirects(true);
+        HttpResponse response = request.execute();
+        String body = response.body();
+        System.out.println(body);
+    }
 }

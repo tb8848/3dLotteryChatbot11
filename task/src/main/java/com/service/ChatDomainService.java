@@ -15,7 +15,7 @@ public class ChatDomainService extends ServiceImpl<ChatDomainDAO, ChatDomain> {
 
     public ChatDomain getOne(){
         LambdaQueryWrapper<ChatDomain> qw = new LambdaQueryWrapper<>();
-        qw.eq(ChatDomain::getStatus,1);
+        qw.orderByDesc(ChatDomain::getCreateTime);
         qw.last("limit 1");
         return chatDomainDAO.selectOne(qw);
     }
