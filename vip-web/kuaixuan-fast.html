@@ -700,7 +700,47 @@
 
 
 <script type="text/javascript">
+    function changeDigitToChinese(dig,unit) {
+        switch(dig){
+            case 1:
+            case "1":
+                return "一"+unit;
+            case 2:
+            case "2":
+                return "两"+unit;
+            case 3:
+            case "3":
+                return "三"+unit;
+            case 4:
+            case "4":
+                return "四"+unit;
+            case 5:
+            case "5":
+                return "五"+unit;
+            case 6:
+            case "6":
+                return "六"+unit;
+            case 7:
+            case "7":
+                return "七"+unit;
+            case 8:
+            case "8":
+                return "八"+unit;
+            case 9:
+            case "9":
+                return "九"+unit;
+            case 0:
+            case "0":
+                return "零"+unit;
+            case 10:
+            case "10":
+                return "全包";
+            default:
+                return "";
 
+        }
+        return "";
+    }
     //window.parent.navSelected(2,"kuaixuan");
 
 
