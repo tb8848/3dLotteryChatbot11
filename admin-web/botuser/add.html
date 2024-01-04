@@ -74,6 +74,12 @@
                                 </td>
                         </tr>
                         <tr>
+                            <td class="bg3" width="100">备注</td>
+                            <td>
+                                <input type="text" name="remarks" id="remarks" required="true" autocomplete="off" aria-required="true">
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="bg3" i18n="user.add.password">密码</td>
                             <td>
                                 <input type="password" name="password" id="password" required="true"  minlength="8" maxlength="16" autocomplete="new-password" value="" aria-required="true">
@@ -265,6 +271,9 @@
         }
 
         data.field.useType = timeType;
+
+        let remarks = $("#remarks").val();
+        data.field.remarks = remarks;
 
         /*var d3 = $("#3d").prop("checked");
         var p3 = $("#p3").prop("checked");

@@ -122,4 +122,14 @@ public class BotUser {
      * 归属彩票类型，1:3D，2：P3,3:3D+P3
      */
     private Integer lotteryType;
+
+    /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
+     * 初始密码修改状态，0:未修改；1:已修改
+     */
+    private Integer initPwdUpdate;
 }

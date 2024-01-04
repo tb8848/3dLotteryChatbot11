@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../css/basicSetting.css" media="all">
+    <link rel="stylesheet" href="../js/layui/css/layui.css" media="all">
+    <style>
+        th {
+            background: url(../img/bg-thead.gif) repeat-x left top;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #a4d4f9;
+            border-right: 1px solid #a4d4f9;
+            padding: 0 4px;
+        }
+
+        td {
+            border: 1px solid #a4d4f9;
+            border-width: 0 1px 1px 0;
+            padding: 4px;
+            outline: none;
+        }
+        .ew-tree-table-cell > .ew-tree-table-cell-content {
+            padding: 5px 15px;
+            line-height: 20px !important;
+        }
+        .t-1 tbody td {
+            line-height: 22px;
+        }
+    </style>
+</head>
+<body style="min-width: 500px">
+<div>
+    <div class="dialog-bd">
+        <div class="module">
+            <div id="cashDialog" name="module" class="m5 mt10">
+                <form id="cash_update" novalidate="novalidate">
+                    <table class="t-1">
+                        <tbody>
+                            <tr>
+                                <td id="account" name="account" width="200" align="right">账号：</td>
+                                <td id="account_input" width="300"></td>
+                            </tr>
+                            <tr>
+                                <td width="200" align="right">网盘账号：</td>
+                                <td id="wpzh" width="300" ></td>
+                            </tr>
+                            <tr>
+                                <td width="200" align="right">网盘地址：</td>
+                                <td id="wpdz" width="300" ></td>
+                            </tr>
+                        </tbody>
+                    </table>
+<!--                    <div style="text-align: center;">-->
+<!--                        <button class="btn" type="submit" id="update" lay-submit lay-filter="update" style="margin:10px auto; position: relative; width: 120px;" i18n="user.access.btn.ok">确认</button>-->
+<!--                    </div>-->
+                </form>
+            </div>
+        </div>
+    </div>
+        <div class="dialog-ft"></div>
+    </div>
+<script src="../js/jquery/jquery.min.js"></script>
+<script src="../js/layui/layui.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="../js/token.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/jquery.i18n.min.js"></script>
+<script src="../js/multi_lang_config.js"></script>
+<script src="../js/projects/validate.js"></script>
+<script>
+    var id = "";
+    var moduleName = "user";
+    var defaultLang = layui.data('langTab').langType;
+    var i18np=null
+    var timeType;
+    layui.config(
+        {base: '../js/'})
+        .extend({i18np: 'i18n'})
+        .use([ 'i18np'], function () {
+            i18np = layui.i18np;
+            reloadI18n({
+                defaultLang:defaultLang,
+                filePath: "../js/i18n/"+moduleName+"/",
+                module:moduleName,
+            })
+            i18np.loadProperties(moduleName);
+            id = GetQueryString("userId");
+            if (id==null || id=="" || id==undefined){
+                id = localStorage.getItem("id");
+            }
+            getProduct();
+        })
+
+    initLangConfig({
+        defaultLang:defaultLang,
+        filePath: "../js/i18n/"+moduleName+"/",
+        module:moduleName,
+        base:"../js/"
+    })
+
+    function changeLang(lang){
+        reloadI18n({
+            defaultLang:lang,
+            filePath: "../js/i18n/"+moduleName+"/",
+            module:moduleName,
+        })
+        i18np.loadProperties(moduleName);
+    }
+
+    var $ = layui.jquery;
+    var form = layui.form ;
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var a = decodeURI(window.location.search);
+        var r = a.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    //判断是否为空
+    function isNull(str){
+        if(str == "" || str == null || str == undefined || str == "null" || str == "undefined") {
+            return true
+        }
+        return false
+    }
+
+    function getProduct() {
+        $.ajax({
+            url: HOST + "admin/botuser/getBotUserById?userId=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code == 0) {
+                    var d = res.data;
+                    $("#account_input").text(d.loginName);
+                    if (!isNull(d.lottery3dAccount)){
+                        $("#wpzh").text(d.lottery3dAccount);
+                    }
+                    if (!isNull(d.lottery3dUrl)){
+                        $("#wpdz").text(d.lottery3dUrl);
+                    }
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    form.render()
+
+    form.on('submit(update)',function(data) {
+        var month = $("#cash_amount").val();
+        if(month==""){
+            layer.msg('续费时长不能为空');
+            return false;
+        }
+        var pass = validateValue(month,'digit');
+        if(!pass){
+            layer.msg('续费时长只能是正整数');
+            return false;
+        }
+
+        $.ajax({
+            url: HOST+"admin/botuser/xufei?userId=" + id + "&month=" + month + "&useType=" + timeType
+            , type: "get"
+            /*, data: {
+                userId : "111",
+                month:month
+            }*/
+            , success: function (res) {
+                if (res.code == 200) {
+                    layer.confirm(i18np.prop('续费成功'), {
+                        title:i18np.prop('user.edit.tips'),
+                        btn: [i18np.prop('user.add.msg.btn.ok')] //可以无限个按钮
+                    }, function(index, layero){
+                        setTimeout(function(){
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);//关闭弹出层
+                            // parent.location.reload();//重新加载父页面表格
+                        }, 1000);
+                    });
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+            , error: function () {
+                console.log("ajax error");
+            }
+        });
+        return false;
+    })
+</script>
+</body>
+</html>

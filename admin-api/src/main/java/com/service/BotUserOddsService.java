@@ -26,9 +26,10 @@ public class BotUserOddsService extends ServiceImpl<BotUserOddsDAO, BotUserOdds>
      * @param userId
      * @return
      */
-    public List<BotUserOdds> getListByUserId (String userId, String lmId) {
+    public List<BotUserOdds> getListByUserId (String userId, String lmId, int lotteryType) {
         Integer[] excludeIds = {1,3,4,5,6,7,8};
         LambdaQueryWrapper<BotUserOdds> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(BotUserOdds::getLotteryType,lotteryType);
         queryWrapper.eq(BotUserOdds::getBotUserId, userId);
         queryWrapper.eq(BotUserOdds::getLotteryMethodId, lmId);
         queryWrapper.notIn(BotUserOdds::getLotterySettingId, excludeIds);

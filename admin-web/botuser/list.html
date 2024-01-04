@@ -64,6 +64,13 @@
         .layui-table-cell{
             font-size: 12px;
         }
+
+        .layui-layer-molv .layui-layer-title{
+            background: #159ED4 !important;
+        }
+        #qy,#ty{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body style="font: 12px Arial, Helvetica, sans-serif;overflow-y: auto">
@@ -101,7 +108,7 @@
                                 <input type="text" class="w90" name="username" id="username3" maxlength="16">
                             </td>
                             <td>
-                                <button type="submit" lay-submit lay-filter="search" class="btn" style="cursor: pointer">查询</button>
+                                <button type="submit" lay-submit lay-filter="search" id="btn-search" class="btn" style="cursor: pointer">查询</button>
                             </td>
                         </tr>
                         </tbody>
@@ -120,7 +127,7 @@
 </div>
 <script type="text/html" id="caozuo">
     <a class="layui-btn  layui-btn-xs layui-btn-primary update" lay-event="update" style="color: #0000FF" i18n="user.table.btn.update">修改</a>
-    <!--<a class="layui-btn  layui-btn-xs layui-btn-primary see" lay-event="see" style="color: #0000FF" i18n="user.table.btn.see">查看</a>-->
+    <a class="layui-btn  layui-btn-xs layui-btn-primary see" lay-event="see" style="color: #0000FF" i18n="user.table.btn.see">查看</a>
     <!--<a class="layui-btn  layui-btn-xs layui-btn-primary odds" lay-event="oddsSetting" style="color: #0000FF">赔率设置</a>-->
     <a class="layui-btn  layui-btn-xs layui-btn-primary xufei" lay-event="xufei" style="color: #0000FF">续费</a>
     <a class="layui-btn  layui-btn-xs layui-btn-primary player" lay-event="player" style="color: #0000FF">玩家列表</a>
@@ -222,6 +229,19 @@
 
     var form = layui.form;
 
+    var userStatus = "-1";
+    function chaStatus(status) {
+        userStatus = status;
+        $("#btn-search").click();
+        if (status == 1){
+            $("#qy").css("color","red");
+            $("#ty").css("color","white");
+        }else if (status == 2){
+            $("#qy").css("color","white");
+            $("#ty").css("color","red");
+        }
+    }
+
     layui.config(
         {base: '../js/'})
         .extend({i18np: 'i18n'})
@@ -241,7 +261,10 @@
         form.on('submit(search)', function (data) {
             username = $("#username3").val();
             table.reload('tt', {
-                where: {"keyword": username}
+                where: {
+                    "keyword": username,
+                    "status": userStatus
+                }
                 , page: {
                     curr: 1
                 }
@@ -261,17 +284,20 @@
                     { templet: "#checkbd",
                         title: "<input type='checkbox' name='siam_all' disabled title='' lay-skin='primary' lay-filter='siam_all'> ",
                         width: 48,},
-                    {title: i18np.prop('user.table.head.serialNumber'), type: 'numbers', align: 'center'},
+                    {title: i18np.prop('user.table.head.serialNumber'), type: 'numbers', align: 'center',width: 60},
                     {field: 'loginName', title: i18np.prop('user.table.head.account'), templet: addLink},
                     {field: 'hsValue', title: "回水值"},
                     {field: 'botCount', title: "假人数量"},
-                    {field: 'lottery3dUrl', title: "网盘地址", width: 260},
-                    {field: 'lottery3dAccount', title: "网盘账号"},
-                    {field: 'dueDate', title: "到期时间"},
-                    {field: 'status', title: i18np.prop('user.table.head.status'), templet: function (res) {
+                    // {field: 'lottery3dUrl', title: "网盘地址", width: 260},
+                    // {field: 'lottery3dAccount', title: "网盘账号"},
+                    {field: 'lastLoginIp', title: "登录IP", width: 200},
+                    {field: 'lastLoginTime', title: "最后登录时间",width: 200},
+                    {field: 'dueDate', title: "到期时间",width: 200},
+                    {field: 'status', title: '<span id="qy" onclick="chaStatus(1)">启用</span>/<span id="ty" onclick="chaStatus(2)">停用</span>', width: 160, templet: function (res) {
                             if (res.status == 0) return "<span style='color: red'>已删除</span>";
                             else if (res.status == 1) return "<span style='color: green'>正常</span>";
                             else if (res.status == 2) return "<span style='color: orange'>已过期</span>";
+                            else return "";
                         }
                     },
                     {toolbar: "#caozuo", align: 'left', title: i18np.prop('user.table.head.operation'), fixed: 'right'}
@@ -381,13 +407,25 @@
                 });
             } else if (obj.event === 'see') {
                 layui.data('t_page', null);
+                var uri = encodeURI("see.html?userId=" + data.id);
+                layer.open({
+                    type: 2
+                    , skin: 'layui-layer-molv' //样式类名
+                    , title: "查看"
+                    , area: ['600px', '200px']
+                    , content: (uri)  //js获取url参数
+                    , end: function () {
+                        // table.reload("tt");
+                        // layer.closeAll();
+                    }
+                });
                 //判断是否为会员
-                if (data.roleNameId == 6) {
-                    //window.location.href = "vip_user_detail.html?parentId="+data.id + "&userDetail=1";
-                    window.location.href = "vip/user_info.html?vipId="+data.id + "&userDetail=1";
-                }else{
-                    window.location.href = "userDetail.html?parentId="+data.id + "&userDetail=1&all=1";
-                }
+                // if (data.roleNameId == 6) {
+                //     //window.location.href = "vip_user_detail.html?parentId="+data.id + "&userDetail=1";
+                //     window.location.href = "vip/user_info.html?vipId="+data.id + "&userDetail=1";
+                // }else{
+                //     window.location.href = "userDetail.html?parentId="+data.id + "&userDetail=1&all=1";
+                // }
                 // window.location.href = "see.html?id=" + data.id;
             }else if(obj.event === 'month'){
                 layui.data('t_page', null);
@@ -404,6 +442,7 @@
                 var uri = encodeURI("xufei.html?userId=" + data.id);
                 layer.open({
                     type: 2
+                    , skin: 'layui-layer-molv' //样式类名
                     , title: "续费"
                     , area: ['600px', '260px']
                     , content: (uri)  //js获取url参数

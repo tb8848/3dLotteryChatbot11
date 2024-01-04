@@ -204,6 +204,7 @@ public class LoginAction {
             Map respData = new HashMap<>();
             respData.put("uname", uname);
             respData.put("token", token);
+            respData.put("initPwd",exist.getInitPwdUpdate());
 //            respData.put("leftCredit",exist.getSurplusCreditLimit());
 //            respData.put("needUpdatePwd",needUpdatePwd);
             //respData.put("creditValue",)
