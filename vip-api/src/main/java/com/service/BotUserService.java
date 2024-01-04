@@ -104,6 +104,7 @@ public class BotUserService extends ServiceImpl<BotUserDAO, BotUser> {
         LambdaUpdateWrapper<BotUser> qw = new LambdaUpdateWrapper();
         qw.eq(BotUser::getId,uid);
         qw.set(BotUser::getLoginPwd,md5New);
+        qw.set(BotUser::getInitPwdUpdate,1);
         dataDAO.update(null,qw);
     }
 

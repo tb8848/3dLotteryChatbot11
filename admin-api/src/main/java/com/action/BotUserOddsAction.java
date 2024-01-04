@@ -30,10 +30,10 @@ public class BotUserOddsAction {
      * @return
      */
     @GetMapping("/oddsList")
-    public ResponseBean listPage(String userId, @RequestHeader(value = "lang") String lang) {
+    public ResponseBean listPage(String userId, @RequestHeader(value = "lang") String lang,@RequestParam(defaultValue = "1")int lotteryType) {
         List<LotteryMethod> list = lotteryMethodService.list();
         for(LotteryMethod lm : list){
-            lm.setBotUserOddsList(botUserOddsService.getListByUserId(userId, lm.getId()));
+            lm.setBotUserOddsList(botUserOddsService.getListByUserId(userId, lm.getId(), lotteryType));
         }
         return new ResponseBean(0,1,list);
     }

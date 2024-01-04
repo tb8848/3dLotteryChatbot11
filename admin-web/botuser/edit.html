@@ -138,14 +138,27 @@
                                 <td><span id="lhzc"></span>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="bg3" width="150">备注</td>
+                                <td><input type="text" name="remarks" id="remarks"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="mt10 tc">
-                    <button class="btn" id="update" type="button" @click="submitData()" i18n="user.add.btn.submit">提交</button>
+                <div class="mt10 tc" style="display: flex;width: 50%;justify-content: space-between;">
+                    <div style="padding-left: 6px;">
+                        <span>类型：</span>
+                        <select id="leixing" style="width: 60px;" @change="leixing()">
+<!--                            <option value="1">3d</option>-->
+<!--                            <option value="2">p3</option>-->
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn" id="update" type="button" @click="submitData()" i18n="user.add.btn.submit">提交</button>
+                    </div>
                     <!--                    <input type="hidden" name="submitUrlParam" value="memberadmin">-->
                 </div>
-                <div class="layui-card-body layui-table-body layui-table-main" style="width: 100%;margin-left: -15px">
+                <div class="layui-table-body layui-table-main mt10">
                     <table class="t-1">
                         <thead>
                         <tr class="bg1">
@@ -271,8 +284,14 @@
             onLoading:true,
             lhFlag: false,
             dataList:[],
+            lotteryType:1,
         },
         methods: {
+            leixing(){
+                this.lotteryType = $("#leixing").val();
+                // console.log("类型："+this.lotteryType);
+                this.prList();
+            },
             init(){
                 const _this = this;
                 _this.userId = GetQueryString("userId");
@@ -285,6 +304,16 @@
                             $("#botCount").html(res.data.botCount);
                             $("#lhzc").html(res.data.lhzc);
                             $("#username").val(res.data.loginName);
+                            $("#remarks").val(res.data.remarks);
+                            _this.lotteryType = res.data.lotteryType;
+                            if (res.data.lotteryType == 1) {
+                                $("#leixing").append("<option value=\"1\">3d</option>");
+                            }else if (res.data.lotteryType == 2) {
+                                $("#leixing").append("<option value=\"2\">p3</option>");
+                            }else if (res.data.lotteryType == 3) {
+                                $("#leixing").append("<option value=\"1\">3d</option>\n" +
+                                    "                            <option value=\"2\">p3</option>");
+                            }
                             /*if (res.data.lotteryType == 1) {
                                 $("#3d").prop('checked', true)
                                 $("#p3").prop('checked', false)
@@ -325,10 +354,14 @@
             },
             prList() {
                 var that = this;
+                let type = 1;
+                if (this.lotteryType != 3){
+                    type = this.lotteryType;
+                }
                 that.userId = GetQueryString("userId");
-                layer.msg(i18np.prop("setting.msg.data.loading"),{time:-1,icon:16,shade:0.3})
+                layer.msg(i18np.prop("数据加载中..."),{time:-1,icon:16,shade:0.3})
                 $.ajax({
-                    url: HOST + 'admin/botUserOdds/oddsList?userId=' + that.userId,
+                    url: HOST + 'admin/botUserOdds/oddsList?userId=' + that.userId+"&lotteryType="+type,
                     type:'get',
                     success:function(res){
                         layer.closeAll();
@@ -358,6 +391,7 @@
                 //获取密码
                 var password = $('#password').val();
                 var username = $('#username').val();
+                var remarks = $("#remarks").val();
                 /*var d3 = $("#3d").prop("checked");
                 var p3 = $("#p3").prop("checked");
                 var lotteryType;
@@ -376,6 +410,7 @@
                     id:that.userId,
                     status:status,
                     loginPwd:password,
+                    remarks:remarks
                     //lotteryType: lotteryType
                 }
                 layer.msg(i18np.prop('user.add.msg.title.submit'),{time:-1,shade:0.3,icon:16})
@@ -459,40 +494,40 @@
         //     }
         // });
 
-        $.ajax({
-            url: HOST+"admin/getLanHuoRatioList?userId=" + GetQueryString("id")
-            , type: "GET"
-            , success:function(res){
-                if(res.code == 200) {
-                    var list = res.data.lhList;
-                    if (list.length*1 < 1){
-                        $("#gudong").append("<option value='0'>0</option>");
-                        $("#daili").append("<option value='0'>0</option>");
-                        // $("#gudong").attr("disabled","disabled");
-                        // $("#daili").attr("disabled","disabled");
-                    }else{
-                        for(var i in list) {
-                            $("#gudong").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
-                            $("#daili").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
-                        }
-                        if (res.data.parentLimit == null) {
-                            $("#gudong").val(0);
-                        }else {
-                            $("#gudong").val(res.data.parentLimit);
-                        }
-                        if (res.data.limit == null) {
-                            $("#daili").val(0);
-                        }else {
-                            $("#daili").val(res.data.limit);
-                        }
-                    }
-                    form.render()
-                }
-            }
-            , error: function () {
-                console.log("ajax error");
-            }
-        });
+        // $.ajax({
+        //     url: HOST+"admin/getLanHuoRatioList?userId=" + GetQueryString("id")
+        //     , type: "GET"
+        //     , success:function(res){
+        //         if(res.code == 200) {
+        //             var list = res.data.lhList;
+        //             if (list.length*1 < 1){
+        //                 $("#gudong").append("<option value='0'>0</option>");
+        //                 $("#daili").append("<option value='0'>0</option>");
+        //                 // $("#gudong").attr("disabled","disabled");
+        //                 // $("#daili").attr("disabled","disabled");
+        //             }else{
+        //                 for(var i in list) {
+        //                     $("#gudong").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
+        //                     $("#daili").append("<option value='"+list[i].id+"'>"+list[i].ratio+"</option>")
+        //                 }
+        //                 if (res.data.parentLimit == null) {
+        //                     $("#gudong").val(0);
+        //                 }else {
+        //                     $("#gudong").val(res.data.parentLimit);
+        //                 }
+        //                 if (res.data.limit == null) {
+        //                     $("#daili").val(0);
+        //                 }else {
+        //                     $("#daili").val(res.data.limit);
+        //                 }
+        //             }
+        //             form.render()
+        //         }
+        //     }
+        //     , error: function () {
+        //         console.log("ajax error");
+        //     }
+        // });
     }
 
     //监听信用额度

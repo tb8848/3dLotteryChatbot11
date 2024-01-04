@@ -121,6 +121,7 @@ public class BotUserAction {
         botUser.setDueDate(dueDate);
         botUser.setLoginPwd(PasswordUtil.jiami(password));
         botUser.setStatus(1);
+        botUser.setInitPwdUpdate(0);
 //        botUser.setSafePwd(PasswordUtil.jiami("123456"));
         try{
             if(botUserService.save(botUser)){
@@ -206,12 +207,13 @@ public class BotUserAction {
     @ApiOperation(value = "分页加载数据")
     @GetMapping("/listPage")
     public ResponseBean listPage(String keyword,@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer limit,
-                                 HttpServletRequest request,@RequestHeader(value = "token") String token) {
+                                 HttpServletRequest request,@RequestHeader(value = "token") String token,
+                                 @RequestParam(defaultValue = "-1") Integer status) {
         String uId = JwtUtil.getUsername(token);
         if(StringUtil.isNull(uId)){
             return new ResponseBean(1,1,"admin.changePwd.unLogin",null);
         }
-       IPage<BotUser> pager = botUserService.listPager(keyword,page,limit, uId);
+       IPage<BotUser> pager = botUserService.listPager(keyword,page,limit, uId,status);
        return new ResponseBean(0, pager.getTotal(),"", pager.getRecords());
     }
 

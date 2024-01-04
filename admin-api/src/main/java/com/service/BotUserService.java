@@ -65,9 +65,12 @@ public class BotUserService extends ServiceImpl<BotUserDAO, BotUser> {
      * @param loginName
      * @return
      */
-    public IPage<BotUser> listPager(String loginName,Integer pageNo,Integer pageSize, String uId){
+    public IPage<BotUser> listPager(String loginName,Integer pageNo,Integer pageSize, String uId,int status){
         LambdaQueryWrapper<BotUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         Page<BotUser> page = new Page<>(pageNo,pageSize);
+        if (status != -1){
+            lambdaQueryWrapper.eq(BotUser::getStatus,status);
+        }
         if(StringUtil.isNotNull(loginName)){
             lambdaQueryWrapper.like(BotUser::getLoginName,loginName);
         }
