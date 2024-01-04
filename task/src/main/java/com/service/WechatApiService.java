@@ -157,6 +157,10 @@ public class WechatApiService{
                                         String toUserName = toUser.get("string");
                                         Map<String, String> content = oneMsg.getContent();
                                         String text = content.get("string");
+
+                                        if (text.equals("3D") || text.equals("P3")) {
+                                            logger.info(String.format(">>>>收到微信消息>>>>>>>>>>msgId===%s,text===%s", oneMsg.getMsgId(), text));
+                                        }
                                         //logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s", user.getLoginName(), fromUserName));
                                         if (toUserName.equals(wxId) && !excludeWxId.contains(fromUserName)) {
                                             addNewPlayer(text,user,fromUserName,wxId);
