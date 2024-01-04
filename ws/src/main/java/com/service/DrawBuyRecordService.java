@@ -523,9 +523,9 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query12.eq(DrawBuyRecord::getDrawId, drawId);
         query12.eq(DrawBuyRecord::getLotterSettingId, 9);
         query12.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
-        if (sum >= 19 && sum <= 27) { // 大于等于19，小于等于27 为大
+        if (sum >= 14 && sum <= 27) { // 大于等于19，小于等于27 为大
             query12.eq(DrawBuyRecord::getBuyCodes, "大");
-        }else if (sum >= 0 && sum <= 8) { // 大于等于0，小于等于8 为小
+        }else if (sum >= 0 && sum <= 13) { // 大于等于0，小于等于8 为小
             query12.eq(DrawBuyRecord::getBuyCodes, "小");
         }else {
             query12.eq(DrawBuyRecord::getBuyCodes, "");
@@ -544,12 +544,11 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         Integer ge = Integer.valueOf(draw.getDrawResult4T());
         Integer shi = Integer.valueOf(draw.getDrawResult3T());
         Integer bai = Integer.valueOf(draw.getDrawResult2T());
-        if (ge % 2 == 0 && shi % 2 == 0 && bai % 2 == 0) {
+        int jo = bai + shi + ge;
+        if (jo % 2 == 0) {
             query13.eq(DrawBuyRecord::getBuyCodes, "偶");
-        }else if (ge % 2 != 0 && shi % 2 != 0 && bai % 2 != 0) {
-            query13.eq(DrawBuyRecord::getBuyCodes, "奇");
         }else {
-            query13.eq(DrawBuyRecord::getBuyCodes, "");
+            query13.eq(DrawBuyRecord::getBuyCodes, "奇");
         }
         List<DrawBuyRecord> joList = drawBuyRecordDAO.selectList(query13);
         BigDecimal drawMoney12 = updateOneOddsBuyRecords(joList, false);
