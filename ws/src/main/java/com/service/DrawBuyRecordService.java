@@ -719,6 +719,11 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         return result;
     }
 
+    public static void main(String[] args) {
+        int count = CodeUtils.getCountByCode("666");
+        System.out.println(count);
+    }
+
 
     public List<DrawBuyRecord> getDrawPrizeList(Integer drawNo) {
         LambdaQueryWrapper<DrawBuyRecord> query = new LambdaQueryWrapper<>();
