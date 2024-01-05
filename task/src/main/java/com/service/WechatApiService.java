@@ -195,10 +195,15 @@ public class WechatApiService{
                 BotUserSetting botUserSetting = botUserSettingService.getByUserId(user.getId());
                 Player player = playerService.getOneBy(user.getId(), fromUserName);
                 if (null == player) {
-                    String chatUrl = "http://zzsunjob.vicp.cc/";
-                    ChatDomain chatDomain = chatDomainService.getOne(); //获取可用的域名
+                    String chatUrl = "";
+                    ChatDomain chatDomain = chatDomainService.getOneBy(); //获取可用的域名
                     if (null != chatDomain) {
                         chatUrl = chatDomain.getUrl();
+                    }
+                    if(StringUtils.isNullOrEmpty(chatUrl)){
+                        String tips = "域名资源不足，请联系老师";
+                        chatRoomMsgService.sendMsg(fromUserName, wxId, tips);
+                        return;
                     }
                     player = new Player();
                     player.setBotUserId(user.getId());
