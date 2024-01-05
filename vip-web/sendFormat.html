@@ -52,7 +52,8 @@
 <body class="body-protocol">
 <div class="protocol">
     <div class="bd">
-        <h1 class="title fast-lg">作业格式 <span style="margin-left:40px;color:red;cursor: pointer" onclick="javascript:window.close()">关闭</span></h1>
+<!--        <h1 class="title fast-lg">作业格式 <span style="margin-left:40px;color:red;cursor: pointer" onclick="javascript:window.close()">关闭</span></h1>-->
+        <h1 class="title fast-lg">作业格式 <span style="margin-left:40px;color:red;cursor: pointer" onclick="guanbi()">关闭</span></h1>
         <div class="content">
             <h4 style="background-color: orangered;color:#fff;padding: 5px">阅读说明：</h4>
             <ol>
@@ -138,5 +139,21 @@
 <script src="js/layui/layui.all.js"></script>
 <script src="js/token.js"></script>
 <script src="js/config.js"></script>
+<script>
+    function guanbi() {
+        // console.log("点击关闭了");
+        // window.close();
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == 'micromessenger'){
+            console.log("是微信浏览器");
+            // WeixinJSBridge.call('closeWindow');
+            window.history.go(-1);
+            window.close();
+        }else{
+            console.log("不是微信浏览器");
+            window.close();
+        }
+    }
+</script>
 </body>
 </HTML>
