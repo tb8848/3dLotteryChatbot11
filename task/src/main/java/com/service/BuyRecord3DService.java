@@ -263,66 +263,63 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
 
         List<CodesVO> multiCodesVOList = new ArrayList<>();
 
+        List<String> codeBuyList = null;
+        String value = "";
         for (BuyRecord3DVO cvo : lsDataList) {
+            value = cvo.getValue();
+            codeBuyList = cvo.getCodeList();
 
-            boolean isXian = false;
-            String bai = cvo.getBai();
-            String shi = cvo.getShi();
-            String ge = cvo.getGe();
-            String value = bai + "," + shi + "," + ge;
-            List<String> codeList = new ArrayList<>();
-            switch(lmId){
-                case "8":
-                    if (lotterySetting.getTypeId() == 2) {
-                        codeList = Code3DCreateUtils.b6Code(bai, shi, ge);
-                    } else {
-                        codeList = Code3DCreateUtils.b3Code(bai, shi, ge);
-                    }
-                    break;
-                case "7":
-                    if (lotterySetting.getTypeId() == 2) {
-                        //猜2D
-                        isXian = true;
-                        codeList = Code3DCreateUtils.c2dCode(cvo.getBai());
-                        value = cvo.getBai();
-                    } else {
-                        codeList = Code3DCreateUtils.ding2Code(bai, shi, ge);
-                        value = String.format("%s,%s,%s", (StringUtil.isNotNull(bai) ? bai : '-'), (StringUtil.isNotNull(shi) ? shi : '-'), (StringUtil.isNotNull(ge) ? ge : '-'));
-                    }
-                    break;
-                case "6":
-                    if (lotterySetting.getTypeId() == 2) {
-                        //猜1D
-                        isXian = true;
-                        if (bai.length() > 1) {
-                            codeList = Arrays.asList(bai.split(""));
+            if(null == codeBuyList || codeBuyList.isEmpty()){
+                boolean isXian = false;
+                String bai = cvo.getBai();
+                String shi = cvo.getShi();
+                String ge = cvo.getGe();
+                value = bai + "," + shi + "," + ge;
+
+                switch(lmId){
+                    case "8":
+                        if (lotterySetting.getTypeId() == 2) {
+                            codeBuyList = Code3DCreateUtils.b6Code(bai, shi, ge);
                         } else {
-                            codeList.add(bai);
+                            codeBuyList = Code3DCreateUtils.b3Code(bai, shi, ge);
                         }
-                        value = bai;
-                    } else {
-                        codeList = Code3DCreateUtils.ding1Code(bai, shi, ge);
-                        value = String.format("%s,%s,%s", (StringUtil.isNotNull(bai) ? bai : '-'), (StringUtil.isNotNull(shi) ? shi : '-'), (StringUtil.isNotNull(ge) ? ge : '-'));
-                    }
-                    break;
-                default:
-                    codeList = Code3DCreateUtils.zxFushi(bai, shi, ge);
-                    break;
+                        break;
+                    case "7":
+                        if (lotterySetting.getTypeId() == 2) {
+                            //猜2D
+                            isXian = true;
+                            codeBuyList = Code3DCreateUtils.c2dCode(cvo.getBai());
+                            value = cvo.getBai();
+                        } else {
+                            codeBuyList = Code3DCreateUtils.ding2Code(bai, shi, ge);
+                            value = String.format("%s,%s,%s", (StringUtil.isNotNull(bai) ? bai : '-'), (StringUtil.isNotNull(shi) ? shi : '-'), (StringUtil.isNotNull(ge) ? ge : '-'));
+                        }
+                        break;
+                    case "6":
+                        if (lotterySetting.getTypeId() == 2) {
+                            //猜1D
+                            isXian = true;
+                            if (bai.length() > 1) {
+                                codeBuyList = Arrays.asList(bai.split(""));
+                            } else {
+                                codeBuyList.add(bai);
+                            }
+                            value = bai;
+                        } else {
+                            codeBuyList = Code3DCreateUtils.ding1Code(bai, shi, ge);
+                            value = String.format("%s,%s,%s", (StringUtil.isNotNull(bai) ? bai : '-'), (StringUtil.isNotNull(shi) ? shi : '-'), (StringUtil.isNotNull(ge) ? ge : '-'));
+                        }
+                        break;
+                    default:
+                        codeBuyList = Code3DCreateUtils.zxFushi(bai, shi, ge);
+                        break;
+                }
             }
 
-            String hzname = "";
-            if (codeList.size() == 1) {
-                hzname = huizongName + "单式 ";
-            } else {
-                hzname = huizongName + "复式 ";
-            }
-            hzname = hzname + value + " [" + codeList.size() + "注]";
-            if(lmId.equals("2")){
-                hzname = cvo.getHuizongName();
-            }
+            String hzname = cvo.getBuyDesc() + " [" + codeBuyList.size() + "注]";
 
-            if(codeList.size()==1){
-                for (String code : codeList) {
+            if(codeBuyList.size()==1){
+                for (String code : codeBuyList) {
                     CodesVO vo = new CodesVO();
                     vo.setBuyCode(code);
                     vo.setValue(value);
@@ -330,18 +327,18 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                     vo.setLotterySettingId(lotterySetting.getId());
                     vo.setLotteryMethodId(lmId);
                     vo.setBuyMoney(cvo.getBuyMoney());
-                    vo.setIsXian(isXian?1:0);
+                    vo.setIsXian(0);
                     singleCodesVOList.add(vo);
                 }
             }else{
                 CodesVO vo = new CodesVO();
-                vo.setCodeList(codeList);
+                vo.setCodeList(codeBuyList);
                 vo.setValue(value);
                 vo.setHzname(hzname);
                 vo.setLotterySettingId(lotterySetting.getId());
                 vo.setLotteryMethodId(lmId);
                 vo.setBuyMoney(cvo.getBuyMoney());
-                vo.setIsXian(isXian?1:0);
+                vo.setIsXian(0);
                 multiCodesVOList.add(vo);
             }
         }
@@ -410,7 +407,7 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
 
                     buyRecord.setHuizongName(cvo.getHzname());
 
-                    if(cvo.getIsXian()==0){
+                    if(code.length()==3){
                         buyRecord.setBai(arr[0]);
                         buyRecord.setShi(arr[1]);
                         buyRecord.setGe(arr[2]);

@@ -49,17 +49,7 @@ public class BuyRecord3DFastServiceV2 extends ServiceImpl<DrawBuyRecordDAO, Draw
     private LotteryMethodService lotteryMethodService;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Autowired
     private LockTemplate lockTemplate;
-
-    @Autowired
-    private BuyRecord3DNCodesService buyRecord3DNCodesService;
-
 
 
 
@@ -138,7 +128,7 @@ public class BuyRecord3DFastServiceV2 extends ServiceImpl<DrawBuyRecordDAO, Draw
 //                    break;
 //            }
 
-            String hzname = huizongName + "快速下注" + " [" + codeList.size() + "注]";
+            String hzname = cvo.getBuyDesc() + " [" + codeList.size() + "注]";
 
             if(codeList.size()==1){
                 for (String code : codeList) {
