@@ -158,8 +158,8 @@ public class WechatApiService{
                                         Map<String, String> content = oneMsg.getContent();
                                         String text = content.get("string");
 
-                                        if (text.equals("3D") || text.equals("P3")) {
-                                            logger.info(String.format(">>>>收到微信消息>>>>>>>>>>msgId===%s,text===%s", oneMsg.getMsgId(), text));
+                                        if (text.toUpperCase().equals("3D") || text.toUpperCase().equals("P3")) {
+                                            logger.info(String.format(">>>>收到微信消息1>>>>>>>>>>msgId===%s,text===%s", oneMsg.getMsgId(), text));
                                         }
                                         //logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s", user.getLoginName(), fromUserName));
                                         if (toUserName.equals(wxId) && !excludeWxId.contains(fromUserName)) {
@@ -189,7 +189,7 @@ public class WechatApiService{
     public void addNewPlayer(String text,BotUser user,String fromUserName,String wxId){
         String txt = text.toUpperCase();
         if (txt.equals("3D") || txt.equals("P3")) {
-//            logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", user.getLoginName(), fromUserName, text));
+            logger.info(String.format("收到微信消息2>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", user.getLoginName(), fromUserName, text));
             int lottype = txt.equals("P3")?2:1;
             if(lottype>0){
                 BotUserSetting botUserSetting = botUserSettingService.getByUserId(user.getId());
@@ -523,6 +523,7 @@ public class WechatApiService{
 
             Boolean checkTxtResult = true;
             String[] multiArr = text.split("\n");
+            System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
             for(String cmdText : multiArr){
                 if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")){
                     if(cmdText.toUpperCase().startsWith("P3")){
@@ -549,7 +550,7 @@ public class WechatApiService{
             }
 
             if(checkTxtResult){
-                logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
+                logger.info(String.format("收到微信消息3>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
                 ChatRoomMsg fromMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text);
                 chatRoomMsgService.save(fromMsg);
                 rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(fromMsg));

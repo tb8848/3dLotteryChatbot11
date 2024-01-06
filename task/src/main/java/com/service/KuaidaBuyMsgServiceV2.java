@@ -157,6 +157,7 @@ public class KuaidaBuyMsgServiceV2 {
                 buyMoney = new BigDecimal(arr[1]);
 
             } catch (Exception e) {
+                e.printStackTrace();
                 ChatRoomMsg toMsg = createMsg(botUser, player, "金额错误");
                 toMsg.setSource(1);
                 chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
