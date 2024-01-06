@@ -249,6 +249,22 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                             return;
                         }
                         lottype = cmdText.startsWith("P3") ? 2 : 1;
+                        if(lottype==2){
+                            if(p3Draw.getOpenStatus()!=1){
+                                ChatRoomMsg toMsg = createMsg(botUser, player, "【P3】^^★★★停止-上课★★★");
+                                dataDao.insert(toMsg);
+                                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                return;
+                            }
+                        }else{
+                            if(draw.getOpenStatus()!=1){
+                                ChatRoomMsg toMsg = createMsg(botUser, player, "【3D】^^★★★停止-上课★★★");
+                                dataDao.insert(toMsg);
+                                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                return;
+                            }
+                        }
+
                         if (player.getLotteryType() != 3) {
                             if (player.getLotteryType() != lottype) {
                                 ChatRoomMsg toMsg = createMsg(botUser, player, "哦噢，您无提交" + (lottype == 2 ? "P3" : "3D") + "作业的权限");
@@ -276,6 +292,7 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                                     ChatRoomMsg childMsg = createMsg(botUser,player,text1);
                                     lottype = text1.startsWith("P3")?2:1;
                                     String lotName = lottype==2?"P3":"3D";
+
                                     if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
 
                                         String txt = text1.substring(2);

@@ -525,6 +525,22 @@ public class WechatApiService{
             String[] multiArr = text.split("\n");
             for(String cmdText : multiArr){
                 if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")){
+                    if(cmdText.toUpperCase().startsWith("P3")){
+                       Draw draw =  p3DrawService.getLastDrawInfo();
+                       if(null==draw || draw.getOpenStatus()!=1){
+                           ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"【P3】^^★★★停止-上课★★★");
+                           chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                           return;
+                       }
+                    }else{
+                        Draw draw =  drawService.getLastDrawInfo();
+                        if(null==draw || draw.getOpenStatus()!=1){
+                            ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"【3D】^^★★★停止-上课★★★");
+                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                            return;
+                        }
+                    }
+
 
                 }else{
                     checkTxtResult = false;
