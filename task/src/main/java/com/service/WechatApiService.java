@@ -83,6 +83,9 @@ public class WechatApiService{
     @Autowired
     private LockTemplate lockTemplate;
 
+    @Autowired
+    private WechatMsgService wechatMsgService;
+
 
     private Logger logger = LoggerFactory.getLogger(WechatApiService.class);
 
@@ -159,7 +162,20 @@ public class WechatApiService{
                                         String text = content.get("string");
 
                                         if (text.toUpperCase().equals("3D") || text.toUpperCase().equals("P3")) {
-                                            logger.info(String.format(">>>>收到微信消息1>>>>>>>>>>msgId===%s,text===%s", oneMsg.getMsgId(), text));
+                                            boolean msgIdExist = wechatMsgService.checkExist(String.valueOf(oneMsg.getMsgId()));
+                                            if(msgIdExist){
+                                                logger.info(String.format(">>>>重复的微信消息id>>>>>>>>>>%s", oneMsg.getMsgId()));
+                                                return;
+                                            }else{
+                                                WechatMsg wechatMsg = new WechatMsg();
+                                                wechatMsg.setMsgId(String.valueOf(oneMsg.getMsgId()));
+                                                wechatMsg.setFromUser(fromUserName);
+                                                wechatMsg.setToUser(toUserName);
+                                                wechatMsg.setContent(text);
+                                                wechatMsg.setReceiveTime(new Date());
+                                                wechatMsgService.save(wechatMsg);
+                                            }
+
                                         }
                                         //logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s", user.getLoginName(), fromUserName));
                                         if (toUserName.equals(wxId) && !excludeWxId.contains(fromUserName)) {
