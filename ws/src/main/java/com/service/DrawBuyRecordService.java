@@ -16,6 +16,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @Service
@@ -341,8 +343,14 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                         }
                     }
                     if (drawBuyRecord.getLotterSettingId().equals("73")) { // 双飞组六
-                        String str = drawBuyRecord.getHuizongName().substring(0, drawBuyRecord.getHuizongName().indexOf(":"));
-                        String number = drawBuyRecord.getHuizongName().substring(str.length()+1, drawBuyRecord.getHuizongName().length());
+                        //String str = drawBuyRecord.getHuizongName().substring(0, drawBuyRecord.getHuizongName().indexOf(":"));
+                        //String number = drawBuyRecord.getHuizongName().substring(str.length()+1, drawBuyRecord.getHuizongName().length());
+                        Pattern pattern = Pattern.compile("\\d+");
+                        Matcher matcher = pattern.matcher(drawBuyRecord.getHuizongName());
+                        String number = "";
+                        while (matcher.find()) {
+                            number = matcher.group();
+                        }
                         if (getZxDraw(number, draw.getDrawResult()) == 1) {
                             LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
                             uw.set(DrawBuyRecord::getDrawStatus,1);
@@ -719,8 +727,16 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
     }
 
     public static void main(String[] args) {
-        int count = CodeUtils.getCountByCode("666");
+        int count = CodeUtils.getCountByCode("405");
         System.out.println(count);
+        List<String> z6CodeList = Code3DCreateUtils.z6Code("12345678");
+        z6CodeList.forEach(str -> {
+            int countSame = CodeUtils.countSameStr("405", str);
+            if (countSame == 3) {
+                System.out.println(str);
+            }
+        });
+
     }
 
 
@@ -751,7 +767,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         return drawBuyRecordDAO.update(null,updateWrapper);
     }
 
-    public Integer getZxDraw (String buyNumber, String drawNumber) {
+    public static Integer getZxDraw(String buyNumber, String drawNumber) {
         char[] c = buyNumber.toCharArray();
         int count = 0;
         for (char c2 : c) {
