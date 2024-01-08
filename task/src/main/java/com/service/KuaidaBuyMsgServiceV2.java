@@ -209,7 +209,8 @@ public class KuaidaBuyMsgServiceV2 {
                         }
                         code = typeArr[1];
                         String[] splitArr = code.split("\\.|,|，");
-                        for(String r : splitArr){
+                        List<String> cclist = Arrays.stream(splitArr).map(item->item.trim()).collect(Collectors.toList());
+                        for(String r : cclist){
                             if(StringUtils.isNullOrEmpty(r)){
 
                             }else{
@@ -414,7 +415,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] multiArr = codeRule.split(",|，");
+        String[] multiArr = codeRule.split("\\.|,|，");
         for(String ss : multiArr){
             if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
                 continue;
@@ -463,7 +464,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] multiArr = codeRule.split(",|，");
+        String[] multiArr = codeRule.split("\\.|,|，");
         for(String ss : multiArr){
             if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
                 continue;
@@ -518,14 +519,15 @@ public class KuaidaBuyMsgServiceV2 {
             resMap.put("errmsg","号码格式错误");
             return resMap;
         }
-        for(String code : codeArr){
+        List<String> cclist = Arrays.stream(codeArr).map(item->item.trim()).collect(Collectors.toList());
+        for(String code : cclist){
             if(code.length()!=3){
                 resMap.put("errmsg","单选号码["+code+"]错误");
                 return resMap;
             }
         }
 
-        List<String> codeList = Arrays.stream(codeArr).collect(Collectors.toList());
+        List<String> codeList = cclist;
         String value = codeList.stream().collect(Collectors.joining(","));
         String hzname = "直选";
         BuyRecord3DVO oneRecord = new BuyRecord3DVO();

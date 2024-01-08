@@ -990,7 +990,7 @@
             tableBox:null,
             tableDataHtml:'',
             xzuuid:'',
-            fastBuyDesc:""
+            fastBuyDesc:[]
 
         },
         methods:{
@@ -1001,6 +1001,11 @@
 
             setBuyMethod(v){
               this.buyMethod = v;
+              if(v==0){
+                  this.codesList = [];
+                  this.fastBuyDesc = [];
+                  this.ncode="";
+              }
             },
             loadTableData(e){
                 let el = e.target;
@@ -1332,11 +1337,14 @@
                     }else{
                         buyDesc = prefix+changeDigitToChinese(len,"码")+":"+this.ncode;
                     }
-                    this.codesList = [this.ncode];
-                    this.tableDataHtml = "<tr><td>"+buyDesc+"</td></tr>";
+                    //this.codesList = [this.ncode];
+                    this.codesList.push(this.ncode);
+                    this.fastBuyDesc.push(buyDesc);
+                    this.tableDataHtml = this.tableDataHtml+"<tr><td>"+buyDesc+"</td></tr>";
                     //console.log("======",this.tableDataHtml);
-                    that.codesNum=1;
-                    this.fastBuyDesc = buyDesc;
+                    that.codesNum=this.codesList.length;
+                    this.ncode = "";
+                    //this.fastBuyDesc = buyDesc;
                     return;
                 }
 
@@ -1378,6 +1386,7 @@
                     return;
                 }
                 //console.log("=========",codeList);
+
                 that.codesList = codeList;
 
                 that.showLines = Math.ceil(codeList.length/8);
@@ -1413,6 +1422,8 @@
                 this.currLm = item;
                 this.ruleName = item.bettingMethod;
                 this.created = false;
+                this.codesList = [];
+                this.fastBuyDesc = [];
                 if(this.lotteryMethodId!=item.id){
                     this.clearInput();
                 }
@@ -1737,108 +1748,117 @@
                 var ls6 = [4,5,6,7,8,9,10,11];
                 var ls1 = [1,2,3,4,5,6,7,8];
                 var toPageName="";
-                if(this.lotteryMethodId=="4" && this.buyMethod==1){
-                    toPageName = "z6";
-                    var numLen = this.ncode.length;
-                    var typeId = ls6[numLen-3];
-                    var buyDesc = "";
-                    if(numLen==10){
-                        buyDesc = "组六全包"
-                    }else{
-                        buyDesc = '组六'+changeDigitToChinese(numLen,"码")
-                    }
-                    var zuValue = this.ncode;
-                    buyDesc +=":"+zuValue;
-                    buyList.push({
-                        huizongName:buyDesc,
-                        value:zuValue,
-                        buyCodes:zuValue,
-                        bai:zuValue,
-                        shi:"",
-                        ge:"",
-                        buyAmount:1,
-                        lmId:200,
-                        lsTypeId:typeId,
-                        buyMoney:this.buyMoney,
-                        codeList:[zuValue],
-                        buyDesc:buyDesc,
-                        typeFlag:1,
-                        buyMethod:1
-                    })
+                console.log("======this.codeList=====",this.codesList);
+                if(this.codesList.length>0){
+                    for(var i=0;i<this.codesList.length;i++){
+                        var code = this.codesList[i];
+                        if(this.lotteryMethodId=="4" && this.buyMethod==1){
+                            toPageName = "z6";
+                            var numLen = code.length;
+                            var typeId = ls6[numLen-3];
+                            var buyDesc = "";
+                            if(numLen==10){
+                                buyDesc = "组六全包"
+                            }else{
+                                buyDesc = '组六'+changeDigitToChinese(numLen,"码")
+                            }
+                            var zuValue = code;
+                            buyDesc +=":"+zuValue;
+                            buyList.push({
+                                huizongName:buyDesc,
+                                value:zuValue,
+                                buyCodes:zuValue,
+                                bai:zuValue,
+                                shi:"",
+                                ge:"",
+                                buyAmount:1,
+                                lmId:200,
+                                lsTypeId:typeId,
+                                buyMoney:this.buyMoney,
+                                codeList:[zuValue],
+                                buyDesc:buyDesc,
+                                typeFlag:1,
+                                buyMethod:1,
+                            })
 
+                        }
+
+                        if(this.lotteryMethodId=="3" && this.buyMethod==1){
+                            toPageName = "z3"
+                            var numLen = code.length;
+                            var typeId = ls3[numLen-2];
+                            var buyDesc = "";
+                            if(numLen==10){
+                                buyDesc = "组三全包"
+                            }else{
+                                buyDesc = '组三'+changeDigitToChinese(numLen,"码")
+                            }
+                            var zuValue = code;
+                            buyDesc +=":"+zuValue;
+                            buyList.push({
+                                huizongName:buyDesc,
+                                value:zuValue,
+                                buyCodes:zuValue,
+                                bai:zuValue,
+                                shi:"",
+                                ge:"",
+                                buyAmount:1,
+                                lmId:100,
+                                lsTypeId:typeId,
+                                buyMoney:this.buyMoney,
+                                codeList:[zuValue],
+                                buyDesc:buyDesc,
+                                typeFlag:1,
+                                buyMethod:1,
+                            })
+                        }
+
+                        if(this.lotteryMethodId=="2" && this.buyMethod==1){
+                            toPageName = "tx";
+                            var numLen = code.length;
+                            var typeId = ls1[numLen-3];
+                            var buyDesc = "";
+                            if(numLen==10){
+                                buyDesc = "复式全包"
+                            }else{
+                                buyDesc = '复式'+changeDigitToChinese(numLen,"码")
+                            }
+                            var zuValue = code;
+                            buyDesc +=":"+zuValue;
+                            buyList.push({
+                                huizongName:buyDesc,
+                                value:zuValue,
+                                buyCodes:zuValue,
+                                bai:zuValue,
+                                shi:"",
+                                ge:"",
+                                buyAmount:1,
+                                lmId:300,
+                                lsTypeId:typeId,
+                                buyMoney:this.buyMoney,
+                                codeList:[zuValue],
+                                buyDesc:buyDesc,
+                                typeFlag:1,
+                                buyMethod:1,
+                            })
+                        }
+
+                    }
                 }
 
-                if(this.lotteryMethodId=="3" && this.buyMethod==1){
-                    toPageName = "z3"
-                    var numLen = this.ncode.length;
-                    var typeId = ls3[numLen-2];
-                    var buyDesc = "";
-                    if(numLen==10){
-                        buyDesc = "组三全包"
-                    }else{
-                        buyDesc = '组三'+changeDigitToChinese(numLen,"码")
-                    }
-                    var zuValue = this.ncode;
-                    buyDesc +=":"+zuValue;
-                    buyList.push({
-                        huizongName:buyDesc,
-                        value:zuValue,
-                        buyCodes:zuValue,
-                        bai:zuValue,
-                        shi:"",
-                        ge:"",
-                        buyAmount:1,
-                        lmId:100,
-                        lsTypeId:typeId,
-                        buyMoney:this.buyMoney,
-                        codeList:[zuValue],
-                        buyDesc:buyDesc,
-                        typeFlag:1,
-                        buyMethod:1
-                    })
-                }
-
-                if(this.lotteryMethodId=="2" && this.buyMethod==1){
-                    toPageName = "tx";
-                    var numLen = this.ncode.length;
-                    var typeId = ls1[numLen-3];
-                    var buyDesc = "";
-                    if(numLen==10){
-                        buyDesc = "复式全包"
-                    }else{
-                        buyDesc = '复式'+changeDigitToChinese(numLen,"码")
-                    }
-                    var zuValue = this.ncode;
-                    buyDesc +=":"+zuValue;
-                    buyList.push({
-                        huizongName:buyDesc,
-                        value:zuValue,
-                        buyCodes:zuValue,
-                        bai:zuValue,
-                        shi:"",
-                        ge:"",
-                        buyAmount:1,
-                        lmId:300,
-                        lsTypeId:typeId,
-                        buyMoney:this.buyMoney,
-                        codeList:[zuValue],
-                        buyDesc:buyDesc,
-                        typeFlag:1,
-                        buyMethod:1
-                    })
-                }
-
-
+                console.log("==========buyList=========",buyList);
                 var buyDesc = [];
                 var lastDesc = null;
                 buyList.forEach((item,idx)=>{
                     if(lastDesc==null){
                         lastDesc = item.buyDesc;
                         buyDesc.push(lastDesc+"各"+that.buyMoney+"\r\n")
+                        item.cmd = lastDesc+"各"+that.buyMoney;
                         //buyDesc+=lastDesc+"各"+that.buyMoney+"\r\n";
                     }
                     if(lastDesc != item.buyDesc){
                         buyDesc.push(item.buyDesc+"各"+that.buyMoney+"\r\n")
+                        item.cmd = item.buyDesc+"各"+that.buyMoney;
                         //buyDesc+=item.buyDesc+"各"+that.buyMoney+"\r\n";
                     }
                     lastDesc = item.buyDesc;

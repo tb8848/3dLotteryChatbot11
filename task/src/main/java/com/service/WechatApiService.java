@@ -164,7 +164,7 @@ public class WechatApiService{
                                         if (text.toUpperCase().equals("3D") || text.toUpperCase().equals("P3")) {
                                             boolean msgIdExist = wechatMsgService.checkExist(String.valueOf(oneMsg.getMsgId()));
                                             if(msgIdExist){
-                                                logger.info(String.format(">>>>重复的微信消息id>>>>>>>>>>%s", oneMsg.getMsgId()));
+                                                logger.info(String.format(">>>>重复的微信消息id>>>>>>>>>>%s  ==========%s", oneMsg.getMsgId(),text));
                                                 return;
                                             }else{
                                                 WechatMsg wechatMsg = new WechatMsg();
@@ -205,7 +205,6 @@ public class WechatApiService{
     public void addNewPlayer(String text,BotUser user,String fromUserName,String wxId){
         String txt = text.toUpperCase();
         if (txt.equals("3D") || txt.equals("P3")) {
-            logger.info(String.format("收到微信消息2>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", user.getLoginName(), fromUserName, text));
             int lottype = txt.equals("P3")?2:1;
             if(lottype>0){
                 BotUserSetting botUserSetting = botUserSettingService.getByUserId(user.getId());
