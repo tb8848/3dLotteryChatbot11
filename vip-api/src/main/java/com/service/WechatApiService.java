@@ -92,7 +92,7 @@ public class WechatApiService{
             httpRequest.contentType("application/json");
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
-//            logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
+            logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
             //System.out.println(DateUtil.now()+">>>>>>Login/CheckQR>>>>>>"+result);
             if(result.startsWith("{") && result.endsWith("}")){
                 try {
