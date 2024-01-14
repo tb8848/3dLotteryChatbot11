@@ -201,16 +201,17 @@ public class Wechat2Action {
             //System.out.println("result>>>>>>"+result);
             RespData respData = JSONObject.parseObject(result, RespData.class);
             if(respData.getCode()==1){
-//                System.out.println("===========二维码获取成功");
+                System.out.println("===========二维码获取成功");
                 Map<String,Object> datas = respData.getData();
                 String qrUrl = (String)datas.get("QrUrl");
                 String Uuid = (String)datas.get("Uuid");
+                String qrBase64 = (String)datas.get("QrBase64");
                 botUser.setQrUUid(Uuid);
                 botUserService.updateById(botUser);
                 threadPool.execute(()->{
                     wechatApiService.checkQrcodeScan(userId,Uuid);
                 });
-                return new ResponseBean(0, 0, "", qrUrl);
+                return new ResponseBean(0, 0, "", qrBase64);
             }
 
             return new ResponseBean(-1, 0, "获取失败", result,true);
