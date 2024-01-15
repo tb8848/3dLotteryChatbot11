@@ -162,22 +162,23 @@ public class WechatApiService{
                                         String text = content.get("string");
 
                                         if (text.toUpperCase().equals("3D") || text.toUpperCase().equals("P3")) {
+                                            String[] multiArr = text.split("\n");
+                                            String buyDesc = Arrays.stream(multiArr).collect(Collectors.joining(","));
+                                            WechatMsg wechatMsg = new WechatMsg();
+                                            wechatMsg.setMsgId(String.valueOf(oneMsg.getMsgId()));
+                                            wechatMsg.setFromUser(fromUserName);
+                                            wechatMsg.setToUser(toUserName);
+                                            wechatMsg.setContent(buyDesc);
+                                            wechatMsg.setReceiveTime(new Date());
                                             boolean msgIdExist = wechatMsgService.checkExist(String.valueOf(oneMsg.getMsgId()));
                                             if(msgIdExist){
-                                                logger.info(String.format(">>>>重复的微信消息id>>>>>>>>>>%s  ==========%s", oneMsg.getMsgId(),text));
+                                                logger.info(String.format(">>>>重复的微信消息id>>>>>%s>>>>>%s", oneMsg.getMsgId(),buyDesc));
+                                                wechatMsgService.save(wechatMsg);
                                                 return;
                                             }else{
-                                                WechatMsg wechatMsg = new WechatMsg();
-                                                wechatMsg.setMsgId(String.valueOf(oneMsg.getMsgId()));
-                                                wechatMsg.setFromUser(fromUserName);
-                                                wechatMsg.setToUser(toUserName);
-                                                wechatMsg.setContent(text);
-                                                wechatMsg.setReceiveTime(new Date());
                                                 wechatMsgService.save(wechatMsg);
                                             }
-
                                         }
-                                        //logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s", user.getLoginName(), fromUserName));
                                         if (toUserName.equals(wxId) && !excludeWxId.contains(fromUserName)) {
                                             addNewPlayer(text,user,fromUserName,wxId);
                                         }
