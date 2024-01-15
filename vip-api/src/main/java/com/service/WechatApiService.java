@@ -12,8 +12,10 @@ import com.dao.BotUserDAO;
 import com.google.common.collect.Maps;
 
 import com.vo.WechatPushMsgVo;
+import com.wechat.api.RespData;
 import com.wechat.api.RespDataV2;
 
+import net.bytebuddy.utility.JavaConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -89,11 +91,11 @@ public class WechatApiService{
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
             logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
-            RespDataV2 respData = null;
+            RespData respData = null;
             try{
-                respData = JSONObject.parseObject(result, RespDataV2.class);
+                respData = JSONObject.parseObject(result, RespData.class);
                 if(respData.getCode()==0 && respData.getSuccess()){
-                    JSONObject datas = JSONObject.parseObject((String)respData.getData());
+                    Map<String, Object> datas = respData.getData();
                     if(datas.containsKey("status")){
                         Integer status = (Integer)datas.get("status");
                         if(status==1){
@@ -156,6 +158,14 @@ public class WechatApiService{
 
             }catch (Exception e){
                 e.printStackTrace();
+                Map<String,Object> info = new HashMap<>();
+                info.put("wxStatus",-2); //取消登录
+                info.put("flag","login");
+                ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
+                WechatPushMsgVo vo = new WechatPushMsgVo();
+                vo.setBotUserId(botUserId);
+                vo.setResponseBean(responseBean);
+                rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
                 break;
             }
             //System.out.println(DateUtil.now()+">>>>>>Login/CheckQR>>>>>>"+result);
