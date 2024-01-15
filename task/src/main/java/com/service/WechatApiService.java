@@ -161,7 +161,8 @@ public class WechatApiService{
                                         Map<String, String> content = oneMsg.getContent();
                                         String text = content.get("string");
 
-                                        if (text.toUpperCase().equals("3D") || text.toUpperCase().equals("P3")) {
+                                        if (text.toUpperCase().startsWith("3D") || text.toUpperCase().startsWith("P3")) {
+                                            logger.info(String.format(">>>>收到微信消息1>>>>>%s>>>>>%s", oneMsg.getMsgId(),text));
                                             String[] multiArr = text.split("\n");
                                             String buyDesc = Arrays.stream(multiArr).collect(Collectors.joining(","));
                                             WechatMsg wechatMsg = new WechatMsg();
