@@ -1,32 +1,28 @@
 package com.service;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import com.beans.*;
 import com.dao.BotUserDAO;
-import com.dao.WechatIpadTokenDAO;
 
 import com.google.common.collect.Maps;
-import com.util.StringUtil;
+
 import com.vo.WechatPushMsgVo;
-import com.wechat.api.RespData;
-import org.assertj.core.util.Lists;
+import com.wechat.api.RespDataV2;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +45,8 @@ public class WechatApiService{
     private Logger logger = LoggerFactory.getLogger(WechatApiService.class);
 
 
-    public RespData clearProxyIp(String wxId) {
-        RespData respData = null;
+    public RespDataV2 clearProxyIp(String wxId) {
+        RespDataV2 respData = null;
         String url = wechatApiUrl+"Tools/setproxy";
         try{
             Map<String,Object> reqData = new HashMap<>();
@@ -69,7 +65,7 @@ public class WechatApiService{
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
 //            logger.info(">>>>>>Tools/setproxy>>>>>>"+result);
-            respData = JSON.parseObject(result,RespData.class);
+            respData = JSON.parseObject(result,RespDataV2.class);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -93,11 +89,11 @@ public class WechatApiService{
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
             logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
-            RespData respData = null;
+            RespDataV2 respData = null;
             try{
-                respData = JSONObject.parseObject(result, RespData.class);
+                respData = JSONObject.parseObject(result, RespDataV2.class);
                 if(respData.getCode()==0 && respData.getSuccess()){
-                    Map<String,Object> datas = respData.getData();
+                    JSONObject datas = JSONObject.parseObject((String)respData.getData());
                     if(datas.containsKey("status")){
                         Integer status = (Integer)datas.get("status");
                         if(status==1){
