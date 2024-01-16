@@ -15,6 +15,7 @@ import com.vo.WechatPushMsgVo;
 import com.wechat.api.RespData;
 import com.wechat.api.RespDataV2;
 
+import com.wechat.api.RespDataV3;
 import net.bytebuddy.utility.JavaConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,24 +85,26 @@ public class WechatApiService{
         String nickName = "";
         long maxWait = 5*60; //单位：秒
         boolean scanSucc = false;
-        String url = wechatApiUrl+"Login/CheckQR?uuid="+uuid;
+        String url = wechatApiUrl+"login/WXCheckLoginQRCode?accountId="+uuid;
         while(maxWait>0){
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.contentType("application/json");
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
             logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
-            RespData respData = null;
+            RespDataV3 respData = null;
             try{
-                respData = JSONObject.parseObject(result, RespData.class);
-                if(respData.getCode()==0 && respData.getSuccess()){
+                respData = JSONObject.parseObject(result, RespDataV3.class);
+                if(respData.getCode()==0){
                     Map<String, Object> datas = respData.getData();
-                    if(datas.containsKey("status")){
+                    JSONObject resultData = (JSONObject) datas.get("result");
+                    JSONObject notify = (JSONObject) resultData.get("notify");
+                    if(notify.containsKey("status")){
                         Integer status = (Integer)datas.get("status");
                         if(status==1){
 
-                            headImgUrl = (String)datas.get("headImgUrl");
-                            nickName = (String)datas.get("nickName");
+                            headImgUrl = (String)notify.get("headImgUrl");
+                            nickName = (String)notify.get("nickName");
                             Map<String,Object> info = new HashMap<>();
                             info.put("wxId",botUser.getWxId());
                             info.put("wxNick",nickName);
@@ -128,19 +131,22 @@ public class WechatApiService{
                             //stringRedisTemplate.boundValueOps("3d:chatbot:wxStatus:"+botUserId).set("-2");
                             rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
                             break;
+                        } else if(status==2){
+                            String wxId = notify.getString("userName"); //微信ID
+                            headImgUrl = (String)notify.get("headImgUrl");
+                            nickName = (String)notify.get("nickName");
+                            botUser.setWxHeadimg(headImgUrl);
+                            botUser.setWxId(wxId);
+                            botUser.setWxNick(nickName);
+                            botUser.setWxUserName(wxId);
+                            botUser.setWxPassword(notify.getString("pwd"));
+                            botUser.setWxAccount(uuid);
+                            botUser.setWxStatus(1);
+                            botUser.setWxLoginTime(new Date());
+                            botUserDAO.updateWxInfo(botUser);
+                            scanSucc = true;
+                            break;
                         }
-                    }
-                    if(datas.containsKey("acctSectResp")){
-                        JSONObject object = (JSONObject)datas.get("acctSectResp");
-                        String wxId = object.getString("userName"); //微信ID
-                        botUser.setWxHeadimg(headImgUrl);
-                        botUser.setWxId(wxId);
-                        botUser.setWxNick(nickName);
-                        botUser.setWxStatus(1);
-                        botUser.setWxLoginTime(new Date());
-                        botUserDAO.updateWxInfo(botUser);
-                        scanSucc = true;
-                        break;
                     }
                 }else{
                     Map<String,Object> info = new HashMap<>();
