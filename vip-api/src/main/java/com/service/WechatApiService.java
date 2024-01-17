@@ -101,12 +101,9 @@ public class WechatApiService{
                 logger.info(">>>>>>【respData】Login/CheckQR>>>>>>"+respData);
                 if(respData.getCode()==0){
                     Map<String, Object> datas = respData.getData();
-                    logger.info(">>>>>>【datas】Login/CheckQR>>>>>>"+datas);
                     JSONObject resultData = (JSONObject) datas.get("result");
-                    logger.info(">>>>>>【resultData】Login/CheckQR>>>>>>"+resultData);
                     JSONObject resultData2 = (JSONObject) resultData.get("data");
                     JSONObject notify = (JSONObject) resultData2.get("notify");
-                    logger.info(">>>>>>【notify】Login/CheckQR>>>>>>"+notify);
                     logger.info(">>>>>>【status】Login/CheckQR>>>>>>"+(Integer)notify.get("status"));
                     Integer status = (Integer)notify.get("status");
                     if(notify.containsKey("status")){
