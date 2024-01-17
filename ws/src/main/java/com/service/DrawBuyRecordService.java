@@ -102,6 +102,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query.eq(DrawBuyRecord::getDrawId, drawId);
         query.eq(DrawBuyRecord::getLotterSettingId, "19");
         query.eq(DrawBuyRecord::getBuyCodes, draw.getDrawResult());
+        query.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> zxPtList = drawBuyRecordDAO.selectList(query);
         BigDecimal drawMoney = updateOneOddsBuyRecords(zxPtList, false);
@@ -114,6 +116,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query2.eq(DrawBuyRecord::getDrawId, drawId);
         query2.eq(DrawBuyRecord::getLotterSettingId, "20");
         query2.eq(DrawBuyRecord::getParam2, sum.toString());
+        query2.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query2.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query2.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> zxHzList = drawBuyRecordDAO.selectList(query2);
         BigDecimal drawMoney2 = updateOneOddsBuyRecords(zxHzList, false);
@@ -127,6 +131,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query3.eq(DrawBuyRecord::getLotteryMethodId, "2");
         query3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
         query3.eq(DrawBuyRecord::getBuyCodes, draw.getDrawResult());
+        query3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         List<DrawBuyRecord> txList = drawBuyRecordDAO.selectList(query3);
         BigDecimal drawMoney3 = BigDecimal.ZERO;
         if (!txList.isEmpty()) {
@@ -147,6 +153,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             query5.eq(DrawBuyRecord::getDrawId, drawId);
             query5.in(DrawBuyRecord::getLotterSettingId, Arrays.asList("53", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64",
                     "65", "66", "67", "68", "69", "70", "71", "17"));
+            query5.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            query5.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             query5.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
             if (!codeList.isEmpty()) {
                 query5.in(DrawBuyRecord::getBuyCodes, codeList);
@@ -238,6 +246,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             querySfZ3.eq(DrawBuyRecord::getDrawId, drawId);
             querySfZ3.eq(DrawBuyRecord::getLotterSettingId, "54");
             querySfZ3.in(DrawBuyRecord::getBuyCodes, codes);
+            querySfZ3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            querySfZ3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             querySfZ3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
             List<DrawBuyRecord> sfz3List = drawBuyRecordDAO.selectList(querySfZ3);
             drawMoney5 = updateOneOddsBuyRecords(sfz3List, false);
@@ -247,6 +257,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             query12.eq(DrawBuyRecord::getBackCodeFlag, 0);
             query12.eq(DrawBuyRecord::getDrawId, drawId);
             query12.eq(DrawBuyRecord::getLotterSettingId, "11");
+            query12.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            query12.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             List<DrawBuyRecord> stList = drawBuyRecordDAO.selectList(query12);
             /*if (!stList.isEmpty()) {
                 for (DrawBuyRecord drawBuyRecord : stList) {
@@ -293,6 +305,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             querySfZ3.eq(DrawBuyRecord::getLotterSettingId, "54");
             querySfZ3.in(DrawBuyRecord::getBuyCodes, codes);
             querySfZ3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
+            querySfZ3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            querySfZ3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             List<DrawBuyRecord> sfz3List = drawBuyRecordDAO.selectList(querySfZ3);
             drawMoney5 = updateOneOddsBuyRecords(sfz3List, false);
             drawCount = drawCount + sfz3List.size();
@@ -380,6 +394,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query6.in(DrawBuyRecord::getLotterSettingId, Arrays.asList("23", "26"));
         query6.eq(DrawBuyRecord::getParam2, sum.toString());
         query6.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+        query6.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query6.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         List<DrawBuyRecord> hzList = drawBuyRecordDAO.selectList(query6);
         BigDecimal drawMoney6 = updateOneOddsBuyRecords(hzList, false);
         drawCount = drawCount + hzList.size();
@@ -391,6 +407,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         queryHs.eq(DrawBuyRecord::getDrawId, drawId);
         queryHs.eq(DrawBuyRecord::getLotteryMethodId, "5");
         queryHs.eq(DrawBuyRecord::getBuyCodes, sum.toString());
+        queryHs.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        queryHs.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         queryHs.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> hsList = drawBuyRecordDAO.selectList(queryHs);
         BigDecimal drawMoneyHs = updateOneOddsBuyRecords(hsList, false);
@@ -403,6 +421,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query8.eq(DrawBuyRecord::getBackCodeFlag, 0);
         query8.eq(DrawBuyRecord::getDrawId, drawId);
         query8.eq(DrawBuyRecord::getLotterSettingId, "13");
+        query8.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query8.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query8.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         /*query8.and(tmp -> tmp.eq(DrawBuyRecord::getBai, draw.getDrawResult2T())
                 .or().eq(DrawBuyRecord::getShi, draw.getDrawResult3T())
@@ -418,6 +438,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query9.eq(DrawBuyRecord::getBackCodeFlag, 0);
         query9.eq(DrawBuyRecord::getDrawId, drawId);
         query9.eq(DrawBuyRecord::getLotterSettingId, "14");
+        query9.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query9.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query9.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
         List<DrawBuyRecord> listC1D = drawBuyRecordDAO.selectList(query9);
         BigDecimal drawMoney8 = BigDecimal.ZERO;
@@ -479,6 +501,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query10.eq(DrawBuyRecord::getDrawId, drawId);
         query10.eq(DrawBuyRecord::getLotterSettingId, "15");
         query10.in(DrawBuyRecord::getBuyCodes, codes2DList);
+        query10.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query10.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query10.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> list2D = drawBuyRecordDAO.selectList(query10);
         BigDecimal drawMoney9 = updateOneOddsBuyRecords(list2D, false);
@@ -492,6 +516,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query11.eq(DrawBuyRecord::getDrawId, drawId);
         query11.eq(DrawBuyRecord::getLotterSettingId, "16");
         query11.in(DrawBuyRecord::getBuyCodes, codesC2DList);
+        query11.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query11.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query11.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> listC2D = drawBuyRecordDAO.selectList(query11);
         BigDecimal drawMoney10 = BigDecimal.ZERO;
@@ -530,6 +556,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query12.eq(DrawBuyRecord::getBackCodeFlag, 0);
         query12.eq(DrawBuyRecord::getDrawId, drawId);
         query12.eq(DrawBuyRecord::getLotterSettingId, 9);
+        query12.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query12.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query12.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         if (sum >= 14 && sum <= 27) { // 大于等于19，小于等于27 为大
             query12.eq(DrawBuyRecord::getBuyCodes, "大");
@@ -549,6 +577,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query13.eq(DrawBuyRecord::getDrawId, drawId);
         query13.eq(DrawBuyRecord::getLotterSettingId, 10);
         query13.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+        query13.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query13.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         Integer ge = Integer.valueOf(draw.getDrawResult4T());
         Integer shi = Integer.valueOf(draw.getDrawResult3T());
         Integer bai = Integer.valueOf(draw.getDrawResult2T());
@@ -580,6 +610,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             query14.eq(DrawBuyRecord::getBackCodeFlag, 0);
             query14.eq(DrawBuyRecord::getDrawId, drawId);
             query14.eq(DrawBuyRecord::getLotterSettingId, 12);
+            query14.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            query14.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             query14.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
             List<DrawBuyRecord> tljList = drawBuyRecordDAO.selectList(query14);
             BigDecimal drawMoney13 = updateOneOddsBuyRecords(tljList, false);
@@ -598,6 +630,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         queryKd.eq(DrawBuyRecord::getDrawId, drawId);
         queryKd.eq(DrawBuyRecord::getLotteryMethodId, "13");
         queryKd.eq(DrawBuyRecord::getBuyCodes, kd.toString());
+        queryKd.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        queryKd.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         queryKd.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> kdList = drawBuyRecordDAO.selectList(queryKd);
         BigDecimal drawMoney14 = updateOneOddsBuyRecords(kdList, false);
@@ -609,6 +643,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query15.eq(DrawBuyRecord::getBackCodeFlag, 0);
         query15.eq(DrawBuyRecord::getDrawId, drawId);
         query15.eq(DrawBuyRecord::getLotterSettingId, 52);
+        query15.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query15.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query15.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         query15.and(tmp -> tmp.eq(DrawBuyRecord::getBuyCodes, draw.getDrawResult2T())
                 .or().eq(DrawBuyRecord::getBuyCodes, draw.getDrawResult3T())
@@ -623,6 +659,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             LambdaQueryWrapper<DrawBuyRecord> query16 = new LambdaQueryWrapper<>();
             query16.eq(DrawBuyRecord::getBackCodeFlag, 0);
             query16.eq(DrawBuyRecord::getDrawId, drawId);
+            query16.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            query16.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             query16.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("1000", "1001", "1002", "1003",
                     "1004", "1005", "1006", "1007", "1008"));
             query16.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
@@ -657,6 +695,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             LambdaQueryWrapper<DrawBuyRecord> query17 = new LambdaQueryWrapper<>();
             query17.eq(DrawBuyRecord::getBackCodeFlag, 0);
             query17.eq(DrawBuyRecord::getDrawId, drawId);
+            query17.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            query17.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             query17.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("2001", "2002", "2003",
                     "2004", "2005", "2006", "2007", "2008"));
             query17.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
@@ -694,6 +734,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         LambdaQueryWrapper<DrawBuyRecord> query18 = new LambdaQueryWrapper<>();
         query18.eq(DrawBuyRecord::getBackCodeFlag, 0);
         query18.eq(DrawBuyRecord::getDrawId, drawId);
+        query18.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        query18.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
         query18.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("3000", "3001", "3002",
                 "3003", "3004", "3005", "3006", "3007"));
         query18.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
