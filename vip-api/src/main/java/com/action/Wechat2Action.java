@@ -179,7 +179,7 @@ public class Wechat2Action {
                     String ip = ipPort[0];
                     String port = ipPort[1];
                     proxy.put("address",ip);
-                    proxy.put("port",port);
+                    proxy.put("port",Integer.valueOf(port));
                     proxy.put("user",defaultProxyUser);
                     proxy.put("password",defaultProxyPwd);
 //                    logger.info("["+botUser.getLoginName()+"]使用临时代理："+JSON.toJSONString(proxy));
@@ -189,7 +189,7 @@ public class Wechat2Action {
                     String ip = ipPort[0];
                     String port = ipPort[1];
                     proxy.put("address",ip);
-                    proxy.put("port",port);
+                    proxy.put("port",Integer.valueOf(port));
                     proxy.put("user",proxyInfo.getUsername());
                     proxy.put("password",proxyInfo.getPassword());
                 }
@@ -201,13 +201,12 @@ public class Wechat2Action {
 
             Map<String,Object> reqData = new HashMap<>();
             reqData.put("accountId", botUser.getWxAccount());
-            reqData.put("DeviceID","");
-            reqData.put("DeviceName","");
-            reqData.put("OSModel","");
+            reqData.put("data62","");
             reqData.put("vpnInfo",proxy);
 
-            System.out.println("=========="+wechatApiUrl);
-            String url = wechatApiUrl+"login/WXGetLoginQRCode";
+            logger.info("=========="+JSON.toJSONString(reqData));
+            String url = "http://weixin.52iptv.net:8081/login/WXGetLoginQRCode";
+            logger.info("==========url"+url);
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.body(JSON.toJSONString(reqData));
             httpRequest.contentType("application/json");
@@ -215,9 +214,12 @@ public class Wechat2Action {
             String result = httpResponse.body();
             logger.info("["+botUser.getLoginName()+"]获取二维码结果："+result);
             //System.out.println("result>>>>>>"+result);
-            RespData respData = JSONObject.parseObject(result, RespData.class);
-            if(respData.getCode()==1){
-                Map<String,Object> datas = respData.getData();
+            //RespData respData = JSONObject.parseObject(result, RespData.class);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            if(jsonObject.getInteger("code")==0){
+                JSONObject data = (JSONObject) jsonObject.get("data");
+                JSONObject resultData = (JSONObject) data.get("result");
+                JSONObject datas = (JSONObject) resultData.get("data");
                 String qrUrl = (String)datas.get("QrUrl");
                 String Uuid = (String)datas.get("Uuid");
                 String qrBase64 = (String)datas.get("QrBase64");

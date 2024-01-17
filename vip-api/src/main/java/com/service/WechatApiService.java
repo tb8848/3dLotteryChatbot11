@@ -85,9 +85,12 @@ public class WechatApiService{
         String nickName = "";
         long maxWait = 5*60; //单位：秒
         boolean scanSucc = false;
-        String url = wechatApiUrl+"login/WXCheckLoginQRCode?accountId="+uuid;
+        Map<String,Object> reqData = new HashMap<>();
+        reqData.put("accountId", uuid);
+        String url = "http://weixin.52iptv.net:8081/login/WXCheckLoginQRCode";
         while(maxWait>0){
             HttpRequest httpRequest = HttpUtil.createPost(url);
+            httpRequest.body(JSON.toJSONString(reqData));
             httpRequest.contentType("application/json");
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
@@ -95,14 +98,19 @@ public class WechatApiService{
             RespDataV3 respData = null;
             try{
                 respData = JSONObject.parseObject(result, RespDataV3.class);
+                logger.info(">>>>>>【respData】Login/CheckQR>>>>>>"+respData);
                 if(respData.getCode()==0){
                     Map<String, Object> datas = respData.getData();
+                    logger.info(">>>>>>【datas】Login/CheckQR>>>>>>"+datas);
                     JSONObject resultData = (JSONObject) datas.get("result");
-                    JSONObject notify = (JSONObject) resultData.get("notify");
+                    logger.info(">>>>>>【resultData】Login/CheckQR>>>>>>"+resultData);
+                    JSONObject resultData2 = (JSONObject) resultData.get("data");
+                    JSONObject notify = (JSONObject) resultData2.get("notify");
+                    logger.info(">>>>>>【notify】Login/CheckQR>>>>>>"+notify);
+                    logger.info(">>>>>>【status】Login/CheckQR>>>>>>"+(Integer)notify.get("status"));
+                    Integer status = (Integer)notify.get("status");
                     if(notify.containsKey("status")){
-                        Integer status = (Integer)datas.get("status");
-                        if(status==1){
-
+                        if(status==0){
                             headImgUrl = (String)notify.get("headImgUrl");
                             nickName = (String)notify.get("nickName");
                             Map<String,Object> info = new HashMap<>();
@@ -131,22 +139,23 @@ public class WechatApiService{
                             //stringRedisTemplate.boundValueOps("3d:chatbot:wxStatus:"+botUserId).set("-2");
                             rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
                             break;
-                        } else if(status==2){
-                            String wxId = notify.getString("userName"); //微信ID
-                            headImgUrl = (String)notify.get("headImgUrl");
-                            nickName = (String)notify.get("nickName");
-                            botUser.setWxHeadimg(headImgUrl);
-                            botUser.setWxId(wxId);
-                            botUser.setWxNick(nickName);
-                            botUser.setWxUserName(wxId);
-                            botUser.setWxPassword(notify.getString("pwd"));
-                            botUser.setWxAccount(uuid);
-                            botUser.setWxStatus(1);
-                            botUser.setWxLoginTime(new Date());
-                            botUserDAO.updateWxInfo(botUser);
-                            scanSucc = true;
-                            break;
                         }
+                    }
+                    if(status==2){
+                        String wxId = notify.getString("userName"); //微信ID
+                        headImgUrl = (String)notify.get("headImgUrl");
+                        nickName = (String)notify.get("nickName");
+                        botUser.setWxHeadimg(headImgUrl);
+                        botUser.setWxId(wxId);
+                        botUser.setWxNick(nickName);
+                        botUser.setWxUserName(wxId);
+                        botUser.setWxPassword(notify.getString("pwd"));
+                        botUser.setWxAccount(uuid);
+                        botUser.setWxStatus(1);
+                        botUser.setWxLoginTime(new Date());
+                        botUserDAO.updateWxInfo(botUser);
+                        scanSucc = true;
+                        break;
                     }
                 }else{
                     Map<String,Object> info = new HashMap<>();

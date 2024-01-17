@@ -102,6 +102,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query.eq(DrawBuyRecord::getDrawId, drawId);
         query.eq(DrawBuyRecord::getLotterSettingId, "19");
         query.eq(DrawBuyRecord::getBuyCodes, draw.getDrawResult());
+        query.eq(DrawBuyRecord::getBuyType, lotteryType);
         query.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> zxPtList = drawBuyRecordDAO.selectList(query);
         BigDecimal drawMoney = updateOneOddsBuyRecords(zxPtList, false);
@@ -114,6 +115,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query2.eq(DrawBuyRecord::getDrawId, drawId);
         query2.eq(DrawBuyRecord::getLotterSettingId, "20");
         query2.eq(DrawBuyRecord::getParam2, sum.toString());
+        query2.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
         query2.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
         List<DrawBuyRecord> zxHzList = drawBuyRecordDAO.selectList(query2);
         BigDecimal drawMoney2 = updateOneOddsBuyRecords(zxHzList, false);
@@ -127,6 +129,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query3.eq(DrawBuyRecord::getLotteryMethodId, "2");
         query3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
         query3.eq(DrawBuyRecord::getBuyCodes, draw.getDrawResult());
+        query3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
         List<DrawBuyRecord> txList = drawBuyRecordDAO.selectList(query3);
         BigDecimal drawMoney3 = BigDecimal.ZERO;
         if (!txList.isEmpty()) {
@@ -147,6 +150,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             query5.eq(DrawBuyRecord::getDrawId, drawId);
             query5.in(DrawBuyRecord::getLotterSettingId, Arrays.asList("53", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64",
                     "65", "66", "67", "68", "69", "70", "71", "17"));
+            query5.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
             query5.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
             if (!codeList.isEmpty()) {
                 query5.in(DrawBuyRecord::getBuyCodes, codeList);
