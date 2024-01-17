@@ -68,8 +68,8 @@ public class HeatBeatTask {
         if (null == lockInfo) {
             throw new LockException("业务处理中，请稍后再试...");
         }
-        String heartBeatUrl =  "http://weixin.52iptv.net:8081/login/WXHeartBeat?accountId=";
-        String logoutUrl = "http://weixin.52iptv.net:8081/login/WXLogOut?accountId=";
+        String heartBeatUrl =  "http://weixin.52iptv.net:8081/login/WXHeartBeat";
+        String logoutUrl = "http://weixin.52iptv.net:8081/login/WXLogOut";
         try {
             List<BotUser> botUserList = botUserService.listBy();
             if(null!=botUserList && botUserList.size()>0){
@@ -77,7 +77,10 @@ public class HeatBeatTask {
                 for(BotUser botUser : wxList){
                     if(botUser.getWxStatus()==1){
                         if(botUser.getStatus()==2){
-                            HttpRequest httpRequest = HttpUtil.createPost(logoutUrl+botUser.getWxAccount());
+                            HttpRequest httpRequest = HttpUtil.createPost(logoutUrl);
+                            Map<String,Object> reqData = new HashMap<>();
+                            reqData.put("accountId", botUser.getWxAccount());
+                            httpRequest.body(JSON.toJSONString(reqData));
                             httpRequest.contentType("application/json");
                             HttpResponse httpResponse = httpRequest.execute();
                             String result = httpResponse.body();
@@ -97,7 +100,10 @@ public class HeatBeatTask {
 
                             }
                         }else{
-                            HttpRequest httpRequest = HttpUtil.createPost(heartBeatUrl+botUser.getWxAccount());
+                            HttpRequest httpRequest = HttpUtil.createPost(heartBeatUrl);
+                            Map<String,Object> reqData = new HashMap<>();
+                            reqData.put("accountId", botUser.getWxAccount());
+                            httpRequest.body(JSON.toJSONString(reqData));
                             httpRequest.contentType("application/json");
                             HttpResponse httpResponse = httpRequest.execute();
                             String result = httpResponse.body();

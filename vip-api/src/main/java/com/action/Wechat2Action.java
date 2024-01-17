@@ -222,12 +222,13 @@ public class Wechat2Action {
                 JSONObject datas = (JSONObject) resultData.get("data");
                 String qrUrl = (String)datas.get("QrUrl");
                 String Uuid = (String)datas.get("Uuid");
-                String qrBase64 = (String)datas.get("QrBase64");
+                String qrBase64 = (String)datas.get("qrBase64");
                 botUser.setQrUUid(Uuid);
                 botUserService.updateById(botUser);
                 threadPool.execute(()->{
                     wechatApiService.checkQrcodeScan(userId,botUser.getWxAccount());
                 });
+                logger.info("[qrBase64]："+qrBase64);
                 return new ResponseBean(0, 0, "", qrBase64);
             }
 

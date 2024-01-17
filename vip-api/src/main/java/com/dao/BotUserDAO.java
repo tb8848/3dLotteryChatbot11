@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Update;
 
 public interface BotUserDAO extends BaseMapper<BotUser> {
 
-    @Update("update bot_user set wxId=#{user.wxId},wxHeadimg=#{user.wxHeadimg},wxNick=#{user.wxNick},wxStatus=#{user.wxStatus},wxLoginTime=#{user.wxLoginTime} where id=#{user.id}")
+    @Update("update bot_user set wxId=#{user.wxId},wxHeadimg=#{user.wxHeadimg}," +
+            "wxNick=#{user.wxNick},wxStatus=#{user.wxStatus}," +
+            "wxLoginTime=#{user.wxLoginTime}, wxUserName=#{user.wxUserName}, wxPassword=#{user.wxPassword} " +
+            "where id=#{user.id}")
     void updateWxInfo(@Param("user") BotUser botUser);
 }
