@@ -49,12 +49,15 @@ public class WechatApiService {
      * @param text 发送内容
      */
     public void sendMsg(String toWxId, String wxId, String text){
-        String url = wechatApiUrl+"Msg/SendTxt";
+        String url = wechatApiUrl+"msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
-        reqData.put("Content",text);
+        /*reqData.put("Content",text);
         reqData.put("ToWxid",toWxId);
         reqData.put("Type",1);
-        reqData.put("Wxid",wxId);
+        reqData.put("Wxid",wxId);*/
+        reqData.put("toUserName",toWxId);
+        reqData.put("Content",1);
+        reqData.put("accountId",wxId);
 
         HttpRequest httpRequest = HttpUtil.createPost(url);
         httpRequest.contentType("application/json");
