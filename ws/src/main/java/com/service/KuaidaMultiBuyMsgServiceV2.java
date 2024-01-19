@@ -252,7 +252,8 @@ public class KuaidaMultiBuyMsgServiceV2 {
                     dataList.forEach(item->{
                         item.setBaopaiId(playerBuyRecord.getId());
                         item.setVipId(player.getId());
-                        item.setBuyType(lotteryType);
+                        item.setBuyType(0);
+                        item.setHasOneFlag(lotteryType);
                     });
                     Map dynamicPrama = new HashMap();
                     dynamicPrama.put("qihao", String.valueOf(draw.getDrawId()));

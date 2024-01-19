@@ -37,11 +37,6 @@ public class PlayerFixedBuyService extends ServiceImpl<PlayerFixedBuyDAO, Player
     @Autowired
     private PlayerService playerService;
 
-
-    @Autowired
-    private KuaidaBuyMsgService kuaidaBuyMsgService;
-
-
     @Autowired
     private BotUserService botUserService;
 

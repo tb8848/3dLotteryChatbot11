@@ -241,14 +241,22 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                     if(StringUtils.isNullOrEmpty(cmdText)){
                         continue;
                     }
-                    if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")){
+                    String cmdPrefix = cmdText.toUpperCase();
+                    if(cmdPrefix.startsWith("P3") || cmdPrefix.startsWith("3D")
+                            || cmdPrefix.startsWith("福")
+                            || cmdPrefix.startsWith("体")){
                         if (null == player.getLotteryType()) {
                             ChatRoomMsg toMsg = createMsg(botUser, player, "请先开通排列三或福彩3D服务");
                             dataDao.insert(toMsg);
                             simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                             return;
                         }
-                        lottype = cmdText.startsWith("P3") ? 2 : 1;
+                        if(cmdPrefix.startsWith("P3") || cmdPrefix.startsWith("体")){
+                            lottype = 2;
+                        }else{
+                            lottype = 1;
+                        }
+                        //lottype = cmdText.startsWith("P3") ? 2 : 1;
                         if(lottype==2){
                             if(p3Draw.getOpenStatus()!=1){
                                 ChatRoomMsg toMsg = createMsg(botUser, player, "【P3】^^★★★停止-上课★★★");
@@ -288,14 +296,28 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                         case 0:
                             for(String cmdText : multiArr){
                                 String text1 = cmdText.toUpperCase();
-                                if(text1.startsWith("P3") || text1.startsWith("3D")){
+                                String txt = "";
+                                if(text1.startsWith("P3") || text1.startsWith("3D")
+                                        || text1.startsWith("福")
+                                        || text1.startsWith("体") ){
                                     ChatRoomMsg childMsg = createMsg(botUser,player,text1);
-                                    lottype = text1.startsWith("P3")?2:1;
+                                    if(text1.startsWith("P3") || text1.startsWith("体")){
+                                        lottype = 2;
+                                    }else{
+                                        lottype = 1;
+                                    }
+                                    //lottype = text1.startsWith("P3")?2:1;
                                     String lotName = lottype==2?"P3":"3D";
+
+                                    if(text1.startsWith("P3") || text1.startsWith("3D")){
+                                        txt = text1.substring(2);
+                                    }else{
+                                        txt = text1.substring(1);
+                                    }
 
                                     if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
 
-                                        String txt = text1.substring(2);
+                                        //String txt = text1.substring(2);
                                         boolean isBuy = false;
                                         for(String word : GlobalConst.keywords2){
                                             if(txt.startsWith(word)){

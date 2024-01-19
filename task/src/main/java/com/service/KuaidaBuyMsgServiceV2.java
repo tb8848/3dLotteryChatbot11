@@ -616,7 +616,8 @@ public class KuaidaBuyMsgServiceV2 {
                     dataList.forEach(item->{
                         item.setBaopaiId(playerBuyId);
                         item.setVipId(player.getId());//盘口传回的下注明细，将vipId改为玩家ID
-                        item.setBuyType(lotteryType);
+                        item.setBuyType(0);
+                        item.setHasOneFlag(lotteryType);
                     });
                     Map dynamicPrama = new HashMap();
                     dynamicPrama.put("qihao", String.valueOf(draw.getDrawId()));

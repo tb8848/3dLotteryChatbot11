@@ -89,6 +89,19 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
         //List<DrawBuyRecord> buyList1 = new ArrayList<>();
         List<DrawBuyRecord> lsBuyRecordList = new ArrayList<>();
 
+        int buyType = 2;
+        if(player.getUserType()==0){
+            buyType = 2;
+        }else{
+            if(player.getPretexting()==1){
+                buyType = 2;
+            }else if(player.getReportNet()==1){
+                buyType = 0;
+            }else if(player.getEatPrize()==1){
+                buyType = 1;
+            }
+        }
+
         if(multiCodesVOList.size()>0) {
 
             for (CodesVO cvo : multiCodesVOList) {
@@ -126,8 +139,8 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
 
                     //buyRecord.setPrintId(printNo);
                     //buyRecord.setPrintCacheId(printCache.getId());
-                    buyRecord.setHasOneFlag(0);
-                    buyRecord.setBuyType(1);
+                    buyRecord.setHasOneFlag(lottype);
+                    buyRecord.setBuyType(buyType);
 
                     buyRecord.setParam3(odds);
                     //回水金额
@@ -183,18 +196,7 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
             buyList.stream().forEach(item -> {
                 item.setBaopaiId(playerBuyRecord.getId());
             });
-            int buyType = 2;
-            if(player.getUserType()==0){
-                buyType = 2;
-            }else{
-                if(player.getPretexting()==1){
-                    buyType = 2;
-                }else if(player.getReportNet()==1){
-                    buyType = 0;
-                }else if(player.getEatPrize()==1){
-                    buyType = 1;
-                }
-            }
+
             playerBuyRecord.setBuyAmount(noHuiZongList.size());
             playerBuyRecord.setBuyPoints(totalBuyMoney);
             playerBuyRecord.setDrawNo(draw.getDrawId());
@@ -250,6 +252,20 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
             return resultMap;
         }
         List<DrawBuyRecord> buyList = new ArrayList<>();
+
+        int buyType = 2;
+        if(player.getUserType()==0){
+            buyType = 2;
+        }else{
+            if(player.getPretexting()==1){
+                buyType = 2;
+            }else if(player.getReportNet()==1){
+                buyType = 0;
+            }else if(player.getEatPrize()==1){
+                buyType = 1;
+            }
+        }
+
         for (BuyRecord3DVO cvo : lsDataList) {
             List<String> codeList = cvo.getCodeList();
             if(null == codeList || codeList.size()<1){
@@ -283,8 +299,8 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
                     buyRecord.setPeiRate(new BigDecimal(odds));
                 }
 
-                buyRecord.setHasOneFlag(0);
-                buyRecord.setBuyType(1);
+                buyRecord.setHasOneFlag(lottype);
+                buyRecord.setBuyType(buyType);
                 buyRecord.setHuizongFlag(0);
 
                 buyRecord.setParam3(odds);
@@ -319,18 +335,7 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
             buyList.stream().forEach(item -> {
                 item.setBaopaiId(playerBuyRecord.getId());
             });
-            int buyType = 2;
-            if(player.getUserType()==0){
-                buyType = 2;
-            }else{
-                if(player.getPretexting()==1){
-                    buyType = 2;
-                }else if(player.getReportNet()==1){
-                    buyType = 0;
-                }else if(player.getEatPrize()==1){
-                    buyType = 1;
-                }
-            }
+
             playerBuyRecord.setBuyAmount(noHuiZongList.size());
             playerBuyRecord.setBuyPoints(totalBuyMoney);
             playerBuyRecord.setDrawNo(draw.getDrawId());

@@ -74,10 +74,6 @@ public class WechatApiService{
     private KuaidaBuyMsgServiceV2 kuaidaBuyMsgServiceV2;
 
     @Autowired
-    private P3KuaidaBuyMsgService p3KuaidaBuyMsgService;
-
-
-    @Autowired
     private PlayerReturnPointsService playerReturnPointsService;
 
     @Autowired
@@ -575,8 +571,10 @@ public class WechatApiService{
             String[] multiArr = text.split("\n");
             //System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
             for(String cmdText : multiArr){
-                if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")){
-                    if(cmdText.toUpperCase().startsWith("P3")){
+                if(cmdText.toUpperCase().startsWith("P3")
+                        || cmdText.toUpperCase().startsWith("3D") || cmdText.toUpperCase().startsWith("福")
+                        || cmdText.toUpperCase().startsWith("体")){
+                    if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("体")){
                        Draw draw =  p3DrawService.getLastDrawInfo();
                        if(null==draw || draw.getOpenStatus()!=1){
                            ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"【P3】^^★★★停止-上课★★★");
@@ -607,13 +605,23 @@ public class WechatApiService{
 
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();
-                    if(text1.startsWith("P3") || text1.startsWith("3D")){
+                    if(text1.startsWith("P3") || text1.startsWith("3D") || text1.startsWith("福") || text1.startsWith("体")){
                         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
-                        int lottype = text1.startsWith("P3")?2:1;
+                        int lottype = 1;
+                        if(text1.startsWith("P3") || text1.startsWith("体")){
+                            lottype = 2;
+                        }
+                        String txt = "";
+                        if(text1.startsWith("P3") || text1.startsWith("3D")){
+                            txt = text1.substring(2);
+                        }else{
+                            txt = text1.substring(1);
+                        }
+
+                        //int lottype = text1.startsWith("P3")?2:1;
                         String lotName = lottype==2?"P3":"3D";
                         if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
-
-                            String txt = text1.substring(2);
+                            //String txt = text1.substring(2);
                             boolean isBuy = false;
                             for(String word : GlobalConst.keywords2){
                                 if(txt.startsWith(word)){

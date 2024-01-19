@@ -197,7 +197,8 @@ public class DingtouBuyService {
                     dataList.forEach(item->{
                         item.setBaopaiId(playerBuyId);
                         item.setVipId(player.getId()); //报网返回的数据，更改vipId的值为玩家ID
-                        item.setBuyType(dtTask.getLotteryType());
+                        item.setBuyType(0);
+                        item.setHasOneFlag(dtTask.getLotteryType());
                     });
                     Map dynamicPrama = new HashMap();
                     dynamicPrama.put("qihao", String.valueOf(draw.getDrawId()));
