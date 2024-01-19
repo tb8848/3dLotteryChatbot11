@@ -154,14 +154,16 @@ public class WechatApiService{
                         botUserDAO.updateWxInfo(botUser);
                         HttpRequest request = HttpUtil.createPost("http://weixin.52iptv.net:8081/login/WXQRCodeLogin");
                         Map<String,Object> reqMap = new HashMap<>();
-                        reqMap.put("accountId", uuid);
-                        reqMap.put("userName", wxId);
+                        reqMap.put("accountId", botUser.getWxAccount());
+                        reqMap.put("userName", notify.getString("userName"));
                         reqMap.put("pwd", notify.getString("pwd"));
-                        request.body(JSON.toJSONString(reqData));
+                        request.body(JSON.toJSONString(reqMap));
+                        logger.info("#####【WXQRCodeLogin】Login/WXQRCodeLogin######reqData->"+reqMap);
                         request.contentType("application/json");
                         HttpResponse response = request.execute();
                         String result2 = response.body();
                         JSONObject jsonObject = JSONObject.parseObject(result2);
+                        logger.info("#####【WXQRCodeLogin】Login/WXQRCodeLogin######"+jsonObject);
                         if (jsonObject.getInteger("code") == 0) {
                             scanSucc = true;
                             break;
