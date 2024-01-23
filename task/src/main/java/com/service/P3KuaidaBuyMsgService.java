@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Lazy
+@Deprecated
 public class P3KuaidaBuyMsgService {
 
     @Autowired

@@ -322,7 +322,8 @@ public class KuaixuanBuyMsgServiceV2 extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
                     dataList.forEach(item->{
                         item.setBaopaiId(playerBuyRecord.getId());
                         item.setVipId(player.getId()); //盘口返回的数据，将vipId字段的值替换成玩家ID
-                        item.setBuyType(lotteryType);
+                        item.setBuyType(0);
+                        item.setHasOneFlag(lotteryType);
                     });
 
                     Map dynamicPrama = new HashMap();

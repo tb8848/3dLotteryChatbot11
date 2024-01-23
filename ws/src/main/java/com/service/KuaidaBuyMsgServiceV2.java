@@ -144,7 +144,13 @@ public class KuaidaBuyMsgServiceV2 {
             List<BuyRecord3DVO> buyList = Lists.newArrayList();
             Map<String,Object> resMap = Maps.newHashMap();
 
-            String content = fromMsg.getMsg().substring(2);
+
+            String content = "";
+            if(fromMsg.getMsg().startsWith("P3") || fromMsg.getMsg().startsWith("3D")){
+                content = fromMsg.getMsg().substring(2);
+            }else{
+                content = fromMsg.getMsg().substring(1);
+            }
             String[] arr = content.split("各");
             if (arr.length != 2) {
                 toMsg = getErrorMsg(botUser, player);
@@ -674,7 +680,9 @@ public class KuaidaBuyMsgServiceV2 {
                     dataList.forEach(item->{
                         item.setBaopaiId(playerBuyRecord.getId());
                         item.setVipId(player.getId());
-                        item.setBuyType(lotteryType);
+                        item.setBuyType(0);
+                        item.setHasOneFlag(lotteryType);
+
                     });
                     Map dynamicPrama = new HashMap();
                     dynamicPrama.put("qihao", String.valueOf(draw.getDrawId()));

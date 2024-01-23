@@ -113,6 +113,7 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
                     DrawBuyRecord buyRecord = new DrawBuyRecord();
                     buyRecord.setBuyMoney(codeBuyMoney);
                     buyRecord.setBuyAmount(1);
+                    buyRecord.setHasOneFlag(lottype); //表示彩种类型，1:3d,2:p3
                     buyRecord.setParam1(codeBuyMoney.stripTrailingZeros().toPlainString());
                     buyRecord.setCreateTime(new Date());
                     buyRecord.setVipId(player.getId());
@@ -299,6 +300,7 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
 
                 buyRecord.setId(snowflake.nextIdStr());
                 buyRecord.setHuizongName(cvo.getHuizongName());
+                buyRecord.setHasOneFlag(lottype);
 //                buyRecord.setBai(arr[0]);
 //                buyRecord.setShi(arr[1]);
 //                buyRecord.setGe(arr[2]);

@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Lazy
+@Deprecated
 public class KuaidaBuyMsgService{
 
 

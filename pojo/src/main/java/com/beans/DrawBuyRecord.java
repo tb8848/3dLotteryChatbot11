@@ -145,7 +145,7 @@ public class DrawBuyRecord {
     private BigDecimal selfHuiShui;
 
     /**
-     * 购买方式：1：3D下注；2：排列三下注
+     * 购买方式：0：报网；1：吃奖，2:假托
      */
     private Integer buyType;
 

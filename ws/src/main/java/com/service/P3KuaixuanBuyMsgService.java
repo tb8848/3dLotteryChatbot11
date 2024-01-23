@@ -24,6 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 @Lazy
+@Deprecated
 public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg> {
 
     @Autowired

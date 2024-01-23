@@ -74,10 +74,6 @@ public class WechatApiService{
     private KuaidaBuyMsgServiceV2 kuaidaBuyMsgServiceV2;
 
     @Autowired
-    private P3KuaidaBuyMsgService p3KuaidaBuyMsgService;
-
-
-    @Autowired
     private PlayerReturnPointsService playerReturnPointsService;
 
     @Autowired
@@ -112,9 +108,29 @@ public class WechatApiService{
     }
 
 
+    //检查重复消息
+    public boolean checkRepeatMsg(String msgId,String text,String fromUserName,String toUserName){
+        WechatMsg wechatMsg = new WechatMsg();
+        wechatMsg.setMsgId(msgId);
+        wechatMsg.setFromUser(fromUserName);
+        wechatMsg.setToUser(toUserName);
+        wechatMsg.setContent(text);
+        wechatMsg.setReceiveTime(new Date());
+        boolean msgIdExist = wechatMsgService.checkExist(msgId);
+        if(msgIdExist){
+            logger.info(String.format("%s>>>>收到重复的微信消息ID>>>>>%s>>>>>%s",toUserName,msgId,text));
+            //wechatMsgService.save(wechatMsg);
+            return true;
+        }else{
+            wechatMsgService.save(wechatMsg);
+            return false;
+        }
+    }
+
+
     //接受消息
     public void receiveMsg(BotUser user){
-        String lockKey = "3dbot:wx:syncmsg";
+        String lockKey = "3dbot:wx:syncmsg:"+user.getId();
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,30000);
         if(null!=lockKey){
             try {
@@ -161,25 +177,33 @@ public class WechatApiService{
                                         Map<String, String> content = oneMsg.getContent();
                                         String text = content.get("string");
 
-                                        if (text.toUpperCase().startsWith("3D") || text.toUpperCase().startsWith("P3")) {
-                                            logger.info(String.format(">>>>收到微信消息1>>>>>%s>>>>>%s", oneMsg.getMsgId(),text));
-                                            String[] multiArr = text.split("\n");
-                                            String buyDesc = Arrays.stream(multiArr).collect(Collectors.joining(","));
-                                            WechatMsg wechatMsg = new WechatMsg();
-                                            wechatMsg.setMsgId(String.valueOf(oneMsg.getMsgId()));
-                                            wechatMsg.setFromUser(fromUserName);
-                                            wechatMsg.setToUser(toUserName);
-                                            wechatMsg.setContent(buyDesc);
-                                            wechatMsg.setReceiveTime(new Date());
-                                            boolean msgIdExist = wechatMsgService.checkExist(String.valueOf(oneMsg.getMsgId()));
-                                            if(msgIdExist){
-                                                logger.info(String.format(">>>>重复的微信消息id>>>>>%s>>>>>%s", oneMsg.getMsgId(),buyDesc));
-                                                wechatMsgService.save(wechatMsg);
-                                                return;
-                                            }else{
-                                                wechatMsgService.save(wechatMsg);
-                                            }
+                                        String[] multiArr = text.split("\n");
+                                        String buyDesc = Arrays.stream(multiArr).collect(Collectors.joining(","));
+                                        //检查消息是否有重复，如果重复，则直接返回
+                                        boolean checkResult = checkRepeatMsg(String.valueOf(oneMsg.getMsgId()),buyDesc,fromUserName,toUserName);
+                                        if(checkResult){
+                                            return;
                                         }
+
+//                                        if (text.toUpperCase().startsWith("3D") || text.toUpperCase().startsWith("P3")) {
+//                                            logger.info(String.format(">>>>收到微信消息1>>>>>%s>>>>>%s", oneMsg.getMsgId(),text));
+//                                            String[] multiArr = text.split("\n");
+//                                            String buyDesc = Arrays.stream(multiArr).collect(Collectors.joining(","));
+//                                            WechatMsg wechatMsg = new WechatMsg();
+//                                            wechatMsg.setMsgId(String.valueOf(oneMsg.getMsgId()));
+//                                            wechatMsg.setFromUser(fromUserName);
+//                                            wechatMsg.setToUser(toUserName);
+//                                            wechatMsg.setContent(buyDesc);
+//                                            wechatMsg.setReceiveTime(new Date());
+//                                            boolean msgIdExist = wechatMsgService.checkExist(String.valueOf(oneMsg.getMsgId()));
+//                                            if(msgIdExist){
+//                                                logger.info(String.format(">>>>重复的微信消息id>>>>>%s>>>>>%s", oneMsg.getMsgId(),buyDesc));
+//                                                wechatMsgService.save(wechatMsg);
+//                                                return;
+//                                            }else{
+//                                                wechatMsgService.save(wechatMsg);
+//                                            }
+//                                        }
                                         if (toUserName.equals(wxId) && !excludeWxId.contains(fromUserName)) {
                                             addNewPlayer(text,user,fromUserName,wxId);
                                         }
@@ -206,8 +230,13 @@ public class WechatApiService{
 
     public void addNewPlayer(String text,BotUser user,String fromUserName,String wxId){
         String txt = text.toUpperCase();
-        if (txt.equals("3D") || txt.equals("P3")) {
-            int lottype = txt.equals("P3")?2:1;
+        if (txt.equals("3D") || txt.equals("P3") || txt.equals("福") || txt.equals("体")) {
+            int lottype = -1;
+            if(txt.equals("3D")  || txt.equals("福")){
+                lottype = 1;
+            }else{
+                lottype = 2;
+            }
             if(lottype>0){
                 BotUserSetting botUserSetting = botUserSettingService.getByUserId(user.getId());
                 Player player = playerService.getOneBy(user.getId(), fromUserName);
@@ -540,10 +569,12 @@ public class WechatApiService{
 
             Boolean checkTxtResult = true;
             String[] multiArr = text.split("\n");
-            System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
+            //System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
             for(String cmdText : multiArr){
-                if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")){
-                    if(cmdText.toUpperCase().startsWith("P3")){
+                if(cmdText.toUpperCase().startsWith("P3")
+                        || cmdText.toUpperCase().startsWith("3D") || cmdText.toUpperCase().startsWith("福")
+                        || cmdText.toUpperCase().startsWith("体")){
+                    if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("体")){
                        Draw draw =  p3DrawService.getLastDrawInfo();
                        if(null==draw || draw.getOpenStatus()!=1){
                            ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"【P3】^^★★★停止-上课★★★");
@@ -574,13 +605,23 @@ public class WechatApiService{
 
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();
-                    if(text1.startsWith("P3") || text1.startsWith("3D")){
+                    if(text1.startsWith("P3") || text1.startsWith("3D") || text1.startsWith("福") || text1.startsWith("体")){
                         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
-                        int lottype = text1.startsWith("P3")?2:1;
+                        int lottype = 1;
+                        if(text1.startsWith("P3") || text1.startsWith("体")){
+                            lottype = 2;
+                        }
+                        String txt = "";
+                        if(text1.startsWith("P3") || text1.startsWith("3D")){
+                            txt = text1.substring(2);
+                        }else{
+                            txt = text1.substring(1);
+                        }
+
+                        //int lottype = text1.startsWith("P3")?2:1;
                         String lotName = lottype==2?"P3":"3D";
                         if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
-
-                            String txt = text1.substring(2);
+                            //String txt = text1.substring(2);
                             boolean isBuy = false;
                             for(String word : GlobalConst.keywords2){
                                 if(txt.startsWith(word)){
