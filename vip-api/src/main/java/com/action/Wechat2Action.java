@@ -171,6 +171,7 @@ public class Wechat2Action {
                     proxyInfo = proxyService.getUnuseProxy();
                 }
 
+
                 if(null == proxyInfo){
                     proxy.put("ProxyIp",defaultProxyIp);
                     proxy.put("ProxyUser",defaultProxyUser);
