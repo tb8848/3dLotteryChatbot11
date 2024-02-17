@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -172,41 +171,27 @@ public class Wechat2Action {
                     proxyInfo = proxyService.getUnuseProxy();
                 }
 
-
-
                 if(null == proxyInfo){
-                    String[] ipPort = defaultProxyIp.split(":");
-                    String ip = ipPort[0];
-                    String port = ipPort[1];
-                    proxy.put("address",ip);
-                    proxy.put("port",Integer.valueOf(port));
-                    proxy.put("user",defaultProxyUser);
-                    proxy.put("password",defaultProxyPwd);
+                    proxy.put("ProxyIp",defaultProxyIp);
+                    proxy.put("ProxyUser",defaultProxyUser);
+                    proxy.put("ProxyPassword",defaultProxyPwd);
 //                    logger.info("["+botUser.getLoginName()+"]使用临时代理："+JSON.toJSONString(proxy));
                 }else{
 //                    logger.info("["+botUser.getLoginName()+"]使用动态代理："+JSON.toJSONString(proxyInfo));
-                    String[] ipPort = proxyInfo.getIp().split(":");
-                    String ip = ipPort[0];
-                    String port = ipPort[1];
-                    proxy.put("address",ip);
-                    proxy.put("port",Integer.valueOf(port));
-                    proxy.put("user",proxyInfo.getUsername());
-                    proxy.put("password",proxyInfo.getPassword());
+                    proxy.put("ProxyIp",proxyInfo.getIp());
+                    proxy.put("ProxyUser",proxyInfo.getUsername());
+                    proxy.put("ProxyPassword",proxyInfo.getPassword());
                 }
             }
 
-            if (StringUtil.isNull(botUser.getWxAccount())) {
-                botUser.setWxAccount(UUID.randomUUID().toString());
-            }
-
             Map<String,Object> reqData = new HashMap<>();
-            reqData.put("accountId", botUser.getWxAccount());
-            reqData.put("data62","");
-            reqData.put("vpnInfo",proxy);
+            reqData.put("DeviceID","");
+            reqData.put("DeviceName","");
+            reqData.put("OSModel","");
+            reqData.put("Proxy",proxy);
 
-            logger.info("=========="+JSON.toJSONString(reqData));
-            String url = "http://weixin.52iptv.net:8081/login/WXGetLoginQRCode";
-            logger.info("==========url"+url);
+            System.out.println("=========="+wechatApiUrl);
+            String url = wechatApiUrl+"Login/GetQR";
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.body(JSON.toJSONString(reqData));
             httpRequest.contentType("application/json");
@@ -214,19 +199,17 @@ public class Wechat2Action {
             String result = httpResponse.body();
             logger.info("["+botUser.getLoginName()+"]获取二维码结果："+result);
             //System.out.println("result>>>>>>"+result);
-            //RespData respData = JSONObject.parseObject(result, RespData.class);
-            JSONObject jsonObject = JSONObject.parseObject(result);
-            if(jsonObject.getInteger("code")==0){
-                JSONObject data = (JSONObject) jsonObject.get("data");
-                JSONObject resultData = (JSONObject) data.get("result");
-                JSONObject datas = (JSONObject) resultData.get("data");
+            RespData respData = JSONObject.parseObject(result, RespData.class);
+            if(respData.getCode()==1){
+                System.out.println("===========二维码获取成功");
+                Map<String,Object> datas = respData.getData();
                 String qrUrl = (String)datas.get("QrUrl");
                 String Uuid = (String)datas.get("Uuid");
                 String qrBase64 = (String)datas.get("QrBase64");
                 botUser.setQrUUid(Uuid);
                 botUserService.updateById(botUser);
                 threadPool.execute(()->{
-                    wechatApiService.checkQrcodeScan(userId,botUser.getWxAccount());
+                    wechatApiService.checkQrcodeScan(userId,Uuid);
                 });
                 return new ResponseBean(0, 0, "", qrBase64);
             }

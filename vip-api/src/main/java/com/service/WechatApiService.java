@@ -15,7 +15,6 @@ import com.vo.WechatPushMsgVo;
 import com.wechat.api.RespData;
 import com.wechat.api.RespDataV2;
 
-import com.wechat.api.RespDataV3;
 import net.bytebuddy.utility.JavaConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,34 +84,24 @@ public class WechatApiService{
         String nickName = "";
         long maxWait = 5*60; //单位：秒
         boolean scanSucc = false;
-        Map<String,Object> reqData = new HashMap<>();
-        reqData.put("accountId", uuid);
-        String url = "http://weixin.52iptv.net:8081/login/WXCheckLoginQRCode";
+        String url = wechatApiUrl+"Login/CheckQR?uuid="+uuid;
         while(maxWait>0){
             HttpRequest httpRequest = HttpUtil.createPost(url);
-            httpRequest.body(JSON.toJSONString(reqData));
             httpRequest.contentType("application/json");
             HttpResponse httpResponse = httpRequest.execute();
             String result = httpResponse.body();
             logger.info(">>>>>>【"+botUser.getLoginName()+"】Login/CheckQR>>>>>>"+result);
-            RespDataV3 respData = null;
+            RespData respData = null;
             try{
-                respData = JSONObject.parseObject(result, RespDataV3.class);
-                logger.info(">>>>>>【respData】Login/CheckQR>>>>>>"+respData);
-                if(respData.getCode()==0){
+                respData = JSONObject.parseObject(result, RespData.class);
+                if(respData.getCode()==0 && respData.getSuccess()){
                     Map<String, Object> datas = respData.getData();
-                    logger.info(">>>>>>【datas】Login/CheckQR>>>>>>"+datas);
-                    JSONObject resultData = (JSONObject) datas.get("result");
-                    logger.info(">>>>>>【resultData】Login/CheckQR>>>>>>"+resultData);
-                    JSONObject resultData2 = (JSONObject) resultData.get("data");
-                    JSONObject notify = (JSONObject) resultData2.get("notify");
-                    logger.info(">>>>>>【notify】Login/CheckQR>>>>>>"+notify);
-                    logger.info(">>>>>>【status】Login/CheckQR>>>>>>"+(Integer)notify.get("status"));
-                    Integer status = (Integer)notify.get("status");
-                    if(notify.containsKey("status")){
-                        if(status==0){
-                            headImgUrl = (String)notify.get("headImgUrl");
-                            nickName = (String)notify.get("nickName");
+                    if(datas.containsKey("status")){
+                        Integer status = (Integer)datas.get("status");
+                        if(status==1){
+
+                            headImgUrl = (String)datas.get("headImgUrl");
+                            nickName = (String)datas.get("nickName");
                             Map<String,Object> info = new HashMap<>();
                             info.put("wxId",botUser.getWxId());
                             info.put("wxNick",nickName);
@@ -141,16 +130,12 @@ public class WechatApiService{
                             break;
                         }
                     }
-                    if(status==2){
-                        String wxId = notify.getString("userName"); //微信ID
-                        headImgUrl = (String)notify.get("headImgUrl");
-                        nickName = (String)notify.get("nickName");
+                    if(datas.containsKey("acctSectResp")){
+                        JSONObject object = (JSONObject)datas.get("acctSectResp");
+                        String wxId = object.getString("userName"); //微信ID
                         botUser.setWxHeadimg(headImgUrl);
                         botUser.setWxId(wxId);
                         botUser.setWxNick(nickName);
-                        botUser.setWxUserName(wxId);
-                        botUser.setWxPassword(notify.getString("pwd"));
-                        botUser.setWxAccount(uuid);
                         botUser.setWxStatus(1);
                         botUser.setWxLoginTime(new Date());
                         botUserDAO.updateWxInfo(botUser);
