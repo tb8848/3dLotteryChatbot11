@@ -106,10 +106,29 @@ public class HeatBeatTask {
                             if(result.startsWith("{") && result.endsWith("}")){
                                 RespData respData = JSONObject.parseObject(result, RespData.class);
                                 if(respData.getCode()<0){
-                                    botUser.setWxStatus(2);
-                                    botUser.setWxLoginTime(new Date());
-                                    botUserService.updateById(botUser);
-                                    wechatApiService.pushWxLoginStatusMsg(botUser,2);
+
+                                    //二次登录
+                                    String twiceAutoAuth =  wechatApiUrl+"Login/TwiceAutoAuth";
+                                    Map<String,Object> reqData = new HashMap<>();
+                                    reqData.put("OSModel","");
+                                    reqData.put("Wxid",botUser.getWxId());
+
+                                    HttpRequest twiceRequest = HttpUtil.createPost(twiceAutoAuth);
+                                    twiceRequest.body(JSON.toJSONString(reqData));
+                                    twiceRequest.contentType("application/json");
+                                    HttpResponse twiceResponse = twiceRequest.execute();
+                                    String twiceResult = twiceResponse.body();
+                                    logger.info("["+botUser.getLoginName()+"]二次登录结果："+twiceResult);
+                                    RespData twiceData = JSONObject.parseObject(twiceResult, RespData.class);
+                                    if(twiceData.getCode()==0){
+                                        logger.info("二次登录成功");
+                                    }else{
+                                        logger.info("二次登录失败");
+                                        botUser.setWxStatus(2);
+                                        botUser.setWxLoginTime(new Date());
+                                        botUserService.updateById(botUser);
+                                        wechatApiService.pushWxLoginStatusMsg(botUser,2);
+                                    }
                                 }
                             }
                         }
