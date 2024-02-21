@@ -109,6 +109,447 @@ public class KuaidaBuyMsgServiceV2 {
     }
 
     //快打下注，固定文本格式
+    public void handleMsgGroup(ChatRoomMsg fromMsg,BotUser botUser,Player player,Integer lotteryType,String groupName){
+        Draw draw = null;
+        String lotteryName = null;
+        if(2==lotteryType){
+            lotteryName = "P3";
+            draw = p3DrawService.getLastDrawInfo();
+        }else{
+            lotteryName = "3D";
+            draw = drawService.getLastDrawInfo();
+        }
+
+        if(draw.getOpenStatus()!=1){
+            ChatRoomMsg toMsg = createMsg(botUser, player, "【"+lotteryName+"】^^★★★停止-上课★★★");
+            toMsg.setSource(1);
+            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+            return;
+        }
+        kuaidaBuyGroup(fromMsg,botUser,player,draw,lotteryType,lotteryName,groupName);
+    }
+
+    public void kuaidaBuyGroup(ChatRoomMsg fromMsg, BotUser botUser, Player player,Draw draw,Integer lotteryType,String lotteryName,String groupName){
+        try {
+
+            BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
+            if(botUserSetting.getWxChatBuy()!=1){
+                ChatRoomMsg toMsg = createMsg(botUser, player,"交作业功能已关闭");
+                toMsg.setSource(1);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+//                System.out.println(DateUtil.now() + ">>>>>>>>>>>>>>机器人已关闭私聊下注功能!!!!!!");
+                return;
+            }
+//            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
+            String content = fromMsg.getMsg().substring(2);
+            String[] arr = content.split("各");
+            List<BuyRecord3DVO> buyList = Lists.newArrayList();
+            Map<String,Object> resMap = Maps.newHashMap();
+            String errmsg = null;
+            if (arr.length != 2) {
+                ChatRoomMsg toMsg = getErrorMsg(botUser, player);
+                toMsg.setSource(1);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                return;
+            }
+            BigDecimal buyMoney = BigDecimal.ZERO;
+            try {
+                buyMoney = new BigDecimal(arr[1]);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                ChatRoomMsg toMsg = createMsg(botUser, player, "金额错误");
+                toMsg.setSource(1);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                return;
+            }
+            if (arr[0].equals("拖拉机") || arr[0].equals("三同号") || arr[0].equals("猜三同")
+                    || arr[0].equals("大") || arr[0].equals("小") || arr[0].equals("奇") || arr[0].equals("偶")
+                    || arr[0].equals("大小") || arr[0].equals("奇偶")) {
+                switch (arr[0]) {
+                    case "大小":
+                    case "大":
+                    case "小":
+                        buyList = noCodesBuy(botUser, player, buyMoney, arr[0], "9");
+                        break;
+                    case "奇偶":
+                    case "偶":
+                    case "奇":
+                        buyList = noCodesBuy(botUser, player, buyMoney, arr[0], "10");
+                        break;
+                    case "拖拉机":
+                        buyList = noCodesBuy(botUser, player, buyMoney, arr[0], "12");
+                        break;
+                    case "猜三同":
+                    case "三同号":
+                        buyList = noCodesBuy(botUser, player, buyMoney, arr[0], "11");
+                        break;
+                }
+                if (null != buyList && buyList.size()>0) {
+                    xiazhuGroup(botUser, player, fromMsg, buyList,draw,lotteryType,lotteryName,groupName);
+                }else{
+                    ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+arr[0]+"】的要求");
+                    toMsg.setSource(1);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                }
+            } else {
+                boolean matchSucc = false;
+                for (String word : GlobalConst.keywords1) {
+                    String typePart = arr[0].toUpperCase();
+                    if (typePart.startsWith(word)) {
+                        String type = word.toUpperCase();
+                        String code = null;
+                        matchSucc = true;
+                        String[] typeArr = typePart.split(word);
+                        if (typeArr.length != 2) {
+                            ChatRoomMsg toMsg = getErrorMsg(botUser, player);
+                            toMsg.setSource(1);
+                            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                            return;
+                        }
+                        code = typeArr[1];
+                        String[] splitArr = code.split("\\.|,|，");
+                        List<String> cclist = Arrays.stream(splitArr).map(item->item.trim()).collect(Collectors.toList());
+                        for(String r : cclist){
+                            if(StringUtils.isNullOrEmpty(r)){
+
+                            }else{
+                                if(r.equals("全包")){
+                                    continue;
+                                }
+                                if(!StringUtil.checkCodeFormat(r)){
+                                    ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
+                                    toMsg.setSource(0);
+                                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                                    return;
+                                }
+                            }
+                        }
+                        switch (type) {
+                            case "分笔组三":
+                                resMap = z3Buy(botUser, player,buyMoney, code, "3");
+                                break;
+                            case "分笔组六":
+                                resMap = z6Buy(botUser, player,buyMoney, code, "4");
+                                break;
+                            case "分笔复式":
+                                resMap = fsBuy(botUser, player,buyMoney, code, "2");
+                                break;
+                            case "单选":
+                                resMap = codeBuy(botUser, player, buyMoney, code, "1");
+                                break;
+                            case "直选":
+                            case "直选普通":
+                                resMap = zxtxBuy(botUser, player, buyMoney, code, "1");
+                                break;
+                            case "直选和值":
+                                resMap = zxhzBuy(botUser, player, buyMoney, code, "1");
+                                break;
+                            case "通选":
+                            case "复式":
+                                resMap = fsBaozuBuy( buyMoney, code, "300");
+                                break;
+                            case "组三":
+                            case "组三普通":
+//                                if(code.contains(",")||code.contains("，")){
+//                                    resMap = z3Z6OneCode(botUser, player, buyMoney, code, "3");
+//                                }else
+                                if(code.contains("拖")){
+                                    resMap = z3dtBuy(botUser, player, buyMoney, code, "3");
+                                }else{
+                                    resMap = z3BaozuBuy(buyMoney, code, "100");
+                                }
+                                break;
+                            case "双飞组三":
+                                resMap = z3SFBuy(botUser, player, buyMoney, code, "3");
+                                break;
+                            case "组三和值":
+                                resMap = z3hzBuy(botUser, player, buyMoney, code, "3");
+                                break;
+                            case "组六":
+                            case "组六普通":
+//                                if(code.contains(",")||code.contains("，")){
+//                                    resMap = z3Z6OneCode(botUser, player, buyMoney, code, "4");
+//                                }else
+                                if(code.contains("拖")){
+                                    resMap = z6dtBuy(botUser, player, buyMoney, code, "4");
+                                }else{
+                                    resMap = z6BaozuBuy(buyMoney, code, "200");
+                                }
+                                break;
+                            case "双飞组六":
+                                resMap = z6SFBuy(botUser, player, buyMoney, code, "4");
+                                break;
+                            case "组六和值":
+                                resMap = z6hzBuy(botUser, player, buyMoney, code, "4");
+                                break;
+                            case "和数":
+                                resMap = hsBuy(botUser, player, buyMoney, code, "5");
+                                break;
+                            case "跨度":
+                                resMap = kdBuy(botUser, player, buyMoney, code, "13");
+                                break;
+                            case "独胆":
+                                resMap = ddBuy(botUser, player, buyMoney, code, "14");
+                                break;
+                            case "1D":
+                                resMap = ding1Buy(botUser, player, buyMoney, code, "6");
+                                break;
+                            case "猜1D":
+                                resMap = c1dBuy(botUser, player, buyMoney, code, "6");
+                                break;
+                            case "2D":
+                                resMap = ding2Buy(botUser, player, buyMoney, code, "7");
+                                break;
+                            case "猜2D":
+                                resMap = c2dBuy(botUser, player, buyMoney, code, "7");
+                                break;
+                            case "包选三":
+                                resMap = b3Buy(botUser, player, buyMoney, code, "8");
+                                break;
+                            case "包选六":
+                                resMap = b6Buy(botUser, player, buyMoney, code, "8");
+                                break;
+                            default:
+                                ChatRoomMsg toMsg = createMsg(botUser, player, "类别格式错误");
+                                toMsg.setSource(1);
+                                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                                return;
+                        }
+                        if(resMap.containsKey("list")){
+                            buyList = (List<BuyRecord3DVO>) resMap.get("list");
+                        }else{
+                            errmsg = (String)resMap.get("errmsg");
+                        }
+                        if(StringUtil.isNotNull(errmsg)){
+                            ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n"+errmsg);
+                            toMsg.setSource(1);
+                            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                        }else{
+                            if (null != buyList && buyList.size() > 0) {
+                                xiazhuGroup(botUser, player, fromMsg, buyList,draw,lotteryType,lotteryName,groupName);
+                            }else{
+                                ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+type+"】的要求");
+                                toMsg.setSource(1);
+                                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                            }
+                        }
+                        break;
+                    }
+                }
+                if(!matchSucc){
+                    ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n类别格式错误");
+                    toMsg.setSource(1);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            ChatRoomMsg toMsg = createMsg(botUser, player, "系统繁忙，请稍后重试");
+            toMsg.setSource(1);
+            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+        }
+    }
+
+    public void reportToPanGroup(BotUser botUser,Player player,ChatRoomMsg msg,List<BuyRecord3DVO> buyList,BotUserPan botUserPan,
+                            Draw draw,Integer lotteryType,String lotteryName,String groupName){
+        String reportToPanUrl = botUserPan.getLottery3dUrl();
+        if(reportToPanUrl.endsWith("/")){
+            reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
+        }
+        if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){
+            reportToPanUrl+=":9992";
+        }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){
+            reportToPanUrl+=":9892";
+        }else if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
+            reportToPanUrl+=":9092";
+        }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){
+            reportToPanUrl+=":9292";
+        }
+        BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
+
+        String playerBuyId = snowflake.nextIdStr();
+        PlayerBuyRecord playerBuyRecord = new PlayerBuyRecord();
+        playerBuyRecord.setId(playerBuyId);
+        playerBuyRecord.setPlayerId(player.getId());
+        playerBuyRecord.setBuyType(0);
+        playerBuyRecord.setBotUserId(player.getBotUserId());
+
+        String lmId = buyList.get(0).getLmId();
+        Map<String,Object> buyResult = null;
+        ResponseBean reportRespData = null;
+        buyList.forEach(item->{
+            item.setPlayerBuyId(playerBuyId);
+        });
+        if("5".equals(lmId) || "13".equals(lmId)){
+            reportRespData = reportToPanService.buyHs(reportToPanUrl,buyList,botUserPan.getLogin3dToken());
+        }else{
+            reportRespData = reportToPanService.buyForText(reportToPanUrl,buyList,botUserPan.getLogin3dToken());
+        }
+        ChatRoomMsg toMsg = null;
+        switch (reportRespData.getCode()){
+            case 403: //盘口登录token已失效
+                botUserPanService.clearInfo(1,botUser.getId());
+                toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
+                toMsg.setSource(1);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                break;
+            case -1:
+            case 500:
+                String errmsg = reportRespData.getMsg();
+                toMsg = createMsg(botUser,player,errmsg);
+                toMsg.setSource(1);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                break;
+            case 0:
+                Map<String,Object> dataMap = (Map<String,Object>)reportRespData.getData();
+                JSONArray array = (JSONArray)dataMap.get("buyList");
+                List<DrawBuyRecord> dataList = JSONArray.parseArray(JSON.toJSONString(array),DrawBuyRecord.class);
+                if(null!=dataList && dataList.size()>0){
+                    int buyAmount = dataList.size();
+                    BigDecimal totalPoints = dataList.stream().map(item->item.getBuyMoney()).reduce(BigDecimal.ZERO,BigDecimal::add);
+                    playerBuyRecord.setBuyAmount(dataList.size());
+                    playerBuyRecord.setBuyPoints(totalPoints);
+                    playerBuyRecord.setBuyStatus(0);
+                    playerBuyRecord.setBuyTime(new Date());
+                    playerBuyRecord.setDrawNo(draw.getDrawId());
+                    playerBuyRecord.setBotUserId(botUser.getId());
+                    playerBuyRecord.setBuyDesc(msg.getMsg());
+                    playerBuyRecord.setBuyFrom(0);
+                    playerBuyRecord.setKuaixuanRule(msg.getKuaixuanRule());
+                    playerBuyRecord.setEarnPoints(BigDecimal.ZERO.subtract(totalPoints));
+                    playerBuyRecord.setLotteryType(lotteryType);
+                    dataList.forEach(item->{
+                        item.setBaopaiId(playerBuyId);
+                        item.setVipId(player.getId());//盘口传回的下注明细，将vipId改为玩家ID
+                        item.setBuyType(0);
+                        item.setHasOneFlag(lotteryType);
+                    });
+                    Map dynamicPrama = new HashMap();
+                    dynamicPrama.put("qihao", String.valueOf(draw.getDrawId()));
+                    RequestDataHelper.setRequestData(dynamicPrama);
+
+                    if(drawBuyRecordDAO.batchAddBuyCode(dataList)>0){
+                        playerBuyRecordService.save(playerBuyRecord);
+                        playerService.updatePoint(player.getId(),totalPoints,false);
+                        BigDecimal points = playerService.getPoints(player.getId());
+                        String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+msg.getMsg()+"\r\n交作业成功√√\r\n【份数】："+buyAmount+"\r\n"
+                                +"【扣面】："+totalPoints.stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
+
+                        toMsg = new ChatRoomMsg();
+                        toMsg.setFromUserId(botUser.getId());
+                        toMsg.setFromUserNick("机器人");
+                        toMsg.setFromUserType(1);
+                        toMsg.setMsg(newmsg);
+                        toMsg.setMsgType(0);
+                        toMsg.setToUserNick(player.getNickname());
+                        toMsg.setToUserId(player.getId());
+                        toMsg.setCreateTime(new Date());
+                        toMsg.setToUserType(0);
+                        toMsg.setSource(1);
+                        toMsg.setBotUserId(botUser.getId());
+                        if(botUserSetting.getTuimaEnable()==1){//开启了退码
+                            toMsg.setPlayerBuyId(playerBuyRecord.getId());
+                            toMsg.setOptType(3);
+                        }else{//未开启退码
+                            toMsg.setPlayerBuyId(null);
+                            toMsg.setOptType(1);
+                        }
+                        toMsg.setSource(1);
+                        chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    }
+                }else{
+                    JSONArray array1 = (JSONArray)dataMap.get("stopCodeList");
+                    if(null!=array1 && array1.size()>0){
+                        String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+msg.getMsg()+"\r\n交作业成功√√\r\n【份数】："+0+"\r\n"
+                                +"【扣面】："+0+"\r\n"+"【停押】："+array1.size();
+                        toMsg = createMsg(botUser,player,newmsg);
+                        toMsg.setSource(1);
+                        chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    }
+                }
+                break;
+        }
+    }
+
+    public void xiazhuGroup(BotUser botUser, Player player,ChatRoomMsg fromMsg, List<BuyRecord3DVO> buyList,Draw draw,Integer lotteryType,String lotteryName,String groupName) {
+        BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
+        if(totalPoints.compareTo(player.getPoints())>0){
+            //玩家积分不够
+            ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");
+            toMsg.setSource(1);
+            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+            return ;
+        }
+        if(player.getPretexting()==1 || player.getEatPrize()==1){
+            String msg = fromMsg.getMsg();
+            BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
+            String lmId = buyList.get(0).getLmId();
+            Map<String,Object> buyResult = null;
+            if("5".equals(lmId) || "13".equals(lmId)){
+                buyResult = buyRecord3DService.buy3dHs(player,buyList,draw,-2,null,msg,lotteryType);
+            }else{
+                buyResult = buyRecord3DService.codesBatchBuy(player,buyList,draw,-2,null,msg,lotteryType);
+            }
+            if(buyResult.containsKey("playerBuyId")){
+                String playerBuyId = (String)buyResult.get("playerBuyId");
+                PlayerBuyRecord record = playerBuyRecordService.getById(playerBuyId);
+                BigDecimal points = playerService.getPoints(player.getId());
+                String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+msg+"\r\n交作业成功√√\r\n【份数】："+record.getBuyAmount()+"\r\n"
+                        +"【扣面】："+record.getBuyPoints().stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
+
+                ChatRoomMsg toMsg = new ChatRoomMsg();
+                toMsg.setFromUserId(botUser.getId());
+                toMsg.setFromUserNick("机器人");
+                toMsg.setFromUserType(1);
+                toMsg.setMsg(newmsg);
+                toMsg.setToUserNick(player.getNickname());
+                toMsg.setToUserId(player.getId());
+                toMsg.setCreateTime(new Date());
+                toMsg.setToUserType(0);
+                toMsg.setMsgType(0);
+                toMsg.setBotUserId(botUser.getId());
+                if(botUserSetting.getTuimaEnable()==1){
+                    toMsg.setPlayerBuyId(playerBuyId);
+                    toMsg.setOptType(3);
+                }else{
+                    toMsg.setPlayerBuyId(null);
+                    toMsg.setOptType(1);
+                }
+                toMsg.setMsgType(0);
+                toMsg.setSource(1);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+            }else{
+                String errmsg = (String)buyResult.get("errmsg");
+                if(StringUtil.isNotNull(errmsg)){
+                    ChatRoomMsg toMsg = createMsg(botUser,player,errmsg);
+                    toMsg.setSource(1);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                }
+            }
+        }else{
+            if(player.getReportNet()==1){
+                BotUserPan botUserPan = botUserPanService.getOneBy(lotteryType,botUser.getId());
+                if(null == botUserPan){
+                    //机器人不支持3D
+                    ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
+                    toMsg.setSource(1);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    return;
+                }
+                if(StringUtil.isNotNull(botUserPan.getLogin3dToken())){
+                    //报网
+                    reportToPanGroup(botUser,player,fromMsg,buyList,botUserPan,draw,lotteryType,lotteryName,groupName);
+                }else{
+                    ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
+                    toMsg.setSource(1);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                }
+            }
+        }
+    }
+
+    //快打下注，固定文本格式
     public void handleMsg(ChatRoomMsg fromMsg,BotUser botUser,Player player,Integer lotteryType){
         Draw draw = null;
         String lotteryName = null;

@@ -81,7 +81,7 @@ public class HeatBeatTask {
                             httpRequest.contentType("application/json");
                             HttpResponse httpResponse = httpRequest.execute();
                             String result = httpResponse.body();
-                            logger.info("botUser:"+botUser.getLoginName()+">>>>>>>>>>Login/LogOut>>>>>>"+result);
+//                            logger.info("botUser:"+botUser.getLoginName()+">>>>>>>>>>Login/LogOut>>>>>>"+result);
                             //System.out.println(DateUtil.now()+">>>>>>Login/LogOut>>>>>>"+result);
                             RespData respData = JSONObject.parseObject(result, RespData.class);
                             if(respData.getCode()<0 || respData.getCode()==0){
@@ -101,7 +101,7 @@ public class HeatBeatTask {
                             httpRequest.contentType("application/json");
                             HttpResponse httpResponse = httpRequest.execute();
                             String result = httpResponse.body();
-                            logger.info("botUser:"+botUser.getLoginName()+">>>>>>>>>>Login/HeartBeat>>>>>>"+result);
+//                            logger.info("botUser:"+botUser.getLoginName()+">>>>>>>>>>Login/HeartBeat>>>>>>"+result);
                             //System.out.println(DateUtil.now()+">>>>>>["+botUser.getLoginName()+"]Login/HeartBeat>>>>>>"+result);
                             if(result.startsWith("{") && result.endsWith("}")){
                                 RespData respData = JSONObject.parseObject(result, RespData.class);
