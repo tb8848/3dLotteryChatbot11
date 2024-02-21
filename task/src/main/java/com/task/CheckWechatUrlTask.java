@@ -70,7 +70,7 @@ public class CheckWechatUrlTask {
                                     // 发送微信消息
                                     BotUser botUser = botUserService.getById(player.getBotUserId());
                                     String chatUrl = player.getChaturl() + "/?openId=" + player.getOpenid();
-                                    chatRoomMsgService.sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                                    chatRoomMsgService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), "聊天地址变更为：" + chatUrl);
                                 }
                             }
                         }

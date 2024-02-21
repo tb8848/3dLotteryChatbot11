@@ -50,17 +50,18 @@ public class WechatApiService{
 
     public RespDataV2 clearProxyIp(String wxId) {
         RespDataV2 respData = null;
-        String url = wechatApiUrl+"Tools/setproxy";
+        String url = wechatApiUrl+"login/WXSetProxyInfo";
         try{
             Map<String,Object> reqData = new HashMap<>();
 
             Map<String,Object> proxy = new HashMap<>();
-            proxy.put("ProxyIp","");
-            proxy.put("ProxyPassword","");
-            proxy.put("ProxyUser",wxId);
+            proxy.put("address","");
+            proxy.put("port", 0);
+            proxy.put("user","");
+            proxy.put("password","");
 
-            reqData.put("Proxy",proxy);
-            reqData.put("Wxid",wxId);
+            reqData.put("vpnInfo",proxy);
+            reqData.put("accountId",wxId);
 
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.contentType("application/json");
@@ -87,7 +88,7 @@ public class WechatApiService{
         boolean scanSucc = false;
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("accountId", uuid);
-        String url = "http://weixin.52iptv.net:8081/login/WXCheckLoginQRCode";
+        String url = wechatApiUrl + "login/WXCheckLoginQRCode";
         while(maxWait>0){
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.body(JSON.toJSONString(reqData));
@@ -101,62 +102,88 @@ public class WechatApiService{
                 logger.info(">>>>>>【respData】Login/CheckQR>>>>>>"+respData);
                 if(respData.getCode()==0){
                     Map<String, Object> datas = respData.getData();
-                    logger.info(">>>>>>【datas】Login/CheckQR>>>>>>"+datas);
                     JSONObject resultData = (JSONObject) datas.get("result");
-                    logger.info(">>>>>>【resultData】Login/CheckQR>>>>>>"+resultData);
                     JSONObject resultData2 = (JSONObject) resultData.get("data");
                     JSONObject notify = (JSONObject) resultData2.get("notify");
-                    logger.info(">>>>>>【notify】Login/CheckQR>>>>>>"+notify);
-                    logger.info(">>>>>>【status】Login/CheckQR>>>>>>"+(Integer)notify.get("status"));
-                    Integer status = (Integer)notify.get("status");
-                    if(notify.containsKey("status")){
-                        if(status==0){
+                    logger.info(">>>>>>【notify】Login/CheckQR>>>>>>" + notify);
+                    if (null != notify) {
+                        Integer status = (Integer)notify.get("status");
+                        if(notify.containsKey("status")){
+                            if(status==1){
+                                headImgUrl = (String)notify.get("headImgUrl");
+                                nickName = (String)notify.get("nickName");
+                                Map<String,Object> info = new HashMap<>();
+                                info.put("wxId",botUser.getWxId());
+                                info.put("wxNick",nickName);
+                                info.put("wxHeadimg",headImgUrl);
+                                info.put("wxStatus",-1);
+                                info.put("flag","login");
+
+                                ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
+                                WechatPushMsgVo vo = new WechatPushMsgVo();
+                                vo.setBotUserId(botUserId);
+                                vo.setResponseBean(responseBean);
+                                rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
+                            }else if(status==4){
+                                Map<String,Object> info = new HashMap<>();
+                                info.put("wxId",botUser.getWxId());
+                                info.put("wxNick",botUser.getWxNick());
+                                info.put("wxHeadimg",botUser.getWxHeadimg());
+                                info.put("wxStatus",-2); //取消登录
+                                info.put("flag","login");
+                                ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
+                                WechatPushMsgVo vo = new WechatPushMsgVo();
+                                vo.setBotUserId(botUserId);
+                                vo.setResponseBean(responseBean);
+                                //stringRedisTemplate.boundValueOps("3d:chatbot:wxStatus:"+botUserId).set("-2");
+                                rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
+                                break;
+                            }
+                        }
+                        if(status==2){
+                            logger.info("#####【status】Login/CheckQR######"+(Integer)notify.get("status"));
+                            String wxId = notify.getString("userName"); //微信ID
                             headImgUrl = (String)notify.get("headImgUrl");
                             nickName = (String)notify.get("nickName");
-                            Map<String,Object> info = new HashMap<>();
-                            info.put("wxId",botUser.getWxId());
-                            info.put("wxNick",nickName);
-                            info.put("wxHeadimg",headImgUrl);
-                            info.put("wxStatus",-1);
-                            info.put("flag","login");
+                            botUser.setWxHeadimg(headImgUrl);
+                            botUser.setWxId(wxId);
+                            botUser.setWxNick(nickName);
+                            botUser.setWxUserName(wxId);
+                            botUser.setWxPassword(notify.getString("pwd"));
+                            botUser.setWxAccount(uuid);
+                            botUser.setWxStatus(1);
+                            botUser.setWxLoginTime(new Date());
+                            botUserDAO.updateWxInfo(botUser);
+                            HttpRequest request = HttpUtil.createPost(wechatApiUrl + "login/WXQRCodeLogin");
+                            Map<String,Object> reqMap = new HashMap<>();
+                            reqMap.put("accountId", botUser.getWxAccount());
+                            reqMap.put("userName", notify.getString("userName"));
+                            reqMap.put("pwd", notify.getString("pwd"));
+                            request.body(JSON.toJSONString(reqMap));
+                            logger.info("#####【WXQRCodeLogin】Login/WXQRCodeLogin######reqData->"+reqMap);
+                            request.contentType("application/json");
+                            HttpResponse response = request.execute();
+                            String result2 = response.body();
+                            JSONObject jsonObject = JSONObject.parseObject(result2);
+                            logger.info("#####【WXQRCodeLogin】Login/WXQRCodeLogin######"+jsonObject);
+                            if (jsonObject.getInteger("code") == 0) {
+                                scanSucc = true;
+                                break;
+                            }else {
+                                Map<String,Object> info = new HashMap<>();
+                                info.put("wxStatus",-2); //取消登录
+                                info.put("flag","login");
+                                ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
+                                WechatPushMsgVo vo = new WechatPushMsgVo();
+                                vo.setBotUserId(botUserId);
+                                vo.setResponseBean(responseBean);
+                                rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
+                                break;
+                            }
 
-                            ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
-                            WechatPushMsgVo vo = new WechatPushMsgVo();
-                            vo.setBotUserId(botUserId);
-                            vo.setResponseBean(responseBean);
-                            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
-                        }else if(status==4){
-                            Map<String,Object> info = new HashMap<>();
-                            info.put("wxId",botUser.getWxId());
-                            info.put("wxNick",botUser.getWxNick());
-                            info.put("wxHeadimg",botUser.getWxHeadimg());
-                            info.put("wxStatus",-2); //取消登录
-                            info.put("flag","login");
-                            ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
-                            WechatPushMsgVo vo = new WechatPushMsgVo();
-                            vo.setBotUserId(botUserId);
-                            vo.setResponseBean(responseBean);
-                            //stringRedisTemplate.boundValueOps("3d:chatbot:wxStatus:"+botUserId).set("-2");
-                            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
-                            break;
                         }
                     }
-                    if(status==2){
-                        String wxId = notify.getString("userName"); //微信ID
-                        headImgUrl = (String)notify.get("headImgUrl");
-                        nickName = (String)notify.get("nickName");
-                        botUser.setWxHeadimg(headImgUrl);
-                        botUser.setWxId(wxId);
-                        botUser.setWxNick(nickName);
-                        botUser.setWxUserName(wxId);
-                        botUser.setWxPassword(notify.getString("pwd"));
-                        botUser.setWxAccount(uuid);
-                        botUser.setWxStatus(1);
-                        botUser.setWxLoginTime(new Date());
-                        botUserDAO.updateWxInfo(botUser);
-                        scanSucc = true;
-                        break;
-                    }
+
                 }else{
                     Map<String,Object> info = new HashMap<>();
                     info.put("wxStatus",-2); //取消登录
@@ -301,12 +328,12 @@ public class WechatApiService{
 
     //发送消息
     public void sendMsg(String toWxId, String wxId, String text){
-        String url = wechatApiUrl+"Msg/SendTxt";
+        String url = wechatApiUrl+"msg/WXSendText";
         Map<String,Object> reqData = new HashMap<>();
-        reqData.put("Content",text);
-        reqData.put("ToWxid",toWxId);
-        reqData.put("Type",1);
-        reqData.put("Wxid",wxId);
+        reqData.put("content",text);
+        reqData.put("toUserName",toWxId);
+        //reqData.put("Type",1);
+        reqData.put("accountId",wxId);
 
         HttpRequest httpRequest = HttpUtil.createPost(url);
         httpRequest.contentType("application/json");
@@ -330,11 +357,6 @@ public class WechatApiService{
         vo.setResponseBean(responseBean);
         rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
     }
-
-
-
-
-
 }
 
 

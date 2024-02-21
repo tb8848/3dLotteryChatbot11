@@ -38,6 +38,9 @@ public class WechatApiService {
     @Value("${upload.dir}")
     private String uploadDir;
 
+    @Autowired
+    private BotUserService botUserService;
+
     private Logger logger = LoggerFactory.getLogger(WechatApiService.class);
 
     //发送消息
@@ -49,14 +52,14 @@ public class WechatApiService {
      * @param text 发送内容
      */
     public void sendMsg(String toWxId, String wxId, String text){
-        String url = wechatApiUrl+"msg/SendTxt";
+        String url = wechatApiUrl+"msg/WXSendText";
         Map<String,Object> reqData = new HashMap<>();
         /*reqData.put("Content",text);
         reqData.put("ToWxid",toWxId);
         reqData.put("Type",1);
         reqData.put("Wxid",wxId);*/
         reqData.put("toUserName",toWxId);
-        reqData.put("Content",1);
+        reqData.put("content",text);
         reqData.put("accountId",wxId);
 
         HttpRequest httpRequest = HttpUtil.createPost(url);
@@ -72,14 +75,14 @@ public class WechatApiService {
     public void sendImage(String wxFriendId, String wxId, String msg) {
         int maxTry = 3;
         while(maxTry>0){
-            String url = wechatApiUrl+"Msg/UploadImg";
+            String url = wechatApiUrl+"msg/WXSendImage";
             try{
                 String base64 = netImageToBase64(msg);
                 //base64 = "data:image/jpg;base64,"+base64;
                 Map<String,Object> reqData = new HashMap<>();
                 reqData.put("Base64",base64);
-                reqData.put("ToWxid",wxFriendId);
-                reqData.put("Wxid",wxId);
+                reqData.put("toUserName",wxFriendId);
+                reqData.put("accountId",wxId);
 
                 HttpRequest httpRequest = HttpUtil.createPost(url);
                 httpRequest.contentType("application/json");

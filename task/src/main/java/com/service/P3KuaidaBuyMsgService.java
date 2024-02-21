@@ -105,12 +105,12 @@ public class P3KuaidaBuyMsgService {
     public void handleMsg(ChatRoomMsg fromMsg,BotUser botUser,Player player){
         //dataDao.insert(fromMsg);
         //rabbitTemplate.convertAndSend("exchange_lotteryTopic_p3", "botChatMsg", JSON.toJSONString(fromMsg));
-        //wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+        //wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
         Draw draw = p3DrawService.getLastDrawInfo();
         if(draw.getOpenStatus()!=1){
             ChatRoomMsg toMsg = createMsg(botUser, player, "【P3】^^★★★停止-上课★★★");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return;
         }
         kuaidaBuy(fromMsg,botUser,player);
@@ -123,7 +123,7 @@ public class P3KuaidaBuyMsgService {
             if(botUserSetting.getWxChatBuy()!=1){
                 ChatRoomMsg toMsg = createMsg(botUser, player,"交作业功能已关闭");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 //System.out.println(DateUtil.now() + ">>>>>>>>>>>>>>机器人已关闭私聊下注功能!!!!!!");
                 return;
             }
@@ -133,7 +133,7 @@ public class P3KuaidaBuyMsgService {
             if (arr.length != 2) {
                 ChatRoomMsg toMsg = getErrorMsg(botUser, player);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 return;
             }
             BigDecimal buyMoney = BigDecimal.ZERO;
@@ -143,7 +143,7 @@ public class P3KuaidaBuyMsgService {
             } catch (Exception e) {
                 ChatRoomMsg toMsg = createMsg(botUser, player, "金额错误");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 return;
             }
             if (arr[0].equals("拖拉机") || arr[0].equals("三同号") || arr[0].equals("猜三同")
@@ -173,7 +173,7 @@ public class P3KuaidaBuyMsgService {
                 }else{
                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+arr[0]+"】的要求");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             } else {
                 boolean matchSucc = false;
@@ -191,7 +191,7 @@ public class P3KuaidaBuyMsgService {
                             if (typeArr.length != 2) {
                                 ChatRoomMsg toMsg = getErrorMsg(botUser, player);
                                 toMsg.setSource(1);
-                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                                 return;
                             }
                             code = typeArr[1];
@@ -199,7 +199,7 @@ public class P3KuaidaBuyMsgService {
                             if(!code.matches(regex)){
                                 ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
                                 toMsg.setSource(0);
-                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                                 return;
                             }
                         }
@@ -268,7 +268,7 @@ public class P3KuaidaBuyMsgService {
                             default:
                                 ChatRoomMsg toMsg = createMsg(botUser, player, "类别格式错误");
                                 toMsg.setSource(1);
-                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                                 return;
                         }
                         if (null != buyList && buyList.size() > 0) {
@@ -276,7 +276,7 @@ public class P3KuaidaBuyMsgService {
                         }else{
                             ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+type+"】的要求");
                             toMsg.setSource(1);
-                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                         }
                         break;
                     }
@@ -285,14 +285,14 @@ public class P3KuaidaBuyMsgService {
                 if(!matchSucc){
                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n类别格式错误");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
             ChatRoomMsg toMsg = createMsg(botUser, player, "系统繁忙，请稍后重试");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
         }
     }
 
@@ -305,7 +305,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
         for(String code : codeArr){
@@ -314,7 +314,7 @@ public class P3KuaidaBuyMsgService {
 //                toMsg.setSource(1);
 //                dataDao.insert(toMsg);
 //                rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                 return null;
             }
         }
@@ -379,14 +379,14 @@ public class P3KuaidaBuyMsgService {
                 //botUserService.clearPanInfo(botUser.getId());
                 toMsg = createMsg(botUser,player,"机器人未登录网盘");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 break;
             case -1:
             case 500:
                 String errmsg = reportRespData.getMsg();
                 toMsg = createMsg(botUser,player,errmsg);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 break;
             case 0:
                 Map<String,Object> dataMap = (Map<String,Object>)reportRespData.getData();
@@ -442,7 +442,7 @@ public class P3KuaidaBuyMsgService {
                             toMsg.setOptType(1);
                         }
                         toMsg.setSource(1);
-                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                     }
                 }
                 break;
@@ -457,7 +457,7 @@ public class P3KuaidaBuyMsgService {
             //玩家积分不够
             ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return ;
         }
         if(player.getPretexting()==1 || player.getEatPrize()==1){
@@ -498,13 +498,13 @@ public class P3KuaidaBuyMsgService {
                 }
                 toMsg.setMsgType(0);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             }else{
                 String errmsg = (String)buyResult.get("errmsg");
                 if(StringUtil.isNotNull(errmsg)){
                     ChatRoomMsg toMsg = createMsg(botUser,player,errmsg);
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }else{
@@ -514,7 +514,7 @@ public class P3KuaidaBuyMsgService {
                     //机器人不支持P3
                     ChatRoomMsg toMsg = createMsg(botUser,player,"未开通P3服务");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                     return;
                 }
                 if(StringUtil.isNotNull(botUserPan.getLogin3dToken())){
@@ -523,7 +523,7 @@ public class P3KuaidaBuyMsgService {
                 }else{
                     ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录P3网盘");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }
@@ -537,7 +537,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_p3","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
         String bai = locArr[0];
@@ -581,7 +581,7 @@ public class P3KuaidaBuyMsgService {
 //                toMsg.setSource(1);
 //                dataDao.insert(toMsg);
 //                rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                 return null;
             }
         }
@@ -618,7 +618,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -696,7 +696,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -743,7 +743,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -780,7 +780,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -858,7 +858,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -905,7 +905,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -946,7 +946,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -985,7 +985,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -1038,7 +1038,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -1112,7 +1112,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -1173,7 +1173,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -1212,7 +1212,7 @@ public class P3KuaidaBuyMsgService {
         if(hasError){
 //            ChatRoomMsg toMsg = createMsg(botUser,player,"号码错误");
 //            toMsg.setSource(1);
-//            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+//            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return null;
         }
 
@@ -1275,7 +1275,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
         List<String> codeList = Code3DCreateUtils.createB3Code(bai,shi,ge);
@@ -1350,7 +1350,7 @@ public class P3KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 

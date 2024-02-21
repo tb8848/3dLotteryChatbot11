@@ -271,7 +271,7 @@ public class DrawOpenStatusMQService {
 
         List<Player> playerList = null;
         //2:根据玩家ID，获取玩家列表
-        if(null!=playerIdList){
+        if(!playerIdList.isEmpty()){
             playerList = playerService.getListByIds(playerIdList);
             if(null!=playerList && playerList.size()>0){
                 //按玩家的机器人账号分组
@@ -307,7 +307,7 @@ public class DrawOpenStatusMQService {
                                 if(player.getUserType()==2 && StringUtil.isNotNull(botUser.getWxId())){
 
                                     //System.out.println(String.format("%s 玩家成功订单 %s",player.getNickname(),msgBuffer1.toString()));
-                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString());
+                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),msgBuffer1.toString());
                                 }
 
                                 //玩家有效流水订单，只包括报网和吃奖类型的订单
@@ -432,7 +432,7 @@ public class DrawOpenStatusMQService {
                     //每个玩家的中奖情况，单独发送给微信终端
                     if(player.getUserType()==2 && (player.getLotteryType()==3 || player.getLotteryType()==1) && StringUtil.isNotNull(botUser.getWxId())){
                         //System.out.println(String.format("%s 玩家中奖订单 %s",player.getNickname(),buffer1.toString()));
-                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),"【"+lotteryName+"】> > > > > > > > \r\n"+buffer1.toString());
+                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),"【"+lotteryName+"】> > > > > > > > \r\n"+buffer1.toString());
                     }
                 }
 

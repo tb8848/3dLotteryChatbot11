@@ -139,7 +139,7 @@ public class Wechat2Action {
 
             if(StringUtil.isNotNull(botUser.getWxId())){
                 //清除代理
-                wechatApiService.clearProxyIp(botUser.getWxId());
+                wechatApiService.clearProxyIp(botUser.getWxAccount());
             }
 
             Map<String,Object> proxy = new HashMap<>();
@@ -205,7 +205,7 @@ public class Wechat2Action {
             reqData.put("vpnInfo",proxy);
 
             logger.info("=========="+JSON.toJSONString(reqData));
-            String url = "http://weixin.52iptv.net:8081/login/WXGetLoginQRCode";
+            String url = wechatApiUrl + "login/WXGetLoginQRCode";
             logger.info("==========url"+url);
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.body(JSON.toJSONString(reqData));
@@ -220,9 +220,9 @@ public class Wechat2Action {
                 JSONObject data = (JSONObject) jsonObject.get("data");
                 JSONObject resultData = (JSONObject) data.get("result");
                 JSONObject datas = (JSONObject) resultData.get("data");
-                String qrUrl = (String)datas.get("QrUrl");
-                String Uuid = (String)datas.get("Uuid");
-                String qrBase64 = (String)datas.get("QrBase64");
+                String qrUrl = (String)datas.get("qrUrl");
+                String Uuid = (String)datas.get("uuid");
+                String qrBase64 = (String)datas.get("qrBase64");
                 botUser.setQrUUid(Uuid);
                 botUserService.updateById(botUser);
                 threadPool.execute(()->{
@@ -261,9 +261,12 @@ public class Wechat2Action {
                 return new ResponseBean(-1,0,"数据错误",null,true);//用户名或密码为空
             }
 
-            if(StringUtil.isNotNull(botUser.getWxId())){
-                String url = wechatApiUrl+"Login/LogOut?wxid="+botUser.getWxId();
+            if(StringUtil.isNotNull(botUser.getWxAccount())){
+                Map<String,Object> reqData = new HashMap<>();
+                reqData.put("accountId", botUser.getWxAccount());
+                String url = wechatApiUrl+"login/WXLogOut";
                 HttpRequest httpRequest = HttpUtil.createPost(url);
+                httpRequest.body(JSON.toJSONString(reqData));
                 httpRequest.contentType("application/json");
                 HttpResponse httpResponse = httpRequest.execute();
                 String respResult = httpResponse.body();
@@ -311,26 +314,95 @@ public class Wechat2Action {
             }
 
             if(StringUtil.isNotNull(botUser.getWxId()) && botUser.getWxStatus()==2){
-                String url = wechatApiUrl+"Login/Awaken?wxid="+botUser.getWxId();
+                String url = wechatApiUrl+"login/WXPushLoginUrl";
+
+                if(StringUtil.isNotNull(botUser.getWxId())){
+                    //清除代理
+                    wechatApiService.clearProxyIp(botUser.getWxAccount());
+                }
+
+                Map<String,Object> proxy = new HashMap<>();
+                if(null!=defaultFixedProxy && "1".equals(defaultFixedProxy)){
+                    proxy.put("ProxyIp",defaultProxyIp);
+                    proxy.put("ProxyUser",defaultProxyUser);
+                    proxy.put("ProxyPassword",defaultProxyPwd);
+                }else{
+                    Proxy proxyInfo = null;
+                    Map<String,Object> addr = opLogIpUtil.getCityInfoV2(IpUtil.getIpAddr(request));
+                    if(null!=addr){
+                        String prov = null;
+                        String city = null;
+                        //如果ip解析返回省份，则使用省份
+                        if(addr.containsKey("province")){
+                            prov = (String)addr.get("province");
+                        }
+                        //如果省份为空，但返回国家，则将国家视为省份
+                        if(StringUtil.isNull(prov)){
+                            if(addr.containsKey("country")){
+                                prov = (String)addr.get("country");
+                            }
+                        }
+//                    logger.info("["+botUser.getLoginName()+"]扫码登录省市："+String.format("ip：%s,省份：%s,城市:%s",IpUtil.getIpAddr(request), prov,city));
+                        proxyInfo = proxyService.getProxyByArea(prov,city);
+                        if(null == proxyInfo){
+                            proxyInfo = proxyService.getUnuseProxy();
+                        }
+                    }else{
+                        proxyInfo = proxyService.getUnuseProxy();
+                    }
+
+
+
+                    if(null == proxyInfo){
+                        String[] ipPort = defaultProxyIp.split(":");
+                        String ip = ipPort[0];
+                        String port = ipPort[1];
+                        proxy.put("address",ip);
+                        proxy.put("port",Integer.valueOf(port));
+                        proxy.put("user",defaultProxyUser);
+                        proxy.put("password",defaultProxyPwd);
+//                    logger.info("["+botUser.getLoginName()+"]使用临时代理："+JSON.toJSONString(proxy));
+                    }else{
+//                    logger.info("["+botUser.getLoginName()+"]使用动态代理："+JSON.toJSONString(proxyInfo));
+                        String[] ipPort = proxyInfo.getIp().split(":");
+                        String ip = ipPort[0];
+                        String port = ipPort[1];
+                        proxy.put("address",ip);
+                        proxy.put("port",Integer.valueOf(port));
+                        proxy.put("user",proxyInfo.getUsername());
+                        proxy.put("password",proxyInfo.getPassword());
+                    }
+                }
+
+                /*if (StringUtil.isNull(botUser.getWxAccount())) {
+                    botUser.setWxAccount(UUID.randomUUID().toString());
+                }*/
+
                 Map<String,Object> reqData = new HashMap<>();
-                reqData.put("Wxid",botUser.getWxId());
-                reqData.put("OSModel","");
+                reqData.put("accountId", botUser.getWxAccount());
+                reqData.put("vpnInfo",proxy);
                 HttpRequest httpRequest = HttpUtil.createPost(url);
                 httpRequest.contentType("application/json");
                 httpRequest.body(JSON.toJSONString(reqData));
+                logger.info("=======获取二维码请求参数======" + JSON.toJSONString(reqData));
                 HttpResponse httpResponse = httpRequest.execute();
                 String respResult = httpResponse.body();
 //                logger.info(">>>>>>Login/Awaken>>>>>>"+respResult);
-                RespData respData = JSONObject.parseObject(respResult, RespData.class);
-                if(respData.getCode()==0){
-                    Map<String,Object> datas = respData.getData();
-                    if(datas.containsKey("Uuid")){
-                        String Uuid = (String)datas.get("Uuid");
+                JSONObject jsonObject = JSONObject.parseObject(respResult);
+                if(jsonObject.getInteger("code")==0){
+                    JSONObject data = (JSONObject) jsonObject.get("data");
+                    JSONObject resultData = (JSONObject) data.get("result");
+                    JSONObject datas = (JSONObject) resultData.get("data");
+                    String qrUrl = (String)datas.get("qrUrl");
+                    String Uuid = (String)datas.get("uuid");
+                    logger.info("=======获取二维码返回参数======" + Uuid);
+                    if(StringUtil.isNotNull(Uuid)){
                         botUser.setQrUUid(Uuid);
+                        botUser.setWxAccount(Uuid);
                         botUser.setWxStatus(-1);
                         botUserService.updateById(botUser);
                         threadPool.execute(()->{
-                            wechatApiService.checkQrcodeScan(userId,Uuid);
+                            wechatApiService.checkQrcodeScan(userId,botUser.getWxAccount());
                         });
                     }else{
                         botUser.setWxId("");

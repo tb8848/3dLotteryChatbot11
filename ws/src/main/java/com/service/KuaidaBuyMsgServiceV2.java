@@ -134,7 +134,7 @@ public class KuaidaBuyMsgServiceV2 {
                 simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                 if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
                     //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                 }
                 return;
             }
@@ -158,7 +158,7 @@ public class KuaidaBuyMsgServiceV2 {
                 dataDao.insert(toMsg);
                 simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                 if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                 }
                 return;
             }
@@ -172,7 +172,7 @@ public class KuaidaBuyMsgServiceV2 {
                 simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                 if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
                     //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                 }
                 return;
             }
@@ -207,7 +207,7 @@ public class KuaidaBuyMsgServiceV2 {
                     dataDao.insert(toMsg);
                     simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                     if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                     }
                 }
             } else {
@@ -227,7 +227,7 @@ public class KuaidaBuyMsgServiceV2 {
                             simpMessagingTemplate.convertAndSend("/topic/room/" + userId, toMsg);
                             if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
                                 //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                             }
                             return;
                         }
@@ -246,7 +246,7 @@ public class KuaidaBuyMsgServiceV2 {
                                     dataDao.insert(toMsg);
                                     simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                                     if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                                     }
                                     return;
                                 }
@@ -258,7 +258,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 dataDao.insert(toMsg);
                                 simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                                 if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                                 }
                                 return;
                         }
@@ -355,7 +355,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 dataDao.insert(toMsg);
                                 simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                                 if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                                 }
                                 return;
                         }
@@ -371,7 +371,7 @@ public class KuaidaBuyMsgServiceV2 {
                             dataDao.insert(toMsg);
                             simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                             if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                             }
                         }else{
                             if (null != buyList && buyList.size() > 0) {
@@ -382,7 +382,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 dataDao.insert(toMsg);
                                 simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                                 if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                                 }
                             }
                         }
@@ -396,7 +396,7 @@ public class KuaidaBuyMsgServiceV2 {
                     dataDao.insert(toMsg);
                     simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                     if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
                     }
                 }
             }
@@ -407,7 +407,7 @@ public class KuaidaBuyMsgServiceV2 {
             dataDao.insert(toMsg);
             simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
             if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(), toMsg.getMsg());
             }
         }
     }
@@ -646,7 +646,7 @@ public class KuaidaBuyMsgServiceV2 {
                 dataDao.insert(toMsg);
                 simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                 }
                 break;
             case -1:
@@ -656,7 +656,7 @@ public class KuaidaBuyMsgServiceV2 {
                 dataDao.insert(toMsg);
                 simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                 }
                 break;
             case 0:
@@ -717,7 +717,7 @@ public class KuaidaBuyMsgServiceV2 {
                         simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                         if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                             //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                         }
                     }
                 }else{
@@ -730,7 +730,7 @@ public class KuaidaBuyMsgServiceV2 {
                         dataDao.insert(toMsg);
                         simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                         if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                         }
                     }
                 }
@@ -751,7 +751,7 @@ public class KuaidaBuyMsgServiceV2 {
             dataDao.insert(toMsg);
             simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
             if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             }
             return;
         }
@@ -802,7 +802,7 @@ public class KuaidaBuyMsgServiceV2 {
                 dataDao.insert(toMsg);
                 simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                 }
             }else{
                 String errmsg = (String)buyResult.get("errmsg");
@@ -812,7 +812,7 @@ public class KuaidaBuyMsgServiceV2 {
                     dataDao.insert(toMsg);
                     simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                     if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                     }
                 }
             }
@@ -828,7 +828,7 @@ public class KuaidaBuyMsgServiceV2 {
                     dataDao.insert(toMsg);
                     simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                     if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                     }
                 }
             }

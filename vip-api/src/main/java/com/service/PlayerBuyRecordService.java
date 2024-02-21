@@ -172,7 +172,7 @@ public class PlayerBuyRecordService extends ServiceImpl<PlayerBuyRecordDAO, Play
             //simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
             if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                 //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             }
             return "退米失败：订单不存在";
         }
@@ -182,7 +182,7 @@ public class PlayerBuyRecordService extends ServiceImpl<PlayerBuyRecordDAO, Play
             rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg",JSON.toJSONString(toMsg));
             if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                 //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             }
             return "退米失败：订单【"+existOne.getBuyDesc()+"】已退米";
         }
@@ -233,7 +233,7 @@ public class PlayerBuyRecordService extends ServiceImpl<PlayerBuyRecordDAO, Play
                     //dataDao.insert(toMsg);
                     //simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                     if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                     }
                     return "机器人未登录"+lotName+"网盘";
                     //break;
@@ -244,7 +244,7 @@ public class PlayerBuyRecordService extends ServiceImpl<PlayerBuyRecordDAO, Play
                     chatRoomMsgService.save(toMsg);
                     rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg",JSON.toJSONString(toMsg));
                     if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                     }
                     return "报网退米失败:"+errmsg;
                     //break;
@@ -266,7 +266,7 @@ public class PlayerBuyRecordService extends ServiceImpl<PlayerBuyRecordDAO, Play
                 rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg",JSON.toJSONString(toMsg));
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                     //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                 }
                 return "退米失败:"+errmsg;
             }else{
@@ -289,7 +289,7 @@ public class PlayerBuyRecordService extends ServiceImpl<PlayerBuyRecordDAO, Play
                 rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg",JSON.toJSONString(toMsg));
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                     //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
                 }
             }
         }

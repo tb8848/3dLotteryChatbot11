@@ -795,7 +795,7 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         query.eq(DrawBuyRecord::getBackCodeFlag, 0);
         query.eq(DrawBuyRecord::getDrawStatus, 1);
         query.eq(DrawBuyRecord::getDrawId,drawNo);
-        query.eq(DrawBuyRecord::getBuyType,lotteryType);
+        query.eq(DrawBuyRecord::getHasOneFlag,lotteryType);
         return drawBuyRecordDAO.selectList(query);
     }
 

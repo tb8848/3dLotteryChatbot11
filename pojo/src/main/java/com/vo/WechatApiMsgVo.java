@@ -7,17 +7,17 @@ import java.util.Map;
 @Data
 public class WechatApiMsgVo {
 
-    private Long MsgId;
+    private Long msgId;
 
-    private Map<String,String> FromUserName;
+    private String fromUserName;
 
-    private Map<String,String> ToUserName;
+    private String toUserName;
 
-    private Integer MsgType;
+    private Integer msgType;
 
-    private Map<String,String> Content;
+    private String content;
 
-    private Integer Status;
+    private Integer status;
 
 
 

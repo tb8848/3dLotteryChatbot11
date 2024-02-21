@@ -352,7 +352,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -430,7 +430,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -477,7 +477,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -514,7 +514,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -592,7 +592,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -639,7 +639,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -680,7 +680,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -767,7 +767,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -841,7 +841,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -901,7 +901,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -942,7 +942,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 
@@ -1004,7 +1004,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
         List<String> codeList = Code3DCreateUtils.createB3Code(bai,shi,ge);
@@ -1080,7 +1080,7 @@ public class KuaidaBuyMsgService {
 //            toMsg.setSource(1);
 //            dataDao.insert(toMsg);
 //            rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
-//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+//            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
             return null;
         }
 

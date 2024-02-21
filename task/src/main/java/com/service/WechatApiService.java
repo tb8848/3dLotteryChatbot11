@@ -89,13 +89,13 @@ public class WechatApiService{
 
     public RespData receiveMsg(BotUser user,Integer Scene,String syncKey) {
         String wxId = user.getWxId();
-        String syncMsgUrl =  wechatApiUrl+"Msg/Sync";
+        String syncMsgUrl =  wechatApiUrl+"msg/WXNewSync";
         HttpRequest request = HttpUtil.createPost(syncMsgUrl);
         request.contentType("application/json");
         Map<String,Object> reqData = new HashMap<>();
-        reqData.put("Scene",Scene);
-        reqData.put("Synckey",syncKey);
-        reqData.put("Wxid",wxId);
+        //reqData.put("Scene",Scene);
+        reqData.put("syncKey",syncKey);
+        reqData.put("accountId",user.getWxAccount());
         request.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = request.execute();
         String result = httpResponse.body();
@@ -109,7 +109,7 @@ public class WechatApiService{
 
 
     //检查重复消息
-    public boolean checkRepeatMsg(String msgId,String text,String fromUserName,String toUserName){
+    public boolean checkRepeatMsg(String msgId,String text,String fromUserName,String toUserName) {
         WechatMsg wechatMsg = new WechatMsg();
         wechatMsg.setMsgId(msgId);
         wechatMsg.setFromUser(fromUserName);
@@ -117,11 +117,11 @@ public class WechatApiService{
         wechatMsg.setContent(text);
         wechatMsg.setReceiveTime(new Date());
         boolean msgIdExist = wechatMsgService.checkExist(msgId);
-        if(msgIdExist){
-            logger.info(String.format("%s>>>>收到重复的微信消息ID>>>>>%s>>>>>%s",toUserName,msgId,text));
+        if (msgIdExist) {
+            logger.info(String.format("%s>>>>收到重复的微信消息ID>>>>>%s>>>>>%s", toUserName, msgId, text));
             //wechatMsgService.save(wechatMsg);
             return true;
-        }else{
+        } else {
             wechatMsgService.save(wechatMsg);
             return false;
         }
@@ -137,45 +137,93 @@ public class WechatApiService{
                 String syncKey = "";
                 Integer Scene = 7;
                 String wxId = user.getWxId();
+                logger.info("=====receiveMsg======{}", wxId);
                 List<String> excludeWxId = Arrays.asList("weixin", wxId);
                 if (!GlobalConst.msgBuffer.containsKey(wxId)) {
+                    logger.info("=====receiveMsg2======");
                     RespData respData = receiveMsg(user, Scene, syncKey);
                     if(null == respData){
                         return;
                     }
-                    if (respData.getCode() == 0) {
+                    /*if (respData.getCode() == 0) {
                         Map<String, Object> datas = respData.getData();
-                        if (datas.containsKey("KeyBuf")) {
-                            JSONObject obj = (JSONObject) datas.get("KeyBuf");
+                        if (datas.containsKey("keyBuf")) {
+                            JSONObject obj = (JSONObject) datas.get("keyBuf");
                             String buffer = (String) obj.get("buffer");
                             GlobalConst.msgBuffer.put(wxId, buffer);
+                        }
+                    }*/
+                    if (respData.getCode() == 0) {
+                        Map<String, Object> data = respData.getData();
+                        JSONObject resultData = (JSONObject) data.get("result");
+                        JSONObject datas = (JSONObject) resultData.get("data");
+                        if (datas.containsKey("addMsgs")) {
+                            logger.info("=====receiveMsg3======datas");
+                            JSONArray arr = (JSONArray) datas.get("addMsgs");
+                            if (null != arr) {
+                                for (Object obj : arr) {
+
+                                    try {
+                                        WechatApiMsgVo oneMsg = JSONObject.parseObject(JSONObject.toJSONString(obj), WechatApiMsgVo.class);
+                                        //Map<String, String> fromUser = oneMsg.getFromUserName();
+                                        String fromUserName = oneMsg.getFromUserName();
+                                        //Map<String, String> toUser = oneMsg.getToUserName();
+                                        String toUserName = oneMsg.getToUserName();
+                                        //Map<String, String> content = oneMsg.getContent();
+                                        String text = oneMsg.getContent();
+
+                                        String[] multiArr = text.split("\n");
+                                        String buyDesc = Arrays.stream(multiArr).collect(Collectors.joining(","));
+                                        //检查消息是否有重复，如果重复，则直接返回
+                                        boolean checkResult = checkRepeatMsg(String.valueOf(oneMsg.getMsgId()),buyDesc,fromUserName,toUserName);
+                                        if(checkResult){
+                                            return;
+                                        }
+
+                                        if (toUserName.equals(wxId) && !excludeWxId.contains(fromUserName)) {
+                                            addNewPlayer(text,user,fromUserName,user.getWxAccount());
+                                        }
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }finally {
+                                        if(null!=lockInfo){
+                                            lockTemplate.releaseLock(lockInfo);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
 
                 if (GlobalConst.msgBuffer.containsKey(wxId)) {
+                    logger.info("=====receiveMsg3======");
                     syncKey = GlobalConst.msgBuffer.get(wxId);
+                    logger.info("=====receiveMsg3======syncKey{}", syncKey);
                     Scene = 1;
                     RespData respData = receiveMsg(user, Scene, syncKey);
                     if(null == respData){
                         return;
                     }
                     if (respData.getCode() == 0) {
-                        Map<String, Object> datas = respData.getData();
-                        if (datas.containsKey("AddMsgs")) {
-                            JSONArray arr = (JSONArray) datas.get("AddMsgs");
+                        Map<String, Object> data = respData.getData();
+                        JSONObject resultData = (JSONObject) data.get("result");
+                        JSONObject datas = (JSONObject) resultData.get("data");
+                        if (datas.containsKey("addMsgs")) {
+                            logger.info("=====receiveMsg4======datas");
+                            JSONArray arr = (JSONArray) datas.get("addMsgs");
                             if (null != arr) {
                                 for (Object obj : arr) {
 
                                     try {
                                         WechatApiMsgVo oneMsg = JSONObject.parseObject(JSONObject.toJSONString(obj), WechatApiMsgVo.class);
-                                        Map<String, String> fromUser = oneMsg.getFromUserName();
-                                        String fromUserName = fromUser.get("string");
-                                        Map<String, String> toUser = oneMsg.getToUserName();
-                                        String toUserName = toUser.get("string");
-                                        Map<String, String> content = oneMsg.getContent();
-                                        String text = content.get("string");
+                                        //Map<String, String> fromUser = oneMsg.getFromUserName();
+                                        String fromUserName = oneMsg.getFromUserName();
+                                        //Map<String, String> toUser = oneMsg.getToUserName();
+                                        String toUserName = oneMsg.getToUserName();
+                                        //Map<String, String> content = oneMsg.getContent();
+                                        String text = oneMsg.getContent();
 
                                         String[] multiArr = text.split("\n");
                                         String buyDesc = Arrays.stream(multiArr).collect(Collectors.joining(","));
@@ -205,7 +253,7 @@ public class WechatApiService{
 //                                            }
 //                                        }
                                         if (toUserName.equals(wxId) && !excludeWxId.contains(fromUserName)) {
-                                            addNewPlayer(text,user,fromUserName,wxId);
+                                            addNewPlayer(text,user,fromUserName,user.getWxAccount());
                                         }
                                     }catch (Exception e){
                                         e.printStackTrace();
@@ -369,7 +417,7 @@ public class WechatApiService{
 //        buffer.append("组三和值+和值+ '各' +金额，如：组三和值7,8,9,10各100\r\n");
         ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser,player,msg);
         toMsg.setSource(1);
-        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
 
     }
 
@@ -415,7 +463,7 @@ public class WechatApiService{
             }
             String msg = "【累计流水】" + totalBuyPoints.stripTrailingZeros().toPlainString();
             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player, msg);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return;
         }
 
@@ -432,14 +480,14 @@ public class WechatApiService{
             }
             String msg = "YK：" + totalEarnPoints.stripTrailingZeros().toPlainString();
             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player, msg);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return;
         }
 
         if (text.startsWith("盛鱼")) {
             String msg = "【当前盛鱼】" +player.getPoints().stripTrailingZeros().toPlainString();
             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player, msg);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return;
         }
 
@@ -467,7 +515,7 @@ public class WechatApiService{
 
             }
             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player, msg);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return;
         }
 
@@ -492,7 +540,7 @@ public class WechatApiService{
                 }
             }else{
                 ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player, "回水功能未开启");
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             }
         }
     }
@@ -538,11 +586,11 @@ public class WechatApiService{
                     }
                     if(!isBuy){
                         ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"作业格式有误");
-                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                     }
                 }else{
                     ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }
@@ -578,14 +626,14 @@ public class WechatApiService{
                        Draw draw =  p3DrawService.getLastDrawInfo();
                        if(null==draw || draw.getOpenStatus()!=1){
                            ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"【P3】^^★★★停止-上课★★★");
-                           chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                           chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                            return;
                        }
                     }else{
                         Draw draw =  drawService.getLastDrawInfo();
                         if(null==draw || draw.getOpenStatus()!=1){
                             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"【3D】^^★★★停止-上课★★★");
-                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                             return;
                         }
                     }
@@ -632,11 +680,11 @@ public class WechatApiService{
                             }
                             if(!isBuy){
                                 ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"作业格式有误:"+cmdText);
-                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                             }
                         }else{
                             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
-                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                         }
                     }
                 }
@@ -667,7 +715,7 @@ public class WechatApiService{
             points = Tools.substractDigit(content);
             if (StringUtil.isNull(points)) {
                 ChatRoomMsg toMsg = chatRoomMsgService.getErrorMsg(botUser, player);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
 
             } else {
 
@@ -675,7 +723,7 @@ public class WechatApiService{
                     if (player.getPoints().compareTo(new BigDecimal(points)) < 0) {
                         //可用积分小于下分值
                         ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player, "面上不足");
-                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                         return;
                     }
                 }
@@ -701,7 +749,7 @@ public class WechatApiService{
                 toMsg.setMsgType(0);
                 toMsg.setOptType(0);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -718,7 +766,7 @@ public class WechatApiService{
             toMsg.setMsgType(0);
             toMsg.setOptType(0);
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
         }
     }
 
@@ -787,7 +835,7 @@ public class WechatApiService{
             buffer.append("【当期返水】" + validHs.stripTrailingZeros().toPlainString()).append("\r\n");
             buffer.append("【当前盛鱼】" + playerTotalPoints.stripTrailingZeros().toPlainString()).append("\r\n");
             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player, buffer.toString());
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
         }
     }
 

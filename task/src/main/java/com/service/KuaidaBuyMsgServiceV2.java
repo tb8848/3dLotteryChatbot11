@@ -123,7 +123,7 @@ public class KuaidaBuyMsgServiceV2 {
         if(draw.getOpenStatus()!=1){
             ChatRoomMsg toMsg = createMsg(botUser, player, "【"+lotteryName+"】^^★★★停止-上课★★★");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return;
         }
         kuaidaBuy(fromMsg,botUser,player,draw,lotteryType,lotteryName);
@@ -136,7 +136,7 @@ public class KuaidaBuyMsgServiceV2 {
             if(botUserSetting.getWxChatBuy()!=1){
                 ChatRoomMsg toMsg = createMsg(botUser, player,"交作业功能已关闭");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
 //                System.out.println(DateUtil.now() + ">>>>>>>>>>>>>>机器人已关闭私聊下注功能!!!!!!");
                 return;
             }
@@ -149,7 +149,7 @@ public class KuaidaBuyMsgServiceV2 {
             if (arr.length != 2) {
                 ChatRoomMsg toMsg = getErrorMsg(botUser, player);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 return;
             }
             BigDecimal buyMoney = BigDecimal.ZERO;
@@ -160,7 +160,7 @@ public class KuaidaBuyMsgServiceV2 {
                 e.printStackTrace();
                 ChatRoomMsg toMsg = createMsg(botUser, player, "金额错误");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 return;
             }
             if (arr[0].equals("拖拉机") || arr[0].equals("三同号") || arr[0].equals("猜三同")
@@ -190,7 +190,7 @@ public class KuaidaBuyMsgServiceV2 {
                 }else{
                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+arr[0]+"】的要求");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             } else {
                 boolean matchSucc = false;
@@ -204,7 +204,7 @@ public class KuaidaBuyMsgServiceV2 {
                         if (typeArr.length != 2) {
                             ChatRoomMsg toMsg = getErrorMsg(botUser, player);
                             toMsg.setSource(1);
-                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                             return;
                         }
                         code = typeArr[1];
@@ -220,7 +220,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 if(!StringUtil.checkCodeFormat(r)){
                                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
                                     toMsg.setSource(0);
-                                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                                     return;
                                 }
                             }
@@ -228,7 +228,7 @@ public class KuaidaBuyMsgServiceV2 {
 //                        if(!StringUtil.checkCodeFormat(code)){
 //                            ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
 //                            toMsg.setSource(0);
-//                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+//                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
 //                            return;
 //                        }
                         switch (type) {
@@ -319,7 +319,7 @@ public class KuaidaBuyMsgServiceV2 {
                             default:
                                 ChatRoomMsg toMsg = createMsg(botUser, player, "类别格式错误");
                                 toMsg.setSource(1);
-                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                                 return;
                         }
 
@@ -332,14 +332,14 @@ public class KuaidaBuyMsgServiceV2 {
                         if(StringUtil.isNotNull(errmsg)){
                             ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n"+errmsg);
                             toMsg.setSource(1);
-                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                         }else{
                             if (null != buyList && buyList.size() > 0) {
                                 xiazhu(botUser, player, fromMsg, buyList,draw,lotteryType,lotteryName);
                             }else{
                                 ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+type+"】的要求");
                                 toMsg.setSource(1);
-                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                             }
                         }
                         break;
@@ -349,14 +349,14 @@ public class KuaidaBuyMsgServiceV2 {
                 if(!matchSucc){
                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n类别格式错误");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
             ChatRoomMsg toMsg = createMsg(botUser, player, "系统繁忙，请稍后重试");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
         }
     }
 
@@ -586,14 +586,14 @@ public class KuaidaBuyMsgServiceV2 {
                 botUserPanService.clearInfo(1,botUser.getId());
                 toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 break;
             case -1:
             case 500:
                 String errmsg = reportRespData.getMsg();
                 toMsg = createMsg(botUser,player,errmsg);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 break;
             case 0:
                 Map<String,Object> dataMap = (Map<String,Object>)reportRespData.getData();
@@ -650,7 +650,7 @@ public class KuaidaBuyMsgServiceV2 {
                             toMsg.setOptType(1);
                         }
                         toMsg.setSource(1);
-                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                     }
                 }else{
                     JSONArray array1 = (JSONArray)dataMap.get("stopCodeList");
@@ -659,7 +659,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 +"【扣面】："+0+"\r\n"+"【停押】："+array1.size();
                         toMsg = createMsg(botUser,player,newmsg);
                         toMsg.setSource(1);
-                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                     }
                 }
 
@@ -675,7 +675,7 @@ public class KuaidaBuyMsgServiceV2 {
             //玩家积分不够
             ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return ;
         }
         if(player.getPretexting()==1 || player.getEatPrize()==1){
@@ -715,13 +715,13 @@ public class KuaidaBuyMsgServiceV2 {
                 }
                 toMsg.setMsgType(0);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             }else{
                 String errmsg = (String)buyResult.get("errmsg");
                 if(StringUtil.isNotNull(errmsg)){
                     ChatRoomMsg toMsg = createMsg(botUser,player,errmsg);
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }else{
@@ -731,7 +731,7 @@ public class KuaidaBuyMsgServiceV2 {
                     //机器人不支持3D
                     ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                     return;
                 }
                 if(StringUtil.isNotNull(botUserPan.getLogin3dToken())){
@@ -740,7 +740,7 @@ public class KuaidaBuyMsgServiceV2 {
                 }else{
                     ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }

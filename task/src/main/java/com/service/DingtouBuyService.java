@@ -163,7 +163,7 @@ public class DingtouBuyService {
                 playerBuyRecordService.save(playerBuyRecord);
                 toMsg = createMsg(botUser,player,err);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 break;
             case -1:
             case 500:
@@ -173,7 +173,7 @@ public class DingtouBuyService {
                 playerBuyRecordService.save(playerBuyRecord);
                 toMsg = createMsg(botUser,player,errmsg);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 break;
             case 0:
                 Map<String,Object> dataMap = (Map<String,Object>)reportRespData.getData();
@@ -231,7 +231,7 @@ public class DingtouBuyService {
                             toMsg.setOptType(1);
                         }
                         toMsg.setSource(1);
-                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                     }
                 }else{
                     playerBuyRecord.setDtStatus(0);
@@ -265,7 +265,7 @@ public class DingtouBuyService {
             //玩家积分不够
             ChatRoomMsg toMsg = createMsg(botUser,player,errmsg);
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+            chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             return ;
         }
         if(player.getPretexting()==1 || player.getEatPrize()==1){
@@ -315,7 +315,7 @@ public class DingtouBuyService {
                 }
                 toMsg.setMsgType(0);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
             }else{
                 String errmsg = (String)buyResult.get("errmsg");
                 if(StringUtil.isNotNull(errmsg)){
@@ -326,7 +326,7 @@ public class DingtouBuyService {
 
                     ChatRoomMsg toMsg = createMsg(botUser,player,errmsg);
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }else{
@@ -344,7 +344,7 @@ public class DingtouBuyService {
 
                     ChatRoomMsg toMsg = createMsg(botUser,player,errmsg);
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxAccount());
                 }
             }
         }

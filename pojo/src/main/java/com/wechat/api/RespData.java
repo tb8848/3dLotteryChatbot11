@@ -7,11 +7,11 @@ import java.util.Map;
 @Data
 public class RespData {
 
-    Integer Code;
+    Integer code;
 
-    Boolean Success;
+    Boolean success;
 
-    String Message;
+    String MSG;
 
     Map<String,Object> data;
 }

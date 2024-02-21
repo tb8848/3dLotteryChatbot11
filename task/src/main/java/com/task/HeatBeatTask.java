@@ -59,7 +59,7 @@ public class HeatBeatTask {
     /**
      * 每分钟执行更新购买记录表退码状态，超过字典表配置分钟数则不可退码
      */
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     //@Lock4j( expire = 60000, acquireTimeout = 1000)
     @Async
     public void task () {
@@ -68,8 +68,8 @@ public class HeatBeatTask {
         if (null == lockInfo) {
             throw new LockException("业务处理中，请稍后再试...");
         }
-        String heartBeatUrl =  wechatApiUrl+"Login/HeartBeat?wxid=";
-        String logoutUrl = wechatApiUrl + "Login/LogOut?wxid=";
+        String heartBeatUrl = wechatApiUrl + "login/WXHeartBeat";
+        String logoutUrl = wechatApiUrl + "login/WXLogOut";
         try {
             List<BotUser> botUserList = botUserService.listBy();
             if(null!=botUserList && botUserList.size()>0){
@@ -77,7 +77,10 @@ public class HeatBeatTask {
                 for(BotUser botUser : wxList){
                     if(botUser.getWxStatus()==1){
                         if(botUser.getStatus()==2){
-                            HttpRequest httpRequest = HttpUtil.createPost(logoutUrl+botUser.getWxId());
+                            HttpRequest httpRequest = HttpUtil.createPost(logoutUrl);
+                            Map<String,Object> reqData = new HashMap<>();
+                            reqData.put("accountId", botUser.getWxAccount());
+                            httpRequest.body(JSON.toJSONString(reqData));
                             httpRequest.contentType("application/json");
                             HttpResponse httpResponse = httpRequest.execute();
                             String result = httpResponse.body();
@@ -97,7 +100,10 @@ public class HeatBeatTask {
 
                             }
                         }else{
-                            HttpRequest httpRequest = HttpUtil.createPost(heartBeatUrl+botUser.getWxId());
+                            HttpRequest httpRequest = HttpUtil.createPost(heartBeatUrl);
+                            Map<String,Object> reqData = new HashMap<>();
+                            reqData.put("accountId", botUser.getWxAccount());
+                            httpRequest.body(JSON.toJSONString(reqData));
                             httpRequest.contentType("application/json");
                             HttpResponse httpResponse = httpRequest.execute();
                             String result = httpResponse.body();
@@ -106,10 +112,28 @@ public class HeatBeatTask {
                             if(result.startsWith("{") && result.endsWith("}")){
                                 RespData respData = JSONObject.parseObject(result, RespData.class);
                                 if(respData.getCode()<0){
-                                    botUser.setWxStatus(2);
-                                    botUser.setWxLoginTime(new Date());
-                                    botUserService.updateById(botUser);
-                                    wechatApiService.pushWxLoginStatusMsg(botUser,2);
+                                    // 调用二次登录
+                                    HttpRequest httpRequest2 = HttpUtil.createPost(wechatApiUrl + "login/WXAutoAuth");
+                                    httpRequest2.body(JSON.toJSONString(reqData));
+                                    httpRequest2.contentType("application/json");
+                                    HttpResponse httpResponse2 = httpRequest2.execute();
+                                    String result2 = httpResponse2.body();
+                                    logger.info("调用二次登录:"+botUser.getLoginName()+">>>>>>>>>>Login/WXAutoAuth>>>>>>"+result2);
+                                    if(result2.startsWith("{") && result2.endsWith("}")){
+                                        RespData respData2 = JSONObject.parseObject(result2, RespData.class);
+                                        if(respData2.getCode()<0){
+                                            botUser.setWxStatus(2);
+                                            botUser.setWxLoginTime(new Date());
+                                            botUserService.updateById(botUser);
+                                            wechatApiService.pushWxLoginStatusMsg(botUser,2);
+                                        }
+                                    }else {
+                                        botUser.setWxStatus(2);
+                                        botUser.setWxLoginTime(new Date());
+                                        botUserService.updateById(botUser);
+                                        wechatApiService.pushWxLoginStatusMsg(botUser,2);
+                                    }
+
                                 }
                             }
                         }

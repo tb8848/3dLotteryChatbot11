@@ -89,7 +89,7 @@ public class ChatDomainAction {
                             // 发送微信消息
                             BotUser botUser = botUserService.getById(player.getBotUserId());
                             String chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
-                            sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                            sendMsg(player.getWxFriendId(),botUser.getWxAccount(), "聊天地址变更为：" + chatUrl);
                         }
                     }
                 }
@@ -114,7 +114,7 @@ public class ChatDomainAction {
                                 // 发送微信消息
                                 BotUser botUser = botUserService.getById(player.getBotUserId());
                                 String chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
-                                sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                                sendMsg(player.getWxFriendId(),botUser.getWxAccount(), "聊天地址变更为：" + chatUrl);
                             }
                         }
                     }
@@ -156,7 +156,7 @@ public class ChatDomainAction {
                                 // 发送微信消息
                                 BotUser botUser = botUserService.getById(player.getBotUserId());
                                 String chatUrl = player.getChaturl() + "/?openId=" + player.getOpenid();
-                                sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                                sendMsg(player.getWxFriendId(),botUser.getWxAccount(), "聊天地址变更为：" + chatUrl);
                             }
                         }
                     }
@@ -184,12 +184,12 @@ public class ChatDomainAction {
      * @param text
      */
     private void sendMsg(String toWxId, String wxId, String text){
-        String url = wechatApiUrl + "Msg/SendTxt";
+        String url = wechatApiUrl + "msg/WXSendText";
         Map<String,Object> reqData = new HashMap<>();
-        reqData.put("Content",text);
-        reqData.put("ToWxid",toWxId);
-        reqData.put("Type",1);
-        reqData.put("Wxid",wxId);
+        reqData.put("content",text);
+        reqData.put("toUserName",toWxId);
+        //reqData.put("Type",1);
+        reqData.put("accountId",wxId);
 
         HttpRequest httpRequest = HttpUtil.createPost(url);
         httpRequest.contentType("application/json");

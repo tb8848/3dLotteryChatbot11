@@ -70,7 +70,7 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
 
         //微信点对点消息
         if(StringUtil.isNotNull(player.getWxFriendId()) && StringUtil.isNotNull(botUser.getWxId())){
-            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),msgtxt);
+            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),msgtxt);
         }
     }
 
@@ -82,7 +82,7 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
         rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
         //微信点对点消息
         if(StringUtil.isNotNull(player.getWxFriendId()) && StringUtil.isNotNull(botUser.getWxId())){
-            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),toMsg.getMsg());
+            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxAccount(),toMsg.getMsg());
         }
     }
 
