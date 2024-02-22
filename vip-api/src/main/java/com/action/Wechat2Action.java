@@ -185,6 +185,10 @@ public class Wechat2Action {
                 }
             }
 
+//            proxy.put("ProxyIp","");
+//            proxy.put("ProxyUser","");
+//            proxy.put("ProxyPassword","");
+
             Map<String,Object> reqData = new HashMap<>();
             reqData.put("DeviceID","");
             reqData.put("DeviceName","");

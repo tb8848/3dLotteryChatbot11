@@ -85,6 +85,7 @@ public class WechatApiService{
         long maxWait = 5*60; //单位：秒
         boolean scanSucc = false;
         String url = wechatApiUrl+"Login/CheckQR?uuid="+uuid;
+//        logger.info(">>>>>>【校验二维码链接】>>>>>>"+url);
         while(maxWait>0){
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.contentType("application/json");
@@ -130,28 +131,41 @@ public class WechatApiService{
                             break;
                         }
                     }
-                    if(datas.containsKey("acctSectResp")){
-                        JSONObject object = (JSONObject)datas.get("acctSectResp");
-                        String wxId = object.getString("userName"); //微信ID
-                        botUser.setWxHeadimg(headImgUrl);
+                    if(datas.containsKey("HeadUrl")){
+                        String wxId = (String) datas.get("WxId"); //微信ID
+                        String imgUrl = (String) datas.get("HeadUrl"); //微信头像
+                        String wxNick = (String) datas.get("NickName"); //微信昵称
+                        botUser.setWxHeadimg(imgUrl);
                         botUser.setWxId(wxId);
-                        botUser.setWxNick(nickName);
+                        botUser.setWxNick(wxNick);
                         botUser.setWxStatus(1);
                         botUser.setWxLoginTime(new Date());
                         botUserDAO.updateWxInfo(botUser);
                         scanSucc = true;
                         break;
                     }
+//                    if(datas.containsKey("acctSectResp")){
+//                        JSONObject object = (JSONObject)datas.get("acctSectResp");
+//                        String wxId = object.getString("userName"); //微信ID
+//                        botUser.setWxHeadimg(headImgUrl);
+//                        botUser.setWxId(wxId);
+//                        botUser.setWxNick(nickName);
+//                        botUser.setWxStatus(1);
+//                        botUser.setWxLoginTime(new Date());
+//                        botUserDAO.updateWxInfo(botUser);
+//                        scanSucc = true;
+//                        break;
+//                    }
                 }else{
-                    Map<String,Object> info = new HashMap<>();
-                    info.put("wxStatus",-2); //取消登录
-                    info.put("flag","login");
-                    ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
-                    WechatPushMsgVo vo = new WechatPushMsgVo();
-                    vo.setBotUserId(botUserId);
-                    vo.setResponseBean(responseBean);
-                    rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
-                    break;
+//                    Map<String,Object> info = new HashMap<>();
+//                    info.put("wxStatus",-2); //取消登录
+//                    info.put("flag","login");
+//                    ResponseBean responseBean = new ResponseBean(0, 0, "", info,true);
+//                    WechatPushMsgVo vo = new WechatPushMsgVo();
+//                    vo.setBotUserId(botUserId);
+//                    vo.setResponseBean(responseBean);
+//                    rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botWechat",JSON.toJSONString(vo));
+//                    break;
                 }
                 maxWait--;
                 Thread.sleep(1000);

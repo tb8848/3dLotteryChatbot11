@@ -14,4 +14,6 @@ public class RespData {
     String Message;
 
     Map<String,Object> data;
+
+    String Debug;
 }

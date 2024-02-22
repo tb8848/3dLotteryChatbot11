@@ -753,8 +753,8 @@ public class WechatApiService{
 
     //获取好友信息
     public void getFriendInfo(String fromWxId, String wxId, Player player){
-//        String url = wechatApiUrl+"Friend/GetContractDetail100";
-        String url = wechatApiUrl+"Friend/GetContractDetail";
+//        String url = wechatApiUrl+"Friend/GetContractDetail";
+        String url = wechatApiUrl+"Friend/GetContractDetail100";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("ToWxid",fromWxId);
         reqData.put("Wxid",wxId);
@@ -763,27 +763,26 @@ public class WechatApiService{
         httpRequest.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-//        logger.info(">>>>>>Friend/GetContractDetail100>>>>>>"+result);
+//        logger.info(">>>>>>Friend/GetContractDetail>>>>>>"+result);
         RespData respData = JSONObject.parseObject(result,RespData.class);
         if(respData.getCode()==0){
             Map<String,Object> datas =  respData.getData();
-//            JSONArray contactList = (JSONArray) datas.get("contactList");
-//            JSONObject contactObj = contactList.getJSONObject(0);
-//            JSONObject contact = contactObj.getJSONObject("contact");
-//
-//            JSONObject NickNameObj = contact.getJSONObject("NickName");
-//            String nickname = NickNameObj.getString("string");
-//
-//            String headImgUrl = contact.getString("SmallHeadImgUrl");
-
-            JSONArray contactList = (JSONArray) datas.get("ContactList");
+            JSONArray contactList = (JSONArray) datas.get("contactList");
             JSONObject contactObj = contactList.getJSONObject(0);
+            JSONObject contact = contactObj.getJSONObject("contact");
 
-            JSONObject NickNameObj = contactObj.getJSONObject("NickName");
+            JSONObject NickNameObj = contact.getJSONObject("nickName");
             String nickname = NickNameObj.getString("string");
 
-            String headImgUrl = contactObj.getString("SmallHeadImgUrl");
+            String headImgUrl = contact.getString("smallHeadImgUrl");
 
+//            JSONArray contactList = (JSONArray) datas.get("ContactList");
+//            JSONObject contactObj = contactList.getJSONObject(0);
+//
+//            JSONObject NickNameObj = contactObj.getJSONObject("NickName");
+//            String nickname = NickNameObj.getString("string");
+//
+//            String headImgUrl = contactObj.getString("SmallHeadImgUrl");
             playerService.updateWxInfo(nickname,headImgUrl,player.getId());
 
         }
