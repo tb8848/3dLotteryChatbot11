@@ -15,6 +15,7 @@ spring:
 logging:
   config: classpath:logback-spring.xml
 nacos:
+  #service-address: 172.89.10.252
   service-address: 45.195.145.18
   port: 8848
 
