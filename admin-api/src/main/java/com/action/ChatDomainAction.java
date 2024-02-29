@@ -88,8 +88,16 @@ public class ChatDomainAction {
                         if(playerService.updateById(player)) {
                             // 发送微信消息
                             BotUser botUser = botUserService.getById(player.getBotUserId());
-                            String chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
-                            sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+//                            String chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
+//                            sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                            String chatUrl = "";
+                            if (player.getChatStatus() == 1){
+                                chatUrl = player.getChaturl()+"/?openId=";
+                                sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl,player.getWxGroup(),player.getNickname());
+                            }else{
+                                chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
+                                sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                            }
                         }
                     }
                 }
@@ -113,8 +121,16 @@ public class ChatDomainAction {
                             if(playerService.updateById(player)) {
                                 // 发送微信消息
                                 BotUser botUser = botUserService.getById(player.getBotUserId());
-                                String chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
-                                sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+//                                String chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
+//                                sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                                String chatUrl = "";
+                                if (player.getChatStatus() == 1){
+                                    chatUrl = player.getChaturl()+"/?openId=";
+                                    sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl,player.getWxGroup(),player.getNickname());
+                                }else{
+                                    chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
+                                    sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                                }
                             }
                         }
                     }
@@ -155,8 +171,16 @@ public class ChatDomainAction {
                             if (playerService.updateById(player)) {
                                 // 发送微信消息
                                 BotUser botUser = botUserService.getById(player.getBotUserId());
-                                String chatUrl = player.getChaturl() + "/?openId=" + player.getOpenid();
-                                sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+//                                String chatUrl = player.getChaturl() + "/?openId=" + player.getOpenid();
+//                                sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                                String chatUrl = "";
+                                if (player.getChatStatus() == 1){
+                                    chatUrl = player.getChaturl()+"/?openId=";
+                                    sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl,player.getWxGroup(),player.getNickname());
+                                }else{
+                                    chatUrl = player.getChaturl()+"/?openId="+player.getOpenid();
+                                    sendMsg(player.getWxFriendId(), botUser.getWxId(), "聊天地址变更为：" + chatUrl);
+                                }
                             }
                         }
                     }
@@ -188,6 +212,30 @@ public class ChatDomainAction {
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("Content",text);
         reqData.put("ToWxid",toWxId);
+        reqData.put("Type",1);
+        reqData.put("Wxid",wxId);
+
+        HttpRequest httpRequest = HttpUtil.createPost(url);
+        httpRequest.contentType("application/json");
+        httpRequest.body(JSON.toJSONString(reqData));
+        HttpResponse httpResponse = httpRequest.execute();
+        String result = httpResponse.body();
+//        System.out.println(DateUtil.now()+">>>>>>Msg/SendTxt>>>>>>"+result);
+
+    }
+
+    /**
+     * 发送群聊消息
+     * @param toWxId
+     * @param wxId
+     * @param text
+     */
+    private void sendMsgGroup(String toWxId, String wxId, String text, String groupName,String wxNick){
+        String url = wechatApiUrl + "Msg/SendTxt";
+        Map<String,Object> reqData = new HashMap<>();
+        reqData.put("At",toWxId);
+        reqData.put("Content","@"+wxNick+" "+text);
+        reqData.put("ToWxid",groupName);
         reqData.put("Type",1);
         reqData.put("Wxid",wxId);
 

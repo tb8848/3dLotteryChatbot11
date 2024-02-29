@@ -107,16 +107,16 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
     }
 
     @Async
-    public void sendMsgGroup(String toWxId, String wxId, String text, String groupName){
+    public void sendMsgGroup(String toWxId, String wxId, String text, String groupName, String wxNick){
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("At",toWxId);
-        reqData.put("Content",text);
+        reqData.put("Content","@"+wxNick+" "+text);
         reqData.put("ToWxid",groupName);
         reqData.put("Type",1);
         reqData.put("Wxid",wxId);
 
-        System.out.println(reqData);
+//        System.out.println(reqData);
         HttpRequest httpRequest = HttpUtil.createPost(url);
         httpRequest.contentType("application/json");
         httpRequest.body(JSON.toJSONString(reqData));
@@ -126,10 +126,10 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
 
     }
 
-    public void saveAndSendMsgGroup(ChatRoomMsg toMsg,String toWxId,String fromWxId,String groupName){
+    public void saveAndSendMsgGroup(ChatRoomMsg toMsg,String toWxId,String fromWxId,String groupName,String wxNick){
         dataDao.insert(toMsg);
         rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(toMsg));
-        sendMsgGroup(toWxId, fromWxId, toMsg.getMsg(),groupName);
+        sendMsgGroup(toWxId, fromWxId, toMsg.getMsg(),groupName,wxNick);
     }
 
     public void saveAndSendMsg(ChatRoomMsg toMsg,String toWxId,String fromWxId){

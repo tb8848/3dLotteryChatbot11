@@ -102,9 +102,64 @@ public class WechatApiService {
 
     }
 
+    /**
+     * 向群聊发送文本消息
+     * @param toWxId 接收人微信ID
+     * @param wxId 发送人微信ID
+     * @param text 发送内容
+     */
+    public void sendMsgGroup(String toWxId, String wxId, String text,String groupName,String wxNick){
+        String url = wechatApiUrl+"Msg/SendTxt";
+        Map<String,Object> reqData = new HashMap<>();
+        reqData.put("At",toWxId);
+        reqData.put("Content","@"+wxNick+" "+text);
+        reqData.put("ToWxid",groupName);
+        reqData.put("Type",1);
+        reqData.put("Wxid",wxId);
 
+        HttpRequest httpRequest = HttpUtil.createPost(url);
+        httpRequest.contentType("application/json");
+        httpRequest.body(JSON.toJSONString(reqData));
+        HttpResponse httpResponse = httpRequest.execute();
+        String result = httpResponse.body();
+//        logger.info(">>>>>>Msg/SendTxt>>>>>>"+result);
 
+    }
 
+    //向群聊发送图片
+    public void sendImageGroup(String wxFriendId, String wxId, String msg,String groupName,String wxNick) {
+        int maxTry = 3;
+        while(maxTry>0){
+            String url = wechatApiUrl+"Msg/UploadImg";
+            try{
+                String base64 = netImageToBase64(msg);
+                //base64 = "data:image/jpg;base64,"+base64;
+                Map<String,Object> reqData = new HashMap<>();
+                reqData.put("Base64",base64);
+                reqData.put("ToWxid",groupName);
+                reqData.put("Wxid",wxId);
+
+                HttpRequest httpRequest = HttpUtil.createPost(url);
+                httpRequest.contentType("application/json");
+                httpRequest.body(JSON.toJSONString(reqData));
+                HttpResponse httpResponse = httpRequest.execute();
+                String result = httpResponse.body();
+//                logger.info(">>>>>>Msg/UploadImg>>>>>>"+result);
+                if(result.startsWith("{") && result.endsWith("}")){
+                    RespData respData = JSON.parseObject(result,RespData.class);
+                    if(respData.getCode()==0){
+                        sendMsgGroup(wxFriendId,wxId,"",groupName,wxNick);
+                        break;
+                    }
+                }
+                maxTry--;
+                Thread.sleep(5000);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 
     public RespData clearProxyIp(String wxId) {
         RespData respData = null;

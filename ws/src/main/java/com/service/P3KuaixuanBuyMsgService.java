@@ -95,7 +95,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
                         dataDao.insert(toMsg);
                         simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
                         if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                            if (player.getChatStatus() == 1){
+                                wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                            }else{
+                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                            }
+//                            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
                         }
                     } else {
                         reportToPan(msg, botUser, player,botUserPan);
@@ -108,7 +113,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
             dataDao.insert(toMsg);
             simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
             if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                if (player.getChatStatus() == 1){
+                    wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                }else{
+                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                }
+//                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
             }
         }
     }
@@ -127,7 +137,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
             dataDao.insert(toMsg);
             simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
             if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                if (player.getChatStatus() == 1){
+                    wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                }else{
+                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                }
+//                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
             }
             return;
         }
@@ -170,7 +185,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
             simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
             if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                 //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                if (player.getChatStatus() == 1){
+                    wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                }else{
+                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                }
+//                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
             }
         }else{
             String errmsg = (String)buyResult.get("errmsg");
@@ -180,7 +200,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
                 simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                     //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    if (player.getChatStatus() == 1){
+                        wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                    }else{
+                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                    }
+//                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
                 }
             }
         }
@@ -214,7 +239,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
             dataDao.insert(toMsg);
             simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
             if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                if (player.getChatStatus() == 1){
+                    wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                }else{
+                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                }
+//                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
             }
             return;
         }
@@ -248,7 +278,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
                 dataDao.insert(toMsg);
                 simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    if (player.getChatStatus() == 1){
+                        wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                    }else{
+                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                    }
+//                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
                 }
                 break;
             case -1:
@@ -258,7 +293,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
                 dataDao.insert(toMsg);
                 simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
-                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                    if (player.getChatStatus() == 1){
+                        wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                    }else{
+                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                    }
+//                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
                 }
                 break;
             case 0:
@@ -319,7 +359,12 @@ public class P3KuaixuanBuyMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoo
                         simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                         if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                             //wechatIpadTokenService.sendMsgToFriend(toMsg);
-                            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
+                            if (player.getChatStatus() == 1){
+                                wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+                            }else{
+                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                            }
+//                            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
                         }
                     }
                 }

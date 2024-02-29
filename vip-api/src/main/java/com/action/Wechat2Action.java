@@ -188,6 +188,8 @@ public class Wechat2Action {
 //            proxy.put("ProxyIp","");
 //            proxy.put("ProxyUser","");
 //            proxy.put("ProxyPassword","");
+//            System.out.println("-------------------");
+//            System.out.println(proxy);
 
             Map<String,Object> reqData = new HashMap<>();
             reqData.put("DeviceID","");
@@ -195,8 +197,9 @@ public class Wechat2Action {
             reqData.put("OSModel","");
             reqData.put("Proxy",proxy);
 
-            System.out.println("=========="+wechatApiUrl);
+//            System.out.println("=========="+wechatApiUrl);
             String url = wechatApiUrl+"Login/GetQR";
+//            System.out.println("获取二维码接口："+url);
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.body(JSON.toJSONString(reqData));
             httpRequest.contentType("application/json");
@@ -206,7 +209,7 @@ public class Wechat2Action {
             //System.out.println("result>>>>>>"+result);
             RespData respData = JSONObject.parseObject(result, RespData.class);
             if(respData.getCode()==1){
-                System.out.println("===========二维码获取成功");
+//                System.out.println("===========二维码获取成功");
                 Map<String,Object> datas = respData.getData();
                 String qrUrl = (String)datas.get("QrUrl");
                 String Uuid = (String)datas.get("Uuid");

@@ -115,5 +115,14 @@ public class Player {
      */
     private Integer lotteryType;
 
+    /**
+     * 微信群聊
+     */
+    private String wxGroup;
+
+    /**
+     * 聊天类型（0：私聊   1：群聊）
+     */
+    private Integer chatStatus;
 
 }

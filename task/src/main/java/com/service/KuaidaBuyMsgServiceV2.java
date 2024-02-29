@@ -109,7 +109,7 @@ public class KuaidaBuyMsgServiceV2 {
     }
 
     //快打下注，固定文本格式
-    public void handleMsgGroup(ChatRoomMsg fromMsg,BotUser botUser,Player player,Integer lotteryType,String groupName){
+    public void handleMsgGroup(ChatRoomMsg fromMsg,BotUser botUser,Player player,Integer lotteryType,String groupName,String wxNick){
         Draw draw = null;
         String lotteryName = null;
         if(2==lotteryType){
@@ -123,20 +123,20 @@ public class KuaidaBuyMsgServiceV2 {
         if(draw.getOpenStatus()!=1){
             ChatRoomMsg toMsg = createMsg(botUser, player, "【"+lotteryName+"】^^★★★停止-上课★★★");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
             return;
         }
-        kuaidaBuyGroup(fromMsg,botUser,player,draw,lotteryType,lotteryName,groupName);
+        kuaidaBuyGroup(fromMsg,botUser,player,draw,lotteryType,lotteryName,groupName,wxNick);
     }
 
-    public void kuaidaBuyGroup(ChatRoomMsg fromMsg, BotUser botUser, Player player,Draw draw,Integer lotteryType,String lotteryName,String groupName){
+    public void kuaidaBuyGroup(ChatRoomMsg fromMsg, BotUser botUser, Player player,Draw draw,Integer lotteryType,String lotteryName,String groupName,String wxNick){
         try {
 
             BotUserSetting botUserSetting = botUserSettingService.getByUserId(botUser.getId());
             if(botUserSetting.getWxChatBuy()!=1){
                 ChatRoomMsg toMsg = createMsg(botUser, player,"交作业功能已关闭");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
 //                System.out.println(DateUtil.now() + ">>>>>>>>>>>>>>机器人已关闭私聊下注功能!!!!!!");
                 return;
             }
@@ -149,7 +149,7 @@ public class KuaidaBuyMsgServiceV2 {
             if (arr.length != 2) {
                 ChatRoomMsg toMsg = getErrorMsg(botUser, player);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 return;
             }
             BigDecimal buyMoney = BigDecimal.ZERO;
@@ -160,7 +160,7 @@ public class KuaidaBuyMsgServiceV2 {
                 e.printStackTrace();
                 ChatRoomMsg toMsg = createMsg(botUser, player, "金额错误");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 return;
             }
             if (arr[0].equals("拖拉机") || arr[0].equals("三同号") || arr[0].equals("猜三同")
@@ -186,11 +186,11 @@ public class KuaidaBuyMsgServiceV2 {
                         break;
                 }
                 if (null != buyList && buyList.size()>0) {
-                    xiazhuGroup(botUser, player, fromMsg, buyList,draw,lotteryType,lotteryName,groupName);
+                    xiazhuGroup(botUser, player, fromMsg, buyList,draw,lotteryType,lotteryName,groupName,wxNick);
                 }else{
                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+arr[0]+"】的要求");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 }
             } else {
                 boolean matchSucc = false;
@@ -204,7 +204,7 @@ public class KuaidaBuyMsgServiceV2 {
                         if (typeArr.length != 2) {
                             ChatRoomMsg toMsg = getErrorMsg(botUser, player);
                             toMsg.setSource(1);
-                            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                             return;
                         }
                         code = typeArr[1];
@@ -220,7 +220,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 if(!StringUtil.checkCodeFormat(r)){
                                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
                                     toMsg.setSource(0);
-                                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                                     return;
                                 }
                             }
@@ -313,7 +313,7 @@ public class KuaidaBuyMsgServiceV2 {
                             default:
                                 ChatRoomMsg toMsg = createMsg(botUser, player, "类别格式错误");
                                 toMsg.setSource(1);
-                                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                                 return;
                         }
                         if(resMap.containsKey("list")){
@@ -324,14 +324,14 @@ public class KuaidaBuyMsgServiceV2 {
                         if(StringUtil.isNotNull(errmsg)){
                             ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n"+errmsg);
                             toMsg.setSource(1);
-                            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                         }else{
                             if (null != buyList && buyList.size() > 0) {
-                                xiazhuGroup(botUser, player, fromMsg, buyList,draw,lotteryType,lotteryName,groupName);
+                                xiazhuGroup(botUser, player, fromMsg, buyList,draw,lotteryType,lotteryName,groupName,wxNick);
                             }else{
                                 ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+type+"】的要求");
                                 toMsg.setSource(1);
-                                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                             }
                         }
                         break;
@@ -340,19 +340,19 @@ public class KuaidaBuyMsgServiceV2 {
                 if(!matchSucc){
                     ChatRoomMsg toMsg = createMsg(botUser, player, content+"\r\n类别格式错误");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
             ChatRoomMsg toMsg = createMsg(botUser, player, "系统繁忙，请稍后重试");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
         }
     }
 
     public void reportToPanGroup(BotUser botUser,Player player,ChatRoomMsg msg,List<BuyRecord3DVO> buyList,BotUserPan botUserPan,
-                            Draw draw,Integer lotteryType,String lotteryName,String groupName){
+                            Draw draw,Integer lotteryType,String lotteryName,String groupName,String wxNick){
         String reportToPanUrl = botUserPan.getLottery3dUrl();
         if(reportToPanUrl.endsWith("/")){
             reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
@@ -392,14 +392,14 @@ public class KuaidaBuyMsgServiceV2 {
                 botUserPanService.clearInfo(1,botUser.getId());
                 toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 break;
             case -1:
             case 500:
                 String errmsg = reportRespData.getMsg();
                 toMsg = createMsg(botUser,player,errmsg);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 break;
             case 0:
                 Map<String,Object> dataMap = (Map<String,Object>)reportRespData.getData();
@@ -456,7 +456,7 @@ public class KuaidaBuyMsgServiceV2 {
                             toMsg.setOptType(1);
                         }
                         toMsg.setSource(1);
-                        chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                        chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                     }
                 }else{
                     JSONArray array1 = (JSONArray)dataMap.get("stopCodeList");
@@ -465,20 +465,20 @@ public class KuaidaBuyMsgServiceV2 {
                                 +"【扣面】："+0+"\r\n"+"【停押】："+array1.size();
                         toMsg = createMsg(botUser,player,newmsg);
                         toMsg.setSource(1);
-                        chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                        chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                     }
                 }
                 break;
         }
     }
 
-    public void xiazhuGroup(BotUser botUser, Player player,ChatRoomMsg fromMsg, List<BuyRecord3DVO> buyList,Draw draw,Integer lotteryType,String lotteryName,String groupName) {
+    public void xiazhuGroup(BotUser botUser, Player player,ChatRoomMsg fromMsg, List<BuyRecord3DVO> buyList,Draw draw,Integer lotteryType,String lotteryName,String groupName,String wxNick) {
         BigDecimal totalPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
         if(totalPoints.compareTo(player.getPoints())>0){
             //玩家积分不够
             ChatRoomMsg toMsg = createMsg(botUser,player,"面上不足");
             toMsg.setSource(1);
-            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
             return ;
         }
         if(player.getPretexting()==1 || player.getEatPrize()==1){
@@ -518,13 +518,13 @@ public class KuaidaBuyMsgServiceV2 {
                 }
                 toMsg.setMsgType(0);
                 toMsg.setSource(1);
-                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
             }else{
                 String errmsg = (String)buyResult.get("errmsg");
                 if(StringUtil.isNotNull(errmsg)){
                     ChatRoomMsg toMsg = createMsg(botUser,player,errmsg);
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 }
             }
         }else{
@@ -534,16 +534,16 @@ public class KuaidaBuyMsgServiceV2 {
                     //机器人不支持3D
                     ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                     return;
                 }
                 if(StringUtil.isNotNull(botUserPan.getLogin3dToken())){
                     //报网
-                    reportToPanGroup(botUser,player,fromMsg,buyList,botUserPan,draw,lotteryType,lotteryName,groupName);
+                    reportToPanGroup(botUser,player,fromMsg,buyList,botUserPan,draw,lotteryType,lotteryName,groupName,wxNick);
                 }else{
                     ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                     toMsg.setSource(1);
-                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName);
+                    chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                 }
             }
         }

@@ -70,7 +70,12 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
 
         //微信点对点消息
         if(StringUtil.isNotNull(player.getWxFriendId()) && StringUtil.isNotNull(botUser.getWxId())){
-            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),msgtxt);
+            if (player.getChatStatus() == 1){
+                wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(),msgtxt,player.getWxGroup(),player.getNickname());
+            }else{
+                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),msgtxt);
+            }
+//            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),msgtxt);
         }
     }
 
@@ -82,7 +87,12 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
         rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d","botChatMsg", JSON.toJSONString(toMsg));
         //微信点对点消息
         if(StringUtil.isNotNull(player.getWxFriendId()) && StringUtil.isNotNull(botUser.getWxId())){
-            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),toMsg.getMsg());
+            if (player.getChatStatus() == 1){
+                wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(),toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+            }else{
+                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),toMsg.getMsg());
+            }
+//            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),toMsg.getMsg());
         }
     }
 

@@ -19,6 +19,6 @@ public class WechatApiMsgVo {
 
     private Integer Status;
 
-
+    private String PushContent;
 
 }

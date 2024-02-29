@@ -317,7 +317,25 @@ public class WechatApiService{
 
     }
 
+    //发送群聊消息
+    public void sendMsgGroup(String toWxId, String wxId, String text,String groupName,String wxNick){
+        String url = wechatApiUrl+"Msg/SendTxt";
+        Map<String,Object> reqData = new HashMap<>();
+        reqData.put("At",toWxId);
+        reqData.put("Content","@"+wxNick+" "+text);
+        reqData.put("ToWxid",groupName);
+        reqData.put("Type",1);
+        reqData.put("Wxid",wxId);
 
+        HttpRequest httpRequest = HttpUtil.createPost(url);
+        httpRequest.contentType("application/json");
+        httpRequest.body(JSON.toJSONString(reqData));
+        HttpResponse httpResponse = httpRequest.execute();
+        String result = httpResponse.body();
+//        logger.info(">>>>>>Msg/SendTxt>>>>>>"+result);
+        //System.out.println(DateUtil.now()+">>>>>>Msg/SendTxt>>>>>>"+result);
+
+    }
 
     public void notifyBotUserRelogin(String botUserId){
         Map<String,Object> info = new HashMap<>();
