@@ -1,17 +1,10 @@
 package com.service;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.beans.BotUser;
-import com.beans.BotUserSetting;
-import com.beans.Player;
-
-import com.vo.WechatApiMsgVo;
+import com.beans.Dictionary;
 import com.wechat.api.RespData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +15,6 @@ import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -32,8 +24,11 @@ import java.util.*;
 @Service
 public class WechatApiService {
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @Value("${upload.dir}")
     private String uploadDir;
@@ -49,6 +44,11 @@ public class WechatApiService {
      * @param text 发送内容
      */
     public void sendMsg(String toWxId, String wxId, String text){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("Content",text);
@@ -69,6 +69,11 @@ public class WechatApiService {
     public void sendImage(String wxFriendId, String wxId, String msg) {
         int maxTry = 3;
         while(maxTry>0){
+            String wechatApiUrl = "";
+            Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+            if (dic != null){
+                wechatApiUrl = dic.getValue();
+            }
             String url = wechatApiUrl+"Msg/UploadImg";
             try{
                 String base64 = netImageToBase64(msg);
@@ -109,6 +114,11 @@ public class WechatApiService {
      * @param text 发送内容
      */
     public void sendMsgGroup(String toWxId, String wxId, String text,String groupName,String wxNick){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("At",toWxId);
@@ -130,6 +140,11 @@ public class WechatApiService {
     public void sendImageGroup(String wxFriendId, String wxId, String msg,String groupName,String wxNick) {
         int maxTry = 3;
         while(maxTry>0){
+            String wechatApiUrl = "";
+            Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+            if (dic != null){
+                wechatApiUrl = dic.getValue();
+            }
             String url = wechatApiUrl+"Msg/UploadImg";
             try{
                 String base64 = netImageToBase64(msg);
@@ -163,6 +178,11 @@ public class WechatApiService {
 
     public RespData clearProxyIp(String wxId) {
         RespData respData = null;
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Tools/setproxy";
         try{
             Map<String,Object> reqData = new HashMap<>();

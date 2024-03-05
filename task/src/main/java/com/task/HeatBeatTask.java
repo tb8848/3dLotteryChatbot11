@@ -1,6 +1,5 @@
 package com.task;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
@@ -9,30 +8,23 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import com.baomidou.lock.exception.LockException;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.beans.BotUser;
-import com.beans.BotUserSetting;
-import com.beans.ResponseBean;
+import com.beans.Dictionary;
 import com.service.BotUserService;
+import com.service.DictionaryService;
 import com.service.WechatApiService;
-import com.task.runner.RecoverWechatSessionRunner;
 import com.util.StringUtil;
-import com.vo.WechatPushMsgVo;
 import com.wechat.api.RespData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,12 +37,14 @@ public class HeatBeatTask {
     @Autowired
     private BotUserService botUserService;
 
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @Autowired
     private WechatApiService wechatApiService;
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
     private Logger logger = LoggerFactory.getLogger(HeatBeatTask.class);
 
@@ -68,8 +62,15 @@ public class HeatBeatTask {
         if (null == lockInfo) {
             throw new LockException("业务处理中，请稍后再试...");
         }
-        String heartBeatUrl =  wechatApiUrl+"Login/HeartBeat?wxid=";
-        String logoutUrl = wechatApiUrl + "Login/LogOut?wxid=";
+        String wxApi = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wxApi = dic.getValue();
+        }
+        String heartBeatUrl =  wxApi+"Login/HeartBeat?wxid=";
+        String logoutUrl = wxApi + "Login/LogOut?wxid=";
+//        String heartBeatUrl =  wechatApiUrl+"Login/HeartBeat?wxid=";
+//        String logoutUrl = wechatApiUrl + "Login/LogOut?wxid=";
         try {
             List<BotUser> botUserList = botUserService.listBy();
             if(null!=botUserList && botUserList.size()>0){
@@ -108,7 +109,8 @@ public class HeatBeatTask {
                                 if(respData.getCode()<0){
 
                                     //二次登录
-                                    String twiceAutoAuth =  wechatApiUrl+"Login/TwiceAutoAuth";
+                                    String twiceAutoAuth =  wxApi+"Login/TwiceAutoAuth";
+//                                    String twiceAutoAuth =  wechatApiUrl+"Login/TwiceAutoAuth";
                                     Map<String,Object> reqData = new HashMap<>();
                                     reqData.put("OSModel","");
                                     reqData.put("Wxid",botUser.getWxId());

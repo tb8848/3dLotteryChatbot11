@@ -1,22 +1,21 @@
 package com.action;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.beans.BotUser;
 import com.beans.ChatDomain;
+import com.beans.Dictionary;
 import com.beans.Player;
 import com.beans.ResponseBean;
 import com.service.BotUserService;
 import com.service.ChatDomainService;
+import com.service.DictionaryService;
 import com.service.PlayerService;
 import com.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -35,8 +34,11 @@ public class ChatDomainAction {
     @Autowired
     private BotUserService botUserService;
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+    @Autowired
+    private DictionaryService dictionaryService;
+
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
     /**
      * 域名列表
@@ -208,6 +210,11 @@ public class ChatDomainAction {
      * @param text
      */
     private void sendMsg(String toWxId, String wxId, String text){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl + "Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("Content",text);
@@ -231,6 +238,11 @@ public class ChatDomainAction {
      * @param text
      */
     private void sendMsgGroup(String toWxId, String wxId, String text, String groupName,String wxNick){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl + "Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("At",toWxId);

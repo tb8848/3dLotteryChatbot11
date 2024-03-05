@@ -1,26 +1,21 @@
 package com.service;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.beans.BotUser;
 import com.beans.Dictionary;
 import com.beans.ResponseBean;
 import com.dao.BotUserDAO;
 import com.juLiang.DynamicGetIps;
 import com.util.JuLiangUtil;
-import com.vo.WechatPushMsgVo;
 import com.wechat.api.RespData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,8 +25,8 @@ import java.util.Map;
 @Service
 public class JuLiangService {
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
     @Autowired
     private BotUserDAO botUserDAO;
@@ -86,6 +81,11 @@ public class JuLiangService {
 
     //发送消息
     public void sendMsg(String toWxId, String wxId, String text){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("Content",text);

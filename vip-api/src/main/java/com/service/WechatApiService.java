@@ -15,12 +15,10 @@ import com.vo.WechatPushMsgVo;
 import com.wechat.api.RespData;
 import com.wechat.api.RespDataV2;
 
-import net.bytebuddy.utility.JavaConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import org.springframework.stereotype.Service;
@@ -32,8 +30,11 @@ import java.util.Map;
 @Service
 public class WechatApiService{
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @Autowired
     private BotUserDAO botUserDAO;
@@ -49,6 +50,11 @@ public class WechatApiService{
 
     public RespDataV2 clearProxyIp(String wxId) {
         RespDataV2 respData = null;
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Tools/setproxy";
         try{
             Map<String,Object> reqData = new HashMap<>();
@@ -84,6 +90,11 @@ public class WechatApiService{
         String nickName = "";
         long maxWait = 5*60; //单位：秒
         boolean scanSucc = false;
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Login/CheckQR?uuid="+uuid;
 //        logger.info(">>>>>>【校验二维码链接】>>>>>>"+url);
         while(maxWait>0){
@@ -300,6 +311,11 @@ public class WechatApiService{
 
     //发送消息
     public void sendMsg(String toWxId, String wxId, String text){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("Content",text);
@@ -319,6 +335,11 @@ public class WechatApiService{
 
     //发送群聊消息
     public void sendMsgGroup(String toWxId, String wxId, String text,String groupName,String wxNick){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("At",toWxId);

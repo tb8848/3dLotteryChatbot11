@@ -38,8 +38,8 @@ public class RecvMsgTask {
     @Autowired
     private WechatApiService wechatApiService;
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
     /**
      * 每分钟执行更新购买记录表退码状态，超过字典表配置分钟数则不可退码

@@ -1,6 +1,5 @@
 package com.service;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
@@ -8,17 +7,14 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.beans.BotUser;
 import com.beans.ChatRoomMsg;
+import com.beans.Dictionary;
 import com.beans.Player;
-import com.dao.BotUserDAO;
 import com.dao.ChatRoomMsgDAO;
-import com.util.StringUtil;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +25,11 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
     @Autowired
     private ChatRoomMsgDAO dataDao;
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+    @Autowired
+    private DictionaryService dictionaryService;
+
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -90,6 +89,11 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
 
     @Async
     public void sendMsg(String toWxId, String wxId, String text){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("Content",text);
@@ -108,6 +112,11 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
 
     @Async
     public void sendMsgGroup(String toWxId, String wxId, String text, String groupName, String wxNick){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String url = wechatApiUrl+"Msg/SendTxt";
         Map<String,Object> reqData = new HashMap<>();
         reqData.put("At",toWxId);

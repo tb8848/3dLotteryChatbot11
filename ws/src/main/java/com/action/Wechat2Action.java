@@ -1,25 +1,9 @@
 package com.action;
 
-
-import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSON;
-import com.beans.BotUser;
-import com.beans.ResponseBean;
-import com.beans.WechatIpadToken;
 import com.service.*;
-import com.util.JwtUtil;
-import com.util.StringUtil;
-import org.redisson.misc.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * wechat接口
@@ -45,8 +29,8 @@ public class Wechat2Action {
     @Autowired
     private WechatIpadTokenService wechatIpadTokenService;
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
 
     /**

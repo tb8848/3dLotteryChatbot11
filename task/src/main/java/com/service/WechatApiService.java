@@ -1,6 +1,5 @@
 package com.service;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
@@ -10,13 +9,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
-import com.baomidou.lock.exception.LockException;
 import com.beans.*;
+import com.beans.Dictionary;
 import com.mysql.jdbc.StringUtils;
-import com.util.Code3DCreateUtils;
 import com.util.StringUtil;
 import com.util.Tools;
-import com.vo.BuyRecord3DVO;
 import com.vo.WechatApiMsgVo;
 import com.vo.WechatPushMsgVo;
 import com.wechat.api.RespData;
@@ -25,13 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
@@ -40,8 +34,8 @@ import java.util.stream.Collectors;
 @Service
 public class WechatApiService{
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
     @Autowired
     private PlayerService playerService;
@@ -82,12 +76,18 @@ public class WechatApiService{
     @Autowired
     private WechatMsgService wechatMsgService;
 
+    @Autowired
+    private DictionaryService dictionaryService;
 
     private Logger logger = LoggerFactory.getLogger(WechatApiService.class);
 
 
-
     public RespData receiveMsg(BotUser user,Integer Scene,String syncKey) {
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
         String wxId = user.getWxId();
         String syncMsgUrl =  wechatApiUrl+"Msg/Sync";
         HttpRequest request = HttpUtil.createPost(syncMsgUrl);
@@ -134,6 +134,11 @@ public class WechatApiService{
         final LockInfo lockInfo = lockTemplate.lock(lockKey,60000,30000);
         if(null!=lockKey){
             try {
+                String wxApi = "";
+                Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+                if (dic != null){
+                    wxApi = dic.getValue();
+                }
                 String syncKey = "";
                 Integer Scene = 7;
                 String wxId = user.getWxId();
@@ -765,6 +770,11 @@ public class WechatApiService{
 
     //获取好友信息
     public void getFriendInfo(String fromWxId, String wxId, Player player){
+        String wechatApiUrl = "";
+        Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+        if (dic != null){
+            wechatApiUrl = dic.getValue();
+        }
 //        String url = wechatApiUrl+"Friend/GetContractDetail";
         String url = wechatApiUrl+"Friend/GetContractDetail100";
         Map<String,Object> reqData = new HashMap<>();

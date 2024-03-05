@@ -1,24 +1,16 @@
 package com.action;
 
-
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.auth.AuthContext;
-import com.auth.AuthInfo;
 import com.auth.OpLogIpUtil;
-import com.beans.BotUser;
-import com.beans.Proxy;
-import com.beans.ResponseBean;
-import com.beans.WechatIpadToken;
+import com.beans.*;
 import com.service.*;
 import com.util.IpUtil;
 import com.util.JwtUtil;
 import com.util.StringUtil;
-import com.vo.WechatPushMsgVo;
 import com.wechat.api.RespData;
 
 import org.slf4j.Logger;
@@ -32,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -52,13 +43,14 @@ public class Wechat2Action {
     @Autowired
     private ThreadPoolExecutor threadPool;
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @Value("${wechat.proxy.default.ip}")
     private String defaultProxyIp;
-
 
     @Value("${wechat.proxy.default.user}")
     private String defaultProxyUser;
@@ -68,7 +60,6 @@ public class Wechat2Action {
 
     @Value("${wechat.fixed.proxy}")
     private String defaultFixedProxy;
-
 
     @Resource
     OpLogIpUtil opLogIpUtil;
@@ -197,6 +188,11 @@ public class Wechat2Action {
             reqData.put("OSModel","");
             reqData.put("Proxy",proxy);
 
+            String wechatApiUrl = "";
+            Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+            if (dic != null){
+                wechatApiUrl = dic.getValue();
+            }
 //            System.out.println("=========="+wechatApiUrl);
             String url = wechatApiUrl+"Login/GetQR";
 //            System.out.println("获取二维码接口："+url);
@@ -253,6 +249,11 @@ public class Wechat2Action {
             }
 
             if(StringUtil.isNotNull(botUser.getWxId())){
+                String wechatApiUrl = "";
+                Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+                if (dic != null){
+                    wechatApiUrl = dic.getValue();
+                }
                 String url = wechatApiUrl+"Login/LogOut?wxid="+botUser.getWxId();
                 HttpRequest httpRequest = HttpUtil.createPost(url);
                 httpRequest.contentType("application/json");
@@ -302,6 +303,11 @@ public class Wechat2Action {
             }
 
             if(StringUtil.isNotNull(botUser.getWxId()) && botUser.getWxStatus()==2){
+                String wechatApiUrl = "";
+                Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+                if (dic != null){
+                    wechatApiUrl = dic.getValue();
+                }
                 String url = wechatApiUrl+"Login/Awaken?wxid="+botUser.getWxId();
                 Map<String,Object> reqData = new HashMap<>();
                 reqData.put("Wxid",botUser.getWxId());
@@ -361,6 +367,11 @@ public class Wechat2Action {
             if(StringUtil.isNotNull(botUser.getWxId())){
                 boolean canDel = true;
                 if(botUser.getWxStatus()==1){
+                    String wechatApiUrl = "";
+                    Dictionary dic = dictionaryService.getDicByCode("system","wxApi");
+                    if (dic != null){
+                        wechatApiUrl = dic.getValue();
+                    }
                     String url = wechatApiUrl+"Login/LogOut?wxid="+botUser.getWxId();
                     Map<String,Object> reqData = new HashMap<>();
                     HttpRequest httpRequest = HttpUtil.createPost(url);

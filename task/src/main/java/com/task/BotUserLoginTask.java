@@ -38,8 +38,8 @@ public class BotUserLoginTask {
     @Autowired
     private WechatApiService wechatApiService;
 
-    @Value("${wechat.api.url}")
-    private String wechatApiUrl;
+//    @Value("${wechat.api.url}")
+//    private String wechatApiUrl;
 
     @Autowired
     private SyncWechatMsgService syncWechatMsgService;
