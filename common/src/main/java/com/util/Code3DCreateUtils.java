@@ -936,9 +936,9 @@ public class Code3DCreateUtils {
      */
     public static List<String> zxFushi(String bai,String shi,String ge){
         Set<String> codeSet = new HashSet<>();
-        String[] baiArr = bai.split("");
-        String[] shiArr = shi.split("");
-        String[] geArr = ge.split("");
+        String[] baiArr = bai.replaceAll(",","").split("");
+        String[] shiArr = shi.replaceAll(",","").split("");
+        String[] geArr = ge.replaceAll(",","").split("");
         for(String bi : baiArr){
             for(String si : shiArr){
                 for(String g : geArr){
