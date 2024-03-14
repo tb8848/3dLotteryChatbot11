@@ -196,42 +196,43 @@ public class DrawOpenStatusMQService {
 
             Integer drawNo = msgData.getDrawNo();
             Draw draw = drawService.getByDrawNo(drawNo);
-            drawBuyRecordDAO.copyTable(draw.getDrawId()+"");
-            Integer drawStatus = draw.getDrawStatus();
-            int flag = 0;
-            if(openStatus==1 || openStatus==3){
-                flag = 1;
-            }
-            redisTemplate.boundValueOps("3dchatbot-pushLeftTime").set(flag);
-            redisTemplate.boundValueOps("3dchatbot-pushData").set(JSON.toJSONString(msgData));
-
-            int lotteryType = 1;
-            String lotteryName = "3D";
-
-            if(null!=drawStatus && drawStatus==4){
-                logger.info(">>>>>>>>>>>>[3D]快速初始化:"+body);
-               clearDrawPrizeResult(draw,lotteryType,lotteryName);
-            }else if(null!=drawStatus && drawStatus==3){
-                //3D网已结账
-                logger.info(">>>>>>>>>>>>[3D]已结算:"+body);
-                pushDrawPrizeResult(draw,lotteryType,lotteryName);
-                pushDrawCode(draw,lotteryType,lotteryName);
-            }else{
-                if(openStatus==1){
-                    pushDrawStatus(openStatus,lotteryType,lotteryName);
-                    setDingTouStartTime();
-                }else if(openStatus==0){
-                    pushDrawStatus(openStatus,lotteryType,lotteryName);
-                    Thread.sleep(3000);
-                    pushSuccessOrder(drawNo,lotteryType,lotteryName);
+            if (draw != null){
+                drawBuyRecordDAO.copyTable(draw.getDrawId()+"");
+                Integer drawStatus = draw.getDrawStatus();
+                int flag = 0;
+                if(openStatus==1 || openStatus==3){
+                    flag = 1;
                 }
+                redisTemplate.boundValueOps("3dchatbot-pushLeftTime").set(flag);
+                redisTemplate.boundValueOps("3dchatbot-pushData").set(JSON.toJSONString(msgData));
+
+                int lotteryType = 1;
+                String lotteryName = "3D";
+
+                if(null!=drawStatus && drawStatus==4){
+                    logger.info(">>>>>>>>>>>>[3D]快速初始化:"+body);
+                    clearDrawPrizeResult(draw,lotteryType,lotteryName);
+                }else if(null!=drawStatus && drawStatus==3){
+                    //3D网已结账
+                    logger.info(">>>>>>>>>>>>[3D]已结算:"+body);
+                    pushDrawPrizeResult(draw,lotteryType,lotteryName);
+                    pushDrawCode(draw,lotteryType,lotteryName);
+                }else{
+                    if(openStatus==1){
+                        pushDrawStatus(openStatus,lotteryType,lotteryName);
+                        setDingTouStartTime();
+                    }else if(openStatus==0){
+                        pushDrawStatus(openStatus,lotteryType,lotteryName);
+                        Thread.sleep(3000);
+                        pushSuccessOrder(drawNo,lotteryType,lotteryName);
+                    }
+                }
+                //发送中奖号码
+                //^^--|  119集-7|4|1|2|1|尨
+
+                //redisTemplate.boundValueOps(msgKey).set("1",1, TimeUnit.DAYS);
+                channel.basicAck(msg.getMessageProperties().getDeliveryTag(),false);
             }
-            //发送中奖号码
-            //^^--|  119集-7|4|1|2|1|尨
-
-            //redisTemplate.boundValueOps(msgKey).set("1",1, TimeUnit.DAYS);
-            channel.basicAck(msg.getMessageProperties().getDeliveryTag(),false);
-
         } catch (Exception e) {
             e.printStackTrace();
             if(msg.getMessageProperties().getRedelivered()){
@@ -307,7 +308,11 @@ public class DrawOpenStatusMQService {
                                 if(player.getUserType()==2 && StringUtil.isNotNull(botUser.getWxId())){
 
                                     //System.out.println(String.format("%s 玩家成功订单 %s",player.getNickname(),msgBuffer1.toString()));
-                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString());
+                                    if (player.getChatStatus() == 1){
+                                        wechatApiService.sendMsgGroup(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString(),player.getWxGroup(),player.getNickname());
+                                    }else{
+                                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString());
+                                    }
                                 }
 
                                 //玩家有效流水订单，只包括报网和吃奖类型的订单
@@ -432,7 +437,11 @@ public class DrawOpenStatusMQService {
                     //每个玩家的中奖情况，单独发送给微信终端
                     if(player.getUserType()==2 && (player.getLotteryType()==3 || player.getLotteryType()==1) && StringUtil.isNotNull(botUser.getWxId())){
                         //System.out.println(String.format("%s 玩家中奖订单 %s",player.getNickname(),buffer1.toString()));
-                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),"【"+lotteryName+"】> > > > > > > > \r\n"+buffer1.toString());
+                        if (player.getChatStatus() == 1){
+                            wechatApiService.sendMsgGroup(player.getWxFriendId(),botUser.getWxId(),"【"+lotteryName+"】> > > > > > > > \r\n"+buffer1.toString(),player.getWxGroup(),player.getNickname());
+                        }else{
+                            wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),"【"+lotteryName+"】> > > > > > > > \r\n"+buffer1.toString());
+                        }
                     }
                 }
 

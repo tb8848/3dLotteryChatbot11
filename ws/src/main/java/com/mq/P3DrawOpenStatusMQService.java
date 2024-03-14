@@ -228,7 +228,11 @@ public class P3DrawOpenStatusMQService {
                                 //每个玩家的成功订单，单独发送给微信终端
                                 if(player.getUserType()==2 && StringUtil.isNotNull(botUser.getWxId())){
 //                                    System.out.println(String.format("%s 玩家成功订单 %s",player.getNickname(),msgBuffer1.toString()));
-                                    wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString());
+                                    if (player.getChatStatus() == 1){
+                                        wechatApiService.sendMsgGroup(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString(),player.getWxGroup(),player.getNickname());
+                                    }else{
+                                        wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),msgBuffer1.toString());
+                                    }
                                 }
 
                                 //玩家有效流水订单，只包括报网和吃奖类型的订单
@@ -352,7 +356,11 @@ public class P3DrawOpenStatusMQService {
                         //每个玩家的中奖情况，单独发送给微信终端
                         if (player.getUserType() == 2 && (player.getLotteryType()==3 || player.getLotteryType()==2) && StringUtil.isNotNull(botUser.getWxId())) {
                             //System.out.println(String.format("%s 玩家中奖订单 %s", player.getNickname(), buffer1.toString().toString()));
-                            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),"【P3】> > > > > > > > \r\n"+buffer1.toString().toString());
+                            if (player.getChatStatus() == 1){
+                                wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(),"【P3】> > > > > > > > \r\n"+buffer1.toString().toString(),player.getWxGroup(),player.getNickname());
+                            }else{
+                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(),"【P3】> > > > > > > > \r\n"+buffer1.toString().toString());
+                            }
                         }
                     }
 

@@ -3,7 +3,6 @@ package com.service;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.beans.Player;
 import com.dao.PlayerDAO;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -77,7 +77,15 @@ public class PlayerService extends ServiceImpl<PlayerDAO, Player> {
 
     public List<Player> getListByIds(List<String> playerIdList) {
 
-        return dataDAO.selectBatchIds(playerIdList);
+        List<Player> playerList = new ArrayList<>();
+        for (String playerId : playerIdList){
+            Player player = dataDAO.selectById(playerId);
+            if (player != null){
+                playerList.add(player);
+            }
+        }
+        return playerList;
+//        return dataDAO.selectBatchIds(playerIdList);
     }
 
     public Player getOneBy(String uid, String wxId) {

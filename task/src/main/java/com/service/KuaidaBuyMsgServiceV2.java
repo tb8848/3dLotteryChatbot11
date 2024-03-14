@@ -363,7 +363,7 @@ public class KuaidaBuyMsgServiceV2 {
                 return;
             }
 //            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
-            System.out.println("消息内容："+fromMsg.getMsg());
+//            System.out.println("消息内容："+fromMsg.getMsg());
             if (fromMsg.getMsg().contains("福") || fromMsg.getMsg().contains("体")){
                 String[] arr = fromMsg.getMsg().split("各");
                 List<BuyRecord3DVO> buyList = Lists.newArrayList();
@@ -391,11 +391,11 @@ public class KuaidaBuyMsgServiceV2 {
                     chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                     return;
                 }
-                System.out.println("金额："+buyMoney);
-                System.out.println("类型："+arr[0]);
+//                System.out.println("金额："+buyMoney);
+//                System.out.println("类型："+arr[0]);
                 if (arr[0].contains("豹子") || arr[0].contains("大") || arr[0].contains("小") || arr[0].contains("奇") || arr[0].contains("偶") || arr[0].contains("拖拉机")) {
                     String arrOne = arr[0].replaceAll("福","").replaceAll("体","");
-                    System.out.println("操作后1："+arrOne);
+//                    System.out.println("操作后1："+arrOne);
                     switch (arrOne) {
                         case "大小":
                         case "大":
@@ -445,7 +445,7 @@ public class KuaidaBuyMsgServiceV2 {
                             if(StringUtil.isNull(code)){
                                 code = typeArr[1];
                             }
-                            System.out.println("code="+code);
+//                            System.out.println("code="+code);
                             String[] splitArr = code.split("\\.|,|，");
                             List<String> cclist = Arrays.stream(splitArr).map(item->item.trim()).collect(Collectors.toList());
                             for(String r : cclist){
@@ -466,7 +466,7 @@ public class KuaidaBuyMsgServiceV2 {
                             int fei = 0;
                             int tuo = 0;
                             int z3z6 = 0;
-                            System.out.println("操作后2："+type);
+//                            System.out.println("操作后2："+type);
                             switch (type) {
                                 case "分笔组三":
                                     resMap = z3Buy(botUser, player,buyMoney, code, "3");
@@ -1451,7 +1451,7 @@ public class KuaidaBuyMsgServiceV2 {
                 return;
             }
 //            System.out.println(">>>>>>>>>>>>>>有下注消息来了");
-            System.out.println("消息内容："+fromMsg.getMsg());
+//            System.out.println("消息内容："+fromMsg.getMsg());
             if (fromMsg.getMsg().contains("福") || fromMsg.getMsg().contains("体")){
                 String[] arr = fromMsg.getMsg().split("各");
                 List<BuyRecord3DVO> buyList = Lists.newArrayList();
@@ -1479,11 +1479,11 @@ public class KuaidaBuyMsgServiceV2 {
                     chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
                     return;
                 }
-                System.out.println("金额："+buyMoney);
-                System.out.println("类型："+arr[0]);
+//                System.out.println("金额："+buyMoney);
+//                System.out.println("类型："+arr[0]);
                 if (arr[0].contains("豹子") || arr[0].contains("大") || arr[0].contains("小") || arr[0].contains("奇") || arr[0].contains("偶") || arr[0].contains("拖拉机")) {
                     String arrOne = arr[0].replaceAll("福","").replaceAll("体","");
-                    System.out.println("操作后1："+arrOne);
+//                    System.out.println("操作后1："+arrOne);
                     switch (arrOne) {
                         case "大小":
                         case "大":
@@ -1533,7 +1533,7 @@ public class KuaidaBuyMsgServiceV2 {
                             if(StringUtil.isNull(code)){
                                 code = typeArr[1];
                             }
-                            System.out.println("code="+code);
+//                            System.out.println("code="+code);
                             String[] splitArr = code.split("\\.|,|，");
                             List<String> cclist = Arrays.stream(splitArr).map(item->item.trim()).collect(Collectors.toList());
                             for(String r : cclist){
