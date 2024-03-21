@@ -76,16 +76,10 @@ public class PlayerService extends ServiceImpl<PlayerDAO, Player> {
     }
 
     public List<Player> getListByIds(List<String> playerIdList) {
-
-        List<Player> playerList = new ArrayList<>();
-        for (String playerId : playerIdList){
-            Player player = dataDAO.selectById(playerId);
-            if (player != null){
-                playerList.add(player);
-            }
+        if (!playerIdList.isEmpty()) {
+            return dataDAO.selectBatchIds(playerIdList);
         }
-        return playerList;
-//        return dataDAO.selectBatchIds(playerIdList);
+        return new ArrayList<>();
     }
 
     public Player getOneBy(String uid, String wxId) {
