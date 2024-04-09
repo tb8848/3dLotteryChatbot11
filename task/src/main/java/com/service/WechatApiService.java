@@ -457,7 +457,7 @@ public class WechatApiService{
                 if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")
                         || cmdText.toUpperCase().startsWith("福") || cmdText.toUpperCase().startsWith("体")
                         || (cmdText.contains("福") && cmdText.contains("各")) || (cmdText.contains("体") && cmdText.contains("各"))){
-                    if (cmdText.contains("福") && cmdText.contains("体")){
+                    if ((cmdText.contains("福") && cmdText.contains("体")) || cmdText.contains("3D") && cmdText.contains("P3")){
                         Draw draw =  p3DrawService.getLastDrawInfo();
                         Draw drawTwo =  drawService.getLastDrawInfo();
                         if ((null==draw || draw.getOpenStatus()!=1) && (null==drawTwo || drawTwo.getOpenStatus()!=1)){
@@ -507,7 +507,17 @@ public class WechatApiService{
 
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();
-                    if(text1.contains("福") || text1.contains("体")){
+                    if ((text1.contains("3D") && text1.contains("P3")) || (text1.contains("福") && text1.contains("体"))) {
+                        String fcContent = text1.replaceAll("P3", "").replaceAll("体", "");
+                        String tcContent = text1.replaceAll("3D", "").replaceAll("福", "");
+                        String[] cp = new String[]{fcContent, tcContent};
+                        for (String con : cp) {
+                            extractedGroup(botUser, player, cmdText, con, groupName, wxNick);
+                        }
+                    }else{
+                        extractedGroup(botUser, player, cmdText, text1, groupName, wxNick);
+                    }
+                    /*if(text1.contains("福") || text1.contains("体")){
                         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
                         int lottype = 1;
                         if(text1.startsWith("P3") || text1.contains("体")){
@@ -561,9 +571,47 @@ public class WechatApiService{
                             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
                             chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                         }
-                    }
+                    }*/
                 }
             }
+        }
+    }
+
+    private void extractedGroup(BotUser botUser, Player player, String cmdText, String text1,String groupName,String wxNick) {
+        ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
+        int lottype = 1;
+        if(text1.contains("P3") || text1.contains("体")){
+            lottype = 2;
+        }
+        String txt = "";
+        if(text1.startsWith("P3") || text1.startsWith("3D")){
+            txt = text1.substring(2);
+        }else{
+            if (text1.startsWith("福") || text1.startsWith("体")) {
+                txt = text1.substring(1);
+            }else {
+                txt = text1.replaceAll("福", "");
+                txt = txt.replaceAll("体", "");
+            }
+        }
+        childMsg.setMsg(txt);
+        String lotName = lottype==2?"P3":"3D";
+        if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
+            boolean isBuy = false;
+            for(String word : GlobalConst.keywords2){
+                if(txt.startsWith(word) || txt.contains(word)){
+                    kuaidaBuyMsgServiceV2.handleMsgGroup(childMsg,botUser,player,lottype,groupName,wxNick);
+                    isBuy = true;
+                    break;
+                }
+            }
+            if(!isBuy){
+                ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"作业格式有误:"+cmdText);
+                chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
+            }
+        }else{
+            ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
+            chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
         }
     }
 
@@ -1282,7 +1330,7 @@ public class WechatApiService{
                 if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")
                         || cmdText.toUpperCase().startsWith("福") || cmdText.toUpperCase().startsWith("体")
                         || (cmdText.contains("福") && cmdText.contains("各")) || (cmdText.contains("体") && cmdText.contains("各"))){
-                    if (cmdText.contains("福") && cmdText.contains("体")){
+                    if ((cmdText.contains("福") && cmdText.contains("体")) || cmdText.contains("3D") && cmdText.contains("P3")){
                         Draw draw =  p3DrawService.getLastDrawInfo();
                         Draw drawTwo =  drawService.getLastDrawInfo();
                         if ((null==draw || draw.getOpenStatus()!=1) && (null==drawTwo || drawTwo.getOpenStatus()!=1)){
@@ -1332,7 +1380,17 @@ public class WechatApiService{
 
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();
-                    if (text1.contains("福") || text1.contains("体")){
+                    if ((text1.contains("3D") && text1.contains("P3")) || (text1.contains("福") && text1.contains("体"))) {
+                        String fcContent = text1.replaceAll("P3", "").replaceAll("体", "");
+                        String tcContent = text1.replaceAll("3D", "").replaceAll("福", "");
+                        String[] cp = new String[]{fcContent, tcContent};
+                        for (String con : cp) {
+                            extracted(botUser, player, cmdText, con);
+                        }
+                    }else{
+                        extracted(botUser, player, cmdText, text1);
+                    }
+                    /*if (text1.contains("福") || text1.contains("体")){
                         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
                         int lottype = 1;
                         if(text1.startsWith("P3") || text1.contains("体")){
@@ -1386,9 +1444,47 @@ public class WechatApiService{
                             ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
                             chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
                         }
-                    }
+                    }*/
                 }
             }
+        }
+    }
+
+    private void extracted(BotUser botUser, Player player, String cmdText, String text1) {
+        ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser, player, text1);
+        int lottype = 1;
+        if(text1.contains("P3") || text1.contains("体")){
+            lottype = 2;
+        }
+        String txt = "";
+        if(text1.startsWith("P3") || text1.startsWith("3D")){
+            txt = text1.substring(2);
+        }else{
+            if (text1.startsWith("福") || text1.startsWith("体")) {
+                txt = text1.substring(1);
+            }else {
+                txt = text1.replaceAll("福", "");
+                txt = txt.replaceAll("体", "");
+            }
+        }
+        childMsg.setMsg(txt);
+        String lotName = lottype==2?"P3":"3D";
+        if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
+            boolean isBuy = false;
+            for(String word : GlobalConst.keywords2){
+                if(txt.startsWith(word) || txt.contains(word)){
+                    kuaidaBuyMsgServiceV2.handleMsg(childMsg, botUser, player,lottype);
+                    isBuy = true;
+                    break;
+                }
+            }
+            if(!isBuy){
+                ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"作业格式有误:"+ cmdText);
+                chatRoomMsgService.saveAndSendMsg(toMsg, player.getWxFriendId(), botUser.getWxId());
+            }
+        }else{
+            ChatRoomMsg toMsg = chatRoomMsgService.createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
+            chatRoomMsgService.saveAndSendMsg(toMsg, player.getWxFriendId(), botUser.getWxId());
         }
     }
 

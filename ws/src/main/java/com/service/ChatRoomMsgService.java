@@ -237,158 +237,17 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                     }
                 }
 
-                if(optType==4){
-                    if (draw.getOpenStatus() == 1 || p3Draw.getOpenStatus()==1) {
-                        tuima(msg, botUser, player);
-                        return;
+                if ((content.contains("3D") && content.contains("P3")) || (content.contains("福") && content.contains("体"))){
+                    String fcContent = content.replaceAll("P3","").replaceAll("体","");
+                    String tcContent = content.replaceAll("3D","").replaceAll("福","");
+                    String[] cp = new String[]{fcContent,tcContent};
+                    for (String con : cp){
+                        msg.setMsg(con);
+                        if (extracted(botUser, msg, player, optType, draw, p3Draw, lottype)) return;
                     }
+                }else{
+                    if (extracted(botUser, msg, player, optType, draw, p3Draw, lottype)) return;
                 }
-
-                String text = msg.getMsg().toUpperCase();
-                Boolean checkTxtResult = true;
-                String[] multiArr = text.split("\n|\r");
-                for(String cmdText : multiArr){
-                    if(StringUtils.isNullOrEmpty(cmdText)){
-                        continue;
-                    }
-                    String cmdPrefix = cmdText.toUpperCase();
-                    if(cmdPrefix.startsWith("P3") || cmdPrefix.startsWith("3D")
-                            || cmdPrefix.startsWith("福")
-                            || cmdPrefix.startsWith("体")){
-                        if (null == player.getLotteryType()) {
-                            ChatRoomMsg toMsg = createMsg(botUser, player, "请先开通排列三或福彩3D服务");
-                            dataDao.insert(toMsg);
-                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
-                            return;
-                        }
-                        if(cmdPrefix.startsWith("P3") || cmdPrefix.startsWith("体")){
-                            lottype = 2;
-                        }else{
-                            lottype = 1;
-                        }
-                        //lottype = cmdText.startsWith("P3") ? 2 : 1;
-                        if(lottype==2){
-                            if(p3Draw.getOpenStatus()!=1){
-                                ChatRoomMsg toMsg = createMsg(botUser, player, "【P3】^^★★★停止-上课★★★");
-                                dataDao.insert(toMsg);
-                                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
-                                return;
-                            }
-                        }else{
-                            if(draw.getOpenStatus()!=1){
-                                ChatRoomMsg toMsg = createMsg(botUser, player, "【3D】^^★★★停止-上课★★★");
-                                dataDao.insert(toMsg);
-                                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
-                                return;
-                            }
-                        }
-
-                        if (player.getLotteryType() != 3) {
-                            if (player.getLotteryType() != lottype) {
-                                ChatRoomMsg toMsg = createMsg(botUser, player, "哦噢，您无提交" + (lottype == 2 ? "P3" : "3D") + "作业的权限");
-                                dataDao.insert(toMsg);
-                                simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
-                                if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-//                                    if (player.getChatStatus() == 1){
-//                                        wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
-//                                    }else{
-//                                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-//                                    }
-//                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-                                }
-                                return;
-                            }
-                        }
-                    }else{
-                        checkTxtResult = false;
-                        break;
-                    }
-                }
-
-                if(checkTxtResult){
-
-                    switch (optType) {
-                        case 0:
-                            for(String cmdText : multiArr){
-                                String text1 = cmdText.toUpperCase();
-                                String txt = "";
-                                if(text1.startsWith("P3") || text1.startsWith("3D")
-                                        || text1.startsWith("福")
-                                        || text1.startsWith("体") ){
-                                    ChatRoomMsg childMsg = createMsg(botUser,player,text1);
-                                    if(text1.startsWith("P3") || text1.startsWith("体")){
-                                        lottype = 2;
-                                    }else{
-                                        lottype = 1;
-                                    }
-                                    //lottype = text1.startsWith("P3")?2:1;
-                                    String lotName = lottype==2?"P3":"3D";
-
-                                    if(text1.startsWith("P3") || text1.startsWith("3D")){
-                                        txt = text1.substring(2);
-                                    }else{
-                                        txt = text1.substring(1);
-                                    }
-
-                                    if(player.getLotteryType()==3 || player.getLotteryType()==lottype){
-
-                                        //String txt = text1.substring(2);
-                                        boolean isBuy = false;
-                                        for(String word : GlobalConst.keywords2){
-                                            if(txt.startsWith(word)){
-                                                kuaidaBuyMsgServiceV2.kuaidaBuy(childMsg,botUser,player,lottype);
-                                                isBuy = true;
-                                                break;
-                                            }
-                                        }
-                                        if (!isBuy) {
-                                            ChatRoomMsg toMsg = createMsg(botUser, player, "格式错误");
-                                            dataDao.insert(toMsg);
-                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
-                                            if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-//                                                if (player.getChatStatus() == 1){
-//                                                    wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
-//                                                }else{
-//                                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-//                                                }
-//                                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-                                            }
-                                        }
-                                    }else{
-                                        ChatRoomMsg toMsg = createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
-                                        dataDao.insert(toMsg);
-                                        if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
-//                                            if (player.getChatStatus() == 1){
-//                                                wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
-//                                            }else{
-//                                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-//                                            }
-//                                            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case 1:
-                        case 90:
-                            if(lottype>0){
-                                kuaixuanBuyMsgServiceV2.handleMsg(msg,botUser,player,lottype);
-                            }
-                            break;
-                        case 91: //多组下注，不进行文本解析
-                            if(lottype>0){
-                                kuaidaMultiBuyMsgServiceV2.kuaidaBuyForMultiGroup(msg,botUser,player,lottype);
-                            }
-                            break;
-
-
-                    }
-                }
-
-
-
-
-
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -405,6 +264,161 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
 //                wechatApiService.sendMsg(player.getWxFriendId(),botUser.getWxId(),toMsg.getMsg());
             }
         }
+    }
+
+    private boolean extracted(BotUser botUser, ChatRoomMsg msg, Player player, Integer optType, Draw draw, Draw p3Draw, int lottype) {
+        if(optType ==4){
+            if (draw.getOpenStatus() == 1 || p3Draw.getOpenStatus()==1) {
+                tuima(msg, botUser, player);
+                return true;
+            }
+        }
+
+        String text = msg.getMsg().toUpperCase();
+        Boolean checkTxtResult = true;
+        String[] multiArr = text.split("\n|\r");
+        for(String cmdText : multiArr){
+            if(StringUtils.isNullOrEmpty(cmdText)){
+                continue;
+            }
+            String cmdPrefix = cmdText.toUpperCase();
+            if(cmdPrefix.contains("P3") || cmdPrefix.contains("3D")
+                    || cmdPrefix.contains("福")
+                    || cmdPrefix.contains("体")){
+                if (null == player.getLotteryType()) {
+                    ChatRoomMsg toMsg = createMsg(botUser, player, "请先开通排列三或福彩3D服务");
+                    dataDao.insert(toMsg);
+                    simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                    return true;
+                }
+                if(cmdPrefix.contains("P3") || cmdPrefix.contains("体")){
+                    lottype = 2;
+                }else{
+                    lottype = 1;
+                }
+                //lottype = cmdText.startsWith("P3") ? 2 : 1;
+                if(lottype ==2){
+                    if(p3Draw.getOpenStatus()!=1){
+                        ChatRoomMsg toMsg = createMsg(botUser, player, "【P3】^^★★★停止-上课★★★");
+                        dataDao.insert(toMsg);
+                        simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                        return true;
+                    }
+                }else{
+                    if(draw.getOpenStatus()!=1){
+                        ChatRoomMsg toMsg = createMsg(botUser, player, "【3D】^^★★★停止-上课★★★");
+                        dataDao.insert(toMsg);
+                        simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                        return true;
+                    }
+                }
+
+                if (player.getLotteryType() != 3) {
+                    if (player.getLotteryType() != lottype) {
+                        ChatRoomMsg toMsg = createMsg(botUser, player, "哦噢，您无提交" + (lottype == 2 ? "P3" : "3D") + "作业的权限");
+                        dataDao.insert(toMsg);
+                        simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                        if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+//                                    if (player.getChatStatus() == 1){
+//                                        wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+//                                    }else{
+//                                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+//                                    }
+//                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                        }
+                        return true;
+                    }
+                }
+            }else{
+                checkTxtResult = false;
+                break;
+            }
+        }
+
+        if(checkTxtResult){
+            switch (optType) {
+                case 0:
+                    for(String cmdText : multiArr){
+                        String text1 = cmdText.toUpperCase();
+                        String txt = "";
+                        if(text1.contains("P3") || text1.contains("3D")
+                                || text1.contains("福")
+                                || text1.contains("体") ){
+                            ChatRoomMsg childMsg = createMsg(botUser, player,text1);
+                            if(text1.contains("P3") || text1.contains("体")){
+                                lottype = 2;
+                            }else{
+                                lottype = 1;
+                            }
+                            //lottype = text1.startsWith("P3")?2:1;
+                            String lotName = lottype ==2?"P3":"3D";
+
+                            if(text1.startsWith("P3") || text1.startsWith("3D")){
+                                txt = text1.substring(2);
+                            }else{
+                                if (text1.startsWith("福") || text1.startsWith("体")) {
+                                    txt = text1.substring(1);
+                                }else {
+                                    txt = text1.replaceAll("福", "");
+                                    txt = txt.replaceAll("体", "");
+                                }
+                            }
+
+                            if(player.getLotteryType()==3 || player.getLotteryType()== lottype){
+
+                                //String txt = text1.substring(2);
+                                boolean isBuy = false;
+                                for(String word : GlobalConst.keywords2){
+                                    if(txt.startsWith(word) || txt.contains(word)){
+                                        kuaidaBuyMsgServiceV2.kuaidaBuy(childMsg, botUser, player, lottype);
+                                        isBuy = true;
+                                        break;
+                                    }
+                                }
+                                if (!isBuy) {
+                                    ChatRoomMsg toMsg = createMsg(botUser, player, "格式错误");
+                                    dataDao.insert(toMsg);
+                                    simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                    if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+//                                                if (player.getChatStatus() == 1){
+//                                                    wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+//                                                }else{
+//                                                    wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+//                                                }
+//                                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                    }
+                                }
+                            }else{
+                                ChatRoomMsg toMsg = createMsg(botUser, player,"哦噢，您无提交"+lotName+"作业的权限");
+                                dataDao.insert(toMsg);
+                                if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+//                                            if (player.getChatStatus() == 1){
+//                                                wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
+//                                            }else{
+//                                                wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+//                                            }
+//                                            wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                case 90:
+                    if(lottype >0){
+                        kuaixuanBuyMsgServiceV2.handleMsg(msg, botUser, player, lottype);
+                    }
+                    break;
+                case 91: //多组下注，不进行文本解析
+                    if(lottype >0){
+                        kuaidaMultiBuyMsgServiceV2.kuaidaBuyForMultiGroup(msg, botUser, player, lottype);
+                    }
+                    break;
+
+
+            }
+        }
+        return false;
     }
 
 

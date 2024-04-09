@@ -132,10 +132,4 @@ public class BotUser {
      * 初始密码修改状态，0:未修改；1:已修改
      */
     private Integer initPwdUpdate;
-
-    private String wxAccount;
-
-    private String wxUserName;
-
-    private String wxPassword;
 }

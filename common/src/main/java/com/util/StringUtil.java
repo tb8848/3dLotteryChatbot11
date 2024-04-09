@@ -1,5 +1,7 @@
 package com.util;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,7 +85,16 @@ public class StringUtil {
         }
     }
 
-
+    //判断字符串是否有相同字符（true：有相同字符）
+    public static boolean hasDuplicateChar(String str) {
+        Set<Character> charSet = new HashSet<>();
+        for (char c : str.toCharArray()) {
+            if (!charSet.add(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 

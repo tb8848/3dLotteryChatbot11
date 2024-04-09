@@ -154,7 +154,12 @@ public class KuaidaBuyMsgServiceV2 {
             if(fromMsg.getMsg().startsWith("P3") || fromMsg.getMsg().startsWith("3D")){
                 content = fromMsg.getMsg().substring(2);
             }else{
-                content = fromMsg.getMsg().substring(1);
+                if (fromMsg.getMsg().startsWith("福") || fromMsg.getMsg().startsWith("体")) {
+                    content = fromMsg.getMsg().substring(1);
+                }else {
+                    content = fromMsg.getMsg().replaceAll("福", "");
+                    content = content.replaceAll("体", "");
+                }
             }
             String[] arr = content.split("各");
             if (arr.length != 2) {
@@ -174,8 +179,13 @@ public class KuaidaBuyMsgServiceV2 {
             }
             BigDecimal buyMoney = BigDecimal.ZERO;
             try {
-                buyMoney = new BigDecimal(arr[1]);
-
+                int len = arr[1].length();
+                if (arr[1].contains("笔")){
+                    String arrStr = arr[1].substring(0,len-1);
+                    buyMoney = new BigDecimal(arrStr);
+                }else{
+                    buyMoney = new BigDecimal(arr[1]);
+                }
             } catch (Exception e) {
                 toMsg = createMsg(botUser, player, content+"\r\n金额错误");
                 dataDao.insert(toMsg);
@@ -192,8 +202,8 @@ public class KuaidaBuyMsgServiceV2 {
                 return;
             }
             String text = arr[0].toUpperCase();
-            if (text.equals("拖拉机") || text.equals("三同号") || text.equals("猜三同")
-                    || text.equals("大") || text.equals("小") || text.equals("奇") || text.equals("偶") || text.equals("大小") || text.equals("奇偶")) {
+            if (text.equals("拖拉机") || text.equals("三同号") || text.equals("猜三同") || text.equals("大") || text.equals("小") ||
+                    text.equals("奇") || text.equals("偶") || text.equals("大小") || text.equals("奇偶") || text.equals("豹子")) {
                 switch (text) {
                     case "大小":
                     case "大":
@@ -208,10 +218,10 @@ public class KuaidaBuyMsgServiceV2 {
                     case "拖拉机":
                         buyList = noCodesBuy(botUser, player, buyMoney, arr[0], "12");
                         break;
+                    case "豹子":
                     case "猜三同":
                     case "三同号":
                         buyList = noCodesBuy(botUser, player, buyMoney, arr[0], "11");
-
                         break;
 
                 }
@@ -234,13 +244,26 @@ public class KuaidaBuyMsgServiceV2 {
 
                 boolean matchSucc = false;
                 for (String word : GlobalConst.keywords1) {
-                    if (text.startsWith(word)) {
+                    if (text.startsWith(word) || text.contains(word)) {
                         String type = word;
                         String code = null;
                         matchSucc = true;
 
-                        String[] typeArr = text.split(word);
-                        if (typeArr.length != 2) {
+                        if (!type.equals(".") && !type.equals(",") && !type.equals("，") && !type.equals("XX") && !type.equals("**") &&
+                                !type.equals("X") && !type.equals("*")){
+                            text = text.replaceAll(word, "");
+                            text = word + text;
+                        }
+                        String[] typeArr = new String[]{};
+                        if (type.equals("**")){
+                            typeArr = text.split("\\*\\*");
+                        }else if (type.equals("*")){
+                            typeArr = text.split("\\*");
+                        }else{
+                            typeArr = text.split(word);
+                        }
+                        if (typeArr.length != 2 && (!type.equals(".") && !type.equals(",") && !type.equals("，") && !type.equals("XX") &&
+                                !type.equals("**") && !type.equals("X") && !type.equals("*"))) {
                             toMsg = getErrorMsg(botUser, player);
                             toMsg.setSource(0);
                             dataDao.insert(toMsg);
@@ -256,7 +279,15 @@ public class KuaidaBuyMsgServiceV2 {
                             }
                             return;
                         }
-                        code=typeArr[1];
+                        if (text.contains("百") && text.contains("十") && !text.contains("直") && !text.contains("一定") && !text.contains("二定") &&
+                                !text.contains("1D") && !text.contains("2D")){
+                            code=text;
+                        }else if (type.equals(".") || type.equals(",") || type.equals("，") || type.equals("XX") || type.equals("**") ||
+                                type.equals("X") || type.equals("*")){
+                            code=text;
+                        }else{
+                            code=typeArr[1];
+                        }
                         String[] splitArr = code.split("\\.|,|，");
                         for(String r : splitArr){
                             if(StringUtils.isNullOrEmpty(r)){
@@ -265,7 +296,8 @@ public class KuaidaBuyMsgServiceV2 {
                                 if(r.equals("全包")){
                                     continue;
                                 }
-                                if(!StringUtil.checkCodeFormat(r)){
+                                if(!StringUtil.checkCodeFormat(r) && (!type.equals(".") && !type.equals(",") && !type.equals("，") && !type.equals("XX") &&
+                                        !type.equals("**") && !type.equals("X") && !type.equals("*") && !type.equals("2D") && !type.equals("二定") && !type.equals("直组"))){
                                     toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
                                     toMsg.setSource(0);
                                     dataDao.insert(toMsg);
@@ -282,7 +314,9 @@ public class KuaidaBuyMsgServiceV2 {
                                 }
                             }
                         }
-                        if(!StringUtil.checkCodeFormat(code)){
+
+                        if(!code.contains(",") && !code.contains("，") && !code.contains(".") && !code.contains("XX") && !code.contains("**") &&
+                                !code.contains("X") && !code.contains("*") && !type.equals("直组") && !StringUtil.checkCodeFormat(code)){
                                 toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
                                 toMsg.setSource(0);
                                 dataDao.insert(toMsg);
@@ -298,6 +332,8 @@ public class KuaidaBuyMsgServiceV2 {
                                 return;
                         }
                         switch (type) {
+                            case "直":
+                            case "单":
                             case "单选":
                                 resMap = codeBuy(botUser, player, buyMoney, code, "1");
                                 break;
@@ -309,6 +345,7 @@ public class KuaidaBuyMsgServiceV2 {
 //                                resMap = zxhzBuy(botUser, player, buyMoney, code, "1");
 //                                break;
                             case "通选":
+                            case "复":
                             case "复式":
                                 resMap = fsBaozuBuy(buyMoney, code, "300");
                                 break;
@@ -318,18 +355,68 @@ public class KuaidaBuyMsgServiceV2 {
                             case "分笔组三":
                                 resMap = z3Buy(botUser, player, buyMoney, code, "3");
                                 break;
+                            case "组3组6":
+                            case "组三组六":
+                                Map<String,Object> zu3 = Maps.newHashMap();
+                                if(code.contains("拖")){
+                                    zu3 = z3dtBuy(botUser, player, buyMoney, code, "3");
+                                }else{
+                                    zu3 = z3BaozuBuy(buyMoney, code, "100");
+                                }
+                                Map<String,Object> zu6 = Maps.newHashMap();
+                                if(code.contains("拖")){
+                                    zu6 = z6dtBuy(botUser, player, buyMoney, code, "4");
+                                }else{
+                                    zu6 = z6BaozuBuy(buyMoney, code, "200");
+                                }
+                                List<BuyRecord3DVO> zu3List = (List<BuyRecord3DVO>) zu3.get("list");
+                                List<BuyRecord3DVO> zu6List = (List<BuyRecord3DVO>) zu6.get("list");
+                                zu3List.addAll(zu6List);
+                                resMap.put("list",zu3List);
+                                break;
+                            case "直组":
+                                String[] multiArr = code.split("\\.|,|，|/| |-");
+                                List<BuyRecord3DVO> hmList = Lists.newArrayList();
+                                for(String ss : multiArr){
+                                    if (StringUtil.hasDuplicateChar(ss)){
+                                        Map<String,Object> z3 = Maps.newHashMap();
+                                        if(ss.contains("拖")){
+                                            z3 = z3dtBuy(botUser, player, buyMoney, ss, "3");
+                                        }else{
+                                            z3 = z3Buy(botUser, player, buyMoney, ss, "3");
+                                        }
+                                        List<BuyRecord3DVO> z3List = (List<BuyRecord3DVO>) z3.get("list");
+                                        hmList.addAll(z3List);
+                                    }else{
+                                        Map<String,Object> zx = codeBuy(botUser, player, buyMoney, ss, "1");
+                                        Map<String,Object> z6 = Maps.newHashMap();
+                                        if(ss.contains("拖")){
+                                            z6 = z6dtBuy(botUser, player, buyMoney, ss, "4");
+                                        }else{
+                                            z6 = z6BaozuBuy(buyMoney, ss, "200");
+                                        }
+                                        List<BuyRecord3DVO> zxList = (List<BuyRecord3DVO>) zx.get("list");
+                                        List<BuyRecord3DVO> z6List = (List<BuyRecord3DVO>) z6.get("list");
+                                        hmList.addAll(zxList);
+                                        hmList.addAll(z6List);
+                                    }
+                                }
+                                resMap.put("list",hmList);
+                                break;
+                            case "组3":
                             case "组三":
                             case "组三普通":
 //                                if(code.contains(",") || code.contains("，")){
 //                                    resMap = z3Z6OneCode(botUser, player, buyMoney, code, "3");
 //                                }else
-
                                 if(code.contains("拖")){
                                     resMap = z3dtBuy(botUser, player, buyMoney, code, "3");
                                 }else{
                                     resMap = z3BaozuBuy(buyMoney, code, "100");
                                 }
                                 break;
+                            case "组3飞":
+                            case "组三飞":
                             case "双飞组三":
                                 resMap = z3SFBuy(botUser, player, buyMoney, code, "3");
                                 break;
@@ -339,39 +426,51 @@ public class KuaidaBuyMsgServiceV2 {
                             case "分笔组六":
                                 resMap = z3Buy(botUser, player, buyMoney, code, "4");
                                 break;
+                            case "组6":
                             case "组六":
                             case "组六普通":
 //                                if(code.contains(",") || code.contains("，")){
 //                                    resMap = z3Z6OneCode(botUser, player, buyMoney, code, "4");
 //                                }else
-
                                 if(code.contains("拖")){
                                     resMap = z6dtBuy(botUser, player, buyMoney, code, "4");
                                 }else{
                                     resMap = z6BaozuBuy(buyMoney, code, "200");
                                 }
                                 break;
+                            case "组6飞":
+                            case "组六飞":
                             case "双飞组六":
                                 resMap = z6SFBuy(botUser, player, buyMoney, code, "4");
                                 break;
 //                            case "组六和值":
 //                                resMap = z6hzBuy(botUser, player, buyMoney, code, "4");
 //                                break;
+                            case "和":
                             case "和数":
                                 resMap = hsBuy(botUser, player, buyMoney, code, "5");
                                 break;
+                            case "跨":
                             case "跨度":
                                 resMap = kdBuy(botUser, player, buyMoney, code, "13");
                                 break;
+                            case "独":
+                            case "胆":
                             case "独胆":
                                 resMap = ddBuy(botUser, player, buyMoney, code, "14");
                                 break;
+                            case "一定":
+                            case "XX":
+                            case "**":
                             case "1D":
                                 resMap = ding1Buy(botUser, player, buyMoney, code, "6");
                                 break;
 //                            case "猜1D":
 //                                resMap = c1dBuy(botUser, player, buyMoney, code, "6");
 //                                break;
+                            case "二定":
+                            case "X":
+                            case "*":
                             case "2D":
                                 resMap = ding2Buy(botUser, player, buyMoney, code, "7");
                                 break;
@@ -384,6 +483,18 @@ public class KuaidaBuyMsgServiceV2 {
 //                            case "包选六":
 //                                resMap = b6Buy(botUser, player, buyMoney, code, "8");
 //                                break;
+                            case "百":
+                                if (code.contains("十") && code.contains("个")){
+                                    resMap = zxtxBuy(botUser, player, buyMoney, code, "1");
+                                }else if (code.contains("十")){
+                                    resMap = ding2Buy(botUser, player, buyMoney, code, "7");
+                                }
+                                break;
+                            case ".":
+                            case ",":
+                            case "，":
+                                resMap = codeBuy(botUser, player, buyMoney, code, "1");
+                                break;
                             default:
                                 toMsg = createMsg(botUser, player, "没有此玩法类别："+type);
                                 toMsg.setSource(0);
@@ -1065,33 +1176,82 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         boolean hasError = false;
-        //删除数字之外的任何字符
-        //codeRule = codeRule.replace("/[^[0-9]/g","");
-        String newValue  = codeRule.replaceAll("[^0-9]","");
-        String[] numArr = newValue.split("");
-        //删除重复的数字
-        Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
-        if(nums.size()!=2){
-            resMap.put("errmsg","只能选2个号码:"+codeRule);
-            return resMap;
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
+            String[] splitArr = codeRule.split("\\.|,|，");
+            int num = 0;
+            for (String arr : splitArr) {
+                //删除数字之外的任何字符
+                //codeRule = codeRule.replace("/[^[0-9]/g","");
+                String newValue = arr.replaceAll("[^0-9]", "");
+                String[] numArr = newValue.split("");
+                //删除重复的数字
+                Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+                if (nums.size() != 2) {
+                    resMap.put("errmsg", "只能选2个号码:" + codeRule);
+                    return resMap;
+                }
+                String bai = nums.stream().collect(Collectors.joining());
+                List<String> codeList = Code3DCreateUtils.z3SFCode(bai);
+                num = num + codeList.size();
+            }
+            for (String arr : splitArr) {
+                //删除数字之外的任何字符
+                //codeRule = codeRule.replace("/[^[0-9]/g","");
+                String newValue  = arr.replaceAll("[^0-9]","");
+                String[] numArr = newValue.split("");
+                //删除重复的数字
+                Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+                if(nums.size()!=2){
+                    resMap.put("errmsg","只能选2个号码:"+codeRule);
+                    return resMap;
+                }
+
+                String bai = nums.stream().collect(Collectors.joining());
+                List<String> codeList = Code3DCreateUtils.z3SFCode(bai);
+
+                String buyDesc = "双飞组三"+codeRule + "[" + num + "注]";
+                BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+                oneRecord.setHuizongName(buyDesc);
+                oneRecord.setBai(bai);
+                oneRecord.setBuyAmount(codeList.size());
+                oneRecord.setBuyCodes(bai);
+                oneRecord.setValue(bai);
+                oneRecord.setLmId(lmId);
+                oneRecord.setLsTypeId("2");
+                oneRecord.setBuyMoney(buyMoney);
+                oneRecord.setTypeFlag(4);
+                oneRecord.setCodeList(codeList);
+                list.add(oneRecord);
+            }
+        }else{
+            //删除数字之外的任何字符
+            //codeRule = codeRule.replace("/[^[0-9]/g","");
+            String newValue  = codeRule.replaceAll("[^0-9]","");
+            String[] numArr = newValue.split("");
+            //删除重复的数字
+            Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+            if(nums.size()!=2){
+                resMap.put("errmsg","只能选2个号码:"+codeRule);
+                return resMap;
+            }
+
+            String bai = nums.stream().collect(Collectors.joining());
+            List<String> codeList = Code3DCreateUtils.z3SFCode(bai);
+
+            String buyDesc = "双飞组三"+codeRule + "[" + codeList.size() + "注]";
+            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+            oneRecord.setHuizongName(buyDesc);
+            oneRecord.setBai(bai);
+            oneRecord.setBuyAmount(codeList.size());
+            oneRecord.setBuyCodes(bai);
+            oneRecord.setValue(bai);
+            oneRecord.setLmId(lmId);
+            oneRecord.setLsTypeId("2");
+            oneRecord.setBuyMoney(buyMoney);
+            oneRecord.setTypeFlag(4);
+            oneRecord.setCodeList(codeList);
+            list.add(oneRecord);
         }
-
-        String bai = nums.stream().collect(Collectors.joining());
-        List<String> codeList = Code3DCreateUtils.z3SFCode(bai);
-
-        String buyDesc = "双飞组三"+codeRule;
-        BuyRecord3DVO oneRecord = new BuyRecord3DVO();
-        oneRecord.setHuizongName(buyDesc);
-        oneRecord.setBai(bai);
-        oneRecord.setBuyAmount(codeList.size());
-        oneRecord.setBuyCodes(bai);
-        oneRecord.setValue(bai);
-        oneRecord.setLmId(lmId);
-        oneRecord.setLsTypeId("2");
-        oneRecord.setBuyMoney(buyMoney);
-        oneRecord.setTypeFlag(4);
-        oneRecord.setCodeList(codeList);
-        list.add(oneRecord);
         resMap.put("list",list);
         return resMap;
     }
@@ -1189,62 +1349,125 @@ public class KuaidaBuyMsgServiceV2 {
     public Map<String,Object> z3dtBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] numArr = codeRule.split("拖");
-        if(numArr.length!=2){
-            resMap.put("errmsg","号码格式不正确："+codeRule);
-            return resMap;
-        }
-        String tm = null;
-        String dm = null;
-        dm = numArr[0];
-        tm = numArr[1];
-        if(StringUtil.isNull(dm) || StringUtil.isNull(tm)){
-            resMap.put("errmsg","号码格式不正确："+codeRule);
-            return resMap;
-        }
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
+            String[] splitArr = codeRule.split("\\.|,|，");
+            for (String arr : splitArr) {
+                String[] numArr = arr.split("拖");
+                if(numArr.length!=2){
+                    resMap.put("errmsg","号码格式不正确："+codeRule);
+                    return resMap;
+                }
+                String tm = null;
+                String dm = null;
+                dm = numArr[0];
+                tm = numArr[1];
+                if(StringUtil.isNull(dm) || StringUtil.isNull(tm)){
+                    resMap.put("errmsg","号码格式不正确："+codeRule);
+                    return resMap;
+                }
 
-        Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
-        dm = dmCode.stream().collect(Collectors.joining());
-        if(dm.length()!=1){
-            resMap.put("errmsg","只能选择1个胆码："+codeRule);
-            return resMap;
-        }
+                Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
+                dm = dmCode.stream().collect(Collectors.joining());
+                if(dm.length()!=1){
+                    resMap.put("errmsg","只能选择1个胆码："+codeRule);
+                    return resMap;
+                }
 
-        Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
-        tm = tmCode.stream().collect(Collectors.joining());
-        for(String c : dmCode){
-            if(tm.contains(c)){ //拖码中包含胆码号码，则删除拖码中对应的号码
-                tm = tm.replace(c,"");
+                Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
+                tm = tmCode.stream().collect(Collectors.joining());
+                for(String c : dmCode){
+                    if(tm.contains(c)){ //拖码中包含胆码号码，则删除拖码中对应的号码
+                        tm = tm.replace(c,"");
+                    }
+                }
+
+                if(tm.length()<2){
+                    resMap.put("errmsg","至少选择2个拖码："+codeRule);
+                    return resMap;
+                }
+
+                String lsName = dm.length()+"码"+"拖"+tm.length();
+                List<LotterySetting> lsList = lotterySettingService.getListBy("3");
+                LotterySetting ls = lsList.stream().filter(item->item.getBettingRule().equals(lsName)).findFirst().orElse(null);
+                if(null == ls){
+                    resMap.put("errmsg","号码格式错误："+codeRule);
+                    return resMap;
+                }
+
+                List<String> codeList = Code3DCreateUtils.z3DtCode(dm,tm);
+//                String buyDesc = "组三"+dm+"拖"+tm;
+                String buyDesc = "组三"+codeRule;
+                BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+                oneRecord.setHuizongName(buyDesc);
+                oneRecord.setBai(dm);
+                oneRecord.setShi(tm);
+                oneRecord.setBuyAmount(codeList.size());
+                oneRecord.setValue(dm+","+tm);
+                oneRecord.setLmId(lmId);
+                oneRecord.setLsTypeId(ls.getTypeId()+"");
+                oneRecord.setBuyMoney(buyMoney);
+                oneRecord.setTypeFlag(2);
+                oneRecord.setCodeList(codeList);
+                list.add(oneRecord);
             }
-        }
+        }else{
+            String[] numArr = codeRule.split("拖");
+            if(numArr.length!=2){
+                resMap.put("errmsg","号码格式不正确："+codeRule);
+                return resMap;
+            }
+            String tm = null;
+            String dm = null;
+            dm = numArr[0];
+            tm = numArr[1];
+            if(StringUtil.isNull(dm) || StringUtil.isNull(tm)){
+                resMap.put("errmsg","号码格式不正确："+codeRule);
+                return resMap;
+            }
 
-        if(tm.length()<2){
-            resMap.put("errmsg","至少选择2个拖码："+codeRule);
-            return resMap;
-        }
+            Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
+            dm = dmCode.stream().collect(Collectors.joining());
+            if(dm.length()!=1){
+                resMap.put("errmsg","只能选择1个胆码："+codeRule);
+                return resMap;
+            }
 
-        String lsName = dm.length()+"码"+"拖"+tm.length();
-        List<LotterySetting> lsList = lotterySettingService.getListBy("3");
-        LotterySetting ls = lsList.stream().filter(item->item.getBettingRule().equals(lsName)).findFirst().orElse(null);
-        if(null == ls){
-            resMap.put("errmsg","号码格式错误："+codeRule);
-            return resMap;
-        }
+            Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
+            tm = tmCode.stream().collect(Collectors.joining());
+            for(String c : dmCode){
+                if(tm.contains(c)){ //拖码中包含胆码号码，则删除拖码中对应的号码
+                    tm = tm.replace(c,"");
+                }
+            }
 
-        List<String> codeList = Code3DCreateUtils.z3DtCode(dm,tm);
-        String buyDesc = "组三"+dm+"拖"+tm;
-        BuyRecord3DVO oneRecord = new BuyRecord3DVO();
-        oneRecord.setHuizongName(buyDesc);
-        oneRecord.setBai(dm);
-        oneRecord.setShi(tm);
-        oneRecord.setBuyAmount(codeList.size());
-        oneRecord.setValue(dm+","+tm);
-        oneRecord.setLmId(lmId);
-        oneRecord.setLsTypeId(ls.getTypeId()+"");
-        oneRecord.setBuyMoney(buyMoney);
-        oneRecord.setTypeFlag(2);
-        oneRecord.setCodeList(codeList);
-        list.add(oneRecord);
+            if(tm.length()<2){
+                resMap.put("errmsg","至少选择2个拖码："+codeRule);
+                return resMap;
+            }
+
+            String lsName = dm.length()+"码"+"拖"+tm.length();
+            List<LotterySetting> lsList = lotterySettingService.getListBy("3");
+            LotterySetting ls = lsList.stream().filter(item->item.getBettingRule().equals(lsName)).findFirst().orElse(null);
+            if(null == ls){
+                resMap.put("errmsg","号码格式错误："+codeRule);
+                return resMap;
+            }
+
+            List<String> codeList = Code3DCreateUtils.z3DtCode(dm,tm);
+            String buyDesc = "组三"+dm+"拖"+tm;
+            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+            oneRecord.setHuizongName(buyDesc);
+            oneRecord.setBai(dm);
+            oneRecord.setShi(tm);
+            oneRecord.setBuyAmount(codeList.size());
+            oneRecord.setValue(dm+","+tm);
+            oneRecord.setLmId(lmId);
+            oneRecord.setLsTypeId(ls.getTypeId()+"");
+            oneRecord.setBuyMoney(buyMoney);
+            oneRecord.setTypeFlag(2);
+            oneRecord.setCodeList(codeList);
+            list.add(oneRecord);
+        }
         resMap.put("list",list);
         return resMap;
     }
@@ -1354,59 +1577,119 @@ public class KuaidaBuyMsgServiceV2 {
     public Map<String,Object> z6dtBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId ){
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] numArr = codeRule.split("拖");
-        if(numArr.length!=2){
-            resMap.put("errmsg","号码格式不正确："+codeRule);
-            return resMap;
-        }
-        String dm = numArr[0];
-        String tm = numArr[1];
-        if(StringUtil.isNull(dm) || StringUtil.isNull(tm)){
-            resMap.put("errmsg","号码格式不正确："+codeRule);
-            return resMap;
-        }
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
+            String[] splitArr = codeRule.split("\\.|,|，");
+            for (String arr : splitArr) {
+                String[] numArr = arr.split("拖");
+                if(numArr.length!=2){
+                    resMap.put("errmsg","号码格式不正确："+arr);
+                    return resMap;
+                }
+                String dm = numArr[0];
+                String tm = numArr[1];
+                if(StringUtil.isNull(dm) || StringUtil.isNull(tm)){
+                    resMap.put("errmsg","号码格式不正确："+arr);
+                    return resMap;
+                }
 
-        Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
-        dm = dmCode.stream().collect(Collectors.joining());
-        if(dm.length()!=1 && dm.length()!=2){
-            resMap.put("errmsg","只能选择1~2个胆码："+codeRule);
-            return resMap;
-        }
+                Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
+                dm = dmCode.stream().collect(Collectors.joining());
+                if(dm.length()!=1 && dm.length()!=2){
+                    resMap.put("errmsg","只能选择1~2个胆码："+arr);
+                    return resMap;
+                }
 
-        Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
-        tm = tmCode.stream().collect(Collectors.joining());
-        for(String c : dmCode){
-            if(tm.contains(c)){ //拖码中包含胆码号码，则删除拖码中对应的号码
-                tm = tm.replace(c,"");
+                Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
+                tm = tmCode.stream().collect(Collectors.joining());
+                for(String c : dmCode){
+                    if(tm.contains(c)){ //拖码中包含胆码号码，则删除拖码中对应的号码
+                        tm = tm.replace(c,"");
+                    }
+                }
+                if(tm.length()<1){
+                    resMap.put("errmsg","拖码数量不能小于1："+arr);
+                    return resMap;
+                }
+
+                String lsName = dm.length()+"码"+"拖"+tm.length();
+                List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
+                LotterySetting ls = lsList.stream().filter(item->item.getBettingRule().equals(lsName)).findFirst().orElse(null);
+                if(null == ls){
+                    resMap.put("errmsg","号码格式错误："+arr);
+                    return resMap;
+                }
+
+                List<String> codeList = Code3DCreateUtils.z6DtCode(dm,tm);
+                String buyDesc = "组六"+arr;
+                BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+                oneRecord.setHuizongName(buyDesc);
+                oneRecord.setBai(dm);
+                oneRecord.setShi(tm);
+                oneRecord.setBuyAmount(codeList.size());
+                oneRecord.setValue(dm+","+tm);
+                oneRecord.setLmId(lmId);
+                oneRecord.setLsTypeId(ls.getTypeId()+"");
+                oneRecord.setBuyMoney(buyMoney);
+                oneRecord.setTypeFlag(2);
+                oneRecord.setCodeList(codeList);
+                list.add(oneRecord);
             }
-        }
-        if(tm.length()<1){
-            resMap.put("errmsg","拖码数量不能小于1："+codeRule);
-            return resMap;
+        }else {
+            String[] numArr = codeRule.split("拖");
+            if(numArr.length!=2){
+                resMap.put("errmsg","号码格式不正确："+codeRule);
+                return resMap;
+            }
+            String dm = numArr[0];
+            String tm = numArr[1];
+            if(StringUtil.isNull(dm) || StringUtil.isNull(tm)){
+                resMap.put("errmsg","号码格式不正确："+codeRule);
+                return resMap;
+            }
+
+            Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
+            dm = dmCode.stream().collect(Collectors.joining());
+            if(dm.length()!=1 && dm.length()!=2){
+                resMap.put("errmsg","只能选择1~2个胆码："+codeRule);
+                return resMap;
+            }
+
+            Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
+            tm = tmCode.stream().collect(Collectors.joining());
+            for(String c : dmCode){
+                if(tm.contains(c)){ //拖码中包含胆码号码，则删除拖码中对应的号码
+                    tm = tm.replace(c,"");
+                }
+            }
+            if(tm.length()<1){
+                resMap.put("errmsg","拖码数量不能小于1："+codeRule);
+                return resMap;
+            }
+
+            String lsName = dm.length()+"码"+"拖"+tm.length();
+            List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
+            LotterySetting ls = lsList.stream().filter(item->item.getBettingRule().equals(lsName)).findFirst().orElse(null);
+            if(null == ls){
+                resMap.put("errmsg","号码格式错误："+codeRule);
+                return resMap;
+            }
+
+            List<String> codeList = Code3DCreateUtils.z6DtCode(dm,tm);
+            String buyDesc = "组六"+codeRule;
+            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+            oneRecord.setHuizongName(buyDesc);
+            oneRecord.setBai(dm);
+            oneRecord.setShi(tm);
+            oneRecord.setBuyAmount(codeList.size());
+            oneRecord.setValue(dm+","+tm);
+            oneRecord.setLmId(lmId);
+            oneRecord.setLsTypeId(ls.getTypeId()+"");
+            oneRecord.setBuyMoney(buyMoney);
+            oneRecord.setTypeFlag(2);
+            oneRecord.setCodeList(codeList);
+            list.add(oneRecord);
         }
 
-        String lsName = dm.length()+"码"+"拖"+tm.length();
-        List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
-        LotterySetting ls = lsList.stream().filter(item->item.getBettingRule().equals(lsName)).findFirst().orElse(null);
-        if(null == ls){
-            resMap.put("errmsg","号码格式错误："+codeRule);
-            return resMap;
-        }
-
-        List<String> codeList = Code3DCreateUtils.z6DtCode(dm,tm);
-        String buyDesc = "组六"+codeRule;
-        BuyRecord3DVO oneRecord = new BuyRecord3DVO();
-        oneRecord.setHuizongName(buyDesc);
-        oneRecord.setBai(dm);
-        oneRecord.setShi(tm);
-        oneRecord.setBuyAmount(codeList.size());
-        oneRecord.setValue(dm+","+tm);
-        oneRecord.setLmId(lmId);
-        oneRecord.setLsTypeId(ls.getTypeId()+"");
-        oneRecord.setBuyMoney(buyMoney);
-        oneRecord.setTypeFlag(2);
-        oneRecord.setCodeList(codeList);
-        list.add(oneRecord);
         resMap.put("list",list);
         return resMap;
     }
@@ -1449,36 +1732,81 @@ public class KuaidaBuyMsgServiceV2 {
         return resMap;
     }
 
-    //双飞组三
+    //双飞组六
     public Map<String,Object> z6SFBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        //删除数字之外的任何字符
-        //codeRule = codeRule.replace("/[^[0-9]/g","");
-        String newValue  = codeRule.replaceAll("[^0-9]","");
-        String[] numArr = newValue.split("");
-        //删除重复的数字
-        Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
-        if(nums.size()!=2){
-            resMap.put("errmsg","请选择2个号码："+codeRule);
-            return resMap;
-        }
-        String bai = nums.stream().collect(Collectors.joining());
-        List<String> codeList = Code3DCreateUtils.z6SFCode(bai);
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
+            String[] splitArr = codeRule.split("\\.|,|，");
+            int num = 0;
+            for (String arr : splitArr) {
+                String newValue  = arr.replaceAll("[^0-9]","");
+                String[] numArr = newValue.split("");
+                Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+                if(nums.size()!=2){
+                    resMap.put("errmsg","请选择2个号码："+codeRule);
+                    return resMap;
+                }
+                String bai = nums.stream().collect(Collectors.joining());
+                List<String> codeList = Code3DCreateUtils.z6SFCode(bai);
+                num = num + codeList.size();
+            }
+            for (String arr : splitArr) {
+                //删除数字之外的任何字符
+                //codeRule = codeRule.replace("/[^[0-9]/g","");
+                String newValue  = arr.replaceAll("[^0-9]","");
+                String[] numArr = newValue.split("");
+                //删除重复的数字
+                Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+                if(nums.size()!=2){
+                    resMap.put("errmsg","请选择2个号码："+codeRule);
+                    return resMap;
+                }
+                String bai = nums.stream().collect(Collectors.joining());
+                List<String> codeList = Code3DCreateUtils.z6SFCode(bai);
 
-        String buyDesc = "双飞组六"+codeRule;
-        BuyRecord3DVO oneRecord = new BuyRecord3DVO();
-        oneRecord.setHuizongName(buyDesc);
-        oneRecord.setBai(bai);
-        oneRecord.setBuyAmount(codeList.size());
-        oneRecord.setBuyCodes(bai);
-        oneRecord.setValue(bai);
-        oneRecord.setLmId(lmId);
-        oneRecord.setLsTypeId("2");
-        oneRecord.setBuyMoney(buyMoney);
-        oneRecord.setTypeFlag(4);
-        oneRecord.setCodeList(codeList);
-        list.add(oneRecord);
+                String buyDesc = "双飞组六"+codeRule + "[" + num + "注]";
+                BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+                oneRecord.setHuizongName(buyDesc);
+                oneRecord.setBai(bai);
+                oneRecord.setBuyAmount(codeList.size());
+                oneRecord.setBuyCodes(bai);
+                oneRecord.setValue(bai);
+                oneRecord.setLmId(lmId);
+                oneRecord.setLsTypeId("2");
+                oneRecord.setBuyMoney(buyMoney);
+                oneRecord.setTypeFlag(4);
+                oneRecord.setCodeList(codeList);
+                list.add(oneRecord);
+            }
+        }else{
+            //删除数字之外的任何字符
+            //codeRule = codeRule.replace("/[^[0-9]/g","");
+            String newValue  = codeRule.replaceAll("[^0-9]","");
+            String[] numArr = newValue.split("");
+            //删除重复的数字
+            Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+            if(nums.size()!=2){
+                resMap.put("errmsg","请选择2个号码："+codeRule);
+                return resMap;
+            }
+            String bai = nums.stream().collect(Collectors.joining());
+            List<String> codeList = Code3DCreateUtils.z6SFCode(bai);
+
+            String buyDesc = "双飞组六"+codeRule + "[" + codeList.size() + "注]";
+            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+            oneRecord.setHuizongName(buyDesc);
+            oneRecord.setBai(bai);
+            oneRecord.setBuyAmount(codeList.size());
+            oneRecord.setBuyCodes(bai);
+            oneRecord.setValue(bai);
+            oneRecord.setLmId(lmId);
+            oneRecord.setLsTypeId("2");
+            oneRecord.setBuyMoney(buyMoney);
+            oneRecord.setTypeFlag(4);
+            oneRecord.setCodeList(codeList);
+            list.add(oneRecord);
+        }
         resMap.put("list",list);
         return resMap;
     }
@@ -1611,60 +1939,125 @@ public class KuaidaBuyMsgServiceV2 {
     public  Map<String,Object> ding1Buy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         List<BuyRecord3DVO> list = Lists.newArrayList();
         Map<String,Object> resultMap = new HashMap<>();
-        if(codeRule.contains("百") || codeRule.contains("十") || codeRule.contains("个")) {
-            int shiIdx = codeRule.indexOf("十");
-            int geIdx = codeRule.indexOf("个");
-            int baiIdx = codeRule.indexOf("百");
-            String bai = null;
-            String shi = null;
-            String ge = null;
-            if (baiIdx > -1) {
-                if (shiIdx > -1) {
-                    bai = codeRule.substring(baiIdx + 1, shiIdx);
-                } else if (geIdx > -1) {
-                    bai = codeRule.substring(baiIdx + 1, geIdx);
-                } else {
-                    bai = codeRule.substring(baiIdx + 1);
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
+            String[] splitArr = codeRule.split("\\.|,|，");
+            for (String arr : splitArr) {
+                if (arr.contains("XX") || arr.contains("**")){
+                    arr = "百"+arr.replaceAll("XX","").replaceAll("\\**","");
                 }
-            }
-            if (shiIdx > -1) {
-                if (geIdx > -1) {
-                    shi = codeRule.substring(shiIdx + 1, geIdx);
-                } else {
-                    shi = codeRule.substring(shiIdx + 1);
-                }
-            }
-            if (geIdx > -1) ge = codeRule.substring(geIdx + 1);
+                if(arr.contains("百") || arr.contains("十") || arr.contains("个")) {
+                    int shiIdx = arr.indexOf("十");
+                    int geIdx = arr.indexOf("个");
+                    int baiIdx = arr.indexOf("百");
+                    String bai = null;
+                    String shi = null;
+                    String ge = null;
+                    if (baiIdx > -1) {
+                        if (shiIdx > -1) {
+                            bai = arr.substring(baiIdx + 1, shiIdx);
+                        } else if (geIdx > -1) {
+                            bai = arr.substring(baiIdx + 1, geIdx);
+                        } else {
+                            bai = arr.substring(baiIdx + 1);
+                        }
+                    }
+                    if (shiIdx > -1) {
+                        if (geIdx > -1) {
+                            shi = arr.substring(shiIdx + 1, geIdx);
+                        } else {
+                            shi = arr.substring(shiIdx + 1);
+                        }
+                    }
+                    if (geIdx > -1) ge = arr.substring(geIdx + 1);
 
-            if (StringUtil.isNull(bai) && StringUtil.isNull(shi) && StringUtil.isNull(ge)) {
-                resultMap.put("errmsg", "号码格式错误：" + codeRule);
-                return resultMap;
+                    if (StringUtil.isNull(bai) && StringUtil.isNull(shi) && StringUtil.isNull(ge)) {
+                        resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                        return resultMap;
+                    }
+                    if (StringUtil.isNull(bai)) bai = "-";
+                    if (StringUtil.isNull(shi)) shi = "-";
+                    if (StringUtil.isNull(ge)) ge = "-";
+                    List<String> codeList = Code3DCreateUtils.ding1Code(bai, shi, ge);
+                    BuyRecord3DVO vo = new BuyRecord3DVO();
+                    String buyDesc = "1D" + arr;
+                    vo.setHuizongName(buyDesc);
+                    vo.setBuyDesc(buyDesc);
+                    vo.setHuizongName(buyDesc);
+                    vo.setBai(bai);
+                    vo.setShi(shi);
+                    vo.setGe(ge);
+                    vo.setLmId("6");
+                    vo.setLsTypeId("1");
+                    vo.setValue(codeRule);
+                    vo.setBuyAmount(codeList.size());
+                    vo.setCodeList(codeList);
+                    vo.setBuyMoney(buyMoney);
+                    list.add(vo);
+                }else{
+                    resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                    return resultMap;
+                }
             }
-            if (StringUtil.isNull(bai)) bai = "-";
-            if (StringUtil.isNull(shi)) shi = "-";
-            if (StringUtil.isNull(ge)) ge = "-";
-            List<String> codeList = Code3DCreateUtils.ding1Code(bai, shi, ge);
-            BuyRecord3DVO vo = new BuyRecord3DVO();
-            String buyDesc = "1D" + codeRule;
-            vo.setHuizongName(buyDesc);
-            vo.setBuyDesc(buyDesc);
-            vo.setHuizongName(buyDesc);
-            vo.setBai(bai);
-            vo.setShi(shi);
-            vo.setGe(ge);
-            vo.setLmId("6");
-            vo.setLsTypeId("1");
-            vo.setValue(codeRule);
-            vo.setBuyAmount(codeList.size());
-            vo.setCodeList(codeList);
-            vo.setBuyMoney(buyMoney);
-            list.add(vo);
             resultMap.put("list", list);
             return resultMap;
+        }else{
+            if (codeRule.contains("XX") || codeRule.contains("**")){
+                codeRule = "百"+codeRule.replaceAll("XX","").replaceAll("\\**","");
+            }
+            if(codeRule.contains("百") || codeRule.contains("十") || codeRule.contains("个")) {
+                int shiIdx = codeRule.indexOf("十");
+                int geIdx = codeRule.indexOf("个");
+                int baiIdx = codeRule.indexOf("百");
+                String bai = null;
+                String shi = null;
+                String ge = null;
+                if (baiIdx > -1) {
+                    if (shiIdx > -1) {
+                        bai = codeRule.substring(baiIdx + 1, shiIdx);
+                    } else if (geIdx > -1) {
+                        bai = codeRule.substring(baiIdx + 1, geIdx);
+                    } else {
+                        bai = codeRule.substring(baiIdx + 1);
+                    }
+                }
+                if (shiIdx > -1) {
+                    if (geIdx > -1) {
+                        shi = codeRule.substring(shiIdx + 1, geIdx);
+                    } else {
+                        shi = codeRule.substring(shiIdx + 1);
+                    }
+                }
+                if (geIdx > -1) ge = codeRule.substring(geIdx + 1);
+
+                if (StringUtil.isNull(bai) && StringUtil.isNull(shi) && StringUtil.isNull(ge)) {
+                    resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                    return resultMap;
+                }
+                if (StringUtil.isNull(bai)) bai = "-";
+                if (StringUtil.isNull(shi)) shi = "-";
+                if (StringUtil.isNull(ge)) ge = "-";
+                List<String> codeList = Code3DCreateUtils.ding1Code(bai, shi, ge);
+                BuyRecord3DVO vo = new BuyRecord3DVO();
+                String buyDesc = "1D" + codeRule;
+                vo.setHuizongName(buyDesc);
+                vo.setBuyDesc(buyDesc);
+                vo.setHuizongName(buyDesc);
+                vo.setBai(bai);
+                vo.setShi(shi);
+                vo.setGe(ge);
+                vo.setLmId("6");
+                vo.setLsTypeId("1");
+                vo.setValue(codeRule);
+                vo.setBuyAmount(codeList.size());
+                vo.setCodeList(codeList);
+                vo.setBuyMoney(buyMoney);
+                list.add(vo);
+                resultMap.put("list", list);
+                return resultMap;
+            }
         }
         resultMap.put("errmsg", "号码格式错误：" + codeRule);
         return resultMap;
-
     }
 
 
@@ -1705,60 +2098,182 @@ public class KuaidaBuyMsgServiceV2 {
     public Map<String,Object> ding2Buy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         List<BuyRecord3DVO> list = Lists.newArrayList();
         Map<String,Object> resultMap = new HashMap<>();
-        if(codeRule.contains("百") || codeRule.contains("十") || codeRule.contains("个")) {
-            int shiIdx = codeRule.indexOf("十");
-            int geIdx = codeRule.indexOf("个");
-            int baiIdx = codeRule.indexOf("百");
-            String bai = null;
-            String shi = null;
-            String ge = null;
-            if (baiIdx > -1) {
-                if (shiIdx > -1) {
-                    bai = codeRule.substring(baiIdx + 1, shiIdx);
-                } else if (geIdx > -1) {
-                    bai = codeRule.substring(baiIdx + 1, geIdx);
-                } else {
-                    bai = codeRule.substring(baiIdx + 1);
-                }
-            }
-            if (shiIdx > -1) {
-                if (geIdx > -1) {
-                    shi = codeRule.substring(shiIdx + 1, geIdx);
-                } else {
-                    shi = codeRule.substring(shiIdx + 1);
-                }
-            }
-            if (geIdx > -1) ge = codeRule.substring(geIdx + 1);
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
+            String[] splitArr = codeRule.split("\\.|,|，");
+            for (String arr : splitArr) {
+                if (arr.contains("X") || arr.contains("*")) {
+                    arr = arr.replaceAll("\\*", "X");
+                    List<String> codeList = new ArrayList<>();
+                    codeList.add(arr);
+                    if(null==codeList || codeList.size()<1){
+                        resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                        return resultMap;
+                    }
+                    String bai = arr.charAt(0)+"";
+                    String shi = arr.charAt(1)+"";
+                    String ge = arr.charAt(2)+"";
+                    BuyRecord3DVO vo = new BuyRecord3DVO();
+                    String buyDesc = "2D" + arr;
+                    vo.setHuizongName(buyDesc);
+                    vo.setBuyDesc(buyDesc);
+                    vo.setHuizongName(buyDesc);
+                    vo.setBai(bai.equals("X") ? "-" : bai);
+                    vo.setShi(shi.equals("X") ? "-" : shi);
+                    vo.setGe(ge.equals("X") ? "-" : ge);
+                    vo.setLmId(lmId);
+                    vo.setLsTypeId("1");
+                    vo.setValue("");
+                    vo.setBuyAmount(codeList.size());
+                    vo.setCodeList(codeList);
+                    vo.setBuyMoney(buyMoney);
+                    list.add(vo);
+                }else{
+                    if(arr.contains("百") || arr.contains("十") || arr.contains("个")) {
+                        int shiIdx = arr.indexOf("十");
+                        int geIdx = arr.indexOf("个");
+                        int baiIdx = arr.indexOf("百");
+                        String bai = null;
+                        String shi = null;
+                        String ge = null;
+                        if (baiIdx > -1) {
+                            if (shiIdx > -1) {
+                                bai = arr.substring(baiIdx + 1, shiIdx);
+                            } else if (geIdx > -1) {
+                                bai = arr.substring(baiIdx + 1, geIdx);
+                            } else {
+                                bai = arr.substring(baiIdx + 1);
+                            }
+                        }
+                        if (shiIdx > -1) {
+                            if (geIdx > -1) {
+                                shi = arr.substring(shiIdx + 1, geIdx);
+                            } else {
+                                shi = arr.substring(shiIdx + 1);
+                            }
+                        }
+                        if (geIdx > -1) ge = arr.substring(geIdx + 1);
 
-            if (StringUtil.isNull(bai) && StringUtil.isNull(shi) && StringUtil.isNull(ge)) {
-                resultMap.put("errmsg", "号码格式错误：" + codeRule);
-                return resultMap;
+                        if (StringUtil.isNull(bai) && StringUtil.isNull(shi) && StringUtil.isNull(ge)) {
+                            resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                            return resultMap;
+                        }
+                        if (StringUtil.isNull(bai)) bai = "-";
+                        if (StringUtil.isNull(shi)) shi = "-";
+                        if (StringUtil.isNull(ge)) ge = "-";
+                        List<String> codeList = Code3DCreateUtils.ding2Code(bai, shi, ge);
+                        if(null==codeList || codeList.size()<1){
+                            resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                            return resultMap;
+                        }
+                        BuyRecord3DVO vo = new BuyRecord3DVO();
+                        String buyDesc = "2D" + arr;
+                        vo.setHuizongName(buyDesc);
+                        vo.setBuyDesc(buyDesc);
+                        vo.setHuizongName(buyDesc);
+                        vo.setBai(bai);
+                        vo.setShi(shi);
+                        vo.setGe(ge);
+                        vo.setLmId(lmId);
+                        vo.setLsTypeId("1");
+                        vo.setValue(codeRule);
+                        vo.setBuyAmount(codeList.size());
+                        vo.setCodeList(codeList);
+                        vo.setBuyMoney(buyMoney);
+                        list.add(vo);
+                    }else{
+                        resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                        return resultMap;
+                    }
+                }
             }
-            if (StringUtil.isNull(bai)) bai = "-";
-            if (StringUtil.isNull(shi)) shi = "-";
-            if (StringUtil.isNull(ge)) ge = "-";
-            List<String> codeList = Code3DCreateUtils.ding2Code(bai, shi, ge);
-            if(null==codeList || codeList.size()<1){
-                resultMap.put("errmsg", "号码格式错误：" + codeRule);
-                return resultMap;
-            }
-            BuyRecord3DVO vo = new BuyRecord3DVO();
-            String buyDesc = "2D" + codeRule;
-            vo.setHuizongName(buyDesc);
-            vo.setBuyDesc(buyDesc);
-            vo.setHuizongName(buyDesc);
-            vo.setBai(bai);
-            vo.setShi(shi);
-            vo.setGe(ge);
-            vo.setLmId(lmId);
-            vo.setLsTypeId("1");
-            vo.setValue(codeRule);
-            vo.setBuyAmount(codeList.size());
-            vo.setCodeList(codeList);
-            vo.setBuyMoney(buyMoney);
-            list.add(vo);
             resultMap.put("list", list);
             return resultMap;
+        }else{
+            if (codeRule.contains("X") || codeRule.contains("*")) {
+                codeRule = codeRule.replaceAll("\\*", "X");
+                List<String> codeList = new ArrayList<>();
+                codeList.add(codeRule);
+                if(null==codeList || codeList.size()<1){
+                    resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                    return resultMap;
+                }
+                String bai = codeRule.charAt(0)+"";
+                String shi = codeRule.charAt(1)+"";
+                String ge = codeRule.charAt(2)+"";
+                BuyRecord3DVO vo = new BuyRecord3DVO();
+                String buyDesc = "2D" + codeRule;
+                vo.setHuizongName(buyDesc);
+                vo.setBuyDesc(buyDesc);
+                vo.setHuizongName(buyDesc);
+                vo.setBai(bai.equals("X") ? "-" : bai);
+                vo.setShi(shi.equals("X") ? "-" : shi);
+                vo.setGe(ge.equals("X") ? "-" : ge);
+                vo.setLmId(lmId);
+                vo.setLsTypeId("1");
+                vo.setValue("");
+                vo.setBuyAmount(codeList.size());
+                vo.setCodeList(codeList);
+                vo.setBuyMoney(buyMoney);
+                list.add(vo);
+                resultMap.put("list", list);
+                return resultMap;
+            }else{
+                if(codeRule.contains("百") || codeRule.contains("十") || codeRule.contains("个")) {
+                    int shiIdx = codeRule.indexOf("十");
+                    int geIdx = codeRule.indexOf("个");
+                    int baiIdx = codeRule.indexOf("百");
+                    String bai = null;
+                    String shi = null;
+                    String ge = null;
+                    if (baiIdx > -1) {
+                        if (shiIdx > -1) {
+                            bai = codeRule.substring(baiIdx + 1, shiIdx);
+                        } else if (geIdx > -1) {
+                            bai = codeRule.substring(baiIdx + 1, geIdx);
+                        } else {
+                            bai = codeRule.substring(baiIdx + 1);
+                        }
+                    }
+                    if (shiIdx > -1) {
+                        if (geIdx > -1) {
+                            shi = codeRule.substring(shiIdx + 1, geIdx);
+                        } else {
+                            shi = codeRule.substring(shiIdx + 1);
+                        }
+                    }
+                    if (geIdx > -1) ge = codeRule.substring(geIdx + 1);
+
+                    if (StringUtil.isNull(bai) && StringUtil.isNull(shi) && StringUtil.isNull(ge)) {
+                        resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                        return resultMap;
+                    }
+                    if (StringUtil.isNull(bai)) bai = "-";
+                    if (StringUtil.isNull(shi)) shi = "-";
+                    if (StringUtil.isNull(ge)) ge = "-";
+                    List<String> codeList = Code3DCreateUtils.ding2Code(bai, shi, ge);
+                    if(null==codeList || codeList.size()<1){
+                        resultMap.put("errmsg", "号码格式错误：" + codeRule);
+                        return resultMap;
+                    }
+                    BuyRecord3DVO vo = new BuyRecord3DVO();
+                    String buyDesc = "2D" + codeRule;
+                    vo.setHuizongName(buyDesc);
+                    vo.setBuyDesc(buyDesc);
+                    vo.setHuizongName(buyDesc);
+                    vo.setBai(bai);
+                    vo.setShi(shi);
+                    vo.setGe(ge);
+                    vo.setLmId(lmId);
+                    vo.setLsTypeId("1");
+                    vo.setValue(codeRule);
+                    vo.setBuyAmount(codeList.size());
+                    vo.setCodeList(codeList);
+                    vo.setBuyMoney(buyMoney);
+                    list.add(vo);
+                    resultMap.put("list", list);
+                    return resultMap;
+                }
+            }
         }
         resultMap.put("errmsg", "号码格式错误：" + codeRule);
         return resultMap;
