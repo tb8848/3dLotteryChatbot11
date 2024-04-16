@@ -131,7 +131,9 @@
     <!--<a class="layui-btn  layui-btn-xs layui-btn-primary odds" lay-event="oddsSetting" style="color: #0000FF">赔率设置</a>-->
     <a class="layui-btn  layui-btn-xs layui-btn-primary xufei" lay-event="xufei" style="color: #0000FF">续费</a>
     <a class="layui-btn  layui-btn-xs layui-btn-primary player" lay-event="player" style="color: #0000FF">玩家列表</a>
-    <a class="layui-btn  layui-btn-xs layui-btn-primary delete" lay-event="delete" style="color: #0000FF;display: none">删除</a>
+    {{# if(d.status==2) { }}
+    <a class="layui-btn  layui-btn-xs layui-btn-primary delete" lay-event="delete" style="color: #0000FF;">删除</a>
+    {{# } }}
 </script>
 <!--<script type="text/html" id="report">
     <a class="layui-btn  layui-btn-xs month" lay-event="month" i18n="user.table.btn.monthReport">月报表</a>
@@ -470,8 +472,26 @@
                         // layer.closeAll();
                     }
                 });
+            }else if (obj.event === 'delete'){
+                layer.confirm(i18np.prop('user.msg.title.want.delete'), {
+                    icon: 3,
+                    title: i18np.prop('user.edit.tips'),
+                    btn: [i18np.prop("user.add.msg.btn.ok"),i18np.prop("user.add.msg.btn.cancel")] //可以无限个按钮
+                }, function (index) {
+                    $.ajax({
+                        type: "get",
+                        url: HOST + "admin/botuser/deleteBotUserById?id=" + data.id,
+                        success: function (res) {
+                            if (res.code == 200) {
+                                layer.msg(res.msg, {icon: 1, time: 1000});
+                                table.reload("tt");
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        }
+                    })
+                })
             }
-
         });
         xinzeng = function () {
             window.location.href = 'add.html';

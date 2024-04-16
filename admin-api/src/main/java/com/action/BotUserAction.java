@@ -10,7 +10,6 @@ import com.beans.*;
 import com.google.common.collect.Maps;
 import com.service.*;
 import com.util.JwtUtil;
-import com.util.MD5Util;
 import com.util.PasswordUtil;
 import com.util.StringUtil;
 import io.swagger.annotations.ApiOperation;
@@ -449,5 +448,21 @@ public class BotUserAction {
             }
         }
         return ResponseBean.OK;
+    }
+
+    /**
+     * 删除机器人账号
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteBotUserById")
+    public ResponseBean deleteBotUserById(String id){
+        if (StringUtil.isNull(id)){
+            return new ResponseBean(500,"缺少参数","",true);
+        }
+        if (botUserService.removeById(id)){
+            return new ResponseBean(200,"删除成功","",true);
+        }
+        return new ResponseBean(500,"删除失败","",true);
     }
 }

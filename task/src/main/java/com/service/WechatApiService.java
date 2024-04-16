@@ -345,7 +345,7 @@ public class WechatApiService{
      * @param botUser
      * @param player
      */
-    public void handleMultiMsgGroup(String text,BotUser botUser, Player player,String groupName,String wxNick){
+    /*public void handleMultiMsgGroup(String text,BotUser botUser, Player player,String groupName,String wxNick){
         boolean isCommonCmd = false;
         for(String cmd : GlobalConst.commonCmd){
             if(text.startsWith(cmd)){
@@ -430,7 +430,7 @@ public class WechatApiService{
                 }
             }
         }
-    }
+    }*/
 
     /**
      * 处理多组下注
@@ -453,6 +453,7 @@ public class WechatApiService{
             Boolean checkTxtResult = true;
             String[] multiArr = text.split("\n");
             //System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
+            Integer drawId = null;
             for(String cmdText : multiArr){
                 if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")
                         || cmdText.toUpperCase().startsWith("福") || cmdText.toUpperCase().startsWith("体")
@@ -476,6 +477,7 @@ public class WechatApiService{
                                 return;
                             }
                         }
+                        drawId = draw.getDrawId();
                     }else{
                         if(cmdText.toUpperCase().startsWith("P3") || cmdText.contains("体")){
                             Draw draw =  p3DrawService.getLastDrawInfo();
@@ -484,6 +486,7 @@ public class WechatApiService{
                                 chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                                 return;
                             }
+                            drawId = draw.getDrawId();
                         }else if (cmdText.toUpperCase().startsWith("3D") || cmdText.contains("福")){
                             Draw draw =  drawService.getLastDrawInfo();
                             if(null==draw || draw.getOpenStatus()!=1){
@@ -491,6 +494,7 @@ public class WechatApiService{
                                 chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
                                 return;
                             }
+                            drawId = draw.getDrawId();
                         }
                     }
                 }else{
@@ -505,6 +509,10 @@ public class WechatApiService{
                 chatRoomMsgService.save(fromMsg);
                 rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(fromMsg));
 
+                List<String> msgId = new ArrayList<>();
+                List<Integer> xzCount = new ArrayList<>();
+                List<BigDecimal> xzPoints = new ArrayList<>();
+
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();
                     if ((text1.contains("3D") && text1.contains("P3")) || (text1.contains("福") && text1.contains("体"))) {
@@ -512,10 +520,10 @@ public class WechatApiService{
                         String tcContent = text1.replaceAll("3D", "").replaceAll("福", "");
                         String[] cp = new String[]{fcContent, tcContent};
                         for (String con : cp) {
-                            extractedGroup(botUser, player, cmdText, con, groupName, wxNick);
+                            extractedGroup(botUser, player, cmdText, con, groupName, wxNick, msgId, xzCount, xzPoints);
                         }
                     }else{
-                        extractedGroup(botUser, player, cmdText, text1, groupName, wxNick);
+                        extractedGroup(botUser, player, cmdText, text1, groupName, wxNick, msgId, xzCount, xzPoints);
                     }
                     /*if(text1.contains("福") || text1.contains("体")){
                         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
@@ -573,11 +581,33 @@ public class WechatApiService{
                         }
                     }*/
                 }
+                if (!msgId.isEmpty()) {
+                    if (msgId.size() == multiArr.length) {
+                        ChatRoomMsg toMsg = chatRoomMsgService.getById(msgId.get(0));
+                        int lottype = 1;
+                        if(text.contains("P3") || text.contains("体")){
+                            lottype = 2;
+                        }else{
+                            lottype = 1;
+                        }
+                        //lottype = text1.startsWith("P3")?2:1;
+                        String lotteryName = lottype ==2?"P3":"3D";
+                        player.getId();
+                        BigDecimal points = playerService.getPoints(player.getId());
+                        Integer count = xzCount.stream().mapToInt(Integer::intValue).sum();
+                        BigDecimal points2 = xzPoints.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+                        String newmsg = "["+lotteryName+"课号]"+drawId+"\r\n"+text+"\r\n交作业成功√√\r\n【份数】："+count+"\r\n"
+                                +"【扣面】："+points2.stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
+                        toMsg.setMsg(newmsg);
+                        chatRoomMsgService.saveAndSendMsgGroup(toMsg,player.getWxFriendId(),botUser.getWxId(),groupName,wxNick);
+                    }
+                }
             }
         }
     }
 
-    private void extractedGroup(BotUser botUser, Player player, String cmdText, String text1,String groupName,String wxNick) {
+    private void extractedGroup(BotUser botUser, Player player, String cmdText, String text1,String groupName,String wxNick,
+                                List<String> msgId, List<Integer> xzCount, List<BigDecimal> xzPoints) {
         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
         int lottype = 1;
         if(text1.contains("P3") || text1.contains("体")){
@@ -600,7 +630,7 @@ public class WechatApiService{
             boolean isBuy = false;
             for(String word : GlobalConst.keywords2){
                 if(txt.startsWith(word) || txt.contains(word)){
-                    kuaidaBuyMsgServiceV2.handleMsgGroup(childMsg,botUser,player,lottype,groupName,wxNick);
+                    kuaidaBuyMsgServiceV2.handleMsgGroup(childMsg,botUser,player,lottype,groupName,wxNick, msgId, xzCount, xzPoints);
                     isBuy = true;
                     break;
                 }
@@ -1157,7 +1187,7 @@ public class WechatApiService{
 
 
 
-    public void handleMsg(String text,BotUser botUser, Player player){
+    /*public void handleMsg(String text,BotUser botUser, Player player){
         boolean isCommonCmd = false;
         for(String cmd : GlobalConst.commonCmd){
             if(text.startsWith(cmd)){
@@ -1204,7 +1234,7 @@ public class WechatApiService{
                 }
             }
         }
-    }
+    }*/
 
     /**
      * 处理多组下注
@@ -1212,7 +1242,7 @@ public class WechatApiService{
      * @param botUser
      * @param player
      */
-    public void handleMultiMsg(String text,BotUser botUser, Player player){
+    /*public void handleMultiMsg(String text,BotUser botUser, Player player){
         boolean isCommonCmd = false;
         for(String cmd : GlobalConst.commonCmd){
             if(text.startsWith(cmd)){
@@ -1302,7 +1332,7 @@ public class WechatApiService{
 
 
         }
-    }
+    }*/
 
     /**
      * 处理多组下注
@@ -1322,7 +1352,7 @@ public class WechatApiService{
 //            logger.info(String.format("收到微信消息>>>>>>>>>>toUser===%s,fromUser===%s,text===%s", botUser.getLoginName(), player.getNickname(), text));
             handleCommonMsg(botUser,text,player);
         }else{
-
+            Integer drawId = null;
             Boolean checkTxtResult = true;
             String[] multiArr = text.split("\n");
             //System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
@@ -1349,6 +1379,7 @@ public class WechatApiService{
                                 return;
                             }
                         }
+                        drawId = draw.getDrawId();
                     }else{
                         if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("体")){
                             Draw draw =  p3DrawService.getLastDrawInfo();
@@ -1357,6 +1388,7 @@ public class WechatApiService{
                                 chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
                                 return;
                             }
+                            drawId = draw.getDrawId();
                         }else if (cmdText.toUpperCase().startsWith("3D") || cmdText.contains("福")){
                             Draw draw =  drawService.getLastDrawInfo();
                             if(null==draw || draw.getOpenStatus()!=1){
@@ -1364,6 +1396,7 @@ public class WechatApiService{
                                 chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
                                 return;
                             }
+                            drawId = draw.getDrawId();
                         }
                     }
                 }else{
@@ -1378,6 +1411,10 @@ public class WechatApiService{
                 chatRoomMsgService.save(fromMsg);
                 rabbitTemplate.convertAndSend("exchange_lotteryTopic_3d", "botChatMsg", JSON.toJSONString(fromMsg));
 
+                List<String> msgId = new ArrayList<>();
+                List<Integer> xzCount = new ArrayList<>();
+                List<BigDecimal> xzPoints = new ArrayList<>();
+
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();
                     if ((text1.contains("3D") && text1.contains("P3")) || (text1.contains("福") && text1.contains("体"))) {
@@ -1385,10 +1422,10 @@ public class WechatApiService{
                         String tcContent = text1.replaceAll("3D", "").replaceAll("福", "");
                         String[] cp = new String[]{fcContent, tcContent};
                         for (String con : cp) {
-                            extracted(botUser, player, cmdText, con);
+                            extracted(botUser, player, cmdText, con, msgId, xzCount, xzPoints);
                         }
                     }else{
-                        extracted(botUser, player, cmdText, text1);
+                        extracted(botUser, player, cmdText, text1, msgId, xzCount, xzPoints);
                     }
                     /*if (text1.contains("福") || text1.contains("体")){
                         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser,player,text1);
@@ -1446,11 +1483,33 @@ public class WechatApiService{
                         }
                     }*/
                 }
+                if (!msgId.isEmpty()) {
+                    if (msgId.size() == multiArr.length) {
+                        ChatRoomMsg toMsg = chatRoomMsgService.getById(msgId.get(0));
+                        int lottype = 1;
+                        if(text.contains("P3") || text.contains("体")){
+                            lottype = 2;
+                        }else{
+                            lottype = 1;
+                        }
+                        //lottype = text1.startsWith("P3")?2:1;
+                        String lotteryName = lottype ==2?"P3":"3D";
+                        player.getId();
+                        BigDecimal points = playerService.getPoints(player.getId());
+                        Integer count = xzCount.stream().mapToInt(Integer::intValue).sum();
+                        BigDecimal points2 = xzPoints.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+                        String newmsg = "["+lotteryName+"课号]"+drawId+"\r\n"+text+"\r\n交作业成功√√\r\n【份数】："+count+"\r\n"
+                                +"【扣面】："+points2.stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
+                        toMsg.setMsg(newmsg);
+                        chatRoomMsgService.saveAndSendMsg(toMsg,player.getWxFriendId(),botUser.getWxId());
+                    }
+                }
             }
         }
     }
 
-    private void extracted(BotUser botUser, Player player, String cmdText, String text1) {
+    private void extracted(BotUser botUser, Player player, String cmdText, String text1,
+                           List<String> msgId, List<Integer> xzCount, List<BigDecimal> xzPoints) {
         ChatRoomMsg childMsg = chatRoomMsgService.createFromWxMsg(botUser, player, text1);
         int lottype = 1;
         if(text1.contains("P3") || text1.contains("体")){
@@ -1473,7 +1532,7 @@ public class WechatApiService{
             boolean isBuy = false;
             for(String word : GlobalConst.keywords2){
                 if(txt.startsWith(word) || txt.contains(word)){
-                    kuaidaBuyMsgServiceV2.handleMsg(childMsg, botUser, player,lottype);
+                    kuaidaBuyMsgServiceV2.handleMsg(childMsg, botUser, player,lottype, msgId, xzCount, xzPoints);
                     isBuy = true;
                     break;
                 }

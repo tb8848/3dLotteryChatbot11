@@ -309,6 +309,14 @@ public class BotUserPanAction {
                     .execute();
             String body = execute.body();
             Map dataMaps = (Map) JSON.parse(body);
+            int code = Integer.parseInt(dataMaps.get("code").toString());
+            if (code == 403 || code == 4031) {
+                botUserPan.setLogin3dToken("");
+                botUserPan.setActiveStatus(0);
+                botUserPanService.updateById(botUserPan);
+
+                return new ResponseBean(500, 0, "网盘登录信息已失效", null, true);
+            }
             String data = dataMaps.get("data").toString();
             Map map = (Map) JSON.parse(data);
             String drawId = map.get("drawId").toString();

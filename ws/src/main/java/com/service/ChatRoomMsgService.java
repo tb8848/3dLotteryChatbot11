@@ -338,6 +338,9 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
         if(checkTxtResult){
             switch (optType) {
                 case 0:
+                    List<String> msgId = new ArrayList<>();
+                    List<Integer> xzCount = new ArrayList<>();
+                    List<BigDecimal> xzPoints = new ArrayList<>();
                     for(String cmdText : multiArr){
                         String text1 = cmdText.toUpperCase();
                         String txt = "";
@@ -370,7 +373,7 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                                 boolean isBuy = false;
                                 for(String word : GlobalConst.keywords2){
                                     if(txt.startsWith(word) || txt.contains(word)){
-                                        kuaidaBuyMsgServiceV2.kuaidaBuy(childMsg, botUser, player, lottype);
+                                        kuaidaBuyMsgServiceV2.kuaidaBuy(childMsg, botUser, player, lottype, msgId, xzCount, xzPoints);
                                         isBuy = true;
                                         break;
                                     }
@@ -402,6 +405,29 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                             }
                         }
                     }
+
+                    if (!msgId.isEmpty()) {
+                        if (msgId.size() == multiArr.length) {
+                            ChatRoomMsg toMsg = dataDao.selectById(msgId.get(0));
+                            if(text.contains("P3") || text.contains("体")){
+                                lottype = 2;
+                            }else{
+                                lottype = 1;
+                            }
+                            //lottype = text1.startsWith("P3")?2:1;
+                            String lotteryName = lottype ==2?"P3":"3D";
+                            player.getId();
+                            BigDecimal points = playerService.getPoints(player.getId());
+                            Integer count = xzCount.stream().mapToInt(Integer::intValue).sum();
+                            BigDecimal points2 = xzPoints.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+                            String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+msg.getMsg()+"\r\n交作业成功√√\r\n【份数】："+count+"\r\n"
+                                    +"【扣面】："+points2.stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
+                            toMsg.setMsg(newmsg);
+                            simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
+                        }
+                    }
+
+
                     break;
                 case 1:
                 case 90:

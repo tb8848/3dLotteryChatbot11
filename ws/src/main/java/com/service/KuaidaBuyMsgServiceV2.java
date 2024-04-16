@@ -115,7 +115,7 @@ public class KuaidaBuyMsgServiceV2 {
     }
 
     //快打下注，固定文本格式
-    public void kuaidaBuy(ChatRoomMsg fromMsg, BotUser botUser, Player player,Integer lotteryType){
+    public void kuaidaBuy(ChatRoomMsg fromMsg, BotUser botUser, Player player,Integer lotteryType, List<String> msgId, List<Integer> xzCount, List<BigDecimal> xzPoints){
         try {
             Draw draw = null;
             ChatRoomMsg toMsg = null;
@@ -226,7 +226,7 @@ public class KuaidaBuyMsgServiceV2 {
 
                 }
                 if (null != buyList && buyList.size()>0) {
-                    xiazhu(botUser, player, fromMsg, buyList,lotteryType,draw);
+                    xiazhu(botUser, player, fromMsg, buyList,lotteryType,draw, msgId, xzCount, xzPoints);
                 }else{
                     toMsg = createMsg(botUser, player, "作业内容不符合【"+text+"】的要求");
                     dataDao.insert(toMsg);
@@ -288,7 +288,7 @@ public class KuaidaBuyMsgServiceV2 {
                         }else{
                             code=typeArr[1];
                         }
-                        String[] splitArr = code.split("\\.|,|，");
+                        String[] splitArr = code.split("\\.|,|，|/| |-");
                         for(String r : splitArr){
                             if(StringUtils.isNullOrEmpty(r)){
 
@@ -316,7 +316,8 @@ public class KuaidaBuyMsgServiceV2 {
                         }
 
                         if(!code.contains(",") && !code.contains("，") && !code.contains(".") && !code.contains("XX") && !code.contains("**") &&
-                                !code.contains("X") && !code.contains("*") && !type.equals("直组") && !StringUtil.checkCodeFormat(code)){
+                                !code.contains("X") && !code.contains("*") && !type.equals("直组") && !StringUtil.checkCodeFormat(code) &&
+                                !code.contains(" ") && !code.contains("/") && !code.contains("-")){
                                 toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
                                 toMsg.setSource(0);
                                 dataDao.insert(toMsg);
@@ -383,7 +384,8 @@ public class KuaidaBuyMsgServiceV2 {
                                         if(ss.contains("拖")){
                                             z3 = z3dtBuy(botUser, player, buyMoney, ss, "3");
                                         }else{
-                                            z3 = z3Buy(botUser, player, buyMoney, ss, "3");
+//                                            z3 = z3Buy(botUser, player, buyMoney, ss, "3");
+                                            z3 = zzBuy(buyMoney, code, "100");
                                         }
                                         List<BuyRecord3DVO> z3List = (List<BuyRecord3DVO>) z3.get("list");
                                         hmList.addAll(z3List);
@@ -531,7 +533,7 @@ public class KuaidaBuyMsgServiceV2 {
                             }
                         }else{
                             if (null != buyList && buyList.size() > 0) {
-                                xiazhu(botUser, player, fromMsg, buyList,lotteryType,draw);
+                                xiazhu(botUser, player, fromMsg, buyList,lotteryType,draw, msgId, xzCount, xzPoints);
                             }else{
                                 toMsg = createMsg(botUser, player, content+"\r\n作业内容不符合【"+type+"】的要求");
                                 toMsg.setSource(0);
@@ -590,7 +592,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] multiArr = codeRule.split("\\.|,|，");
+        String[] multiArr = codeRule.split("\\.|,|，|/| |-");
         for(String ss : multiArr){
             if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
                 continue;
@@ -665,7 +667,7 @@ public class KuaidaBuyMsgServiceV2 {
                 resMap.put("errmsg","组三号码格式错误:"+codeRule);
                 return resMap;
             }
-            String buyDesc = lsName+"(组):"+bai;
+            String buyDesc = lsName+"(组):"+bai + "[" + 1 + "注]";
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
             oneRecord.setBuyCode(bai);
@@ -714,7 +716,7 @@ public class KuaidaBuyMsgServiceV2 {
                 resMap.put("errmsg","组六号码格式错误:"+codeRule);
                 return resMap;
             }
-            String buyDesc = lsName+"(组):"+bai;
+            String buyDesc = lsName+"(组):"+bai + "[" + 1 + "注]";
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
             oneRecord.setBuyCode(bai);
@@ -736,7 +738,7 @@ public class KuaidaBuyMsgServiceV2 {
     private Map<String,Object> codeBuy(BotUser botUser, Player player, BigDecimal buyMoney, String codeRule, String lmId) {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] codeArr = codeRule.split("\\.|,|，");
+        String[] codeArr = codeRule.split("\\.|,|，|/| |-");
         if(codeArr.length==0){
             resMap.put("errmsg","号码格式错误");
             return resMap;
@@ -771,7 +773,7 @@ public class KuaidaBuyMsgServiceV2 {
 
 
     public void reportToPan(BotUser botUser,Player player,ChatRoomMsg msg,List<BuyRecord3DVO> buyList,
-                            BotUserPan botUserPan,Draw draw,Integer lotteryType,String lotteryName){
+                            BotUserPan botUserPan,Draw draw,Integer lotteryType,String lotteryName, List<String> msgId, List<Integer> xzCount, List<BigDecimal> xzPoints){
         String reportToPanUrl = botUserPan.getLottery3dUrl();
         if(reportToPanUrl.endsWith("/")){
             reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
@@ -873,6 +875,10 @@ public class KuaidaBuyMsgServiceV2 {
                         playerBuyRecordService.save(playerBuyRecord);
                         playerService.updatePoint(player.getId(),totalPoints,false);
                         BigDecimal points = playerService.getPoints(player.getId());
+
+                        xzCount.add(buyAmount);
+                        xzPoints.add(totalPoints);
+
                         String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+msg.getMsg()+"\r\n交作业成功√√\r\n【份数】："+buyAmount+"\r\n"
                                 +"【扣面】："+totalPoints.stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
 
@@ -895,7 +901,8 @@ public class KuaidaBuyMsgServiceV2 {
                         }
                         toMsg.setMsgType(0);
                         dataDao.insert(toMsg);
-                        simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
+                        msgId.add(toMsg.getId());
+                        //simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                         if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
                             //wechatIpadTokenService.sendMsgToFriend(toMsg);
 //                            if (player.getChatStatus() == 1){
@@ -933,7 +940,7 @@ public class KuaidaBuyMsgServiceV2 {
 
     private void xiazhu(BotUser botUser, Player player,ChatRoomMsg fromMsg,
                         List<BuyRecord3DVO> buyList,
-                        Integer lotteryType,Draw draw) {
+                        Integer lotteryType,Draw draw, List<String> msgId, List<Integer> xzCount, List<BigDecimal> xzPoints) {
         BigDecimal totalBuyPoints = buyList.stream().map(item->item.getBuyMoney().multiply(new BigDecimal(item.getBuyAmount()))).reduce(BigDecimal.ZERO,BigDecimal::add);
         if(totalBuyPoints.compareTo(player.getPoints())>0){
             //玩家积分不够
@@ -973,6 +980,8 @@ public class KuaidaBuyMsgServiceV2 {
                 String playerBuyId = (String)buyResult.get("playerBuyId");
                 PlayerBuyRecord record = playerBuyRecordService.getById(playerBuyId);
                 BigDecimal points = playerService.getPoints(player.getId());
+                xzCount.add(record.getBuyAmount());
+                xzPoints.add(record.getBuyPoints());
                 String newmsg = "["+lotteryName+"课号]"+draw.getDrawId()+"\r\n"+msg+"\r\n交作业成功√√\r\n【份数】："+record.getBuyAmount()+"\r\n"
                         +"【扣面】："+record.getBuyPoints().stripTrailingZeros().toPlainString()+"\r\n"+"【盛鱼】："+points.stripTrailingZeros().toPlainString();
 
@@ -996,7 +1005,8 @@ public class KuaidaBuyMsgServiceV2 {
                 toMsg.setMsgType(0);
                 toMsg.setSource(0);
                 dataDao.insert(toMsg);
-                simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
+                msgId.add(toMsg.getId());
+                //simpMessagingTemplate.convertAndSend("/topic/room/"+botUser.getId(),toMsg);
                 if(player.getUserType()==2  && StringUtil.isNotNull(botUser.getWxId())){
 //                    if (player.getChatStatus() == 1){
 //                        wechatApiService.sendMsgGroup(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg(),player.getWxGroup(),player.getNickname());
@@ -1027,7 +1037,7 @@ public class KuaidaBuyMsgServiceV2 {
                 BotUserPan botUserPan = botUserPanService.getOneBy(botUser.getId(),lotteryType);
                 if(null!=botUserPan && StringUtil.isNotNull(botUserPan.getLogin3dToken())){
                     //报网
-                    reportToPan(botUser,player,fromMsg,buyList,botUserPan,draw,lotteryType,lotteryName);
+                    reportToPan(botUser,player,fromMsg,buyList,botUserPan,draw,lotteryType,lotteryName, msgId, xzCount, xzPoints);
                 }else{
                     ChatRoomMsg toMsg = createMsg(botUser,player,"机器人未登录"+lotteryName+"网盘");
                     toMsg.setSource(0);
@@ -1177,7 +1187,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<BuyRecord3DVO> list = Lists.newArrayList();
         boolean hasError = false;
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
-            String[] splitArr = codeRule.split("\\.|,|，");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
             int num = 0;
             for (String arr : splitArr) {
                 //删除数字之外的任何字符
@@ -1301,6 +1311,84 @@ public class KuaidaBuyMsgServiceV2 {
         return resMap;
     }
 
+    public Map<String,Object> zzBuy(BigDecimal buyMoney,String codeRule,String lmId){
+        List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
+        Map<String,Object> resMap = Maps.newHashMap();
+        List<BuyRecord3DVO> list = Lists.newArrayList();
+        String[] multiArr = codeRule.split(",|，");
+        for(String ss : multiArr){
+            if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
+                continue;
+            }
+            String newValue  = ss;
+            if(ss.equals("全包")){
+                ss = "0123456789";
+            }
+            //删除数字之外的任何字符
+            newValue  = ss.replaceAll("[^0-9]","");
+            String[] numArr = newValue.split("");
+            //删除重复的数字
+            Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+            if(nums.size()<2){
+                resMap.put("errmsg","组三号码数量必须大于2:"+codeRule);
+                return resMap;
+            }
+            if (getCountByCode(newValue) != 2) {
+                continue;
+            }
+            String bai = nums.stream().collect(Collectors.joining());
+            String lsName = "组三"+ StringUtil.changeDigitToChinese(bai.length(),"码");
+
+            LotterySetting ls = lsList.stream().filter(item->item.getBettingRule().equals(lsName)).findFirst().orElse(null);
+            if(null == ls){
+                resMap.put("errmsg","组三号码格式错误:"+codeRule);
+                return resMap;
+            }
+            String buyDesc = lsName+"(组):"+bai + "[" + 1 + "注]";
+            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+            oneRecord.setHuizongName(buyDesc);
+            oneRecord.setBuyCode(bai);
+            oneRecord.setBuyAmount(1);
+            oneRecord.setValue(bai);
+            oneRecord.setLmId(lmId);
+            oneRecord.setLsTypeId(ls.getTypeId()+"");
+            oneRecord.setBuyMoney(buyMoney);
+            oneRecord.setBuyDesc(buyDesc);
+            oneRecord.setCodeList(Lists.newArrayList(bai));
+            list.add(oneRecord);
+        }
+        resMap.put("list",list);
+        return resMap;
+    }
+
+    public static Integer getCountByCode(String buyCode) {
+        List list = new ArrayList();
+        char c[] = buyCode.toCharArray();
+        list.add(c[0]);
+        for(int i = 0;i < c.length;i++){
+            for(int j = 0;j < list.size();j++){
+                if((char)list.get(j) == c[i]){
+                    break;
+                }else{
+                    if(j == list.size()-1){
+                        list.add(c[i]);
+                    }
+                }
+            }
+        }
+        List<Integer> list2 = Lists.newArrayList();
+        for(int j = 0;j < list.size();j++){  //拿出集合中每一个跟数组中元素比，如果一样则m++
+            int m=0;
+            for(int i = 0;i < c.length;i++){  //遍历数组中的每一个字符
+                if(list.get(j).equals(c[i])){
+                    m++;
+                }
+            }
+            list2.add(m);
+        }
+
+        return list2.stream().max(Integer::compareTo).get();
+    }
 
 
     //组三普通
@@ -1350,7 +1438,54 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
-            String[] splitArr = codeRule.split("\\.|,|，");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            int num = 0;
+            for (String arr : splitArr) {
+                String[] numArr = arr.split("拖");
+                if (numArr.length != 2) {
+                    resMap.put("errmsg", "号码格式不正确：" + codeRule);
+                    return resMap;
+                }
+                String tm = null;
+                String dm = null;
+                dm = numArr[0];
+                tm = numArr[1];
+                if (StringUtil.isNull(dm) || StringUtil.isNull(tm)) {
+                    resMap.put("errmsg", "号码格式不正确：" + codeRule);
+                    return resMap;
+                }
+
+                Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
+                dm = dmCode.stream().collect(Collectors.joining());
+                if (dm.length() != 1) {
+                    resMap.put("errmsg", "只能选择1个胆码：" + codeRule);
+                    return resMap;
+                }
+
+                Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
+                tm = tmCode.stream().collect(Collectors.joining());
+                for (String c : dmCode) {
+                    if (tm.contains(c)) { //拖码中包含胆码号码，则删除拖码中对应的号码
+                        tm = tm.replace(c, "");
+                    }
+                }
+
+                if (tm.length() < 2) {
+                    resMap.put("errmsg", "至少选择2个拖码：" + codeRule);
+                    return resMap;
+                }
+
+                String lsName = dm.length() + "码" + "拖" + tm.length();
+                List<LotterySetting> lsList = lotterySettingService.getListBy("3");
+                LotterySetting ls = lsList.stream().filter(item -> item.getBettingRule().equals(lsName)).findFirst().orElse(null);
+                if (null == ls) {
+                    resMap.put("errmsg", "号码格式错误：" + codeRule);
+                    return resMap;
+                }
+
+                List<String> codeList = Code3DCreateUtils.z3DtCode(dm, tm);
+                num = num + codeList.size();
+            }
             for (String arr : splitArr) {
                 String[] numArr = arr.split("拖");
                 if(numArr.length!=2){
@@ -1396,7 +1531,7 @@ public class KuaidaBuyMsgServiceV2 {
 
                 List<String> codeList = Code3DCreateUtils.z3DtCode(dm,tm);
 //                String buyDesc = "组三"+dm+"拖"+tm;
-                String buyDesc = "组三"+codeRule;
+                String buyDesc = "组三"+codeRule + "[" + num + "注]";
                 BuyRecord3DVO oneRecord = new BuyRecord3DVO();
                 oneRecord.setHuizongName(buyDesc);
                 oneRecord.setBai(dm);
@@ -1454,7 +1589,7 @@ public class KuaidaBuyMsgServiceV2 {
             }
 
             List<String> codeList = Code3DCreateUtils.z3DtCode(dm,tm);
-            String buyDesc = "组三"+dm+"拖"+tm;
+            String buyDesc = "组三"+dm+"拖"+tm + "[" + codeList.size() + "注]";
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
             oneRecord.setBai(dm);
@@ -1578,7 +1713,51 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
-            String[] splitArr = codeRule.split("\\.|,|，");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            int num = 0;
+            for (String arr : splitArr) {
+                String[] numArr = arr.split("拖");
+                if (numArr.length != 2) {
+                    resMap.put("errmsg", "号码格式不正确：" + arr);
+                    return resMap;
+                }
+                String dm = numArr[0];
+                String tm = numArr[1];
+                if (StringUtil.isNull(dm) || StringUtil.isNull(tm)) {
+                    resMap.put("errmsg", "号码格式不正确：" + arr);
+                    return resMap;
+                }
+
+                Set<String> dmCode = Arrays.asList(dm.split("")).stream().collect(Collectors.toSet());
+                dm = dmCode.stream().collect(Collectors.joining());
+                if (dm.length() != 1 && dm.length() != 2) {
+                    resMap.put("errmsg", "只能选择1~2个胆码：" + arr);
+                    return resMap;
+                }
+
+                Set<String> tmCode = Arrays.asList(tm.split("")).stream().collect(Collectors.toSet());
+                tm = tmCode.stream().collect(Collectors.joining());
+                for (String c : dmCode) {
+                    if (tm.contains(c)) { //拖码中包含胆码号码，则删除拖码中对应的号码
+                        tm = tm.replace(c, "");
+                    }
+                }
+                if (tm.length() < 1) {
+                    resMap.put("errmsg", "拖码数量不能小于1：" + arr);
+                    return resMap;
+                }
+
+                String lsName = dm.length() + "码" + "拖" + tm.length();
+                List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
+                LotterySetting ls = lsList.stream().filter(item -> item.getBettingRule().equals(lsName)).findFirst().orElse(null);
+                if (null == ls) {
+                    resMap.put("errmsg", "号码格式错误：" + arr);
+                    return resMap;
+                }
+
+                List<String> codeList = Code3DCreateUtils.z6DtCode(dm, tm);
+                num = num + codeList.size();
+            }
             for (String arr : splitArr) {
                 String[] numArr = arr.split("拖");
                 if(numArr.length!=2){
@@ -1620,7 +1799,7 @@ public class KuaidaBuyMsgServiceV2 {
                 }
 
                 List<String> codeList = Code3DCreateUtils.z6DtCode(dm,tm);
-                String buyDesc = "组六"+arr;
+                String buyDesc = "组六"+arr + "[" + num + "注]";
                 BuyRecord3DVO oneRecord = new BuyRecord3DVO();
                 oneRecord.setHuizongName(buyDesc);
                 oneRecord.setBai(dm);
@@ -1675,7 +1854,7 @@ public class KuaidaBuyMsgServiceV2 {
             }
 
             List<String> codeList = Code3DCreateUtils.z6DtCode(dm,tm);
-            String buyDesc = "组六"+codeRule;
+            String buyDesc = "组六"+codeRule + "[" + codeList.size() + "注]";
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
             oneRecord.setBai(dm);
@@ -1737,7 +1916,7 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
-            String[] splitArr = codeRule.split("\\.|,|，");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
             int num = 0;
             for (String arr : splitArr) {
                 String newValue  = arr.replaceAll("[^0-9]","");
@@ -1940,7 +2119,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<BuyRecord3DVO> list = Lists.newArrayList();
         Map<String,Object> resultMap = new HashMap<>();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
-            String[] splitArr = codeRule.split("\\.|,|，");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
             for (String arr : splitArr) {
                 if (arr.contains("XX") || arr.contains("**")){
                     arr = "百"+arr.replaceAll("XX","").replaceAll("\\**","");
@@ -2099,7 +2278,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<BuyRecord3DVO> list = Lists.newArrayList();
         Map<String,Object> resultMap = new HashMap<>();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".")) {
-            String[] splitArr = codeRule.split("\\.|,|，");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
             for (String arr : splitArr) {
                 if (arr.contains("X") || arr.contains("*")) {
                     arr = arr.replaceAll("\\*", "X");
