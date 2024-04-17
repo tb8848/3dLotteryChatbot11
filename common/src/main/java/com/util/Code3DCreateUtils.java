@@ -1065,14 +1065,14 @@ public class Code3DCreateUtils {
         Set<String> codeSet = new HashSet<>();
         String[] codeArr = nums.split("");
         Arrays.sort(codeArr);
-        String code1 = codeArr[0]+codeArr[0]+codeArr[0];
+        //String code1 = codeArr[0]+codeArr[0]+codeArr[0];
         String code2 = codeArr[0]+codeArr[0]+codeArr[1];
         String code3 = codeArr[0]+codeArr[1]+codeArr[1];
-        String code4 = codeArr[1]+codeArr[1]+codeArr[1];
-        codeSet.add(code1);
+        //String code4 = codeArr[1]+codeArr[1]+codeArr[1];
+        //codeSet.add(code1);
         codeSet.add(code2);
         codeSet.add(code3);
-        codeSet.add(code4);
+        //codeSet.add(code4);
         List<String> codeList = codeSet.stream().collect(Collectors.toList());
         Collections.sort(codeList);
         return codeList;
