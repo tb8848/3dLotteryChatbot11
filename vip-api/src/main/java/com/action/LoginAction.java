@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.auth.AuthContext;
 import com.auth.AuthInfo;
 import com.beans.BotUser;
-import com.beans.Dictionary;
 import com.beans.LotterySetting;
 import com.beans.ResponseBean;
 import com.config.NoLogin;
@@ -13,11 +12,7 @@ import com.service.BotUserService;
 import com.service.DictionaryService;
 import com.service.LoginService;
 import com.util.*;
-import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
-import io.minio.Result;
-import io.minio.messages.Item;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -356,7 +351,7 @@ public class LoginAction {
      */
     @NoLogin
     @GetMapping(value = "/chooseImg")
-    public ResponseBean chooseImg(){
+    public ResponseBean chooseImg() throws Exception {
 
         return new ResponseBean(0,0,"",botUserService.chooseImg(),true);
 //        Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder().bucket("3d-robot-img").build());

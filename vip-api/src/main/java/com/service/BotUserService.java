@@ -2,14 +2,12 @@ package com.service;
 
 import com.baomidou.lock.LockTemplate;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.beans.BotUser;
-import com.beans.Dictionary;
-import com.beans.ResponseBean;
 import com.dao.BotUserDAO;
 import com.dao.DictionaryDAO;
+import io.minio.GetObjectArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
 import io.minio.Result;
@@ -17,11 +15,14 @@ import io.minio.messages.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static com.util.StringUtil.convertToBase64;
 
 @Service
 public class BotUserService extends ServiceImpl<BotUserDAO, BotUser> {
@@ -119,7 +120,7 @@ public class BotUserService extends ServiceImpl<BotUserDAO, BotUser> {
      * 随机获取头像
      * @return
      */
-    public String chooseImg(){
+    public String chooseImg() throws Exception {
         Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder().bucket("3d-robot-img").build());
         List<Item> list = new ArrayList<>();
         results.forEach(itemResult -> {
@@ -134,13 +135,19 @@ public class BotUserService extends ServiceImpl<BotUserDAO, BotUser> {
         int idx = new Random().nextInt(len);
         Item imgName = list.get(idx);
 
-        List<Dictionary> dicList = dictionaryDAO.selectList(new QueryWrapper<Dictionary>().eq("code","MinioUrl").eq("type","system"));
-        if (dicList.size() > 0){
-            Dictionary dictionary = dicList.get(0);
-            String icon = dictionary.getValue()+"/3d-robot-img/"+imgName.objectName();
-            return icon;
-        }
-        return "";
+        // 获取对象的InputStream
+        InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(imgName.objectName()).build());
+        // 将图像转换为Base64编码
+        String base64Image = convertToBase64(inputStream);
+        return base64Image;
+
+//        List<Dictionary> dicList = dictionaryDAO.selectList(new QueryWrapper<Dictionary>().eq("code","MinioUrl").eq("type","system"));
+//        if (dicList.size() > 0){
+//            Dictionary dictionary = dicList.get(0);
+//            String icon = dictionary.getValue()+"/3d-robot-img/"+imgName.objectName();
+//            return icon;
+//        }
+//        return "";
     }
 
     public List<BotUser> listBy() {

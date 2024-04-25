@@ -380,14 +380,17 @@ public class KuaidaBuyMsgServiceV2 {
                                 List<BuyRecord3DVO> hmList = Lists.newArrayList();
                                 for(String ss : multiArr){
                                     if (StringUtil.hasDuplicateChar(ss)){
+                                        Map<String,Object> zx = codeBuy(botUser, player, buyMoney, ss, "1");
                                         Map<String,Object> z3 = Maps.newHashMap();
                                         if(ss.contains("拖")){
                                             z3 = z3dtBuy(botUser, player, buyMoney, ss, "3");
                                         }else{
 //                                            z3 = z3Buy(botUser, player, buyMoney, ss, "3");
-                                            z3 = zzBuy(buyMoney, code, "100");
+                                            z3 = zzBuy(buyMoney, ss, "100");
                                         }
+                                        List<BuyRecord3DVO> zxList = (List<BuyRecord3DVO>) zx.get("list");
                                         List<BuyRecord3DVO> z3List = (List<BuyRecord3DVO>) z3.get("list");
+                                        hmList.addAll(zxList);
                                         hmList.addAll(z3List);
                                     }else{
                                         Map<String,Object> zx = codeBuy(botUser, player, buyMoney, ss, "1");
@@ -1344,17 +1347,17 @@ public class KuaidaBuyMsgServiceV2 {
                 resMap.put("errmsg","组三号码格式错误:"+codeRule);
                 return resMap;
             }
-            String buyDesc = lsName+"(组):"+bai + "[" + 1 + "注]";
+            String buyDesc = lsName+"(组):"+codeRule + "[" + 1 + "注]";
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
-            oneRecord.setBuyCode(bai);
+            oneRecord.setBuyCode(codeRule);
             oneRecord.setBuyAmount(1);
-            oneRecord.setValue(bai);
+            oneRecord.setValue(codeRule);
             oneRecord.setLmId(lmId);
             oneRecord.setLsTypeId(ls.getTypeId()+"");
             oneRecord.setBuyMoney(buyMoney);
             oneRecord.setBuyDesc(buyDesc);
-            oneRecord.setCodeList(Lists.newArrayList(bai));
+            oneRecord.setCodeList(Lists.newArrayList(codeRule));
             list.add(oneRecord);
         }
         resMap.put("list",list);
