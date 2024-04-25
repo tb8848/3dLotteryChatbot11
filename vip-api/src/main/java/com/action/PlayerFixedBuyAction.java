@@ -6,10 +6,15 @@ import com.config.NoLogin;
 import com.service.*;
 import com.util.JwtUtil;
 import com.util.StringUtil;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.InputStream;
 import java.util.*;
+
+import static com.util.StringUtil.convertToBase64;
 
 /**
  * 玩家定投
@@ -27,6 +32,8 @@ public class PlayerFixedBuyAction {
     @Autowired
     private PlayerFixedBuyService playerFixedBuyService;
 
+    @Autowired
+    private MinioClient minioClient;
 
     /**
      * 增加定投
@@ -198,7 +205,7 @@ public class PlayerFixedBuyAction {
      * @return
      */
     @GetMapping("/getBotUserFixedBuy")
-    public ResponseBean getBotUserFixedBuy(@RequestHeader(value = "token")String token, Integer pageNo,Integer pageSize){
+    public ResponseBean getBotUserFixedBuy(@RequestHeader(value = "token")String token, Integer pageNo,Integer pageSize) throws Exception {
 
         String uid = JwtUtil.getUsername(token);
         if(StringUtil.isNull(uid)){
@@ -213,7 +220,12 @@ public class PlayerFixedBuyAction {
             Player player = playerService.getById(playerFixedBuy.getPlayerId());
             if (player != null){
                 playerFixedBuy.setPlayerName(player.getNickname());
-                playerFixedBuy.setPlayerHeadImg(player.getHeadimg());
+//                playerFixedBuy.setPlayerHeadImg(player.getHeadimg());
+                // 获取对象的InputStream
+                InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                // 将图像转换为Base64编码
+                String base64Image = convertToBase64(inputStream);
+                playerFixedBuy.setPlayerHeadImg("data:image/jpeg;base64,"+base64Image);
             }
         }
         return new ResponseBean(0,iPage.getTotal(),"",iPage.getRecords());

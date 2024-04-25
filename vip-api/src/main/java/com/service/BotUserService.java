@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.util.StringUtil.convertToBase64;
 
@@ -120,7 +117,7 @@ public class BotUserService extends ServiceImpl<BotUserDAO, BotUser> {
      * 随机获取头像
      * @return
      */
-    public String chooseImg() throws Exception {
+    public Map chooseImg() throws Exception {
         Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder().bucket("3d-robot-img").build());
         List<Item> list = new ArrayList<>();
         results.forEach(itemResult -> {
@@ -139,7 +136,11 @@ public class BotUserService extends ServiceImpl<BotUserDAO, BotUser> {
         InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(imgName.objectName()).build());
         // 将图像转换为Base64编码
         String base64Image = convertToBase64(inputStream);
-        return base64Image;
+        Map map = new HashMap();
+        map.put("base64",base64Image);
+        map.put("url",imgName.objectName());
+
+        return map;
 
 //        List<Dictionary> dicList = dictionaryDAO.selectList(new QueryWrapper<Dictionary>().eq("code","MinioUrl").eq("type","system"));
 //        if (dicList.size() > 0){

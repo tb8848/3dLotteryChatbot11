@@ -83,7 +83,7 @@ public class PlayerDummyAction {
                 player.setNickname(nickname);
 //                String randomImg = chooseImage();
 //                player.setHeadimg("http://192.168.100.104:9192/bot/downHeadimg?imgName="+randomImg);
-                player.setHeadimg(botUserService.chooseImg());
+                player.setHeadimg((String) botUserService.chooseImg().get("url"));
                 player.setChaturl("");
                 player.setHsType(0);
                 player.setBotUserId(uid);

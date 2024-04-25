@@ -7,11 +7,16 @@ import com.config.NoLogin;
 import com.service.*;
 import com.util.JwtUtil;
 import com.util.StringUtil;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.*;
+
+import static com.util.StringUtil.convertToBase64;
 
 @RestController
 @RequestMapping(value = "/bot/player/buy")
@@ -25,6 +30,9 @@ public class PlayerBuyRecordAction {
 
     @Autowired
     private DrawService drawService;
+
+    @Autowired
+    private MinioClient minioClient;
 
     /**
      * 玩家列表
@@ -83,6 +91,11 @@ public class PlayerBuyRecordAction {
                     item.setPlayer(player);
                 }else{
                     Player p = playerService.getById(item.getPlayerId());
+                    // 获取对象的InputStream
+                    InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                    // 将图像转换为Base64编码
+                    String base64Image = convertToBase64(inputStream);
+                    p.setHeadimg("data:image/jpeg;base64,"+base64Image);
                     item.setPlayer(p);
                 }
             }

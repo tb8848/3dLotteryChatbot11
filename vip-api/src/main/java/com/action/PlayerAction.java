@@ -8,13 +8,18 @@ import com.model.res.ReportRes;
 import com.service.*;
 import com.util.JwtUtil;
 import com.util.StringUtil;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.util.StringUtil.convertToBase64;
 
 @RestController
 @RequestMapping(value = "/bot/player")
@@ -44,6 +49,8 @@ public class PlayerAction {
     @Autowired
     private ChatDomainService chatDomainService;
 
+    @Autowired
+    private MinioClient minioClient;
 
     /**
      * 添加玩家
@@ -306,6 +313,11 @@ public class PlayerAction {
                             player.setDayTotalEarn(countData.getEarnPoints());
                         }
                     }
+                    // 获取对象的InputStream
+                    InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                    // 将图像转换为Base64编码
+                    String base64Image = convertToBase64(inputStream);
+                    player.setHeadimg("data:image/jpeg;base64,"+base64Image);
                 }
             }
 
