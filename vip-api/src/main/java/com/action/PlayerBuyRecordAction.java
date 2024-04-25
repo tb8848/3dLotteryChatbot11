@@ -91,11 +91,13 @@ public class PlayerBuyRecordAction {
                     item.setPlayer(player);
                 }else{
                     Player p = playerService.getById(item.getPlayerId());
-                    // 获取对象的InputStream
-                    InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
-                    // 将图像转换为Base64编码
-                    String base64Image = convertToBase64(inputStream);
-                    p.setHeadimg("data:image/jpeg;base64,"+base64Image);
+                    if (StringUtil.isNotNull(p.getHeadimg())){
+                        // 获取对象的InputStream
+                        InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                        // 将图像转换为Base64编码
+                        String base64Image = convertToBase64(inputStream);
+                        p.setHeadimg("data:image/jpeg;base64,"+base64Image);
+                    }
                     item.setPlayer(p);
                 }
             }

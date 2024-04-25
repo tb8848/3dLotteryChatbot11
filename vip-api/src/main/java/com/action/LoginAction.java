@@ -352,8 +352,9 @@ public class LoginAction {
     @NoLogin
     @GetMapping(value = "/chooseImg")
     public ResponseBean chooseImg() throws Exception {
+        String img = (String) botUserService.chooseImg().get("base64");
 
-        return new ResponseBean(0,0,"",botUserService.chooseImg(),true);
+        return new ResponseBean(0,0,"",img,true);
 //        Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder().bucket("3d-robot-img").build());
 //        List<Item> list = new ArrayList<>();
 //        results.forEach(itemResult -> {

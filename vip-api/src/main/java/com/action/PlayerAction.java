@@ -313,11 +313,13 @@ public class PlayerAction {
                             player.setDayTotalEarn(countData.getEarnPoints());
                         }
                     }
-                    // 获取对象的InputStream
-                    InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
-                    // 将图像转换为Base64编码
-                    String base64Image = convertToBase64(inputStream);
-                    player.setHeadimg("data:image/jpeg;base64,"+base64Image);
+                    if (StringUtil.isNotNull(player.getHeadimg())){
+                        // 获取对象的InputStream
+                        InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                        // 将图像转换为Base64编码
+                        String base64Image = convertToBase64(inputStream);
+                        player.setHeadimg("data:image/jpeg;base64,"+base64Image);
+                    }
                 }
             }
 

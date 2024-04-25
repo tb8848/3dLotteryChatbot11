@@ -221,11 +221,13 @@ public class PlayerFixedBuyAction {
             if (player != null){
                 playerFixedBuy.setPlayerName(player.getNickname());
 //                playerFixedBuy.setPlayerHeadImg(player.getHeadimg());
-                // 获取对象的InputStream
-                InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
-                // 将图像转换为Base64编码
-                String base64Image = convertToBase64(inputStream);
-                playerFixedBuy.setPlayerHeadImg("data:image/jpeg;base64,"+base64Image);
+                if (StringUtil.isNotNull(player.getHeadimg())){
+                    // 获取对象的InputStream
+                    InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                    // 将图像转换为Base64编码
+                    String base64Image = convertToBase64(inputStream);
+                    playerFixedBuy.setPlayerHeadImg("data:image/jpeg;base64,"+base64Image);
+                }
             }
         }
         return new ResponseBean(0,iPage.getTotal(),"",iPage.getRecords());
