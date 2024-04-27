@@ -221,7 +221,19 @@ public class PlayerAction {
 
         try{
             IPage<Player> pageData = playerService.getBlackListByPager(uid,pageNo,pageSize);
-            return new ResponseBean(0,pageData.getTotal(),"",pageData.getRecords());//用户名或密码为空
+            List<Player> dataList = pageData.getRecords();
+            if(!dataList.isEmpty()) {
+                for (Player player : dataList) {
+                    if (StringUtil.isNotNull(player.getHeadimg()) && player.getUserType() != 2){
+                        // 获取对象的InputStream
+                        InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                        // 将图像转换为Base64编码
+                        String base64Image = convertToBase64(inputStream);
+                        player.setHeadimg("data:image/jpeg;base64,"+base64Image);
+                    }
+                }
+            }
+            return new ResponseBean(0,pageData.getTotal(),"",dataList);//用户名或密码为空
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseBean(500, 0, "系统繁忙", null,true);
@@ -313,7 +325,7 @@ public class PlayerAction {
                             player.setDayTotalEarn(countData.getEarnPoints());
                         }
                     }
-                    if (StringUtil.isNotNull(player.getHeadimg())){
+                    if (StringUtil.isNotNull(player.getHeadimg()) && player.getUserType() != 2){
                         // 获取对象的InputStream
                         InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
                         // 将图像转换为Base64编码
@@ -566,7 +578,15 @@ public class PlayerAction {
             resultMap.put("lotteryType",player.getLotteryType());
             resultMap.put("nickname",player.getNickname());
             resultMap.put("points",player.getPoints());
-            resultMap.put("headimg",player.getHeadimg());
+            if (StringUtil.isNotNull(player.getHeadimg()) && player.getUserType() != 2){
+                // 获取对象的InputStream
+                InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                // 将图像转换为Base64编码
+                String base64Image = convertToBase64(inputStream);
+                resultMap.put("headimg","data:image/jpeg;base64,"+base64Image);
+            }else{
+                resultMap.put("headimg",player.getHeadimg());
+            }
             resultMap.put("kxOpen",botUserSetting.getKuaixuanEnable());
             return new ResponseBean(0, 0, "", resultMap);
 

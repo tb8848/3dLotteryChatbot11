@@ -298,7 +298,8 @@
                                 </tr>
                                 <tr class="fixed-input tc" v-show="(lotteryMethodId==2 || lotteryMethodId==3 || lotteryMethodId==4)">
 
-                                    <td colspan="4">号码:<input type="input" v-model="ncode" @keyup="limitRepeatNums(this,'ncode',0)"></td>
+                                    <td colspan="4" v-show="lotteryMethodId==3">号码:<input type="input" v-model="ncode" @keyup="limitRepeatNumsV2()"></td>
+                                    <td colspan="4" v-show="(lotteryMethodId==2 || lotteryMethodId==4)">号码:<input type="input" v-model="ncode" @keyup="limitRepeatNums(this,'ncode',0)"></td>
 
                                 </tr>
                             </table>
@@ -1314,6 +1315,8 @@
                             layer.alert("请至少输入2个号码");
                             return;
                         }
+                        var code = this.delSameNum(this.ncode);
+                        len = code.length;
                     }else if(this.lotteryMethodId=="4"){
                         var prefix = "组六";
                         if(len<3){
@@ -1666,6 +1669,9 @@
                 v = v.replace(/[^0-9]/g, "");
                 return v;
             },
+            limitRepeatNumsV2() {
+                this.rules.codes = this.ncode;
+            },
             limitRepeatNums(t,ruleTypeName,itemIdx) {
                 switch (ruleTypeName) {
                     case 'ncode':
@@ -1748,7 +1754,7 @@
                 var ls6 = [4,5,6,7,8,9,10,11];
                 var ls1 = [1,2,3,4,5,6,7,8];
                 var toPageName="";
-                console.log("======this.codeList=====",this.codesList);
+                // console.log("======this.codeList=====",this.codesList);
                 if(this.codesList.length>0){
                     for(var i=0;i<this.codesList.length;i++){
                         var code = this.codesList[i];
@@ -1785,7 +1791,9 @@
 
                         if(this.lotteryMethodId=="3" && this.buyMethod==1){
                             toPageName = "z3"
-                            var numLen = code.length;
+                            var z3code = this.delSameNum(code);
+                            var numLen = z3code.length;
+                            // var numLen = code.length;
                             var typeId = ls3[numLen-2];
                             var buyDesc = "";
                             if(numLen==10){
@@ -1803,8 +1811,8 @@
                                 shi:"",
                                 ge:"",
                                 buyAmount:1,
-                                lmId:100,
-                                lsTypeId:typeId,
+                                lmId:3,
+                                lsTypeId:1,
                                 buyMoney:this.buyMoney,
                                 codeList:[zuValue],
                                 buyDesc:buyDesc,

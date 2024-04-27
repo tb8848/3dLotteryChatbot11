@@ -558,7 +558,12 @@
                     $("#formsendmsg").show();
                     roomId = res.data.userId;
                     playerId = res.data.playerId;
-                    headimg = res.data.headimg;
+                    var touxiang = res.data.headimg;
+                    if(touxiang=="" || touxiang==null || touxiang==undefined){
+                        headimg = "img/logo.png"
+                    }else{
+                        headimg = res.data.headimg;
+                    }
                     nickname = res.data.nickname;
                     leftPoints = res.data.points;
                     lottype = res.data.lotteryType;
@@ -1380,7 +1385,6 @@
 
 
     function betFast(selectList,buyDescArr) {
-
         var lotName = selectLotType==2?'P3':'3D';
         var msg  = "";
         buyDescArr.forEach((item,idx)=>{
