@@ -578,12 +578,14 @@ public class PlayerAction {
             resultMap.put("lotteryType",player.getLotteryType());
             resultMap.put("nickname",player.getNickname());
             resultMap.put("points",player.getPoints());
+            resultMap.put("userType",player.getUserType());
             if (StringUtil.isNotNull(player.getHeadimg()) && player.getUserType() != 2){
                 // 获取对象的InputStream
                 InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
                 // 将图像转换为Base64编码
                 String base64Image = convertToBase64(inputStream);
                 resultMap.put("headimg","data:image/jpeg;base64,"+base64Image);
+                resultMap.put("url",player.getHeadimg());
             }else{
                 resultMap.put("headimg",player.getHeadimg());
             }

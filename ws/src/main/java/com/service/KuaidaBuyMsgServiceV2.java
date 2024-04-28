@@ -682,7 +682,12 @@ public class KuaidaBuyMsgServiceV2 {
                 resMap.put("errmsg","组三号码格式错误:"+codeRule);
                 return resMap;
             }
-            String buyDesc = lsName+"(组):"+newValue + "[" + 1 + "注]";
+            String buyDesc = "";
+            if (lmId.equals("3")){
+                buyDesc = "组三组选"+"(组):"+newValue + "[" + 1 + "注]";
+            }else{
+                buyDesc = lsName+"(组):"+newValue + "[" + 1 + "注]";
+            }
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
             oneRecord.setBuyCode(newValue);
@@ -1413,7 +1418,7 @@ public class KuaidaBuyMsgServiceV2 {
                 resMap.put("errmsg","组三号码格式错误:"+codeRule);
                 return resMap;
             }
-            String buyDesc = lsName+"(组):"+codeRule + "[" + 1 + "注]";
+            String buyDesc = "组三组选"+"(组):"+codeRule + "[" + 1 + "注]";
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
             oneRecord.setBuyCode(codeRule);

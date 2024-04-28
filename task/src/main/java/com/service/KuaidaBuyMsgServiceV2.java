@@ -2955,7 +2955,12 @@ public class KuaidaBuyMsgServiceV2 {
                 resMap.put("errmsg","组三号码格式错误:"+codeRule);
                 return resMap;
             }
-            String buyDesc = lsName+"(组):"+newValue + "[" + 1 + "注]";
+            String buyDesc = "";
+            if (lmId.equals("3")){
+                buyDesc = "组三组选"+"(组):"+newValue + "[" + 1 + "注]";
+            }else{
+                buyDesc = lsName+"(组):"+newValue + "[" + 1 + "注]";
+            }
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
             oneRecord.setBuyCode(newValue);
@@ -3782,17 +3787,17 @@ public class KuaidaBuyMsgServiceV2 {
                 resMap.put("errmsg","组三号码格式错误:"+codeRule);
                 return resMap;
             }
-            String buyDesc = lsName+"(组):"+bai + "[" + 1 + "注]";
+            String buyDesc = "组三组选"+"(组):"+newValue + "[" + 1 + "注]";
             BuyRecord3DVO oneRecord = new BuyRecord3DVO();
             oneRecord.setHuizongName(buyDesc);
-            oneRecord.setBuyCode(bai);
+            oneRecord.setBuyCode(newValue);
             oneRecord.setBuyAmount(1);
-            oneRecord.setValue(bai);
+            oneRecord.setValue(newValue);
             oneRecord.setLmId(lmId);
             oneRecord.setLsTypeId(ls.getTypeId()+"");
             oneRecord.setBuyMoney(buyMoney);
             oneRecord.setBuyDesc(buyDesc);
-            oneRecord.setCodeList(Lists.newArrayList(bai));
+            oneRecord.setCodeList(Lists.newArrayList(newValue));
             list.add(oneRecord);
         }
         resMap.put("list",list);
