@@ -1,9 +1,12 @@
 package com.action;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.beans.*;
+import com.beans.Dictionary;
 import com.config.NoLogin;
+import com.dao.DictionaryDAO;
 import com.model.res.ReportRes;
 import com.service.*;
 import com.util.JwtUtil;
@@ -51,6 +54,9 @@ public class PlayerAction {
 
     @Autowired
     private MinioClient minioClient;
+
+    @Autowired
+    private DictionaryDAO dictionaryDAO;
 
     /**
      * 添加玩家
@@ -578,14 +584,18 @@ public class PlayerAction {
             resultMap.put("lotteryType",player.getLotteryType());
             resultMap.put("nickname",player.getNickname());
             resultMap.put("points",player.getPoints());
-            resultMap.put("userType",player.getUserType());
             if (StringUtil.isNotNull(player.getHeadimg()) && player.getUserType() != 2){
+                List<Dictionary> dicList = dictionaryDAO.selectList(new QueryWrapper<Dictionary>().eq("code","MinioUrl").eq("type","system"));
+                if (dicList.size() > 0){
+                    Dictionary dictionary = dicList.get(0);
+                    String icon = dictionary.getValue()+"/3d-robot-img/"+player.getHeadimg();
+                    resultMap.put("headimg",icon);
+                }
                 // 获取对象的InputStream
-                InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+//                InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
                 // 将图像转换为Base64编码
-                String base64Image = convertToBase64(inputStream);
-                resultMap.put("headimg","data:image/jpeg;base64,"+base64Image);
-                resultMap.put("url",player.getHeadimg());
+//                String base64Image = convertToBase64(inputStream);
+//                resultMap.put("headimg","data:image/jpeg;base64,"+base64Image);
             }else{
                 resultMap.put("headimg",player.getHeadimg());
             }

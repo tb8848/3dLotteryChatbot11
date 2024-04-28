@@ -519,7 +519,6 @@
     var playerId = "";
     var nickname = '';
     var headimg = '';
-    var touxiang = '';
     var roomId = "";
     var leftPoints = 0;
     var kxrules = "";
@@ -559,17 +558,11 @@
                     $("#formsendmsg").show();
                     roomId = res.data.userId;
                     playerId = res.data.playerId;
+                    var touxiang = res.data.headimg;
                     if(touxiang=="" || touxiang==null || touxiang==undefined){
                         headimg = "img/logo.png";
-                        touxiang = headimg;
                     }else{
-                        if(res.data.userType != 2){
-                            headimg = res.data.headimg;
-                            touxiang = res.data.url;
-                        }else{
-                            headimg = res.data.headimg;
-                            touxiang = res.data.headimg;
-                        }
+                        headimg = res.data.headimg;
                     }
                     nickname = res.data.nickname;
                     leftPoints = res.data.points;
@@ -1029,7 +1022,7 @@
        if(txtmsg!=""){
            sendMsg({
                toUserId:roomId,
-               fromUserImg:touxiang,
+               fromUserImg:headimg,
                fromUserNick:nickname,
                fromUserId:playerId,
                fromUserType:0,
