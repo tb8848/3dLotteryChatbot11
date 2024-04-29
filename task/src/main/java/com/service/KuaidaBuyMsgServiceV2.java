@@ -1161,6 +1161,24 @@ public class KuaidaBuyMsgServiceV2 {
                                 zu3List.addAll(zu6List);
                                 resMap.put("list",zu3List);
                                 break;
+                            case "组":
+                                String[] multiArrr = code.split("\\.|,|，|/| |-");
+                                List<BuyRecord3DVO> hmLists = Lists.newArrayList();
+                                for(String ss : multiArrr) {
+                                    if (StringUtil.hasDuplicateChar(ss)) {
+                                        Map<String,Object> z3Map = Maps.newHashMap();
+                                        z3Map = zzBuy(buyMoney, ss, "3");
+                                        List<BuyRecord3DVO> z3Lists = (List<BuyRecord3DVO>) z3Map.get("list");
+                                        hmLists.addAll(z3Lists);
+                                    }else{
+                                        Map<String,Object> z6Map = Maps.newHashMap();
+                                        z6Map = z6Buy(botUser, player, buyMoney, ss, "4");
+                                        List<BuyRecord3DVO> z6Lists = (List<BuyRecord3DVO>) z6Map.get("list");
+                                        hmLists.addAll(z6Lists);
+                                    }
+                                }
+                                resMap.put("list",hmLists);
+                                break;
                             case "直组":
                                 String[] multiArr = code.split("\\.|,|，|/| |-");
                                 List<BuyRecord3DVO> hmList = Lists.newArrayList();
@@ -2696,6 +2714,24 @@ public class KuaidaBuyMsgServiceV2 {
                                 List<BuyRecord3DVO> zu6List = (List<BuyRecord3DVO>) zu6.get("list");
                                 zu3List.addAll(zu6List);
                                 resMap.put("list",zu3List);
+                                break;
+                            case "组":
+                                String[] multiArrr = code.split("\\.|,|，|/| |-");
+                                List<BuyRecord3DVO> hmLists = Lists.newArrayList();
+                                for(String ss : multiArrr) {
+                                    if (StringUtil.hasDuplicateChar(ss)) {
+                                        Map<String,Object> z3Map = Maps.newHashMap();
+                                        z3Map = zzBuy(buyMoney, ss, "3");
+                                        List<BuyRecord3DVO> z3Lists = (List<BuyRecord3DVO>) z3Map.get("list");
+                                        hmLists.addAll(z3Lists);
+                                    }else{
+                                        Map<String,Object> z6Map = Maps.newHashMap();
+                                        z6Map = z6Buy(botUser, player, buyMoney, ss, "4");
+                                        List<BuyRecord3DVO> z6Lists = (List<BuyRecord3DVO>) z6Map.get("list");
+                                        hmLists.addAll(z6Lists);
+                                    }
+                                }
+                                resMap.put("list",hmLists);
                                 break;
                             case "直组":
                                 String[] multiArr = code.split("\\.|,|，|/| |-");
