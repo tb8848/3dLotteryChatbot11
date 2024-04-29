@@ -10,12 +10,17 @@ import com.service.PlayerPointsRecordService;
 import com.service.PlayerService;
 import com.util.JwtUtil;
 import com.util.StringUtil;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+
+import static com.util.StringUtil.convertToBase64;
 
 @RestController
 @RequestMapping(value = "/bot/player/points")
@@ -32,6 +37,9 @@ public class PlayerPointsRecordAction {
 
     @Autowired
     private BotUserService botUserService;
+
+    @Autowired
+    private MinioClient minioClient;
 
     /**
      * 上下分记录
@@ -152,7 +160,7 @@ public class PlayerPointsRecordAction {
      * @return
      */
     @PostMapping(value = "/getAllAuditPointsRecord")
-    public ResponseBean getAllAuditPointsRecord(@RequestHeader(value = "token")String token){
+    public ResponseBean getAllAuditPointsRecord(@RequestHeader(value = "token")String token) throws Exception {
         String uid = JwtUtil.getUsername(token);
         if(StringUtil.isNull(uid)){
             return new ResponseBean(403,0,"请重新登录",null,true);
@@ -167,6 +175,13 @@ public class PlayerPointsRecordAction {
         List<PlayerPointsRecord> pointsRecords = playerPointsRecordService.list(new QueryWrapper<PlayerPointsRecord>().eq("authStatus",0).eq("botUserId",uid));
         for (PlayerPointsRecord playerPointsRecord : pointsRecords){
             Player player = playerService.getById(playerPointsRecord.getPlayerId());
+            if (StringUtil.isNotNull(player.getHeadimg()) && player.getUserType() != 2){
+                // 获取对象的InputStream
+                InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                // 将图像转换为Base64编码
+                String base64Image = convertToBase64(inputStream);
+                player.setHeadimg("data:image/jpeg;base64,"+base64Image);
+            }
             playerPointsRecord.setPlayer(player);
         }
         return new ResponseBean(200,"查询成功",pointsRecords,true);
