@@ -379,6 +379,9 @@ public class KuaidaBuyMsgServiceV2 {
                                 String[] multiArrr = code.split("\\.|,|，|/| |-");
                                 List<BuyRecord3DVO> hmLists = Lists.newArrayList();
                                 for(String ss : multiArrr) {
+                                    if (StringUtil.isNull(ss)) {
+                                        continue;
+                                    }
                                     if (StringUtil.hasDuplicateChar(ss)) {
                                         Map<String,Object> z3Map = Maps.newHashMap();
                                         z3Map = zzBuy(buyMoney, ss, "3");

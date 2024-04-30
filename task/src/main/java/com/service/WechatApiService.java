@@ -451,7 +451,7 @@ public class WechatApiService{
             handleCommonMsgGroup(botUser,text,player,groupName,wxNick);
         }else{
             Boolean checkTxtResult = true;
-            String[] multiArr = text.split("\n");
+            String[] multiArr = text.split("\n|\r");
             //System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
             Integer drawId = null;
             for(String cmdText : multiArr){
@@ -512,6 +512,27 @@ public class WechatApiService{
                 List<String> msgId = new ArrayList<>();
                 List<Integer> xzCount = new ArrayList<>();
                 List<BigDecimal> xzPoints = new ArrayList<>();
+
+                if (multiArr.length > 1){
+                    boolean aaa = true;
+                    for(String cmdText : multiArr){
+                        boolean bbb = true;
+                        for(String word : GlobalConst.keywords5) {
+                            if (cmdText.startsWith(word) || cmdText.contains(word)) {
+                                bbb = false;
+                                break;
+                            }
+                        }
+                        if (bbb){
+                            aaa = false;
+                            break;
+                        }
+                    }
+                    if (!aaa){
+                        text = text.replaceAll("\n|\r", " ");
+                        multiArr = text.split("\n|\r");
+                    }
+                }
 
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();
@@ -1354,7 +1375,7 @@ public class WechatApiService{
         }else{
             Integer drawId = null;
             Boolean checkTxtResult = true;
-            String[] multiArr = text.split("\n");
+            String[] multiArr = text.split("\n|\r");
             //System.out.println("=====multi group wx=="+ Arrays.stream(multiArr).collect(Collectors.joining(",")));
             for(String cmdText : multiArr){
                 if(cmdText.toUpperCase().startsWith("P3") || cmdText.toUpperCase().startsWith("3D")
@@ -1414,6 +1435,27 @@ public class WechatApiService{
                 List<String> msgId = new ArrayList<>();
                 List<Integer> xzCount = new ArrayList<>();
                 List<BigDecimal> xzPoints = new ArrayList<>();
+
+                if (multiArr.length > 1){
+                    boolean aaa = true;
+                    for(String cmdText : multiArr){
+                        boolean bbb = true;
+                        for(String word : GlobalConst.keywords5) {
+                            if (cmdText.startsWith(word) || cmdText.contains(word)) {
+                                bbb = false;
+                                break;
+                            }
+                        }
+                        if (bbb){
+                            aaa = false;
+                            break;
+                        }
+                    }
+                    if (!aaa){
+                        text = text.replaceAll("\n|\r", " ");
+                        multiArr = text.split("\n|\r");
+                    }
+                }
 
                 for(String cmdText : multiArr){
                     String text1 = cmdText.toUpperCase();

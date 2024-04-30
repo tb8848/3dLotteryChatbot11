@@ -237,7 +237,9 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
                     }
                 }
 
-                if ((content.contains("3D") && content.contains("P3")) || (content.contains("福") && content.contains("体"))){
+                String text = msg.getMsg().toUpperCase();
+                String[] multiArr = text.split("\n|\r");
+                if ((content.contains("3D") && content.contains("P3") && multiArr.length == 1) || (content.contains("福") && content.contains("体") && multiArr.length == 1)){
                     String fcContent = content.replaceAll("P3","").replaceAll("体","");
                     String tcContent = content.replaceAll("3D","").replaceAll("福","");
                     String[] cp = new String[]{fcContent,tcContent};
@@ -275,8 +277,39 @@ public class ChatRoomMsgService extends ServiceImpl<ChatRoomMsgDAO, ChatRoomMsg>
         }
 
         String text = msg.getMsg().toUpperCase();
+//        text = text.replaceAll("\n|\r", " ");
         Boolean checkTxtResult = true;
         String[] multiArr = text.split("\n|\r");
+//        String[] multiArr = new String[]{};
+//        if (text.contains("福体") || text.contains("体福") || text.contains("P33D") || text.contains("3DP3")) {
+//            multiArr = text.split("福体|体福|3DP3|P33D");
+//        }else {
+//            if ((text.contains("福") && text.contains("体") || (text.contains("P3") && text.contains("3D")))) {
+//                multiArr = text.split("福|体|P3|3D");
+//            }
+//
+//        }
+        if (multiArr.length > 1){
+            boolean aaa = true;
+            for(String cmdText : multiArr){
+                boolean bbb = true;
+                for(String word : GlobalConst.keywords5) {
+                    if (cmdText.startsWith(word) || cmdText.contains(word)) {
+                        bbb = false;
+                        break;
+                    }
+                }
+                if (bbb){
+                    aaa = false;
+                    break;
+                }
+            }
+            if (!aaa){
+                text = text.replaceAll("\n|\r", " ");
+                multiArr = text.split("\n|\r");
+            }
+        }
+
         for(String cmdText : multiArr){
             if(StringUtils.isNullOrEmpty(cmdText)){
                 continue;
