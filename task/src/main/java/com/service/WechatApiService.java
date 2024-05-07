@@ -1026,7 +1026,7 @@ public class WechatApiService{
         httpRequest.body(JSON.toJSONString(reqData));
         HttpResponse httpResponse = httpRequest.execute();
         String result = httpResponse.body();
-//        logger.info(">>>>>>Friend/GetContractDetail>>>>>>"+result);
+        logger.info(">>>>>>Friend/GetContractDetail100>>>>>>"+result);
         RespData respData = JSONObject.parseObject(result,RespData.class);
         if(respData.getCode()==0){
             Map<String,Object> datas =  respData.getData();

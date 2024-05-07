@@ -288,7 +288,7 @@ public class KuaidaBuyMsgServiceV2 {
                         }else{
                             code=typeArr[1];
                         }
-                        String[] splitArr = code.split("\\.|,|，|/| |-");
+                        String[] splitArr = code.split("\\.|,|，|/| |-|。|、");
                         for(String r : splitArr){
                             if(StringUtils.isNullOrEmpty(r)){
 
@@ -317,7 +317,7 @@ public class KuaidaBuyMsgServiceV2 {
 
                         if(!code.contains(",") && !code.contains("，") && !code.contains(".") && !code.contains("XX") && !code.contains("**") &&
                                 !code.contains("X") && !code.contains("*") && !type.equals("直组") && !StringUtil.checkCodeFormat(code) &&
-                                !code.contains(" ") && !code.contains("/") && !code.contains("-")){
+                                !code.contains(" ") && !code.contains("/") && !code.contains("-") && !code.contains("。") && !code.contains("、")){
                                 toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
                                 toMsg.setSource(0);
                                 dataDao.insert(toMsg);
@@ -376,7 +376,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 resMap.put("list",zu3List);
                                 break;
                             case "组":
-                                String[] multiArrr = code.split("\\.|,|，|/| |-");
+                                String[] multiArrr = code.split("\\.|,|，|/| |-|。|、");
                                 List<BuyRecord3DVO> hmLists = Lists.newArrayList();
                                 for(String ss : multiArrr) {
                                     if (StringUtil.isNull(ss)) {
@@ -397,7 +397,7 @@ public class KuaidaBuyMsgServiceV2 {
                                 resMap.put("list",hmLists);
                                 break;
                             case "直组":
-                                String[] multiArr = code.split("\\.|,|，|/| |-");
+                                String[] multiArr = code.split("\\.|,|，|/| |-|。|、");
                                 List<BuyRecord3DVO> hmList = Lists.newArrayList();
                                 for(String ss : multiArr){
                                     if (StringUtil.hasDuplicateChar(ss)){
@@ -628,7 +628,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] multiArr = codeRule.split("\\.|,|，|/| |-");
+        String[] multiArr = codeRule.split("\\.|,|，|/| |-|。|、");
         for(String ss : multiArr){
             if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
                 continue;
@@ -677,7 +677,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] multiArr = codeRule.split(",|，");
+        String[] multiArr = codeRule.split("\\.|,|，|/| |-|。|、");
         for(String ss : multiArr){
             if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
                 continue;
@@ -731,7 +731,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] multiArr = codeRule.split(",|，");
+        String[] multiArr = codeRule.split("\\.|,|，|/| |-|。|、");
         for(String ss : multiArr){
             if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
                 continue;
@@ -779,7 +779,7 @@ public class KuaidaBuyMsgServiceV2 {
     private Map<String,Object> codeBuy(BotUser botUser, Player player, BigDecimal buyMoney, String codeRule, String lmId) {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] codeArr = codeRule.split("\\.|,|，|/| |-");
+        String[] codeArr = codeRule.split("\\.|,|，|/| |-|。|、");
         if(codeArr.length==0){
             resMap.put("errmsg","号码格式错误");
             return resMap;
@@ -1187,7 +1187,7 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         String newValue = codeRule.replaceAll("[^0-9,，]","");
-        String[] hzArr = newValue.split(",|，");
+        String[] hzArr = newValue.split("\\.|,|，|/| |-|。|、");
         Set<String> nums = Arrays.asList(hzArr).stream().collect(Collectors.toSet());
         List<String> hzList = Lists.newArrayList();
         List<String> valueList = Lists.newArrayList();
@@ -1228,7 +1228,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<BuyRecord3DVO> list = Lists.newArrayList();
         boolean hasError = false;
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             int num = 0;
             for (String arr : splitArr) {
                 //删除数字之外的任何字符
@@ -1315,7 +1315,7 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             int num = 0;
             for (String arr : splitArr) {
                 //codeRule = codeRule.replace("/[^[0-9]/g","");
@@ -1410,7 +1410,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<LotterySetting> lsList = lotterySettingService.getListBy(lmId);
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] multiArr = codeRule.split(",|，");
+        String[] multiArr = codeRule.split("\\.|,|，|/| |-|。|、");
         for(String ss : multiArr){
             if(StringUtil.isNull(ss) || StringUtils.isNullOrEmpty(ss)){
                 continue;
@@ -1491,7 +1491,7 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             int num = 0;
             for (String arr : splitArr) {
                 //删除数字之外的任何字符
@@ -1589,7 +1589,7 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             int num = 0;
             for (String arr : splitArr) {
                 String[] numArr = arr.split("拖");
@@ -1762,7 +1762,7 @@ public class KuaidaBuyMsgServiceV2 {
     public  Map<String,Object> z3hzBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] numArr = codeRule.split(",|，");
+        String[] numArr = codeRule.split("\\.|,|，|/| |-|。|、");
         Set<String> hzSet = Arrays.asList(numArr).stream().collect(Collectors.toSet());
         if(hzSet.size()==0){
             resMap.put("errmsg","号码格式不正确");
@@ -1808,7 +1808,7 @@ public class KuaidaBuyMsgServiceV2 {
         String lmName = "";
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] arr = codeRule.split(",|，");
+        String[] arr = codeRule.split("\\.|,|，|/| |-|。|、");
         if(arr.length<2){
             resMap.put("errmsg","号码格式错误："+codeRule);
             return resMap;
@@ -1864,7 +1864,7 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             int num = 0;
             for (String arr : splitArr) {
                 String[] numArr = arr.split("拖");
@@ -2028,7 +2028,7 @@ public class KuaidaBuyMsgServiceV2 {
     public Map<String,Object> z6hzBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] numArr = codeRule.split(",|，");
+        String[] numArr = codeRule.split("\\.|,|，|/| |-|。|、");
         if(numArr.length==0){
             resMap.put("errmsg","号码格式不正确");
             return resMap;
@@ -2067,7 +2067,7 @@ public class KuaidaBuyMsgServiceV2 {
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             int num = 0;
             for (String arr : splitArr) {
                 String newValue  = arr.replaceAll("[^0-9]","");
@@ -2145,7 +2145,7 @@ public class KuaidaBuyMsgServiceV2 {
     public Map<String,Object> hsBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         Map<String,Object> resMap = Maps.newHashMap();
         List<BuyRecord3DVO> list = Lists.newArrayList();
-        String[] numArr = codeRule.split(",|，");
+        String[] numArr = codeRule.split("\\.|,|，|/| |-|。|、");
         if(numArr.length==0){
             resMap.put("errmsg","号码格式错误："+codeRule);
             return resMap;
@@ -2270,7 +2270,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<BuyRecord3DVO> list = Lists.newArrayList();
         Map<String,Object> resultMap = new HashMap<>();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             for (String arr : splitArr) {
                 if (arr.contains("XX") || arr.contains("**")){
                     arr = "百"+arr.replaceAll("XX","").replaceAll("\\**","");
@@ -2429,7 +2429,7 @@ public class KuaidaBuyMsgServiceV2 {
         List<BuyRecord3DVO> list = Lists.newArrayList();
         Map<String,Object> resultMap = new HashMap<>();
         if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
-            String[] splitArr = codeRule.split("\\.|,|，|/| |-");
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
             for (String arr : splitArr) {
                 if (arr.contains("X") || arr.contains("*")) {
                     arr = arr.replaceAll("\\*", "X");
