@@ -155,6 +155,21 @@ public class WechatApiService{
                         scanSucc = true;
                         break;
                     }
+                    if(datas.containsKey("acctSectResp")){
+                        JSONObject object = (JSONObject)datas.get("acctSectResp");
+//                        System.out.println(object);
+                        String wxId = (String) object.get("userName"); //微信ID
+                        String imgUrl = (String) object.get("fsurl"); //微信头像
+                        String wxNick = (String) object.get("nickName"); //微信昵称
+                        botUser.setWxHeadimg(imgUrl);
+                        botUser.setWxId(wxId);
+                        botUser.setWxNick(wxNick);
+                        botUser.setWxStatus(1);
+                        botUser.setWxLoginTime(new Date());
+                        botUserDAO.updateWxInfo(botUser);
+                        scanSucc = true;
+                        break;
+                    }
 //                    if(datas.containsKey("acctSectResp")){
 //                        JSONObject object = (JSONObject)datas.get("acctSectResp");
 //                        String wxId = object.getString("userName"); //微信ID
