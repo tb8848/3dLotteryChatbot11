@@ -280,7 +280,7 @@ public class KuaidaBuyMsgServiceV2 {
                             return;
                         }
                         if (text.contains("百") && text.contains("十") && !text.contains("直") && !text.contains("一定") && !text.contains("二定") &&
-                                !text.contains("1D") && !text.contains("2D")){
+                                !text.contains("1D") && !text.contains("2D") && !text.contains("三定")){
                             code=text;
                         }else if (type.equals(".") || type.equals(",") || type.equals("，") || type.equals("XX") || type.equals("**") ||
                                 type.equals("X") || type.equals("*")){
@@ -338,10 +338,13 @@ public class KuaidaBuyMsgServiceV2 {
                             case "单选":
                                 resMap = codeBuy(botUser, player, buyMoney, code, "1");
                                 break;
+                            case "三定":
                             case "直选":
+                            case "普通直选":
                             case "直选普通":
                                 resMap = zxtxBuy(botUser, player, buyMoney, code, "1");
                                 break;
+//                            case "和值直选":
 //                            case "直选和值":
 //                                resMap = zxhzBuy(botUser, player, buyMoney, code, "1");
 //                                break;
@@ -356,7 +359,9 @@ public class KuaidaBuyMsgServiceV2 {
                             case "分笔组三":
                                 resMap = z3Buy(botUser, player, buyMoney, code, "3");
                                 break;
+                            case "组6组3":
                             case "组3组6":
+                            case "组六组三":
                             case "组三组六":
                                 Map<String,Object> zu3 = Maps.newHashMap();
                                 if(code.contains("拖")){
@@ -454,6 +459,7 @@ public class KuaidaBuyMsgServiceV2 {
                             case "双飞组三":
                                 resMap = z3SFBuy(botUser, player, buyMoney, code, "3");
                                 break;
+//                            case "和值组三":
 //                            case "组三和值":
 //                                resMap = z3hzBuy(botUser, player, buyMoney, code, "3");
 //                                break;
@@ -481,6 +487,7 @@ public class KuaidaBuyMsgServiceV2 {
                             case "双飞组六":
                                 resMap = z6SFBuy(botUser, player, buyMoney, code, "4");
                                 break;
+//                            case "和值组六":
 //                            case "组六和值":
 //                                resMap = z6hzBuy(botUser, player, buyMoney, code, "4");
 //                                break;

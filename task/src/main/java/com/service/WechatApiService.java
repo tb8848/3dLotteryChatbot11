@@ -1034,18 +1034,18 @@ public class WechatApiService{
             JSONObject contactObj = contactList.getJSONObject(0);
             JSONObject contact = contactObj.getJSONObject("contact");
 
-            JSONObject NickNameObj = contact.getJSONObject("nickName");
-            String nickname = NickNameObj.getString("string");
-
-            String headImgUrl = contact.getString("smallHeadImgUrl");
+//            JSONObject NickNameObj = contact.getJSONObject("nickName");
+//            String nickname = NickNameObj.getString("string");
+//
+//            String headImgUrl = contact.getString("smallHeadImgUrl");
 
 //            JSONArray contactList = (JSONArray) datas.get("ContactList");
 //            JSONObject contactObj = contactList.getJSONObject(0);
 //
-//            JSONObject NickNameObj = contactObj.getJSONObject("NickName");
-//            String nickname = NickNameObj.getString("string");
-//
-//            String headImgUrl = contactObj.getString("SmallHeadImgUrl");
+            JSONObject NickNameObj = contact.getJSONObject("NickName");
+            String nickname = NickNameObj.getString("string");
+
+            String headImgUrl = contact.getString("SmallHeadImgUrl");
             playerService.updateWxInfo(nickname,headImgUrl,player.getId());
 
         }
