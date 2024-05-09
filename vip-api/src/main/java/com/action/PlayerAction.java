@@ -467,9 +467,9 @@ public class PlayerAction {
 
             if(isUpdate){
                 playerService.updateById(player);
-                return new ResponseBean(0, 0, "", null);
             }
-            return new ResponseBean(-1,0,"操作失败",null,true);//用户名或密码为空
+            return new ResponseBean(0, 0, "", null);
+//            return new ResponseBean(-1,0,"操作失败",null,true);//用户名或密码为空
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseBean(500, 0, "系统繁忙", null,true);

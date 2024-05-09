@@ -217,12 +217,12 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
 
             if (drawBuyRecordDAO.batchAddBuyCode(buyList) > 0) {//批量插入
 
-                playerBuyRecordService.save(playerBuyRecord);
+//                playerBuyRecordService.save(playerBuyRecord);
                 //更新余额
-                playerService.updatePoint(uid, totalBuyMoney, false);
+//                playerService.updatePoint(uid, totalBuyMoney, false);
                 resultMap.put("errcode",0);
                 resultMap.put("errmsg", "0");
-                resultMap.put("playerBuyId", playerBuyRecord.getId());
+//                resultMap.put("playerBuyId", playerBuyRecord.getId());
                 return resultMap;
 
             } else {
@@ -550,13 +550,13 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
             }
 
             if (drawBuyRecordDAO.batchAddBuyCode(buyList) > 0) {//批量插入
-                playerBuyRecordService.save(playerBuyRecord);
+//                playerBuyRecordService.save(playerBuyRecord);
                 //更新余额
-                playerService.updatePoint(uid, totalBuyMoney, false);
+//                playerService.updatePoint(uid, totalBuyMoney, false);
 
                 resultMap.put("errcode",0);
                 resultMap.put("errmsg", "0");
-                resultMap.put("playerBuyId", playerBuyRecord.getId());
+//                resultMap.put("playerBuyId", playerBuyRecord.getId());
                 return resultMap;
 
             } else {
@@ -689,13 +689,13 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
             }
 
             if (drawBuyRecordDAO.batchAddBuyCode(buyList) > 0) {//批量插入
-                playerBuyRecordService.save(playerBuyRecord);
+//                playerBuyRecordService.save(playerBuyRecord);
                 //更新余额
-                playerService.updatePoint(uid, totalBuyMoney, false);
+//                playerService.updatePoint(uid, totalBuyMoney, false);
 
                 resultMap.put("errcode",0);
                 resultMap.put("errmsg", "0");
-                resultMap.put("playerBuyId", playerBuyRecord.getId());
+//                resultMap.put("playerBuyId", playerBuyRecord.getId());
                 return resultMap;
 
             } else {
@@ -860,13 +860,13 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
 
             if (drawBuyRecordDAO.batchAddBuyCode(buyList) > 0) {//批量插入
 
-                playerBuyRecordService.save(playerBuyRecord);
+//                playerBuyRecordService.save(playerBuyRecord);
                 //更新积分
-                playerService.updatePoint(uid, totalBuyMoney, false);
+//                playerService.updatePoint(uid, totalBuyMoney, false);
 
                 resultMap.put("errcode",0);
                 resultMap.put("errmsg", "0");
-                resultMap.put("playerBuyId", playerBuyRecord.getId());
+//                resultMap.put("playerBuyId", playerBuyRecord.getId());
                 return resultMap;
             } else {
                 resultMap.put("errcode", -1);
@@ -999,16 +999,25 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                             if(1==lsTypeInt){
                                 String huzongName = "直选";
                                 resultMap = zxtx1(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,huzongName,request,buyDesc,lotteryType);
+                                if(!resultMap.get("errcode").equals(0)){
+                                    return resultMap;
+                                }
                             }
                             if(2==lsTypeInt){
                                 String huizongName = "直选和值";
                                 resultMap = hz(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,huizongName,request,buyDesc,lotteryType);
+                                if(!resultMap.get("errcode").equals(0)){
+                                    return resultMap;
+                                }
                             }
                             break;
                         case 2:
                             //if(1==lsTypeInt){
                             String huzongName = "复式";
                             resultMap = zxtx1(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,huzongName,request,buyDesc,lotteryType);
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             //}
                             break;
                         case 3:
@@ -1020,6 +1029,9 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                                 String huizongName = "组三和值";
                                 resultMap = hz(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,huizongName,request,buyDesc,lotteryType);
                             }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 4:
                             if(1==typeFlag || 2==typeFlag || 4==typeFlag || 5==typeFlag){
@@ -1030,6 +1042,9 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                                 String huizongName = "组六和值";
                                 resultMap = hz(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,huizongName,request,buyDesc,lotteryType);
                             }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 8: //包选
                             if(1==lsTypeInt) {
@@ -1039,6 +1054,9 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                             if(2==lsTypeInt) {
                                 String huizongName = "包选六";
                                 resultMap = zxtx1(player, lotteryMethod, lotterySetting, lsDataList, draw, codesFrom, huizongName, request,buyDesc,lotteryType);
+                            }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
                             }
                             break;
                         case 6:
@@ -1051,6 +1069,9 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                                 String huizongName = "猜1D";
                                 resultMap = zxtx1(player, lotteryMethod, lotterySetting, lsDataList, draw, codesFrom, huizongName, request,buyDesc,lotteryType);
                             }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 7:
                             if(1==lsTypeInt) {
@@ -1061,11 +1082,17 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                                 String huizongName = "猜2D";
                                 resultMap = zxtx1(player, lotteryMethod, lotterySetting, lsDataList, draw, codesFrom, huizongName, request,buyDesc,lotteryType);
                             }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 12: //拖拉机
                             if(1==lsTypeInt){
                                 //
                                 resultMap = dxOrJoOrC3tOrTljV2(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,request,buyDesc,lotteryType);
+                            }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
                             }
                             break;
                         case 11: //猜三同
@@ -1073,11 +1100,17 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                                 //
                                 resultMap = dxOrJoOrC3tOrTljV2(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,request,buyDesc,lotteryType);
                             }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 10: //奇偶
                             if(1==lsTypeInt){
                                 //
                                 resultMap = dxOrJoOrC3tOrTljV2(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,request,buyDesc,lotteryType);
+                            }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
                             }
                             break;
                         case 9: //大小
@@ -1085,25 +1118,43 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                                 //
                                 resultMap = dxOrJoOrC3tOrTljV2(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,request,buyDesc,lotteryType);
                             }
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 5:
                             resultMap = hs(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,request,buyDesc,lotteryType);
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 13:
                             resultMap = hs(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,request,buyDesc,lotteryType);
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             //resultMap = hs(vipMember,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,request);
                             break;
                         case 14:
                             String huizongName = "独胆";
                             resultMap = hz(player,lotteryMethod,lotterySetting,lsDataList,draw,codesFrom,huizongName,request,buyDesc,lotteryType);
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 100:
                         case 200:
                             String hzName = lmIdInt==200?"组六N码":"组三N码";
                             resultMap = buyRecord3DNCodesService.z3z6Baozu(player,lotteryMethod,lotterySetting,lsDataList,draw,5,hzName,request,"",1);
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
                         case 300:
                             resultMap = buyRecord3DNCodesService.fushiBaozu(player,lotteryMethod,lotterySetting,lsDataList,draw,5,"复式N码",request,"",1);
+                            if(!resultMap.get("errcode").equals(0)){
+                                return resultMap;
+                            }
                             break;
 
                         default:
@@ -1113,7 +1164,7 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                             return resultMap;
                     }
 
-                    return resultMap;
+//                    return resultMap;
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -1126,6 +1177,42 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
                     }
                 }
             }
+        }
+        if(resultMap.get("errcode").equals(0)){
+            BigDecimal totalBuyMoney = codeList.stream().map(buyRecord3DVO -> buyRecord3DVO.getBuyMoney()).reduce(BigDecimal.ZERO, BigDecimal::add);
+            PlayerBuyRecord playerBuyRecord = new PlayerBuyRecord();
+            playerBuyRecord.setPlayerId(uid);
+            playerBuyRecord.setId(snowflake.nextIdStr());
+            playerBuyRecord.setBotUserId(player.getBotUserId());
+            playerBuyRecord.setBuyAmount(codeList.size());
+            playerBuyRecord.setBuyPoints(totalBuyMoney);
+            playerBuyRecord.setDrawNo(draw.getDrawId());
+            playerBuyRecord.setBuyTime(new Date());
+            playerBuyRecord.setBuyDesc(buyDesc);
+            int buyType = 2;
+            if(player.getUserType()==0){
+                buyType = 2;
+            }else{
+                if(player.getPretexting()==1){
+                    buyType = 2;
+                }else if(player.getReportNet()==1){
+                    buyType = 0;
+                }else if(player.getEatPrize()==1){
+                    buyType = 1;
+                }
+            }
+            playerBuyRecord.setBuyType(buyType);
+            playerBuyRecord.setBuyStatus(0);
+            playerBuyRecord.setEarnPoints(playerBuyRecord.getDrawPoints().subtract(playerBuyRecord.getBuyPoints()));
+            playerBuyRecord.setLotteryType(lotteryType);
+            if(codesFrom==-10){
+                //假人下注
+                playerBuyRecord.setBuyType(2);
+            }
+            playerBuyRecordService.save(playerBuyRecord);
+            playerService.updatePoint(uid, totalBuyMoney, false);
+            resultMap.put("playerBuyId", playerBuyRecord.getId());
+            return resultMap;
         }
         resultMap.put("errcode",-1);
         resultMap.put("errmsg","无效订单");
@@ -1273,13 +1360,13 @@ public class BuyRecord3DService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyRec
 
                 if (drawBuyRecordDAO.batchAddBuyCode(buyList) > 0) {//批量插入
 
-                    playerBuyRecordService.save(playerBuyRecord);
+//                    playerBuyRecordService.save(playerBuyRecord);
                     //更新余额
-                    playerService.updatePoint(player.getId(), totalBuyMoney, false);
+//                    playerService.updatePoint(player.getId(), totalBuyMoney, false);
 
                     resultMap.put("errcode",0);
                     resultMap.put("errmsg", "0");
-                    resultMap.put("playerBuyId", playerBuyRecord.getId());
+//                    resultMap.put("playerBuyId", playerBuyRecord.getId());
                     return resultMap;
                 } else {
                     resultMap.put("errcode", -1);

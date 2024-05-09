@@ -215,13 +215,13 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
             }
 
             if (drawBuyRecordDAO.batchAddBuyCode(buyList) > 0) {//批量插入
-                playerBuyRecordService.save(playerBuyRecord);
+//                playerBuyRecordService.save(playerBuyRecord);
                 //更新余额
-                playerService.updatePoint(uid, totalBuyMoney, false);
+//                playerService.updatePoint(uid, totalBuyMoney, false);
 
                 resultMap.put("errcode",0);
                 resultMap.put("errmsg", "0");
-                resultMap.put("playerBuyId", playerBuyRecord.getId());
+//                resultMap.put("playerBuyId", playerBuyRecord.getId());
                 return resultMap;
 
             } else {
@@ -352,13 +352,13 @@ public class BuyRecord3DNCodesService extends ServiceImpl<DrawBuyRecordDAO, Draw
             }
 
             if (drawBuyRecordDAO.batchAddBuyCode(buyList) > 0) {//批量插入
-                playerBuyRecordService.save(playerBuyRecord);
+//                playerBuyRecordService.save(playerBuyRecord);
                 //更新余额
-                playerService.updatePoint(uid, totalBuyMoney, false);
+//                playerService.updatePoint(uid, totalBuyMoney, false);
 
                 resultMap.put("errcode",0);
                 resultMap.put("errmsg", "0");
-                resultMap.put("playerBuyId", playerBuyRecord.getId());
+//                resultMap.put("playerBuyId", playerBuyRecord.getId());
                 return resultMap;
 
             } else {
