@@ -590,7 +590,7 @@
                         <tbody id="showselectnumber">
                         <tr id="noDataRow" v-show="openStatus!=1 || (openStatus==1 && isStopBuy==1)">
                             <td class="tc" style="height:200px;">
-                                <div class="f16 fb " id="openStatusDesc" style="height: 200;overflow-y: scroll">{{openStatusDesc}}</div>
+                                <div class="f16 fb " id="openStatusDesc" style="height: 200px;overflow-y: scroll">{{openStatusDesc}}</div>
                             </td>
                         </tr>
                         <tr id="showDataRow" v-show="openStatus==1 && isStopBuy==0">
@@ -1670,7 +1670,12 @@
                 return v;
             },
             limitRepeatNumsV2() {
-                this.rules.codes = this.ncode;
+                if(this.ncode.length > 3){
+                    this.ncode = this.delSameNum(this.ncode);
+                    this.rules.codes = this.ncode;
+                }else{
+                    this.rules.codes = this.ncode;
+                }
             },
             limitRepeatNums(t,ruleTypeName,itemIdx) {
                 switch (ruleTypeName) {
@@ -1791,8 +1796,16 @@
 
                         if(this.lotteryMethodId=="3" && this.buyMethod==1){
                             toPageName = "z3"
-                            var z3code = this.delSameNum(code);
-                            var numLen = z3code.length;
+                            var isRepeat = hasDuplicateChars(code);
+                            var numLen = 0;
+                            if (isRepeat && code.length == 3){
+                                var z3code = this.delSameNum(code);
+                                numLen = z3code.length;
+                            }else{
+                                numLen = code.length;
+                            }
+                            // var z3code = this.delSameNum(code);
+                            // var numLen = z3code.length;
                             // var numLen = code.length;
                             var typeId = ls3[numLen-2];
                             var buyDesc = "";
@@ -1811,8 +1824,8 @@
                                 shi:"",
                                 ge:"",
                                 buyAmount:1,
-                                lmId:3,
-                                lsTypeId:1,
+                                lmId:isRepeat ? 3 : 100,
+                                lsTypeId:isRepeat ? 1 : typeId,
                                 buyMoney:this.buyMoney,
                                 codeList:[zuValue],
                                 buyDesc:buyDesc,
