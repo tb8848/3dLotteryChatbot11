@@ -442,7 +442,7 @@ public class PlayerAction {
             }
 
             String headimg = playerParam.getHeadimg();
-            if(StringUtil.isNotNull(headimg) && !headimg.equals(player.getHeadimg())){
+            if(StringUtil.isNotNull(headimg) && !headimg.equals(player.getHeadimg()) && !headimg.contains("data:image/jpeg;base64,")){
                 isUpdate = true;
                 player.setHeadimg(headimg);
             }

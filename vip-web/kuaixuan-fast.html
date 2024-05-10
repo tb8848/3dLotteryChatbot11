@@ -1309,6 +1309,7 @@
                 if(this.buyMethod==1 && (this.lotteryMethodId=="2" || this.lotteryMethodId=="3" || this.lotteryMethodId=="4") ){
                     var len = this.ncode.length;
                     var prefix = "";
+                    var isRepeat = false;
                     if(this.lotteryMethodId=="3"){
                         var prefix = "组三";
                         if(len<2){
@@ -1317,6 +1318,7 @@
                         }
                         var code = this.delSameNum(this.ncode);
                         len = code.length;
+                        isRepeat = hasDuplicateChars(this.ncode);
                     }else if(this.lotteryMethodId=="4"){
                         var prefix = "组六";
                         if(len<3){
@@ -1338,7 +1340,7 @@
                     if(len==10){
                         buyDesc = prefix+"全包:"+this.ncode;
                     }else{
-                        buyDesc = prefix+changeDigitToChinese(len,"码")+":"+this.ncode;
+                        buyDesc = isRepeat ? '组三组选(组):'+this.ncode : prefix+changeDigitToChinese(len,"码")+":"+this.ncode;
                     }
                     //this.codesList = [this.ncode];
                     this.codesList.push(this.ncode);
@@ -1812,7 +1814,7 @@
                             if(numLen==10){
                                 buyDesc = "组三全包"
                             }else{
-                                buyDesc = '组三'+changeDigitToChinese(numLen,"码")
+                                buyDesc = isRepeat ? '组三组选' : '组三'+changeDigitToChinese(numLen,"码")
                             }
                             var zuValue = code;
                             buyDesc +=":"+zuValue;

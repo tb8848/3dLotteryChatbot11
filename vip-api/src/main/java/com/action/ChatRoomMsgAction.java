@@ -3,18 +3,12 @@ package com.action;
 import cn.hutool.core.date.DateUtil;
 import com.beans.BotUser;
 import com.beans.ChatRoomMsg;
-import com.beans.Player;
 import com.beans.ResponseBean;
 import com.config.NoLogin;
-import com.model.res.BillsRes;
-import com.service.BillsService;
 import com.service.BotUserService;
 import com.service.ChatRoomMsgService;
-import com.service.PlayerService;
-import com.util.JwtUtil;
 import com.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,14 +29,13 @@ public class ChatRoomMsgAction {
 
     /**
      * 加载历史消息
-     * @param token
      * @param endTime
      * @return
      * @throws ParseException
      */
     @NoLogin
     @RequestMapping(value = "listHistory")
-    public ResponseBean listHistory (@RequestHeader(value = "token")String token, String endTime,String roomId) throws ParseException {
+    public ResponseBean listHistory (String endTime,String roomId) {
 
         if(StringUtil.isNull(endTime) || StringUtil.isNull(roomId)){
             return new ResponseBean(-1,0,"缺少必填参数",null,true);
