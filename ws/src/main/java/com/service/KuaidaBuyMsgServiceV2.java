@@ -311,6 +311,15 @@ public class KuaidaBuyMsgServiceV2 {
 //                                        wechatApiService.sendMsg(player.getWxFriendId(), botUser.getWxId(), toMsg.getMsg());
                                     }
                                     return;
+                                }else if (type.equals("双飞") && r.length() != 2){
+                                    toMsg = createMsg(botUser, player, content+"\r\n号码格式错误");
+                                    toMsg.setSource(0);
+                                    dataDao.insert(toMsg);
+                                    simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                    if (player.getUserType() == 2 && StringUtil.isNotNull(botUser.getWxId())) {
+
+                                    }
+                                    return;
                                 }
                             }
                         }
@@ -491,6 +500,22 @@ public class KuaidaBuyMsgServiceV2 {
 //                            case "组六和值":
 //                                resMap = z6hzBuy(botUser, player, buyMoney, code, "4");
 //                                break;
+                            case "双飞":
+                                List<BuyRecord3DVO> sfList = Lists.newArrayList();
+                                String[] mulArr = code.split("\\.|,|，|/| |-|。|、");
+                                for(String ss : mulArr){
+                                    if (StringUtil.hasDuplicateChar(ss)){
+                                        Map<String,Object> sf = z3SFBuyNew(botUser, player, buyMoney, ss, "3");
+                                        List<BuyRecord3DVO> list = (List<BuyRecord3DVO>) sf.get("list");
+                                        sfList.addAll(list);
+                                    }else{
+                                        Map<String,Object> sf = z6SFBuyNew(botUser, player, buyMoney, ss, "4");
+                                        List<BuyRecord3DVO> list = (List<BuyRecord3DVO>) sf.get("list");
+                                        sfList.addAll(list);
+                                    }
+                                }
+                                resMap.put("list",sfList);
+                                break;
                             case "和":
                             case "和数":
                                 resMap = hsBuy(botUser, player, buyMoney, code, "5");
@@ -1314,7 +1339,70 @@ public class KuaidaBuyMsgServiceV2 {
         return resMap;
     }
 
+    //双飞组三
+    public Map<String,Object> z3SFBuyNew(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
+        Map<String,Object> resMap = Maps.newHashMap();
+        List<BuyRecord3DVO> list = Lists.newArrayList();
+        boolean hasError = false;
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
+            int num = 0;
+            for (String arr : splitArr) {
+                //删除数字之外的任何字符
+                //codeRule = codeRule.replace("/[^[0-9]/g","");
+                String newValue = arr.replaceAll("[^0-9]", "");
+                String[] numArr = newValue.split("");
+                List<String> codeList = new ArrayList<>();
+                codeList.add(arr);
+                num = num + codeList.size();
+            }
+            for (String arr : splitArr) {
+                //删除数字之外的任何字符
+                //codeRule = codeRule.replace("/[^[0-9]/g","");
+                String newValue  = arr.replaceAll("[^0-9]","");
+                String[] numArr = newValue.split("");
+                List<String> codeList = new ArrayList<>();
+                codeList.add(arr);
 
+                String buyDesc = "双飞组三(组):"+codeRule + "[" + num + "注]";
+                BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+                oneRecord.setHuizongName(buyDesc);
+                oneRecord.setBai(codeRule);
+                oneRecord.setBuyAmount(codeList.size());
+                oneRecord.setBuyCodes(codeRule);
+                oneRecord.setValue(codeRule);
+                oneRecord.setLmId(lmId);
+                oneRecord.setLsTypeId("2");
+                oneRecord.setBuyMoney(buyMoney);
+                oneRecord.setTypeFlag(4);
+                oneRecord.setCodeList(codeList);
+                list.add(oneRecord);
+            }
+        }else{
+            //删除数字之外的任何字符
+            //codeRule = codeRule.replace("/[^[0-9]/g","");
+            String newValue  = codeRule.replaceAll("[^0-9]","");
+            String[] numArr = newValue.split("");
+            List<String> codeList = new ArrayList<>();
+            codeList.add(codeRule);
+
+            String buyDesc = "双飞组三(组):"+codeRule + "[" + codeList.size() + "注]";
+            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+            oneRecord.setHuizongName(buyDesc);
+            oneRecord.setBai(codeRule);
+            oneRecord.setBuyAmount(codeList.size());
+            oneRecord.setBuyCodes(codeRule);
+            oneRecord.setValue(codeRule);
+            oneRecord.setLmId(lmId);
+            oneRecord.setLsTypeId("2");
+            oneRecord.setBuyMoney(buyMoney);
+            oneRecord.setTypeFlag(4);
+            oneRecord.setCodeList(codeList);
+            list.add(oneRecord);
+        }
+        resMap.put("list",list);
+        return resMap;
+    }
 
 
     //组六普通
@@ -2148,6 +2236,87 @@ public class KuaidaBuyMsgServiceV2 {
         return resMap;
     }
 
+    //双飞组六
+    public Map<String,Object> z6SFBuyNew(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
+        Map<String,Object> resMap = Maps.newHashMap();
+        List<BuyRecord3DVO> list = Lists.newArrayList();
+        if (codeRule.contains(",") || codeRule.contains("，") || codeRule.contains(".") || codeRule.contains("/") || codeRule.contains(" ")) {
+            String[] splitArr = codeRule.split("\\.|,|，|/| |-|。|、");
+            int num = 0;
+            for (String arr : splitArr) {
+                String newValue  = arr.replaceAll("[^0-9]","");
+                String[] numArr = newValue.split("");
+                Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+                if(nums.size()!=2){
+                    resMap.put("errmsg","请选择2个号码："+codeRule);
+                    return resMap;
+                }
+                String bai = nums.stream().collect(Collectors.joining());
+                List<String> codeList = new ArrayList<>();
+                codeList.add(arr);
+                num = num + codeList.size();
+            }
+            for (String arr : splitArr) {
+                //删除数字之外的任何字符
+                //codeRule = codeRule.replace("/[^[0-9]/g","");
+                String newValue  = arr.replaceAll("[^0-9]","");
+                String[] numArr = newValue.split("");
+                //删除重复的数字
+                Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+                if(nums.size()!=2){
+                    resMap.put("errmsg","请选择2个号码："+codeRule);
+                    return resMap;
+                }
+                String bai = nums.stream().collect(Collectors.joining());
+                List<String> codeList = new ArrayList<>();
+                codeList.add(arr);
+
+                String buyDesc = "双飞组六(组):"+codeRule + "[" + num + "注]";
+                BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+                oneRecord.setHuizongName(buyDesc);
+                oneRecord.setBai(bai);
+                oneRecord.setBuyAmount(codeList.size());
+                oneRecord.setBuyCodes(bai);
+                oneRecord.setValue(bai);
+                oneRecord.setLmId(lmId);
+                oneRecord.setLsTypeId("2");
+                oneRecord.setBuyMoney(buyMoney);
+                oneRecord.setTypeFlag(4);
+                oneRecord.setCodeList(codeList);
+                list.add(oneRecord);
+            }
+        }else{
+            //删除数字之外的任何字符
+            //codeRule = codeRule.replace("/[^[0-9]/g","");
+            String newValue  = codeRule.replaceAll("[^0-9]","");
+            String[] numArr = newValue.split("");
+            //删除重复的数字
+            Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+            if(nums.size()!=2){
+                resMap.put("errmsg","请选择2个号码："+codeRule);
+                return resMap;
+            }
+            String bai = nums.stream().collect(Collectors.joining());
+            List<String> codeList = new ArrayList<>();
+            codeList.add(codeRule);
+
+            String buyDesc = "双飞组六(组):"+codeRule + "[" + codeList.size() + "注]";
+            BuyRecord3DVO oneRecord = new BuyRecord3DVO();
+            oneRecord.setHuizongName(buyDesc);
+            oneRecord.setBai(bai);
+            oneRecord.setBuyAmount(codeList.size());
+            oneRecord.setBuyCodes(bai);
+            oneRecord.setValue(bai);
+            oneRecord.setLmId(lmId);
+            oneRecord.setLsTypeId("2");
+            oneRecord.setBuyMoney(buyMoney);
+            oneRecord.setTypeFlag(4);
+            oneRecord.setCodeList(codeList);
+            list.add(oneRecord);
+        }
+        resMap.put("list",list);
+        return resMap;
+    }
 
     public Map<String,Object> hsBuy(BotUser botUser, Player player,BigDecimal buyMoney,String codeRule,String lmId){
         Map<String,Object> resMap = Maps.newHashMap();

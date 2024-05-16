@@ -5,8 +5,8 @@
     <title i18n="kuaixuan.title">快选</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+   
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewprot-fit:cover">
     <link href="css/style-Permutation5.css?v=20221212172846000" type="text/css" rel="stylesheet">
     <link href="css/A-P5.css?v=20221212172846000" type="text/css" rel="stylesheet">
 
@@ -633,8 +633,8 @@
 
                 </div>
             </div>
-            <div>
-                <form style="position:fixed;bottom:0;left:0;width: 97%;padding:0px 1%" id="sendForm" autocomplete="off" novalidate="novalidate" v-show="openStatus==1">
+            <div style="position:sticky;bottom:0;left:0;width: 97%;padding:0px 1%;">
+                <form style="" id="sendForm" autocomplete="off" novalidate="novalidate" v-show="openStatus==1">
                     <div class="mt10" v-show="dt==0">
                         <table class="t-1">
                             <thead>
@@ -678,7 +678,9 @@
                         </table>
                     </div>
                 </form>
-
+	<div style="height:100px;height: calc(100px + constant(safe-area-inset-bottom));height: calc(100px + env(safe-area-inset-bottom));">
+	    
+                 </div>
             </div>
 
         </template>

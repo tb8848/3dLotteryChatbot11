@@ -2688,13 +2688,17 @@
                             if(this.bai.length==2){
                                 if(this.lotteryMethodId=="3"){
                                     this.rules.z3.sf.sums = this.bai;
-                                    var matchCodeList = createZ3SFCode(this.bai);
+                                    // var matchCodeList = createZ3SFCode(this.bai);
+                                    var matchCodeList = [];
+                                    matchCodeList.push(this.rules.z3.sf.sums.join(""));
                                     this.rules.z3.sf.codeList = matchCodeList;
                                     this.rules.z3.sf.totals = matchCodeList.length;
                                     this.selectCount = this.rules.z3.sf.totals;
                                 }else if(this.lotteryMethodId=="4"){
                                     this.rules.z6.sf.sums = this.bai;
-                                    var matchCodeList = createZ6SFCode(this.bai);
+                                    // var matchCodeList = createZ6SFCode(this.bai);
+                                    var matchCodeList = [];
+                                    matchCodeList.push(this.rules.z6.sf.sums.join(""));
                                     this.rules.z6.sf.codeList = matchCodeList;
                                     this.rules.z6.sf.totals = matchCodeList.length;
                                     this.selectCount = this.rules.z6.sf.totals;
@@ -4098,9 +4102,10 @@
                 var typeId = "2";
                 var value = this.rules.z3.sf.sums.join("");
                 var buyDesc = "双飞组三"+value;
+                var buyDesc2 = "双飞组三(组):"+value+"[" + that.rules.z3.sf.codeList.length + "注]";
                 that.selectList.push({
                     uuid:that.guid(),
-                    huizongName:buyDesc,
+                    huizongName:buyDesc2,
                     bai:value,
                     shi:"",
                     ge:"",
@@ -4291,9 +4296,10 @@
                 var typeId = "2";
                 var value = this.bai.join("");
                 var buyDesc = "双飞组六"+value;
+                var buyDesc2 = "双飞组六(组):"+value+"[" + that.rules.z6.sf.codeList.length + "注]";
                 that.selectList.push({
                     uuid:that.guid(),
-                    huizongName:buyDesc,
+                    huizongName:buyDesc2,
                     bai:value,
                     shi:"",
                     ge:"",
