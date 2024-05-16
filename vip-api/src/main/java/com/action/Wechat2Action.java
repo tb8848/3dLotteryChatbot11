@@ -153,7 +153,7 @@ public class Wechat2Action {
                             prov = (String)addr.get("country");
                         }
                     }
-//                    logger.info("["+botUser.getLoginName()+"]扫码登录省市："+String.format("ip：%s,省份：%s,城市:%s",IpUtil.getIpAddr(request), prov,city));
+                    logger.info("["+botUser.getLoginName()+"]扫码登录省市："+String.format("ip：%s,省份：%s,城市:%s",IpUtil.getIpAddr(request), prov,city));
                     proxyInfo = proxyService.getProxyByArea(prov,city);
                     if(null == proxyInfo){
                         proxyInfo = proxyService.getUnuseProxy();
@@ -167,9 +167,9 @@ public class Wechat2Action {
                     proxy.put("ProxyIp",defaultProxyIp);
                     proxy.put("ProxyUser",defaultProxyUser);
                     proxy.put("ProxyPassword",defaultProxyPwd);
-//                    logger.info("["+botUser.getLoginName()+"]使用临时代理："+JSON.toJSONString(proxy));
+                    logger.info("["+botUser.getLoginName()+"]使用临时代理1："+JSON.toJSONString(proxy));
                 }else{
-//                    logger.info("["+botUser.getLoginName()+"]使用动态代理："+JSON.toJSONString(proxyInfo));
+                    logger.info("["+botUser.getLoginName()+"]使用动态代理2："+JSON.toJSONString(proxyInfo));
                     proxy.put("ProxyIp",proxyInfo.getIp());
                     proxy.put("ProxyUser",proxyInfo.getUsername());
                     proxy.put("ProxyPassword",proxyInfo.getPassword());
