@@ -240,12 +240,12 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             if (str.length() <= 1) {
                 str = str + str;
             }
-            List<String> codes = Code3DCreateUtils.z3SFCode(str);
+            //List<String> codes = Code3DCreateUtils.z3SFCode(str);
             LambdaQueryWrapper<DrawBuyRecord> querySfZ3 = new LambdaQueryWrapper<>();
             querySfZ3.eq(DrawBuyRecord::getBackCodeFlag, 0);
             querySfZ3.eq(DrawBuyRecord::getDrawId, drawId);
             querySfZ3.eq(DrawBuyRecord::getLotterSettingId, "54");
-            querySfZ3.in(DrawBuyRecord::getBuyCodes, codes);
+            querySfZ3.in(DrawBuyRecord::getBuyCodes, str);
             querySfZ3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
             querySfZ3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             querySfZ3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
@@ -298,12 +298,12 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             if (str.length() <= 1) {
                 str = str + str;
             }
-            List<String> codes = Code3DCreateUtils.z3SFCode(str);
+            //List<String> codes = Code3DCreateUtils.z3SFCode(str);
             LambdaQueryWrapper<DrawBuyRecord> querySfZ3 = new LambdaQueryWrapper<>();
             querySfZ3.eq(DrawBuyRecord::getBackCodeFlag, 0);
             querySfZ3.eq(DrawBuyRecord::getDrawId, drawId);
             querySfZ3.eq(DrawBuyRecord::getLotterSettingId, "54");
-            querySfZ3.in(DrawBuyRecord::getBuyCodes, codes);
+            querySfZ3.in(DrawBuyRecord::getBuyCodes, str);
             querySfZ3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
             querySfZ3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
             querySfZ3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
@@ -359,13 +359,13 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                     if (drawBuyRecord.getLotterSettingId().equals("73")) { // 双飞组六
                         //String str = drawBuyRecord.getHuizongName().substring(0, drawBuyRecord.getHuizongName().indexOf(":"));
                         //String number = drawBuyRecord.getHuizongName().substring(str.length()+1, drawBuyRecord.getHuizongName().length());
-                        Pattern pattern = Pattern.compile("\\d+");
+                        /*Pattern pattern = Pattern.compile("\\d+");
                         Matcher matcher = pattern.matcher(drawBuyRecord.getHuizongName());
                         String number = "";
                         while (matcher.find()) {
                             number = matcher.group();
-                        }
-                        if (getZxDraw(number, draw.getDrawResult()) == 1) {
+                        }*/
+                        if (getZxDraw(drawBuyRecord.getBuyCodes(), draw.getDrawResult()) == 1) {
                             LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
                             uw.set(DrawBuyRecord::getDrawStatus,1);
                             uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
