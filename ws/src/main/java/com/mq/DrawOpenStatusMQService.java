@@ -416,7 +416,7 @@ public class DrawOpenStatusMQService {
                         if(null!=playerBuyRecord){
                             BigDecimal totalDrawMoney = drawList1.stream().map(item->item.getDrawMoney()).reduce(BigDecimal.ZERO,BigDecimal::add);
                             playerBuyRecord.setDrawPoints(totalDrawMoney);
-                            playerBuyRecord.setEarnPoints(playerBuyRecord.getEarnPoints().add(totalDrawMoney));
+                            playerBuyRecord.setEarnPoints(totalDrawMoney.subtract(playerBuyRecord.getBuyPoints()));
                             playerBuyRecordService.updateById(playerBuyRecord);
                             if(StringUtil.isNotNull(playerBuyRecord.getDtTaskId())){
                                 //当前中奖记录来自定投

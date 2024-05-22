@@ -93,7 +93,7 @@ public class PlayerBuyRecordAction {
                     Player p = playerService.getById(item.getPlayerId());
                     if (StringUtil.isNotNull(p.getHeadimg()) && p.getUserType() != 2){
                         // 获取对象的InputStream
-                        InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(player.getHeadimg()).build());
+                        InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket("3d-robot-img").object(p.getHeadimg()).build());
                         // 将图像转换为Base64编码
                         String base64Image = convertToBase64(inputStream);
                         p.setHeadimg("data:image/jpeg;base64,"+base64Image);
