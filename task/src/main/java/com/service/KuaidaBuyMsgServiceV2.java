@@ -1237,7 +1237,7 @@ public class KuaidaBuyMsgServiceV2 {
                                     if (arr[1].contains("笔")){
                                         resMap = z3Buy(botUser, player, buyMoney, code, "3");
                                     }else{
-                                        if (StringUtil.hasDuplicateChar(code)){
+                                        if (StringUtil.hasDuplicateChar(code) && code.length() == 3){
                                             resMap = z3BaozuBuy(buyMoney, code, "3");
                                         }else{
                                             resMap = z3BaozuBuy(buyMoney, code, "100");
@@ -2822,7 +2822,7 @@ public class KuaidaBuyMsgServiceV2 {
                                     if (arr[1].contains("笔")){
                                         resMap = z3Buy(botUser, player, buyMoney, code, "3");
                                     }else{
-                                        if (StringUtil.hasDuplicateChar(code)){
+                                        if (StringUtil.hasDuplicateChar(code) && code.length() == 3){
                                             resMap = z3BaozuBuy(buyMoney, code, "3");
                                         }else{
                                             resMap = z3BaozuBuy(buyMoney, code, "100");
