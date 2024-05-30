@@ -500,6 +500,7 @@ public class KuaidaBuyMsgServiceV2 {
 //                            case "组六和值":
 //                                resMap = z6hzBuy(botUser, player, buyMoney, code, "4");
 //                                break;
+                            case "飞":
                             case "双飞":
                                 List<BuyRecord3DVO> sfList = Lists.newArrayList();
                                 String[] mulArr = code.split("\\.|,|，|/| |-|。|、");
@@ -819,6 +820,10 @@ public class KuaidaBuyMsgServiceV2 {
         for(String code : codeArr){
             if(code.length()!=3){
                 resMap.put("errmsg","单选号码["+code+"]错误");
+                return resMap;
+            }
+            if (!code.matches("-?\\d+(\\.\\d+)?")){
+                resMap.put("errmsg","号码格式错误");
                 return resMap;
             }
         }

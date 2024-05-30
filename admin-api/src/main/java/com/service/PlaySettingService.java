@@ -77,28 +77,28 @@ public class PlaySettingService extends ServiceImpl<PlaySettingDAO, PlaySetting>
         //设置玩法显示隐藏
         for (LotterySetting lotterySetting : lotterySettingList){
             String id = lotterySetting.getId();
-            if (id.equals("64")){
-                String[] ids = new String[]{"64","65","66","67","68","69","70","71"};
-                for (String lsId : ids){
-                    LotterySetting setting = lotterySettingDAO.selectById(lsId);
-                    setting.setIsShow(lotterySetting.getIsShow());
-                    lotterySettingDAO.updateById(setting);
-                }
-            }else if (id.equals("81")){
-                String[] ids = new String[]{"81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96"};
-                for (String lsId : ids){
-                    LotterySetting setting = lotterySettingDAO.selectById(lsId);
-                    setting.setIsShow(lotterySetting.getIsShow());
-                    lotterySettingDAO.updateById(setting);
-                }
-            }else{
-                LotterySetting setting = lotterySettingDAO.selectById(id);
-                setting.setIsShow(lotterySetting.getIsShow());
-                lotterySettingDAO.updateById(setting);
-            }
-//            LotterySetting setting = lotterySettingDAO.selectById(id);
-//            setting.setIsShow(lotterySetting.getIsShow());
-//            lotterySettingDAO.updateById(setting);
+//            if (id.equals("64")){
+//                String[] ids = new String[]{"64","65","66","67","68","69","70","71"};
+//                for (String lsId : ids){
+//                    LotterySetting setting = lotterySettingDAO.selectById(lsId);
+//                    setting.setIsShow(lotterySetting.getIsShow());
+//                    lotterySettingDAO.updateById(setting);
+//                }
+//            }else if (id.equals("81")){
+//                String[] ids = new String[]{"81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96"};
+//                for (String lsId : ids){
+//                    LotterySetting setting = lotterySettingDAO.selectById(lsId);
+//                    setting.setIsShow(lotterySetting.getIsShow());
+//                    lotterySettingDAO.updateById(setting);
+//                }
+//            }else{
+//                LotterySetting setting = lotterySettingDAO.selectById(id);
+//                setting.setIsShow(lotterySetting.getIsShow());
+//                lotterySettingDAO.updateById(setting);
+//            }
+            LotterySetting setting = lotterySettingDAO.selectById(id);
+            setting.setIsShow(lotterySetting.getIsShow());
+            lotterySettingDAO.updateById(setting);
         }
         return null;
     }
