@@ -2113,8 +2113,8 @@
                     // })
                 }
             },
-            moneyInput(e){//金额输入
-                if((e.key>='0' && e.key<='9') || e.key=="."){
+            moneyInput(){//金额输入
+                if((this.buyMoney>='0' && this.buyMoney<='9') || this.buyMoney=="."){
 
                 }else{
                     this.buyMoney = this.buyMoney.substr(0,this.buyMoney.length-1);
