@@ -384,6 +384,18 @@ public class KuaidaBuyMsgServiceV2 {
                                 }else{
                                     zu6 = z6BaozuBuy(buyMoney, code, "200");
                                 }
+                                if (zu3.containsKey("errmsg")) {
+                                    toMsg = createMsg(botUser, player, "\r\n" + (String) zu3.get("errmsg"));
+                                    dataDao.insert(toMsg);
+                                    simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                    return;
+                                }
+                                if (zu6.containsKey("errmsg")) {
+                                    toMsg = createMsg(botUser, player, "\r\n" + (String) zu6.get("errmsg"));
+                                    dataDao.insert(toMsg);
+                                    simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                    return;
+                                }
                                 List<BuyRecord3DVO> zu3List = (List<BuyRecord3DVO>) zu3.get("list");
                                 List<BuyRecord3DVO> zu6List = (List<BuyRecord3DVO>) zu6.get("list");
                                 zu3List.addAll(zu6List);
@@ -399,11 +411,23 @@ public class KuaidaBuyMsgServiceV2 {
                                     if (StringUtil.hasDuplicateChar(ss)) {
                                         Map<String,Object> z3Map = Maps.newHashMap();
                                         z3Map = zzBuy(buyMoney, ss, "3");
+                                        if (z3Map.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) z3Map.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
+                                        }
                                         List<BuyRecord3DVO> z3Lists = (List<BuyRecord3DVO>) z3Map.get("list");
                                         hmLists.addAll(z3Lists);
                                     }else{
                                         Map<String,Object> z6Map = Maps.newHashMap();
                                         z6Map = z6Buy(botUser, player, buyMoney, ss, "4");
+                                        if (z6Map.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) z6Map.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
+                                        }
                                         List<BuyRecord3DVO> z6Lists = (List<BuyRecord3DVO>) z6Map.get("list");
                                         hmLists.addAll(z6Lists);
                                     }
@@ -416,6 +440,12 @@ public class KuaidaBuyMsgServiceV2 {
                                 for(String ss : multiArr){
                                     if (StringUtil.hasDuplicateChar(ss)){
                                         Map<String,Object> zx = codeBuy(botUser, player, buyMoney, ss, "1");
+                                        if (zx.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) zx.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
+                                        }
                                         Map<String,Object> z3 = Maps.newHashMap();
                                         if(ss.contains("拖")){
                                             z3 = z3dtBuy(botUser, player, buyMoney, ss, "3");
@@ -423,17 +453,35 @@ public class KuaidaBuyMsgServiceV2 {
 //                                            z3 = z3Buy(botUser, player, buyMoney, ss, "3");
                                             z3 = zzBuy(buyMoney, ss, "3");
                                         }
+                                        if (z3.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) z3.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
+                                        }
                                         List<BuyRecord3DVO> zxList = (List<BuyRecord3DVO>) zx.get("list");
                                         List<BuyRecord3DVO> z3List = (List<BuyRecord3DVO>) z3.get("list");
                                         hmList.addAll(zxList);
                                         hmList.addAll(z3List);
                                     }else{
                                         Map<String,Object> zx = codeBuy(botUser, player, buyMoney, ss, "1");
+                                        if (zx.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) zx.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
+                                        }
                                         Map<String,Object> z6 = Maps.newHashMap();
                                         if(ss.contains("拖")){
                                             z6 = z6dtBuy(botUser, player, buyMoney, ss, "4");
                                         }else{
                                             z6 = z6BaozuBuy(buyMoney, ss, "200");
+                                        }
+                                        if (z6.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) z6.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
                                         }
                                         List<BuyRecord3DVO> zxList = (List<BuyRecord3DVO>) zx.get("list");
                                         List<BuyRecord3DVO> z6List = (List<BuyRecord3DVO>) z6.get("list");
@@ -507,10 +555,22 @@ public class KuaidaBuyMsgServiceV2 {
                                 for(String ss : mulArr){
                                     if (StringUtil.hasDuplicateChar(ss)){
                                         Map<String,Object> sf = z3SFBuyNew(botUser, player, buyMoney, ss, "3");
+                                        if (sf.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) sf.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
+                                        }
                                         List<BuyRecord3DVO> list = (List<BuyRecord3DVO>) sf.get("list");
                                         sfList.addAll(list);
                                     }else{
                                         Map<String,Object> sf = z6SFBuyNew(botUser, player, buyMoney, ss, "4");
+                                        if (sf.containsKey("errmsg")) {
+                                            toMsg = createMsg(botUser, player, "\r\n" + (String) sf.get("errmsg"));
+                                            dataDao.insert(toMsg);
+                                            simpMessagingTemplate.convertAndSend("/topic/room/" + botUser.getId(), toMsg);
+                                            return;
+                                        }
                                         List<BuyRecord3DVO> list = (List<BuyRecord3DVO>) sf.get("list");
                                         sfList.addAll(list);
                                     }
@@ -1145,9 +1205,9 @@ public class KuaidaBuyMsgServiceV2 {
             String bai = null;
             String shi = null;
             String ge = null;
-            if(baiIdx>-1 && shiIdx>-1) bai = codeRule.substring(baiIdx+1,shiIdx);
-            if(shiIdx>-1 && geIdx>-1)  shi = codeRule.substring(shiIdx+1,geIdx);
-            if(geIdx>-1 && geIdx>-1) ge = codeRule.substring(geIdx+1);
+            if(baiIdx>-1 && shiIdx>-1) bai = codeRule.substring(baiIdx+1,shiIdx).trim();
+            if(shiIdx>-1 && geIdx>-1)  shi = codeRule.substring(shiIdx+1,geIdx).trim();
+            if(geIdx>-1 && geIdx>-1) ge = codeRule.substring(geIdx+1).trim();
             if(StringUtil.isNull(bai) || StringUtil.isNull(shi) || StringUtil.isNull(ge)){
                 resultMap.put("errmsg","号码不能为空");
                 return resultMap;
@@ -2671,7 +2731,7 @@ public class KuaidaBuyMsgServiceV2 {
                         if (StringUtil.isNull(bai)) bai = "-";
                         if (StringUtil.isNull(shi)) shi = "-";
                         if (StringUtil.isNull(ge)) ge = "-";
-                        List<String> codeList = Code3DCreateUtils.ding2Code(bai, shi, ge);
+                        List<String> codeList = Code3DCreateUtils.ding2Code(bai.trim(), shi.trim(), ge.trim());
                         if(null==codeList || codeList.size()<1){
                             resultMap.put("errmsg", "号码格式错误：" + codeRule);
                             return resultMap;
