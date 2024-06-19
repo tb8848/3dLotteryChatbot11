@@ -1394,7 +1394,9 @@
         //     //msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
         //     msg += item.huizongName+item.value+'各'+item.buyMoney+'\r\n';
         // })
+
         kxrules = JSON.stringify(selectList);
+        console.log("kxrules =============",kxrules);
         clearInterval(interval);
         $(".btndown1").trigger("click");
         isAutoMsg = true;
