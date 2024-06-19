@@ -917,10 +917,19 @@ public class KuaidaBuyMsgServiceV2 {
             reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
         }
 
+//        if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){
+//            reportToPanUrl+=":9992";
+//        }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){
+//            reportToPanUrl+=":9892";
+//        }else if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
+//            reportToPanUrl+=":9092";
+//        }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){
+//            reportToPanUrl+=":9292";
+//        }
         if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){
-            reportToPanUrl+=":9992";
+            reportToPanUrl+=":9092";
         }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){
-            reportToPanUrl+=":9892";
+            reportToPanUrl+=":9292";
         }else if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
             reportToPanUrl+=":9092";
         }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){
@@ -1564,6 +1573,24 @@ public class KuaidaBuyMsgServiceV2 {
         }
         resMap.put("list",list);
         return resMap;
+    }
+
+    public static void main(String[] args) {
+        String codeRule = "003-006-009";
+        String[] multiArr = codeRule.split("\\.|,|，|/| |-|。|、");
+        for(String ss : multiArr){
+            String newValue  = ss;
+            newValue  = ss.replaceAll("[^0-9]","");
+            String[] numArr = newValue.split("");
+            //删除重复的数字
+            Set<String> nums = Arrays.asList(numArr).stream().collect(Collectors.toSet());
+            if (getCountByCode(newValue) != 2) {
+                continue;
+            }
+            String bai = nums.stream().collect(Collectors.joining());
+            String lsName = "组三"+ StringUtil.changeDigitToChinese(bai.length(),"码");
+            System.out.println(lsName);
+        }
     }
 
     public Map<String,Object> zzBuy(BigDecimal buyMoney,String codeRule,String lmId){

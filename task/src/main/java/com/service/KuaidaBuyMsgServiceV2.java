@@ -1451,15 +1451,24 @@ public class KuaidaBuyMsgServiceV2 {
     }
 
     public void reportToPanGroup(BotUser botUser,Player player,ChatRoomMsg msg,List<BuyRecord3DVO> buyList,BotUserPan botUserPan,
-                            Draw draw,Integer lotteryType,String lotteryName,String groupName,String wxNick){
+                                 Draw draw,Integer lotteryType,String lotteryName,String groupName,String wxNick){
         String reportToPanUrl = botUserPan.getLottery3dUrl();
         if(reportToPanUrl.endsWith("/")){
             reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
         }
+//        if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){
+//            reportToPanUrl+=":9992";
+//        }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){
+//            reportToPanUrl+=":9892";
+//        }else if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
+//            reportToPanUrl+=":9092";
+//        }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){
+//            reportToPanUrl+=":9292";
+//        }
         if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){
-            reportToPanUrl+=":9992";
+            reportToPanUrl+=":9092";
         }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){
-            reportToPanUrl+=":9892";
+            reportToPanUrl+=":9292";
         }else if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
             reportToPanUrl+=":9092";
         }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){
@@ -3234,10 +3243,19 @@ public class KuaidaBuyMsgServiceV2 {
         if(reportToPanUrl.endsWith("/")){
             reportToPanUrl = reportToPanUrl.substring(0,reportToPanUrl.length()-1);
         }
+//        if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){
+//            reportToPanUrl+=":9992";
+//        }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){
+//            reportToPanUrl+=":9892";
+//        }else if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
+//            reportToPanUrl+=":9092";
+//        }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){
+//            reportToPanUrl+=":9292";
+//        }
         if(reportToPanUrl.indexOf("aa.3d11bb.com")>-1){
-            reportToPanUrl+=":9992";
+            reportToPanUrl+=":9092";
         }else if(reportToPanUrl.indexOf("aa.pai3bb11.com")>-1){
-            reportToPanUrl+=":9892";
+            reportToPanUrl+=":9292";
         }else if(reportToPanUrl.indexOf("aa.3d11aa.com")>-1){
             reportToPanUrl+=":9092";
         }else if(reportToPanUrl.indexOf("aa.pai3aa11.com")>-1){

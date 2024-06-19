@@ -428,4 +428,19 @@ public class CodeUtils {
         str[j] = tmp;
     }
 
+    public static int getSameCharCount(String str1, String str2) {
+        int count = 0;
+        for (int i = 0; i < str1.length(); i++) {
+            char c1 = str1.charAt(i);
+            for (int j = 0; j < str2.length(); j++) {
+                char c2 = str2.charAt(j);
+                if (c1 == c2) {
+                    count++;
+                    break; // Avoid counting the same character twice
+                }
+            }
+        }
+        return count;
+    }
+
 }

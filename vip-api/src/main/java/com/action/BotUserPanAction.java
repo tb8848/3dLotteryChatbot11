@@ -72,17 +72,17 @@ public class BotUserPanAction {
                 url = url.substring(0, url.length() - 1);
             }
             if (botUserPan.getLotteryType() == 1) {
-                if (url.indexOf("bb")>-1){
-                    url = url + ":9992/";
-                }else{
+//                if (url.indexOf("bb")>-1){
+//                    url = url + ":9992/";
+//                }else{
                     url = url + ":9092/";
-                }
+//                }
             } else if (botUserPan.getLotteryType() == 2) {
-                if (url.indexOf("bb")>-1){
-                    url = url + ":9892/";
-                }else{
+//                if (url.indexOf("bb")>-1){
+//                    url = url + ":9892/";
+//                }else{
                     url = url + ":9292/";
-                }
+//                }
             }
         }
 
@@ -291,17 +291,17 @@ public class BotUserPanAction {
                     url = url.substring(0, url.length() - 1);
                 }
                 if (lotteryType == 1) {
-                    if (url.indexOf("bb")>-1){
-                        url = url + ":9992/";
-                    }else{
+//                    if (url.indexOf("bb")>-1){
+//                        url = url + ":9992/";
+//                    }else{
                         url = url + ":9092/";
-                    }
+//                    }
                 } else if (lotteryType == 2) {
-                    if (url.indexOf("bb")>-1){
-                        url = url + ":9892/";
-                    }else{
+//                    if (url.indexOf("bb")>-1){
+//                        url = url + ":9892/";
+//                    }else{
                         url = url + ":9292/";
-                    }
+//                    }
                 }
             }
             HttpResponse execute = HttpRequest.post(url + "robot/getDrawInfo")

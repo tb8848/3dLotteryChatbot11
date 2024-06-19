@@ -53,7 +53,7 @@ public class HeatBeatTask {
     /**
      * 每分钟执行更新购买记录表退码状态，超过字典表配置分钟数则不可退码
      */
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     //@Lock4j( expire = 60000, acquireTimeout = 1000)
     @Async
     public void task () {
@@ -102,7 +102,7 @@ public class HeatBeatTask {
                             httpRequest.contentType("application/json");
                             HttpResponse httpResponse = httpRequest.execute();
                             String result = httpResponse.body();
-//                            logger.info("botUser:"+botUser.getLoginName()+">>>>>>>>>>Login/HeartBeat>>>>>>"+result);
+                            logger.info("botUser:"+botUser.getLoginName()+">>>>>>>>>>Login/HeartBeat>>>>>>"+result);
                             //System.out.println(DateUtil.now()+">>>>>>["+botUser.getLoginName()+"]Login/HeartBeat>>>>>>"+result);
                             if(result.startsWith("{") && result.endsWith("}")){
                                 RespData respData = JSONObject.parseObject(result, RespData.class);

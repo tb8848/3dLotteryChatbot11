@@ -145,17 +145,69 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         int count = CodeUtils.getCountByCode(draw.getDrawResult());
         BigDecimal drawMoney5 = BigDecimal.ZERO;
         if (count == 2) { // 有重号
+            LambdaQueryWrapper<DrawBuyRecord> query51 = new LambdaQueryWrapper<>();
+            query51.eq(DrawBuyRecord::getBackCodeFlag, 0);
+            query51.eq(DrawBuyRecord::getDrawId, drawId);
+            query51.eq(DrawBuyRecord::getLotterSettingId, "55");
+            query51.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+            query51.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            query51.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
+            List<DrawBuyRecord> z3TmList = drawBuyRecordDAO.selectList(query51);
+            if (!z3TmList.isEmpty()) {
+                for (DrawBuyRecord drawBuyRecord : z3TmList) {
+                    if (drawBuyRecord.getBuyCodes().length() == 2) {
+                        String str = CodeUtils.removeRepeatChar(draw.getDrawResult());
+                        if (str.length() <= 1) {
+                            str = str + str;
+                        }
+                        if (str.equals(drawBuyRecord.getBuyCodes())) {
+                            LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
+                            uw.set(DrawBuyRecord::getDrawStatus,1);
+                            uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
+                            BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
+                            BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
+                            uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
+                            uw.set(DrawBuyRecord::getDrawMoney,dm);
+                            drawMoney5 = drawMoney5.add(dm);
+                            uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
+                            uw.eq(DrawBuyRecord::getDrawId,drawId);
+                            drawBuyRecordDAO.update(drawBuyRecord, uw);
+                            drawCount ++;
+                            continue;
+                        }
+                    }else {
+                        List<String> codeList = new ArrayList<>();
+                        CodeUtils.z3Combine(drawBuyRecord.getBuyCodes().toCharArray(), 0, drawBuyRecord.getBuyCodes().length(), codeList);
+                        if (codeList.contains(draw.getDrawResult())) {
+                            LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
+                            uw.set(DrawBuyRecord::getDrawStatus,1);
+                            uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
+                            BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
+                            BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
+                            uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
+                            uw.set(DrawBuyRecord::getDrawMoney,dm);
+                            drawMoney5 = drawMoney5.add(dm);
+                            uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
+                            uw.eq(DrawBuyRecord::getDrawId,drawId);
+                            drawBuyRecordDAO.update(drawBuyRecord, uw);
+                            drawCount ++;
+                            continue;
+                        }
+                    }
+                }
+            }
+
             List<String> codeList = new ArrayList<>();
             CodeUtils.z3Combine(draw.getDrawResult().toCharArray(), 0, draw.getDrawResult().length(), codeList);
             // 查询组3普通、胆拖、包选3号码
             LambdaQueryWrapper<DrawBuyRecord> query5 = new LambdaQueryWrapper<>();
             query5.eq(DrawBuyRecord::getBackCodeFlag, 0);
             query5.eq(DrawBuyRecord::getDrawId, drawId);
-            query5.in(DrawBuyRecord::getLotterSettingId, Arrays.asList("53", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64",
+            query5.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("53", "56", "57", "58", "59", "60", "61", "62", "63", "64",
                     "65", "66", "67", "68", "69", "70", "71", "17"));
+            query5.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
             query5.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
             query5.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
-            query5.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
             if (!codeList.isEmpty()) {
                 query5.in(DrawBuyRecord::getBuyCodes, codeList);
             }
@@ -195,63 +247,9 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                         drawBuyRecordDAO.update(drawBuyRecord, uw);
                         drawCount ++;
                     }
-
-                    // 获取相同号码个数,等于3则中奖
-                    /*int countSame = CodeUtils.countSameStr(draw.getDrawResult(), drawBuyRecord.getBuyCodes());
-                    if (countSame == 3) {
-                        LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
-                        uw.set(DrawBuyRecord::getDrawStatus,1);
-                        uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
-                        if (drawBuyRecord.getLotterSettingId().equals("17")) { // 包选3
-                            if (drawBuyRecord.getParam3().contains("/")) {
-                                String odds;
-                                if (drawBuyRecord.getBuyCodes().equals(draw.getDrawResult())) { // 包选3全中-号码相同，位置相同
-                                    odds = drawBuyRecord.getParam3().split("/")[1];
-                                }else { // 包选3组中-号码相同，位置不同
-                                    odds = drawBuyRecord.getParam3().split("/")[0];
-                                }
-                                uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(odds));
-                                BigDecimal dm = drawBuyRecord.getBuyMoney().multiply(new BigDecimal(odds));
-                                uw.set(DrawBuyRecord::getDrawMoney,dm);
-                                drawMoney5 = drawMoney5.add(dm);
-                                uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
-                                uw.eq(DrawBuyRecord::getDrawId,drawId);
-                                drawBuyRecordDAO.update(drawBuyRecord, uw);
-                                drawCount ++;
-                            }
-                        }else { // 组3
-                            BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
-                            BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
-                            uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
-                            uw.set(DrawBuyRecord::getDrawMoney,dm);
-                            drawMoney5 = drawMoney5.add(dm);
-                            uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
-                            uw.eq(DrawBuyRecord::getDrawId,drawId);
-                            drawBuyRecordDAO.update(drawBuyRecord, uw);
-                            drawCount ++;
-                        }
-                    }*/
                 };
             }
 
-            // 根据开奖号码算双飞组三中奖号码
-            // 开奖号码去重
-            String str = CodeUtils.removeRepeatChar(draw.getDrawResult());
-            if (str.length() <= 1) {
-                str = str + str;
-            }
-            //List<String> codes = Code3DCreateUtils.z3SFCode(str);
-            LambdaQueryWrapper<DrawBuyRecord> querySfZ3 = new LambdaQueryWrapper<>();
-            querySfZ3.eq(DrawBuyRecord::getBackCodeFlag, 0);
-            querySfZ3.eq(DrawBuyRecord::getDrawId, drawId);
-            querySfZ3.eq(DrawBuyRecord::getLotterSettingId, "54");
-            querySfZ3.in(DrawBuyRecord::getBuyCodes, str);
-            querySfZ3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
-            querySfZ3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
-            querySfZ3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
-            List<DrawBuyRecord> sfz3List = drawBuyRecordDAO.selectList(querySfZ3);
-            drawMoney5 = updateOneOddsBuyRecords(sfz3List, false);
-            drawCount = drawCount + sfz3List.size();
         }else if (count == 3) { // 三同
             LambdaQueryWrapper<DrawBuyRecord> query12 = new LambdaQueryWrapper<>();
             query12.eq(DrawBuyRecord::getBackCodeFlag, 0);
@@ -260,37 +258,6 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             query12.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
             query12.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             List<DrawBuyRecord> stList = drawBuyRecordDAO.selectList(query12);
-            /*if (!stList.isEmpty()) {
-                for (DrawBuyRecord drawBuyRecord : stList) {
-                    if (drawBuyRecord.getLotterSettingId().equals("54") && drawBuyRecord.getBuyCodes().equals(draw.getDrawResult())) {
-                        LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
-                        uw.set(DrawBuyRecord::getDrawStatus,1);
-                        uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
-                        BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
-                        BigDecimal dm = drawBuyRecord.getBuyMoney().multiply(odds);
-                        uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
-                        uw.set(DrawBuyRecord::getDrawMoney,dm);
-                        drawMoney5 = drawMoney5.add(dm);
-                        uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
-                        uw.eq(DrawBuyRecord::getDrawId,drawId);
-                        drawBuyRecordDAO.update(drawBuyRecord, uw);
-                        drawCount ++;
-                    }else {
-                        LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
-                        uw.set(DrawBuyRecord::getDrawStatus,1);
-                        uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
-                        BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
-                        BigDecimal dm = drawBuyRecord.getBuyMoney().multiply(odds);
-                        uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
-                        uw.set(DrawBuyRecord::getDrawMoney,dm);
-                        drawMoney5 = drawMoney5.add(dm);
-                        uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
-                        uw.eq(DrawBuyRecord::getDrawId,drawId);
-                        drawBuyRecordDAO.update(drawBuyRecord, uw);
-                        drawCount ++;
-                    }
-                }
-            }*/
             drawMoney5 = updateOneOddsBuyRecords(stList, false);
             drawCount = drawCount + stList.size();
 
@@ -303,8 +270,8 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             querySfZ3.eq(DrawBuyRecord::getBackCodeFlag, 0);
             querySfZ3.eq(DrawBuyRecord::getDrawId, drawId);
             querySfZ3.eq(DrawBuyRecord::getLotterSettingId, "54");
-            querySfZ3.in(DrawBuyRecord::getBuyCodes, str);
-            querySfZ3.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
+            querySfZ3.eq(DrawBuyRecord::getBuyCodes, str);
+            querySfZ3.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
             querySfZ3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
             querySfZ3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             List<DrawBuyRecord> sfz3List = drawBuyRecordDAO.selectList(querySfZ3);
@@ -315,9 +282,11 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
             LambdaQueryWrapper<DrawBuyRecord> query5 = new LambdaQueryWrapper<>();
             query5.eq(DrawBuyRecord::getBackCodeFlag, 0);
             query5.eq(DrawBuyRecord::getDrawId, drawId);
-            query5.in(DrawBuyRecord::getLotterSettingId, Arrays.asList("72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83",
+            query5.in(DrawBuyRecord::getLotterSettingId, Lists.newArrayList("72", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83",
                     "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "18", "105"));
-            query5.in(DrawBuyRecord::getHuizongFlag, Arrays.asList("0", "-1"));
+            query5.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+            query5.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+            query5.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
             List<DrawBuyRecord> z6List = drawBuyRecordDAO.selectList(query5);
             if (!z6List.isEmpty()) {
                 for (DrawBuyRecord drawBuyRecord : z6List) {
@@ -356,35 +325,74 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
                             drawCount ++;
                         }
                     }
-                    if (drawBuyRecord.getLotterSettingId().equals("73")) { // 双飞组六
-                        //String str = drawBuyRecord.getHuizongName().substring(0, drawBuyRecord.getHuizongName().indexOf(":"));
-                        //String number = drawBuyRecord.getHuizongName().substring(str.length()+1, drawBuyRecord.getHuizongName().length());
-                        /*Pattern pattern = Pattern.compile("\\d+");
-                        Matcher matcher = pattern.matcher(drawBuyRecord.getHuizongName());
-                        String number = "";
-                        while (matcher.find()) {
-                            number = matcher.group();
-                        }*/
-                        if (getZxDraw(drawBuyRecord.getBuyCodes(), draw.getDrawResult()) == 1) {
-                            LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
-                            uw.set(DrawBuyRecord::getDrawStatus,1);
-                            uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
-                            BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
-                            BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
-                            uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
-                            uw.set(DrawBuyRecord::getDrawMoney,dm);
-                            drawMoney5 = drawMoney5.add(dm);
-                            uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
-                            uw.eq(DrawBuyRecord::getDrawId,drawId);
-                            drawBuyRecordDAO.update(drawBuyRecord, uw);
-                            drawCount ++;
-                        }
-
-                    }
                 };
             }
         }
         totalDrawMoney = totalDrawMoney.add(drawMoney5);
+
+        // 根据开奖号码算双飞组三中奖号码
+        // 开奖号码去重
+        String str = CodeUtils.removeRepeatChar(draw.getDrawResult());
+        if (str.length() <= 1) {
+            str = str + str;
+        }
+        //List<String> codes = Code3DCreateUtils.z3SFCode(str);
+        LambdaQueryWrapper<DrawBuyRecord> querySfZ3 = new LambdaQueryWrapper<>();
+        querySfZ3.eq(DrawBuyRecord::getBackCodeFlag, 0);
+        querySfZ3.eq(DrawBuyRecord::getDrawId, drawId);
+        querySfZ3.eq(DrawBuyRecord::getLotterSettingId, "54");
+        querySfZ3.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+        querySfZ3.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        querySfZ3.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
+        List<DrawBuyRecord> sfz3List = drawBuyRecordDAO.selectList(querySfZ3);
+        if (!sfz3List.isEmpty()) {
+            for (DrawBuyRecord drawBuyRecord : sfz3List) {
+                int c = getSameCharCount(drawBuyRecord.getBuyCodes(), draw.getDrawResult());
+                if (c == 2) {
+                    LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
+                    uw.set(DrawBuyRecord::getDrawStatus,1);
+                    uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
+                    BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
+                    BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
+                    uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
+                    uw.set(DrawBuyRecord::getDrawMoney,dm);
+                    drawMoney5 = drawMoney5.add(dm);
+                    uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
+                    uw.eq(DrawBuyRecord::getDrawId,drawId);
+                    drawBuyRecordDAO.update(drawBuyRecord, uw);
+                    drawCount ++;
+                }
+            }
+        }
+
+        LambdaQueryWrapper<DrawBuyRecord> querySfZ6 = new LambdaQueryWrapper<>();
+        querySfZ6.eq(DrawBuyRecord::getBackCodeFlag, 0);
+        querySfZ6.eq(DrawBuyRecord::getDrawId, drawId);
+        querySfZ6.eq(DrawBuyRecord::getLotterSettingId, "73");
+        querySfZ6.in(DrawBuyRecord::getHuizongFlag, Lists.newArrayList("0", "-1"));
+        querySfZ6.eq(DrawBuyRecord::getHasOneFlag, lotteryType);
+        querySfZ6.in(DrawBuyRecord::getBuyType, Arrays.asList("1", "0"));
+        List<DrawBuyRecord> sfz6List = drawBuyRecordDAO.selectList(querySfZ6);
+        if (!sfz6List.isEmpty()) {
+            for (DrawBuyRecord drawBuyRecord : sfz6List) {
+                int c = getZxDraw(drawBuyRecord.getBuyCodes(), draw.getDrawResult());
+                if (c == 1) {
+                    LambdaUpdateWrapper<DrawBuyRecord> uw = new LambdaUpdateWrapper();
+                    uw.set(DrawBuyRecord::getDrawStatus,1);
+                    uw.set(DrawBuyRecord::getDrawLotteryFlag,1);
+                    BigDecimal odds = new BigDecimal(drawBuyRecord.getParam3());
+                    BigDecimal dm = new BigDecimal(drawBuyRecord.getParam1()).multiply(odds);
+                    uw.set(DrawBuyRecord::getPeiRate, Double.valueOf(drawBuyRecord.getParam3()));
+                    uw.set(DrawBuyRecord::getDrawMoney,dm);
+                    drawMoney5 = drawMoney5.add(dm);
+                    uw.eq(DrawBuyRecord::getId,drawBuyRecord.getId());
+                    uw.eq(DrawBuyRecord::getDrawId,drawId);
+                    drawBuyRecordDAO.update(drawBuyRecord, uw);
+                    drawCount ++;
+                }
+            }
+        }
+
 
         // 组3,组6和值中奖
         LambdaQueryWrapper<DrawBuyRecord> query6 = new LambdaQueryWrapper<>();
@@ -766,6 +774,22 @@ public class DrawBuyRecordService extends ServiceImpl<DrawBuyRecordDAO, DrawBuyR
         result.put("drawCount", drawCount);
         result.put("totalDrawAmount", totalDrawMoney);
         return result;
+    }
+
+    public static int getSameCharCount(String str1, String str2) {
+        int count = 0;
+        Set<Character> set = new HashSet<>();
+
+        for (int i = 0; i < str1.length(); i++) {
+            set.add(str1.charAt(i));
+        }
+
+        for (int i = 0; i < str2.length(); i++) {
+            if (set.contains(str2.charAt(i))) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static void main(String[] args) {
