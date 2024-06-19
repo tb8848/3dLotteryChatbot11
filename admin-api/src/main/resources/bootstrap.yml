@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prop
+    active: test
   application:
     name: 3d_chatbot_admin
   messages:
